@@ -1,0 +1,965 @@
+        <section class="hero" aria-label="Accueil">
+            <div class="hero__bg">
+                <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="eager" />
+            </div>
+            <div class="hero__overlay"></div>
+            <div class="container hero__inner">
+                <div class="hero__content">
+                    <span class="hero__badge">✨ Nouvelle collection 2026</span>
+                    <h1 class="hero__title">Réveillez-Vous<br><span>Transformé</span></h1>
+                    <p class="hero__text">Découvrez nos matelas d'exception, conçus pour offrir à votre corps le repos qu'il mérite. Chaque nuit devient une expérience de bien-être absolu.</p>
+                    <div class="hero__actions">
+                        <a class="hero__btn hero__btn--primary" href="#">
+                            Explorer la collection
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </a>
+                        <a class="hero__btn hero__btn--secondary" href="#">
+                            <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M10 8l6 4-6 4V8z" fill="currentColor"/></svg>
+                            Voir la vidéo
+                        </a>
+                    </div>
+                    <div class="hero__stats">
+                        <div class="hero__stat">
+                            <span class="hero__stat-number">10K+</span>
+                            <span class="hero__stat-label">Clients satisfaits</span>
+                        </div>
+                        <div class="hero__stat">
+                            <span class="hero__stat-number">4.9</span>
+                            <span class="hero__stat-label">Note moyenne</span>
+                        </div>
+                        <div class="hero__stat">
+                            <span class="hero__stat-number">10</span>
+                            <span class="hero__stat-label">Ans de garantie</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero__visual">
+                    <div class="hero__card">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" />
+                        <div class="hero__card-badge">
+                            <span class="hero__card-discount">-30%</span>
+                            <span class="hero__card-text">Offre limitée</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__scroll">
+                <span>Découvrir</span>
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+        </section>
+
+        <section class="categories" aria-label="Nos univers">
+            <div class="container">
+                <div class="categories__header">
+                    <span class="categories__badge">🛒 Explorez nos univers</span>
+                    <h2 class="categories__title">Trouvez Votre Bonheur</h2>
+                </div>
+                <div class="categories__grid">
+                    <a class="cat-card cat-card--large" href="#">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop" alt="Matelas" loading="lazy" />
+                        <div class="cat-card__overlay">
+                            <span class="cat-card__count">48 produits</span>
+                            <h3 class="cat-card__title">Matelas</h3>
+                            <p class="cat-card__desc">Du ferme au moelleux, trouvez votre équilibre parfait</p>
+                            <span class="cat-card__cta">Explorer <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+                    <a class="cat-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&h=400&fit=crop" alt="Oreillers" loading="lazy" />
+                        <div class="cat-card__overlay">
+                            <span class="cat-card__count">24 produits</span>
+                            <h3 class="cat-card__title">Oreillers</h3>
+                            <span class="cat-card__cta">Voir →</span>
+                        </div>
+                    </a>
+                    <a class="cat-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&h=400&fit=crop" alt="Draps & Couettes" loading="lazy" />
+                        <div class="cat-card__overlay">
+                            <span class="cat-card__count">36 produits</span>
+                            <h3 class="cat-card__title">Draps & Couettes</h3>
+                            <span class="cat-card__cta">Voir →</span>
+                        </div>
+                    </a>
+                    <a class="cat-card cat-card--wide" href="#">
+                        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&h=400&fit=crop" alt="Lits" loading="lazy" />
+                        <div class="cat-card__overlay">
+                            <span class="cat-card__count">18 produits</span>
+                            <h3 class="cat-card__title">Lits & Sommiers</h3>
+                            <p class="cat-card__desc">Structures élégantes pour sublimer votre chambre</p>
+                            <span class="cat-card__cta">Découvrir la collection <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="electro" aria-label="Électroménager & Meubles">
+            <div class="container">
+                <div class="electro__header">
+                    <span class="electro__badge">🔌 Électroménager & Meubles</span>
+                    <h2 class="electro__title">Équipez Votre Maison</h2>
+                </div>
+                <div class="electro__grid">
+                    <a class="electro-card electro-card--large" href="#">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop" alt="Cuisine" loading="lazy" />
+                        <div class="electro-card__overlay">
+                            <span class="electro-card__count">25 produits</span>
+                            <h3 class="electro-card__title">Cuisine</h3>
+                            <p class="electro-card__desc">Gazinière, Mixeur, Bouilloire, Réfrigérateur, Congélateur</p>
+                            <span class="electro-card__cta">Explorer <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+                    <a class="electro-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500&h=400&fit=crop" alt="Climatisation" loading="lazy" />
+                        <div class="electro-card__overlay electro-card__overlay--gradient">
+                            <span class="electro-card__count">12 produits</span>
+                            <h3 class="electro-card__title">Froid & Climatisation</h3>
+                            <span class="electro-card__cta">Voir →</span>
+                        </div>
+                    </a>
+                    <a class="electro-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop" alt="Salon" loading="lazy" />
+                        <div class="electro-card__overlay">
+                            <span class="electro-card__count">18 produits</span>
+                            <h3 class="electro-card__title">Salon</h3>
+                            <span class="electro-card__cta">Voir →</span>
+                        </div>
+                    </a>
+                    <a class="electro-card electro-card--wide" href="#">
+                        <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=900&h=400&fit=crop" alt="Multi-Media" loading="lazy" />
+                        <div class="electro-card__overlay">
+                            <span class="electro-card__count">30 produits</span>
+                            <h3 class="electro-card__title">Multi-Média</h3>
+                            <p class="electro-card__desc">Télévisions, Woofers, Accessoires audio & vidéo</p>
+                            <span class="electro-card__cta">Découvrir la collection <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="guarantees" aria-label="Nos engagements">
+            <div class="guarantees__bg">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=400&fit=crop" alt="" loading="lazy" />
+            </div>
+            <div class="container">
+                <div class="guarantees__grid">
+                    <div class="guarantee">
+                        <div class="guarantee__icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div class="guarantee__content">
+                            <h3 class="guarantee__title">Livraison Express</h3>
+                            <p class="guarantee__text">Gratuite dès 50.000F • Sous 48h partout</p>
+                        </div>
+                    </div>
+                    <div class="guarantee__divider"></div>
+                    <div class="guarantee">
+                        <div class="guarantee__icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM1 10h22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="guarantee__content">
+                            <h3 class="guarantee__title">Paiement Flexible</h3>
+                            <p class="guarantee__text">À la livraison ou en 3x sans frais</p>
+                        </div>
+                    </div>
+                    <div class="guarantee__divider"></div>
+                    <div class="guarantee">
+                        <div class="guarantee__icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="guarantee__content">
+                            <h3 class="guarantee__title">Garantie 10 Ans</h3>
+                            <p class="guarantee__text">Qualité certifiée et durable</p>
+                        </div>
+                    </div>
+                    <div class="guarantee__divider"></div>
+                    <div class="guarantee">
+                        <div class="guarantee__icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="guarantee__content">
+                            <h3 class="guarantee__title">Support 24/7</h3>
+                            <p class="guarantee__text">Experts disponibles à tout moment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="best-modern" aria-label="Nos meilleurs produits">
+            <div class="container">
+                <div class="best-modern__header">
+                    <h2 class="best-modern__title">Découvrez Nos Best-Sellers</h2>
+                    <p class="best-modern__subtitle">Les produits préférés de nos clients, qualité garantie</p>
+                </div>
+
+                <div class="best-modern__grid">
+                    <article class="product-card">
+                        <div class="product-card__badge">-20%</div>
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=400&fit=crop" alt="Matelas Premium" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Matelas Premium Confort</h3>
+                            <p class="product-card__desc">Extra ferme - 2 Places - 20cm</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">58.000F</span>
+                                    <span class="product-card__old">72.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&h=400&fit=crop" alt="Matelas Équilibre" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Matelas Équilibre Plus</h3>
+                            <p class="product-card__desc">Mi-ferme - 2 Places - 25cm</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">75.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__badge product-card__badge--new">NEW</div>
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop" alt="Oreiller Ergo" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Oreiller Mémoire de Forme</h3>
+                            <p class="product-card__desc">Ergonomique - Housse bambou</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">15.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=400&fit=crop" alt="Parure de lit" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Parure de Lit Coton Bio</h3>
+                            <p class="product-card__desc">240x260cm - 100% coton</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">35.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__badge">-15%</div>
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop" alt="Surmatelas" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Surmatelas Nuage</h3>
+                            <p class="product-card__desc">Mousse à mémoire - 7cm</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">42.000F</span>
+                                    <span class="product-card__old">49.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1617325247661-675ab4b64b2a?w=400&h=400&fit=crop" alt="Couette" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Couette 4 Saisons</h3>
+                            <p class="product-card__desc">240x220cm - Anti-acariens</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">28.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__badge product-card__badge--hot">HOT</div>
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=400&h=400&fit=crop" alt="Lit complet" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Lit Complet Design</h3>
+                            <p class="product-card__desc">Sommier + Matelas - 160x200</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">185.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-card__media">
+                            <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=400&h=400&fit=crop" alt="Protège matelas" loading="lazy" />
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Protège-Matelas Imperméable</h3>
+                            <p class="product-card__desc">160x200cm - Respirant</p>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">12.000F</span>
+                                </div>
+                                <button class="product-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="inspire" aria-label="Inspirez-vous">
+            <div class="container">
+                <div class="inspire__header">
+                    <span class="inspire__badge">✨ Laissez-vous séduire</span>
+                    <h2 class="inspire__title">Créez Votre Refuge de Bien-Être</h2>
+                    <p class="inspire__subtitle">Chaque nuit mérite d'être exceptionnelle. Découvrez nos univers pensés pour éveiller vos sens.</p>
+                </div>
+
+                <div class="inspire__grid">
+                    <a class="inspire__card inspire__card--large" href="#">
+                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=1000&fit=crop" alt="Chambre luxueuse" loading="lazy" />
+                        <div class="inspire__overlay">
+                            <span class="inspire__tag">Luxe & Sérénité</span>
+                            <h3 class="inspire__card-title">L'Art du Sommeil Parfait</h3>
+                            <p class="inspire__card-text">Plongez dans un cocon de douceur où chaque détail invite à la détente absolue.</p>
+                            <span class="inspire__cta">Explorer <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+
+                    <a class="inspire__card" href="#">
+                        <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&h=400&fit=crop" alt="Chambre moderne" loading="lazy" />
+                        <div class="inspire__overlay">
+                            <span class="inspire__tag">Design Moderne</span>
+                            <h3 class="inspire__card-title">Élégance Contemporaine</h3>
+                            <span class="inspire__cta">Découvrir <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+
+                    <a class="inspire__card" href="#">
+                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&h=400&fit=crop" alt="Chambre cosy" loading="lazy" />
+                        <div class="inspire__overlay">
+                            <span class="inspire__tag">Cosy & Chaleureux</span>
+                            <h3 class="inspire__card-title">Douceur Naturelle</h3>
+                            <span class="inspire__cta">Découvrir <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+
+                    <div class="inspire__message">
+                        <div class="inspire__message-inner">
+                            <div class="inspire__icon">💭</div>
+                            <h3 class="inspire__message-title">Rêvez Plus Grand</h3>
+                            <p class="inspire__message-text">Votre chambre est bien plus qu'un simple espace. C'est votre sanctuaire, l'endroit où chaque réveil devient une promesse de journée réussie.</p>
+                            <a class="inspire__message-btn" href="#">
+                                Trouvez votre bonheur
+                                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing" aria-label="Trouvez votre matelas">
+            <div class="container">
+                <div class="pricing__header">
+                    <span class="pricing__badge">💰 Adapté à votre budget</span>
+                    <h2 class="pricing__title">Votre Sommeil Parfait,<br>À Votre Prix</h2>
+                    <p class="pricing__subtitle">Peu importe votre budget, nous avons le matelas qui transformera vos nuits</p>
+                </div>
+
+                <div class="pricing__tabs">
+                    <button class="pricing__tab is-active" type="button">Matelas</button>
+                    <button class="pricing__tab" type="button">Lits Complets</button>
+                </div>
+
+                <div class="pricing__grid">
+                    <a class="pricing-card" href="#">
+                        <div class="pricing-card__image">
+                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre économique" loading="lazy" />
+                            <div class="pricing-card__glow pricing-card__glow--blue"></div>
+                        </div>
+                        <div class="pricing-card__content">
+                            <span class="pricing-card__label">Essentiel</span>
+                            <h3 class="pricing-card__title">Confort Accessible</h3>
+                            <p class="pricing-card__desc">Qualité et douceur pour des nuits reposantes, sans compromis sur l'essentiel.</p>
+                            <div class="pricing-card__price">
+                                <span class="pricing-card__from">À partir de</span>
+                                <span class="pricing-card__amount">35.000<small>F</small></span>
+                            </div>
+                            <span class="pricing-card__cta">Découvrir <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+
+                    <a class="pricing-card pricing-card--featured" href="#">
+                        <div class="pricing-card__badge">⭐ BEST SELLER</div>
+                        <div class="pricing-card__image">
+                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre premium" loading="lazy" />
+                            <div class="pricing-card__glow pricing-card__glow--pink"></div>
+                        </div>
+                        <div class="pricing-card__content">
+                            <span class="pricing-card__label">Premium</span>
+                            <h3 class="pricing-card__title">L'Équilibre Parfait</h3>
+                            <p class="pricing-card__desc">Le choix de nos clients. Confort supérieur et durabilité exceptionnelle.</p>
+                            <div class="pricing-card__price">
+                                <span class="pricing-card__from">Entre</span>
+                                <span class="pricing-card__amount">50.000<small>F</small></span>
+                                <span class="pricing-card__to">et 78.000F</span>
+                            </div>
+                            <span class="pricing-card__cta">Découvrir <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+
+                    <a class="pricing-card" href="#">
+                        <div class="pricing-card__image">
+                            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre luxe" loading="lazy" />
+                            <div class="pricing-card__glow pricing-card__glow--gold"></div>
+                        </div>
+                        <div class="pricing-card__content">
+                            <span class="pricing-card__label">Excellence</span>
+                            <h3 class="pricing-card__title">Luxe Absolu</h3>
+                            <p class="pricing-card__desc">L'expérience ultime du sommeil. Matériaux nobles, finitions prestigieuses.</p>
+                            <div class="pricing-card__price">
+                                <span class="pricing-card__from">À partir de</span>
+                                <span class="pricing-card__amount">100.000<small>F</small></span>
+                            </div>
+                            <span class="pricing-card__cta">Découvrir <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="pricing__footer">
+                    <p class="pricing__guarantee">✓ Livraison gratuite &nbsp; ✓ 100 nuits d'essai &nbsp; ✓ Garantie 10 ans</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="trust" aria-label="Pourquoi nous choisir">
+            <div class="trust__bg">
+                <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1920&h=800&fit=crop" alt="" loading="lazy" />
+            </div>
+            <div class="container">
+                <div class="trust__header">
+                    <span class="trust__badge">❤️ +10 000 clients satisfaits</span>
+                    <h2 class="trust__title">Pourquoi Ils Nous<br>Font Confiance</h2>
+                    <p class="trust__subtitle">Découvrez ce qui fait la différence Matelas Addict</p>
+                </div>
+
+                <div class="trust__grid">
+                    <div class="trust-card">
+                        <div class="trust-card__icon">
+                            <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 24c0-6 4-10 10-10s10 4 10 10-4 14-10 14-10-8-10-14z" fill="currentColor" opacity=".2"/><path d="M24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </div>
+                        <h3 class="trust-card__title">Confort Enveloppant</h3>
+                        <p class="trust-card__text">Chaque courbe de votre corps est délicatement soutenue. Vous vous endormez comme sur un nuage, bercé par une douceur incomparable.</p>
+                        <div class="trust-card__stat">
+                            <span class="trust-card__number">98%</span>
+                            <span class="trust-card__label">de satisfaction</span>
+                        </div>
+                    </div>
+
+                    <div class="trust-card trust-card--highlight">
+                        <div class="trust-card__icon">
+                            <svg viewBox="0 0 48 48" width="48" height="48"><path d="M24 4l6 12 13 2-9.5 9 2.5 13-12-6.5L12 40l2.5-13L5 18l13-2z" fill="currentColor" opacity=".2"/><path d="M24 4l6 12 13 2-9.5 9 2.5 13-12-6.5L12 40l2.5-13L5 18l13-2z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>
+                        </div>
+                        <h3 class="trust-card__title">Réveil Sans Douleur</h3>
+                        <p class="trust-card__text">Fini les maux de dos au réveil ! Notre technologie d'alignement vertébral vous offre des matins pleins d'énergie et de vitalité.</p>
+                        <div class="trust-card__stat">
+                            <span class="trust-card__number">87%</span>
+                            <span class="trust-card__label">moins de douleurs</span>
+                        </div>
+                    </div>
+
+                    <div class="trust-card">
+                        <div class="trust-card__icon">
+                            <svg viewBox="0 0 48 48" width="48" height="48"><rect x="8" y="8" width="32" height="32" rx="4" fill="currentColor" opacity=".2"/><path d="M8 16h32M16 8v32" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 32l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <h3 class="trust-card__title">Qualité Garantie 10 Ans</h3>
+                        <p class="trust-card__text">Des matériaux nobles, une fabrication irréprochable. Votre investissement est protégé, votre sommeil assuré pour des années.</p>
+                        <div class="trust-card__stat">
+                            <span class="trust-card__number">10</span>
+                            <span class="trust-card__label">ans de garantie</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trust__cta">
+                    <a class="trust__btn" href="#">
+                        Rejoignez-les maintenant
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="collection" aria-label="Notre Collection">
+            <div class="container">
+                <div class="collection__header">
+                    <div class="collection__intro">
+                        <span class="collection__badge">🛏️ Collection exclusive</span>
+                        <h2 class="collection__title">Nos Matelas d'Exception</h2>
+                        <p class="collection__subtitle">Chaque matelas est une promesse de nuits inoubliables. Trouvez celui qui vous correspond.</p>
+                    </div>
+                    <div class="collection__nav">
+                        <button class="collection__arrow" type="button" aria-label="Précédent">
+                            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </button>
+                        <button class="collection__arrow" type="button" aria-label="Suivant">
+                            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collection__grid">
+                    <article class="collection-card">
+                        <div class="collection-card__media">
+                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=500&fit=crop" alt="Matelas Confort+" loading="lazy" />
+                            <span class="collection-card__tag">Ferme</span>
+                        </div>
+                        <div class="collection-card__body">
+                            <div class="collection-card__rating">
+                                <span class="collection-card__stars">★★★★★</span>
+                                <span class="collection-card__reviews">(127 avis)</span>
+                            </div>
+                            <h3 class="collection-card__name">Matelas Confort+ Premium</h3>
+                            <p class="collection-card__specs">2 Places • Ép. 20cm • Mousse HR</p>
+                            <div class="collection-card__footer">
+                                <span class="collection-card__price">58.000<small>F</small></span>
+                                <button class="collection-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="collection-card collection-card--featured">
+                        <div class="collection-card__badge">Best Seller</div>
+                        <div class="collection-card__media">
+                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500&h=500&fit=crop" alt="Matelas Royal" loading="lazy" />
+                            <span class="collection-card__tag">Mi-Ferme</span>
+                        </div>
+                        <div class="collection-card__body">
+                            <div class="collection-card__rating">
+                                <span class="collection-card__stars">★★★★★</span>
+                                <span class="collection-card__reviews">(284 avis)</span>
+                            </div>
+                            <h3 class="collection-card__name">Matelas Royal Deluxe</h3>
+                            <p class="collection-card__specs">2 Places • Ép. 25cm • Mémoire de forme</p>
+                            <div class="collection-card__footer">
+                                <span class="collection-card__price">89.000<small>F</small></span>
+                                <button class="collection-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="collection-card">
+                        <div class="collection-card__media">
+                            <img src="https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=500&h=500&fit=crop" alt="Matelas Zen" loading="lazy" />
+                            <span class="collection-card__tag">Souple</span>
+                        </div>
+                        <div class="collection-card__body">
+                            <div class="collection-card__rating">
+                                <span class="collection-card__stars">★★★★☆</span>
+                                <span class="collection-card__reviews">(89 avis)</span>
+                            </div>
+                            <h3 class="collection-card__name">Matelas Zen Nature</h3>
+                            <p class="collection-card__specs">2 Places • Ép. 22cm • Latex naturel</p>
+                            <div class="collection-card__footer">
+                                <span class="collection-card__price">75.000<small>F</small></span>
+                                <button class="collection-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="collection-card">
+                        <div class="collection-card__media">
+                            <img src="https://images.unsplash.com/photo-1617325247661-675ab4b64b2a?w=500&h=500&fit=crop" alt="Matelas Prestige" loading="lazy" />
+                            <span class="collection-card__tag">Extra-Ferme</span>
+                        </div>
+                        <div class="collection-card__body">
+                            <div class="collection-card__rating">
+                                <span class="collection-card__stars">★★★★★</span>
+                                <span class="collection-card__reviews">(156 avis)</span>
+                            </div>
+                            <h3 class="collection-card__name">Matelas Prestige Elite</h3>
+                            <p class="collection-card__specs">King Size • Ép. 30cm • Ressorts ensachés</p>
+                            <div class="collection-card__footer">
+                                <span class="collection-card__price">125.000<small>F</small></span>
+                                <button class="collection-card__btn" type="button">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="collection__cta">
+                    <a class="collection__link" href="#">
+                        Voir toute la collection
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="video-hero" aria-label="Découvrez notre univers">
+            <div class="video-hero__bg">
+                <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="lazy" />
+            </div>
+            <div class="container">
+                <div class="video-hero__content">
+                    <span class="video-hero__badge">🎬 Immersion totale</span>
+                    <h2 class="video-hero__title">Entrez Dans<br>Notre Univers</h2>
+                    <p class="video-hero__text">Découvrez les coulisses de notre savoir-faire artisanal. Chaque matelas est une œuvre, conçue avec passion pour votre bien-être.</p>
+                    
+                    <a class="video-hero__play" href="#" aria-label="Lire la vidéo">
+                        <span class="video-hero__play-icon">
+                            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7L8 5z" fill="currentColor"/></svg>
+                        </span>
+                        <span class="video-hero__play-text">
+                            <strong>Regarder la vidéo</strong>
+                            <small>2 min 30</small>
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="video-hero__preview">
+                    <div class="video-hero__frame">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=500&fit=crop" alt="Aperçu vidéo" loading="lazy" />
+                        <div class="video-hero__frame-play">
+                            <svg viewBox="0 0 80 80" width="80" height="80">
+                                <circle cx="40" cy="40" r="38" fill="rgba(255,255,255,.9)" stroke="none"/>
+                                <path d="M32 25v30l24-15-24-15z" fill="#ec4899"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="accessories" aria-label="Accessoires literie">
+            <div class="container">
+                <div class="accessories__header">
+                    <span class="accessories__badge">✨ Accessoires essentiels</span>
+                    <h2 class="accessories__title">Complétez Votre Cocon</h2>
+                    <p class="accessories__subtitle">Les petits plus qui font toute la différence pour des nuits parfaites</p>
+                </div>
+
+                <div class="accessories__grid">
+                    <article class="acc-card">
+                        <div class="acc-card__media">
+                            <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop" alt="Oreiller premium" loading="lazy" />
+                            <span class="acc-card__category">Oreillers</span>
+                        </div>
+                        <div class="acc-card__body">
+                            <h3 class="acc-card__name">Oreiller Mémoire de Forme</h3>
+                            <p class="acc-card__desc">Soutien cervical optimal</p>
+                            <div class="acc-card__footer">
+                                <span class="acc-card__price">15.000<small>F</small></span>
+                                <button class="acc-card__btn" type="button">+</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="acc-card">
+                        <div class="acc-card__media">
+                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=400&fit=crop" alt="Parure de lit" loading="lazy" />
+                            <span class="acc-card__category">Draps</span>
+                        </div>
+                        <div class="acc-card__body">
+                            <h3 class="acc-card__name">Parure Coton Égyptien</h3>
+                            <p class="acc-card__desc">400 fils • Satin de luxe</p>
+                            <div class="acc-card__footer">
+                                <span class="acc-card__price">45.000<small>F</small></span>
+                                <button class="acc-card__btn" type="button">+</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="acc-card">
+                        <div class="acc-card__media">
+                            <img src="https://images.unsplash.com/photo-1617325247661-675ab4b64b2a?w=400&h=400&fit=crop" alt="Couette" loading="lazy" />
+                            <span class="acc-card__category">Couettes</span>
+                        </div>
+                        <div class="acc-card__body">
+                            <h3 class="acc-card__name">Couette 4 Saisons</h3>
+                            <p class="acc-card__desc">Duvet naturel • Thermorégulante</p>
+                            <div class="acc-card__footer">
+                                <span class="acc-card__price">55.000<small>F</small></span>
+                                <button class="acc-card__btn" type="button">+</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="acc-card">
+                        <div class="acc-card__media">
+                            <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=400&h=400&fit=crop" alt="Protège-matelas" loading="lazy" />
+                            <span class="acc-card__category">Protection</span>
+                        </div>
+                        <div class="acc-card__body">
+                            <h3 class="acc-card__name">Protège-Matelas Impermeable</h3>
+                            <p class="acc-card__desc">Respirant • Anti-acariens</p>
+                            <div class="acc-card__footer">
+                                <span class="acc-card__price">18.000<small>F</small></span>
+                                <button class="acc-card__btn" type="button">+</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="favorites-new" aria-label="Nos coups de cœur">
+            <div class="container">
+                <div class="favorites-new__header">
+                    <span class="favorites-new__badge"><i class="fa-solid fa-heart"></i> Coup de Cœur</span>
+                    <h2 class="favorites-new__title">Les Essentiels<br><span>de Votre Bien-Être</span></h2>
+                    <p class="favorites-new__subtitle">Découvrez les produits adorés par notre communauté</p>
+                </div>
+
+                <div class="favorites-new__grid">
+                    <article class="fav-new fav-new--hero">
+                        <div class="fav-new__image">
+                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=900&fit=crop" alt="Matelas Prestige" loading="lazy" />
+                            <div class="fav-new__badge-rank"><i class="fa-solid fa-crown"></i> #1</div>
+                        </div>
+                        <div class="fav-new__overlay">
+                            <div class="fav-new__stats">
+                                <span class="fav-new__votes"><i class="fa-solid fa-fire"></i> 523 votes</span>
+                                <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.9</span>
+                            </div>
+                            <h3 class="fav-new__name">Matelas Signature Prestige</h3>
+                            <p class="fav-new__desc">Mémoire de forme • Confort absolu • 10 ans de garantie</p>
+                            <div class="fav-new__bottom">
+                                <div class="fav-new__price">
+                                    <span class="fav-new__price-current">95.000<small>F</small></span>
+                                    <span class="fav-new__price-old">120.000F</span>
+                                </div>
+                                <a class="fav-new__btn" href="#">
+                                    <i class="fa-solid fa-bag-shopping"></i> Ajouter
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="fav-new">
+                        <div class="fav-new__image">
+                            <img src="https://images.unsplash.com/photo-1592789705501-f9ae4287c4a9?w=500&h=600&fit=crop" alt="Oreiller Premium" loading="lazy" />
+                            <div class="fav-new__badge-rank">#2</div>
+                        </div>
+                        <div class="fav-new__overlay">
+                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.8</span>
+                            <h3 class="fav-new__name">Oreiller Nuage Premium</h3>
+                            <div class="fav-new__bottom">
+                                <span class="fav-new__price-current">28.000<small>F</small></span>
+                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="fav-new">
+                        <div class="fav-new__image">
+                            <img src="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?w=500&h=600&fit=crop" alt="Parure de lit" loading="lazy" />
+                            <div class="fav-new__badge-rank">#3</div>
+                        </div>
+                        <div class="fav-new__overlay">
+                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.9</span>
+                            <h3 class="fav-new__name">Parure Satin Élégance</h3>
+                            <div class="fav-new__bottom">
+                                <span class="fav-new__price-current">45.000<small>F</small></span>
+                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="fav-new">
+                        <div class="fav-new__image">
+                            <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=500&h=600&fit=crop" alt="Couette légère" loading="lazy" />
+                            <div class="fav-new__badge-rank">#4</div>
+                        </div>
+                        <div class="fav-new__overlay">
+                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.7</span>
+                            <h3 class="fav-new__name">Couette Duvet Luxe</h3>
+                            <div class="fav-new__bottom">
+                                <span class="fav-new__price-current">72.000<small>F</small></span>
+                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="spaces" aria-label="Solutions par espace">
+            <div class="container">
+                <div class="spaces__header">
+                    <span class="spaces__badge">🏠 Solutions adaptées</span>
+                    <h2 class="spaces__title">Un Sommeil Sur-Mesure<br>Pour Chaque Univers</h2>
+                    <p class="spaces__subtitle">Que vous équipiez un hôtel, un appartement ou votre maison familiale, nous avons la solution parfaite.</p>
+                </div>
+
+                <div class="spaces__grid">
+                    <a class="space-card space-card--large" href="#">
+                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=900&fit=crop" alt="Hôtellerie" loading="lazy" />
+                        <div class="space-card__overlay">
+                            <h3 class="space-card__title">Hôtellerie</h3>
+                            <p class="space-card__desc">Solutions professionnelles pour hôtels, chambres d'hôtes et résidences de tourisme</p>
+                            <span class="space-card__cta">Voir les offres pro →</span>
+                        </div>
+                    </a>
+
+                    <a class="space-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop" alt="Appartement" loading="lazy" />
+                        <div class="space-card__overlay">
+                            <h3 class="space-card__title">Appartement Meublé</h3>
+                            <span class="space-card__cta">Découvrir →</span>
+                        </div>
+                    </a>
+
+                    <a class="space-card" href="#">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop" alt="Studio" loading="lazy" />
+                        <div class="space-card__overlay">
+                            <h3 class="space-card__title">Studio</h3>
+                            <span class="space-card__cta">Découvrir →</span>
+                        </div>
+                    </a>
+
+                    <a class="space-card space-card--wide" href="#">
+                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=900&h=400&fit=crop" alt="Famille" loading="lazy" />
+                        <div class="space-card__overlay">
+                            <h3 class="space-card__title">Famille</h3>
+                            <p class="space-card__desc">Matelas pour toute la famille, du bébé aux grands-parents</p>
+                            <span class="space-card__cta">Explorer les packs famille →</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="brands" aria-label="Nos partenaires">
+            <div class="container">
+                <div class="brands__inner">
+                    <div class="brands__content">
+                        <span class="brands__badge">🤝 Partenaires de confiance</span>
+                        <h2 class="brands__title">Les Plus Grandes Marques<br>À Vos Côtés</h2>
+                        <p class="brands__text">Nous sélectionnons rigoureusement nos partenaires pour leur excellence, leur innovation et leur engagement qualité. Chaque marque partage notre vision d'un sommeil parfait.</p>
+                    </div>
+                    <div class="brands__grid">
+                        <div class="brand-logo"><span>FIESTA</span><small>COMFORT</small></div>
+                        <div class="brand-logo brand-logo--highlight"><span>Dodo</span></div>
+                        <div class="brand-logo brand-logo--highlight"><span>Richbond</span></div>
+                        <div class="brand-logo"><span>AFRI</span><small>MOUSSES</small></div>
+                        <div class="brand-logo brand-logo--highlight"><span>Dolidol</span></div>
+                        <div class="brand-logo"><span>CIL</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="blog-new" aria-label="Blog et conseils">
+            <div class="blog-new__bg"></div>
+            <div class="container">
+                <div class="blog-new__header">
+                    <span class="blog-new__badge"><i class="fa-solid fa-lightbulb"></i> Magazine Bien-Être</span>
+                    <h2 class="blog-new__title">Secrets d'un<br><span>Sommeil Parfait</span></h2>
+                    <p class="blog-new__subtitle">Inspirations, conseils et découvertes pour transformer vos nuits</p>
+                </div>
+
+                <div class="blog-new__grid">
+                    <article class="blog-card blog-card--hero">
+                        <img src="https://images.unsplash.com/photo-1515894203077-9cd36032142f?w=900&h=600&fit=crop" alt="Bien dormir" loading="lazy" />
+                        <div class="blog-card__overlay">
+                            <div class="blog-card__meta">
+                                <span class="blog-card__cat"><i class="fa-solid fa-book-open"></i> Guide Complet</span>
+                                <span class="blog-card__time"><i class="fa-regular fa-clock"></i> 8 min</span>
+                            </div>
+                            <h3 class="blog-card__title">Comment Choisir le Matelas Idéal pour un Sommeil Réparateur ?</h3>
+                            <p class="blog-card__excerpt">Découvrez tous les critères essentiels pour sélectionner le matelas qui transformera vos nuits en véritables moments de récupération...</p>
+                            <a class="blog-card__btn" href="#">
+                                Lire l'article <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=500&h=350&fit=crop" alt="Position sommeil" loading="lazy" />
+                        <div class="blog-card__content">
+                            <span class="blog-card__cat"><i class="fa-solid fa-heart-pulse"></i> Santé</span>
+                            <h3 class="blog-card__title">Les 5 Positions de Sommeil et Leur Impact sur Votre Corps</h3>
+                            <a class="blog-card__link" href="#">Découvrir <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=350&fit=crop" alt="Routine zen" loading="lazy" />
+                        <div class="blog-card__content">
+                            <span class="blog-card__cat"><i class="fa-solid fa-spa"></i> Bien-être</span>
+                            <h3 class="blog-card__title">Routine du Soir : 7 Étapes pour S'endormir en 10 Minutes</h3>
+                            <a class="blog-card__link" href="#">Découvrir <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=500&h=350&fit=crop" alt="Chambre zen" loading="lazy" />
+                        <div class="blog-card__content">
+                            <span class="blog-card__cat"><i class="fa-solid fa-home"></i> Déco</span>
+                            <h3 class="blog-card__title">Créer une Chambre Zen Propice au Repos Absolu</h3>
+                            <a class="blog-card__link" href="#">Découvrir <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="blog-new__cta">
+                    <a class="blog-new__btn" href="#">
+                        <i class="fa-solid fa-newspaper"></i> Explorer le Magazine
+                    </a>
+                </div>
+            </div>
+        </section>
+
+       
