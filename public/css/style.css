@@ -113,7 +113,7 @@ button{-webkit-tap-highlight-color:transparent}
 }
 .skip-link:focus{left:12px}
 
-.header-new{position:sticky;top:0;z-index:9999;background:#fff}
+.header-new{background:#fff}
 .header-new__top{display:none}
 .header-new__main{
   padding:12px 0;
@@ -201,13 +201,10 @@ button{-webkit-tap-highlight-color:transparent}
 }
 @media(min-width:768px){
   .header-new__nav{
-    position:relative;
-    top:auto;
-    left:auto;
-    right:auto;
-    bottom:auto;
+    position:sticky;
+    top:0;
     background:linear-gradient(135deg,#ec4899 0%,#be185d 100%);
-    z-index:auto;
+    z-index:9999;
     padding:0;
     transform:none;
     opacity:1;
