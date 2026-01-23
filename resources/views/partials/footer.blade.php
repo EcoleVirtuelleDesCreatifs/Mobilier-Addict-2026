@@ -58,8 +58,8 @@
             <div class="footer-new__col">
                 <h4 class="footer-new__title">Contact</h4>
                 <div class="footer-new__contact">
-                    <span>📍 Dakar, Sénégal</span>
-                    <span>📞 +221 77 123 45 67</span>
+                    <span>📍 Abidjan, Côte d'Ivoire</span>
+                    <span>📞 +225 0799140356</span>
                     <span>✉️ contact@mobilier-addict.com</span>
                     <span>🕐 Lun-Sam: 9h-19h</span>
                 </div>

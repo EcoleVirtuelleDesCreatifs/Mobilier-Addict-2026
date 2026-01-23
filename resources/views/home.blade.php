@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.front')
 
 @section('title', 'Accueil')
+@section('meta_description', 'Mobilier Addict : literie, mobilier et équipements pour la maison. Profitez de nos univers, meilleures ventes et inspirations déco pour équiper votre intérieur.')
+@section('canonical', url('/'))
+@section('og_image', asset('assets/logo/mobile/logo.png'))
+@section('twitter_image', asset('assets/logo/mobile/logo.png'))
 
 @section('content')
 @include('sections.hero')
