@@ -31,9 +31,9 @@
                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                     <span class="header-new__action-label">Compte</span>
                 </a>
-                <a class="header-new__cart" href="#">
+                <a class="header-new__cart" href="{{ route('cart.index') }}">
                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                    <span class="header-new__cart-count">2</span>
+                    <span class="header-new__cart-count">{{ is_array(session('cart')) ? array_sum(array_map(fn($i) => (int)($i['quantity'] ?? 0), session('cart'))) : 0 }}</span>
                     <span class="header-new__action-label">Panier</span>
                 </a>
                 <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
@@ -55,15 +55,15 @@
                 <span class="nav-link__icon"><i class="fa-solid fa-house"></i></span>
                 Accueil
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('univers.show', 'matelas') }}">
                 <span class="nav-link__icon"><i class="fa-solid fa-bed"></i></span>
                 Matelas
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('univers.show', 'oreillers') }}">
                 <span class="nav-link__icon"><i class="fa-solid fa-cloud"></i></span>
                 Oreillers
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('univers.show', 'draps-couettes') }}">
                 <span class="nav-link__icon"><i class="fa-solid fa-sheet-plastic"></i></span>
                 Draps & Couettes
             </a>
@@ -71,7 +71,7 @@
                 <span class="nav-link__icon"><i class="fa-solid fa-plug"></i></span>
                 Électroménager & Meubles
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('univers.show', 'lits-sommiers') }}">
                 <span class="nav-link__icon"><i class="fa-solid fa-couch"></i></span>
                 Lits
             </a>

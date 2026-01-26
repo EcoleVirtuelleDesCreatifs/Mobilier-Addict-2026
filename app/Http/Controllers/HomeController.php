@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
+use App\Models\Product;
 use App\Models\Section;
 
 class HomeController extends Controller
@@ -47,6 +49,90 @@ class HomeController extends Controller
             ->get()
             ->keyBy('slug');
 
-        return view('home', compact('homeSections'));
+        $collectionProducts = Product::query()
+            ->active()
+            ->collection()
+            ->ordered()
+            ->take(8)
+            ->get();
+
+        if ($collectionProducts->isEmpty()) {
+            $collectionProducts = Product::query()
+                ->active()
+                ->ordered()
+                ->take(8)
+                ->get();
+        }
+
+        $accessoryCategorySlugs = ['oreillers', 'draps', 'couettes', 'protection'];
+        $accessoryProducts = Product::query()
+            ->active()
+            ->whereHas('category', function ($query) use ($accessoryCategorySlugs) {
+                $query->whereIn('slug', $accessoryCategorySlugs);
+            })
+            ->ordered()
+            ->take(4)
+            ->get();
+
+        if ($accessoryProducts->isEmpty()) {
+            $accessoryProducts = Product::query()
+                ->active()
+                ->ordered()
+                ->take(4)
+                ->get();
+        }
+
+        $favoriteProducts = Product::query()
+            ->active()
+            ->bestsellers()
+            ->ordered()
+            ->take(4)
+            ->get();
+
+        if ($favoriteProducts->count() < 4) {
+            $featured = Product::query()
+                ->active()
+                ->featured()
+                ->ordered()
+                ->take(4)
+                ->get();
+            $favoriteProducts = $favoriteProducts->concat($featured)->unique('id')->take(4)->values();
+        }
+
+        if ($favoriteProducts->isEmpty()) {
+            $favoriteProducts = Product::query()
+                ->active()
+                ->ordered()
+                ->take(4)
+                ->get();
+        }
+
+        $blogFeaturedPost = BlogPost::query()
+            ->active()
+            ->featured()
+            ->ordered()
+            ->with(['category'])
+            ->first();
+
+        $blogPosts = BlogPost::query()
+            ->active()
+            ->when($blogFeaturedPost, fn ($q) => $q->where('id', '!=', $blogFeaturedPost->id))
+            ->ordered()
+            ->with(['category'])
+            ->take(3)
+            ->get();
+
+        if (!$blogFeaturedPost) {
+            $items = BlogPost::query()
+                ->active()
+                ->ordered()
+                ->with(['category'])
+                ->take(4)
+                ->get();
+            $blogFeaturedPost = $items->first();
+            $blogPosts = $items->slice(1, 3)->values();
+        }
+
+        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts'));
     }
 }

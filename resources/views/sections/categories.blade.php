@@ -10,7 +10,7 @@
                     @if($section && $section->categories->count())
                         @foreach($section->categories as $i => $category)
                             @php($cardClass = $i === 0 ? 'cat-card cat-card--large' : ($i === 3 ? 'cat-card cat-card--wide' : 'cat-card'))
-                            <a class="{{ $cardClass }}" href="#">
+                            <a class="{{ $cardClass }}" href="{{ route('univers.show', $category->slug) }}">
                                 <img src="{{ asset($category->image) }}" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
                                 <div class="cat-card__overlay">
                                     <span class="cat-card__count">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
@@ -25,7 +25,7 @@
                             </a>
                         @endforeach
                     @else
-                        <a class="cat-card cat-card--large" href="#">
+                        <a class="cat-card cat-card--large" href="{{ route('univers.show', 'matelas') }}">
                             <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop" alt="Matelas" loading="lazy" />
                             <div class="cat-card__overlay">
                                 <span class="cat-card__count">48 produits</span>
@@ -34,7 +34,7 @@
                                 <span class="cat-card__cta">Explorer <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
                             </div>
                         </a>
-                        <a class="cat-card" href="#">
+                        <a class="cat-card" href="{{ route('univers.show', 'oreillers') }}">
                             <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&h=400&fit=crop" alt="Oreillers" loading="lazy" />
                             <div class="cat-card__overlay">
                                 <span class="cat-card__count">24 produits</span>
@@ -42,7 +42,7 @@
                                 <span class="cat-card__cta">Voir →</span>
                             </div>
                         </a>
-                        <a class="cat-card" href="#">
+                        <a class="cat-card" href="{{ route('univers.show', 'draps-couettes') }}">
                             <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&h=400&fit=crop" alt="Draps & Couettes" loading="lazy" />
                             <div class="cat-card__overlay">
                                 <span class="cat-card__count">36 produits</span>
@@ -50,7 +50,7 @@
                                 <span class="cat-card__cta">Voir →</span>
                             </div>
                         </a>
-                        <a class="cat-card cat-card--wide" href="#">
+                        <a class="cat-card cat-card--wide" href="{{ route('univers.show', 'lits-sommiers') }}">
                             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&h=400&fit=crop" alt="Lits" loading="lazy" />
                             <div class="cat-card__overlay">
                                 <span class="cat-card__count">18 produits</span>

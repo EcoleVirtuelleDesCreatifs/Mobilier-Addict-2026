@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="pricing__grid">
-                    <a class="pricing-card" href="#">
+                    <a class="pricing-card" href="{{ route('pricing') }}">
                         <div class="pricing-card__image">
                             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre économique" loading="lazy" />
                             <div class="pricing-card__glow pricing-card__glow--blue"></div>
@@ -81,7 +81,7 @@
                         </div>
                     </a>
 
-                    <a class="pricing-card pricing-card--featured" href="#">
+                    <a class="pricing-card pricing-card--featured" href="{{ route('pricing') }}">
                         <div class="pricing-card__badge">⭐ BEST SELLER</div>
                         <div class="pricing-card__image">
                             <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre premium" loading="lazy" />
@@ -100,7 +100,7 @@
                         </div>
                     </a>
 
-                    <a class="pricing-card" href="#">
+                    <a class="pricing-card" href="{{ route('pricing') }}">
                         <div class="pricing-card__image">
                             <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre luxe" loading="lazy" />
                             <div class="pricing-card__glow pricing-card__glow--gold"></div>

@@ -6,7 +6,7 @@
                 </div>
 
                 <div class="best-modern__grid">
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__badge">-20%</div>
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=400&fit=crop" alt="Matelas Premium" loading="lazy" />
@@ -19,14 +19,14 @@
                                     <span class="product-card__price">58.000F</span>
                                     <span class="product-card__old">72.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&h=400&fit=crop" alt="Matelas Équilibre" loading="lazy" />
                         </div>
@@ -37,14 +37,14 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">75.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__badge product-card__badge--new">NEW</div>
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop" alt="Oreiller Ergo" loading="lazy" />
@@ -56,14 +56,14 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">15.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=400&fit=crop" alt="Parure de lit" loading="lazy" />
                         </div>
@@ -74,14 +74,14 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">35.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__badge">-15%</div>
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop" alt="Surmatelas" loading="lazy" />
@@ -94,14 +94,14 @@
                                     <span class="product-card__price">42.000F</span>
                                     <span class="product-card__old">49.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1617325247661-675ab4b64b2a?w=400&h=400&fit=crop" alt="Couette" loading="lazy" />
                         </div>
@@ -112,14 +112,14 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">28.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__badge product-card__badge--hot">HOT</div>
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=400&h=400&fit=crop" alt="Lit complet" loading="lazy" />
@@ -131,14 +131,14 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">185.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
 
-                    <article class="product-card">
+                    <a href="{{ route('demo.product') }}" class="product-card">
                         <div class="product-card__media">
                             <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=400&h=400&fit=crop" alt="Protège matelas" loading="lazy" />
                         </div>
@@ -149,12 +149,12 @@
                                 <div class="product-card__prices">
                                     <span class="product-card__price">12.000F</span>
                                 </div>
-                                <button class="product-card__btn" type="button">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6-1.35 2.45A1.99 1.99 0 0 0 6 22h12v-2H6l1.1-2H15a2 2 0 0 0 1.8-1.1L20.4 9H6.2L5.3 7H21V5H6.3L5.6 4z" fill="currentColor"/></svg>
-                                </button>
+                                <span class="product-card__btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
+                                </span>
                             </div>
                         </div>
-                    </article>
+                    </a>
                 </div>
             </div>
         </section>

@@ -5,9 +5,9 @@
                 <h3 class="footer-new__newsletter-title">Rejoignez la Communauté du Bien-Dormir</h3>
                 <p class="footer-new__newsletter-text">Recevez nos offres exclusives, conseils d'experts et les dernières tendances literie.</p>
             </div>
-            <form class="footer-new__newsletter-form">
+            <form class="footer-new__newsletter-form" action="{{ route('newsletter.subscribe') }}" method="POST">
                 @csrf
-                <input type="email" placeholder="Votre adresse email" required />
+                <input type="email" name="email" placeholder="Votre adresse email" required />
                 <button type="submit">S'inscrire <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
             </form>
         </div>
@@ -30,29 +30,29 @@
 
             <div class="footer-new__col">
                 <h4 class="footer-new__title">Nos Produits</h4>
-                <a class="footer-new__link" href="#">Matelas</a>
-                <a class="footer-new__link" href="#">Oreillers</a>
-                <a class="footer-new__link" href="#">Draps & Couettes</a>
-                <a class="footer-new__link" href="#">Protège-Matelas</a>
-                <a class="footer-new__link" href="#">Lits & Sommiers</a>
-                <a class="footer-new__link" href="#">Électroménager</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'matelas']) }}">Matelas</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'oreillers']) }}">Oreillers</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'draps-couettes']) }}">Draps & Couettes</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'protection']) }}">Protège-Matelas</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'lits-sommiers']) }}">Lits & Sommiers</a>
+                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'electromenager']) }}">Électroménager</a>
             </div>
 
             <div class="footer-new__col">
                 <h4 class="footer-new__title">Informations</h4>
-                <a class="footer-new__link" href="#">À propos de nous</a>
-                <a class="footer-new__link" href="#">Contactez-nous</a>
-                <a class="footer-new__link" href="#">Service client</a>
-                <a class="footer-new__link" href="#">Livraison & Retours</a>
-                <a class="footer-new__link" href="#">FAQ</a>
+                <a class="footer-new__link" href="{{ route('pages.about') }}">À propos de nous</a>
+                <a class="footer-new__link" href="{{ route('pages.contact') }}">Contactez-nous</a>
+                <a class="footer-new__link" href="{{ route('pages.customer-service') }}">Service client</a>
+                <a class="footer-new__link" href="{{ route('pages.shipping-returns') }}">Livraison & Retours</a>
+                <a class="footer-new__link" href="{{ route('pages.faq') }}">FAQ</a>
             </div>
 
             <div class="footer-new__col">
                 <h4 class="footer-new__title">Conseils Expert</h4>
-                <a class="footer-new__link" href="#">Guide d'achat matelas</a>
-                <a class="footer-new__link" href="#">Blog du sommeil</a>
-                <a class="footer-new__link" href="#">Choisir son oreiller</a>
-                <a class="footer-new__link" href="#">Entretien literie</a>
+                <a class="footer-new__link" href="{{ route('pages.guides.mattress') }}">Guide d'achat matelas</a>
+                <a class="footer-new__link" href="{{ route('blog.index') }}">Blog du sommeil</a>
+                <a class="footer-new__link" href="{{ route('pages.guides.pillow') }}">Choisir son oreiller</a>
+                <a class="footer-new__link" href="{{ route('pages.guides.care') }}">Entretien literie</a>
             </div>
 
             <div class="footer-new__col">
@@ -71,9 +71,9 @@
         <div class="container footer-new__bottom-inner">
             <p class="footer-new__copy">© {{ date('Y') }} Mobilier Addict. Tous droits réservés.</p>
             <div class="footer-new__legal">
-                <a href="#">Mentions légales</a>
-                <a href="#">Politique de confidentialité</a>
-                <a href="#">CGV</a>
+                <a href="{{ route('pages.legal') }}">Mentions légales</a>
+                <a href="{{ route('pages.privacy') }}">Politique de confidentialité</a>
+                <a href="{{ route('pages.cgv') }}">CGV</a>
             </div>
             <div class="footer-new__payments">
                 <span>💳</span>

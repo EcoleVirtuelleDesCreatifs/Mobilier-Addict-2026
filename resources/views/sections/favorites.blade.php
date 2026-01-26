@@ -7,74 +7,79 @@
                 </div>
 
                 <div class="favorites-new__grid">
-                    <article class="fav-new fav-new--hero">
-                        <div class="fav-new__image">
-                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=900&fit=crop" alt="Matelas Prestige" loading="lazy" />
-                            <div class="fav-new__badge-rank"><i class="fa-solid fa-crown"></i> #1</div>
-                        </div>
-                        <div class="fav-new__overlay">
-                            <div class="fav-new__stats">
-                                <span class="fav-new__votes"><i class="fa-solid fa-fire"></i> 523 votes</span>
-                                <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.9</span>
-                            </div>
-                            <h3 class="fav-new__name">Matelas Signature Prestige</h3>
-                            <p class="fav-new__desc">Mémoire de forme • Confort absolu • 10 ans de garantie</p>
-                            <div class="fav-new__bottom">
-                                <div class="fav-new__price">
-                                    <span class="fav-new__price-current">95.000<small>F</small></span>
-                                    <span class="fav-new__price-old">120.000F</span>
+                    @php
+                        $items = ($favoriteProducts ?? collect())->values();
+                        $hero = $items->first();
+                        $rest = $items->slice(1, 3)->values();
+                    @endphp
+
+                    @if($hero)
+                        <article class="fav-new fav-new--hero">
+                            <a href="{{ route('product.show', $hero->slug) }}" style="text-decoration:none;color:inherit">
+                                <div class="fav-new__image">
+                                    <img src="{{ $hero->image ? asset($hero->image) : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=900&fit=crop' }}" alt="{{ $hero->name }}" loading="lazy" />
+                                    <div class="fav-new__badge-rank"><i class="fa-solid fa-crown"></i> #1</div>
                                 </div>
-                                <a class="fav-new__btn" href="#">
-                                    <i class="fa-solid fa-bag-shopping"></i> Ajouter
+                            </a>
+
+                            <div class="fav-new__overlay">
+                                <div class="fav-new__stats">
+                                    <span class="fav-new__votes"><i class="fa-solid fa-fire"></i> {{ (int) ($hero->reviews_count ?? 0) }} votes</span>
+                                    <span class="fav-new__rating"><i class="fa-solid fa-star"></i> {{ number_format((float) ($hero->rating ?? 0), 1, ',', '.') }}</span>
+                                </div>
+
+                                <a href="{{ route('product.show', $hero->slug) }}" style="text-decoration:none;color:inherit">
+                                    <h3 class="fav-new__name">{{ $hero->name }}</h3>
                                 </a>
-                            </div>
-                        </div>
-                    </article>
 
-                    <article class="fav-new">
-                        <div class="fav-new__image">
-                            <img src="https://images.unsplash.com/photo-1592789705501-f9ae4287c4a9?w=500&h=600&fit=crop" alt="Oreiller Premium" loading="lazy" />
-                            <div class="fav-new__badge-rank">#2</div>
-                        </div>
-                        <div class="fav-new__overlay">
-                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.8</span>
-                            <h3 class="fav-new__name">Oreiller Nuage Premium</h3>
-                            <div class="fav-new__bottom">
-                                <span class="fav-new__price-current">28.000<small>F</small></span>
-                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>
-                    </article>
+                                <p class="fav-new__desc">{{ $hero->short_description ?: ' ' }}</p>
 
-                    <article class="fav-new">
-                        <div class="fav-new__image">
-                            <img src="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?w=500&h=600&fit=crop" alt="Parure de lit" loading="lazy" />
-                            <div class="fav-new__badge-rank">#3</div>
-                        </div>
-                        <div class="fav-new__overlay">
-                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.9</span>
-                            <h3 class="fav-new__name">Parure Satin Élégance</h3>
-                            <div class="fav-new__bottom">
-                                <span class="fav-new__price-current">45.000<small>F</small></span>
-                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>
-                    </article>
+                                <div class="fav-new__bottom">
+                                    <div class="fav-new__price">
+                                        <span class="fav-new__price-current">{{ number_format((float) $hero->price, 0, ',', '.') }}<small>F</small></span>
+                                        @if(!empty($hero->old_price))
+                                            <span class="fav-new__price-old">{{ number_format((float) $hero->old_price, 0, ',', '.') }}F</span>
+                                        @endif
+                                    </div>
 
-                    <article class="fav-new">
-                        <div class="fav-new__image">
-                            <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=500&h=600&fit=crop" alt="Couette légère" loading="lazy" />
-                            <div class="fav-new__badge-rank">#4</div>
-                        </div>
-                        <div class="fav-new__overlay">
-                            <span class="fav-new__rating"><i class="fa-solid fa-star"></i> 4.7</span>
-                            <h3 class="fav-new__name">Couette Duvet Luxe</h3>
-                            <div class="fav-new__bottom">
-                                <span class="fav-new__price-current">72.000<small>F</small></span>
-                                <button class="fav-new__add"><i class="fa-solid fa-plus"></i></button>
+                                    <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $hero->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button class="fav-new__btn" type="submit">
+                                            <i class="fa-solid fa-bag-shopping"></i> Ajouter
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
+                    @endif
+
+                    @foreach($rest as $i => $product)
+                        <article class="fav-new">
+                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                <div class="fav-new__image">
+                                    <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1592789705501-f9ae4287c4a9?w=500&h=600&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <div class="fav-new__badge-rank">#{{ $i + 2 }}</div>
+                                </div>
+                            </a>
+                            <div class="fav-new__overlay">
+                                <span class="fav-new__rating"><i class="fa-solid fa-star"></i> {{ number_format((float) ($product->rating ?? 0), 1, ',', '.') }}</span>
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <h3 class="fav-new__name">{{ $product->name }}</h3>
+                                </a>
+                                <div class="fav-new__bottom">
+                                    <span class="fav-new__price-current">{{ number_format((float) $product->price, 0, ',', '.') }}<small>F</small></span>
+                                    <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button class="fav-new__add" type="submit" aria-label="Ajouter au panier"><i class="fa-solid fa-plus"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
                 </div>
             </div>
         </section>

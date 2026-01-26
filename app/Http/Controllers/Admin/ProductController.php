@@ -36,37 +36,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug'],
-            'short_description' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'image' => ['required', 'image', 'max:4096'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'old_price' => ['nullable', 'numeric', 'min:0'],
-            'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'badge' => ['nullable', 'string', 'max:50'],
-            'badge_type' => ['nullable', 'in:new,hot,sale,custom'],
-            'stock' => ['nullable', 'integer', 'min:0'],
-            'sku' => ['nullable', 'string', 'max:255', 'unique:products,sku'],
-            'dimensions' => ['nullable', 'string', 'max:255'],
-            'material' => ['nullable', 'string', 'max:255'],
-            'color' => ['nullable', 'string', 'max:255'],
-            'is_featured' => ['nullable', 'boolean'],
-            'is_bestseller' => ['nullable', 'boolean'],
-            'is_active' => ['nullable', 'boolean'],
-            'order' => ['nullable', 'integer'],
-        ]);
-
-        $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
-        $data['stock'] = $data['stock'] ?? 0;
-        $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
-        $data['is_bestseller'] = (bool) ($data['is_bestseller'] ?? false);
-        $data['is_active'] = (bool) ($data['is_active'] ?? false);
-        $data['order'] = $data['order'] ?? 0;
-
-        $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
+        $data = $this->validateProduct($request);
+        $data = $this->normalizeProductData($data);
+        $data = $this->handleProductUploads($request, $data);
 
         Product::create($data);
 
@@ -82,39 +54,9 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug,' . $product->id],
-            'short_description' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:4096'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'old_price' => ['nullable', 'numeric', 'min:0'],
-            'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'badge' => ['nullable', 'string', 'max:50'],
-            'badge_type' => ['nullable', 'in:new,hot,sale,custom'],
-            'stock' => ['nullable', 'integer', 'min:0'],
-            'sku' => ['nullable', 'string', 'max:255', 'unique:products,sku,' . $product->id],
-            'dimensions' => ['nullable', 'string', 'max:255'],
-            'material' => ['nullable', 'string', 'max:255'],
-            'color' => ['nullable', 'string', 'max:255'],
-            'is_featured' => ['nullable', 'boolean'],
-            'is_bestseller' => ['nullable', 'boolean'],
-            'is_active' => ['nullable', 'boolean'],
-            'order' => ['nullable', 'integer'],
-        ]);
-
-        $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
-        $data['stock'] = $data['stock'] ?? 0;
-        $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
-        $data['is_bestseller'] = (bool) ($data['is_bestseller'] ?? false);
-        $data['is_active'] = (bool) ($data['is_active'] ?? false);
-        $data['order'] = $data['order'] ?? 0;
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
-        }
+        $data = $this->validateProduct($request, $product);
+        $data = $this->normalizeProductData($data);
+        $data = $this->handleProductUploads($request, $data, $product);
 
         $product->update($data);
 
@@ -140,5 +82,106 @@ class ProductController extends Controller
         $file->move($dir, $filename);
 
         return 'uploads/' . $folder . '/' . $filename;
+    }
+
+    private function validateProduct(Request $request, ?Product $product = null): array
+    {
+        $isUpdate = $product !== null;
+
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug' . ($isUpdate ? ',' . $product->id : '')],
+            'short_description' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'image' => [$isUpdate ? 'nullable' : 'required', 'image', 'max:4096'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['nullable', 'image', 'max:4096'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'promo_price' => ['nullable', 'numeric', 'min:0'],
+            'old_price' => ['nullable', 'numeric', 'min:0'],
+            'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'badge' => ['nullable', 'string', 'max:50'],
+            'badge_type' => ['nullable', 'in:new,hot,sale,custom'],
+            'stock' => ['nullable', 'integer', 'min:0'],
+            'sku' => ['nullable', 'string', 'max:255', 'unique:products,sku' . ($isUpdate ? ',' . $product->id : '')],
+            'dimensions' => ['nullable', 'string', 'max:255'],
+            'material' => ['nullable', 'string', 'max:255'],
+            'color' => ['nullable', 'string', 'max:255'],
+            'is_featured' => ['nullable', 'boolean'],
+            'is_bestseller' => ['nullable', 'boolean'],
+            'is_collection' => ['nullable', 'boolean'],
+            'section' => ['nullable', 'in:collection,featured,bestseller'],
+            'is_active' => ['nullable', 'boolean'],
+            'order' => ['nullable', 'integer'],
+        ]);
+    }
+
+    private function normalizeProductData(array $data): array
+    {
+        if (!empty($data['promo_price'])) {
+            $currentPrice = (float) $data['price'];
+            $promoPrice = (float) $data['promo_price'];
+
+            if ($promoPrice > 0 && $promoPrice < $currentPrice) {
+                $data['old_price'] = $data['old_price'] ?: $data['price'];
+                $data['price'] = $data['promo_price'];
+            }
+        }
+        unset($data['promo_price']);
+
+        $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
+        $data['stock'] = $data['stock'] ?? 0;
+        $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
+        $data['is_bestseller'] = (bool) ($data['is_bestseller'] ?? false);
+        $data['is_collection'] = (bool) ($data['is_collection'] ?? false);
+        $data['is_active'] = (bool) ($data['is_active'] ?? false);
+        $data['order'] = $data['order'] ?? 0;
+
+        if (!empty($data['section'])) {
+            if ($data['section'] === 'collection') {
+                $data['is_collection'] = true;
+            }
+            if ($data['section'] === 'featured') {
+                $data['is_featured'] = true;
+            }
+            if ($data['section'] === 'bestseller') {
+                $data['is_bestseller'] = true;
+            }
+        }
+        unset($data['section']);
+
+        if (!empty($data['old_price']) && (float) $data['old_price'] > 0 && empty($data['discount_percent'])) {
+            $price = (float) $data['price'];
+            $oldPrice = (float) $data['old_price'];
+            if ($oldPrice > $price && $price >= 0) {
+                $data['discount_percent'] = (int) round((($oldPrice - $price) / $oldPrice) * 100);
+            }
+        }
+
+        return $data;
+    }
+
+    private function handleProductUploads(Request $request, array $data, ?Product $product = null): array
+    {
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
+        }
+
+        if (!$product && empty($data['image'])) {
+            $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
+        }
+
+        $gallery = $product?->gallery ?: [];
+        if ($request->hasFile('gallery')) {
+            foreach ((array) $request->file('gallery') as $file) {
+                if ($file) {
+                    $gallery[] = $this->storeUploadedImage($file, 'products');
+                }
+            }
+        }
+        $data['gallery'] = $gallery ?: null;
+
+        return $data;
     }
 }

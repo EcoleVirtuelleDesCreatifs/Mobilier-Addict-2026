@@ -1,4 +1,4 @@
-        <section class="video-hero" aria-label="Découvrez notre univers">
+        <section class="video-hero" aria-label="Découvrez notre univers" data-video-url="https://www.youtube.com/embed/dQw4w9WgXcQ">
             <div class="video-hero__bg">
                 <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="lazy" />
             </div>
@@ -8,7 +8,7 @@
                     <h2 class="video-hero__title">Entrez Dans<br>Notre Univers</h2>
                     <p class="video-hero__text">Découvrez les coulisses de notre savoir-faire artisanal. Chaque matelas est une œuvre, conçue avec passion pour votre bien-être.</p>
 
-                    <a class="video-hero__play" href="#" aria-label="Lire la vidéo">
+                    <a class="video-hero__play" href="#" aria-label="Lire la vidéo" data-video-trigger>
                         <span class="video-hero__play-icon">
                             <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7L8 5z" fill="currentColor"/></svg>
                         </span>
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="video-hero__preview">
-                    <div class="video-hero__frame">
+                    <div class="video-hero__frame" role="button" tabindex="0" aria-label="Lire la vidéo" data-video-trigger>
                         <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=500&fit=crop" alt="Aperçu vidéo" loading="lazy" />
                         <div class="video-hero__frame-play">
                             <svg viewBox="0 0 80 80" width="80" height="80">
@@ -33,6 +33,92 @@
             </div>
         </section>
 
+        <div class="video-modal" id="videoModal" aria-hidden="true">
+            <div class="video-modal__overlay" data-video-close></div>
+            <div class="video-modal__dialog" role="dialog" aria-modal="true" aria-label="Vidéo">
+                <button class="video-modal__close" type="button" aria-label="Fermer" data-video-close>
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L12 13.41l-6.29 6.3-1.42-1.42L10.59 12 4.29 5.71 5.71 4.29 12 10.59l6.29-6.3z" fill="currentColor"/></svg>
+                </button>
+                <div class="video-modal__frame" id="videoModalFrame"></div>
+            </div>
+        </div>
+
+        @push('scripts')
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const section = document.querySelector('.video-hero');
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoModalFrame');
+            if (!section || !modal || !frame) return;
+
+            const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const baseUrl = section.getAttribute('data-video-url');
+
+            const buildUrl = () => {
+                if (!baseUrl) return null;
+                const hasQuery = baseUrl.includes('?');
+                const sep = hasQuery ? '&' : '?';
+                return reducedMotion ? baseUrl : `${baseUrl}${sep}autoplay=1`;
+            };
+
+            const open = () => {
+                const url = buildUrl();
+                if (!url) return;
+                frame.innerHTML = `<iframe src="${url}" title="Vidéo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const close = () => {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                frame.innerHTML = '';
+                document.body.style.overflow = '';
+            };
+
+            section.querySelectorAll('[data-video-trigger]').forEach((el) => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    open();
+                });
+                el.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        open();
+                    }
+                });
+            });
+
+            modal.querySelectorAll('[data-video-close]').forEach((el) => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    close();
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+                    close();
+                }
+            });
+        });
+        </script>
+        @endpush
+
+        @push('styles')
+        <style>
+        .video-modal{position:fixed;inset:0;z-index:99999;display:none}
+        .video-modal.is-open{display:block}
+        .video-modal__overlay{position:absolute;inset:0;background:rgba(2,6,23,.72);backdrop-filter:blur(8px)}
+        .video-modal__dialog{position:relative;max-width:min(980px,calc(100vw - 32px));margin:6vh auto 0;background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.22);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden}
+        .video-modal__close{position:absolute;top:12px;right:12px;border:none;background:rgba(15,23,42,.08);color:#0b1220;border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+        .video-modal__close:hover{background:rgba(15,23,42,.14)}
+        .video-modal__frame{width:100%;aspect-ratio:16/9;background:#000}
+        .video-modal__frame iframe{width:100%;height:100%;display:block}
+        </style>
+        @endpush
+
         <section class="accessories" aria-label="Accessoires literie">
             <div class="container">
                 <div class="accessories__header">
@@ -42,65 +128,38 @@
                 </div>
 
                 <div class="accessories__grid">
-                    <article class="acc-card">
-                        <div class="acc-card__media">
-                            <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop" alt="Oreiller premium" loading="lazy" />
-                            <span class="acc-card__category">Oreillers</span>
-                        </div>
-                        <div class="acc-card__body">
-                            <h3 class="acc-card__name">Oreiller Mémoire de Forme</h3>
-                            <p class="acc-card__desc">Soutien cervical optimal</p>
-                            <div class="acc-card__footer">
-                                <span class="acc-card__price">15.000<small>F</small></span>
-                                <button class="acc-card__btn" type="button">+</button>
-                            </div>
-                        </div>
-                    </article>
+                    @foreach(($accessoryProducts ?? collect()) as $product)
+                        @php
+                            $categoryLabel = $product->category?->name;
+                        @endphp
 
-                    <article class="acc-card">
-                        <div class="acc-card__media">
-                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=400&fit=crop" alt="Parure de lit" loading="lazy" />
-                            <span class="acc-card__category">Draps</span>
-                        </div>
-                        <div class="acc-card__body">
-                            <h3 class="acc-card__name">Parure Coton Égyptien</h3>
-                            <p class="acc-card__desc">400 fils • Satin de luxe</p>
-                            <div class="acc-card__footer">
-                                <span class="acc-card__price">45.000<small>F</small></span>
-                                <button class="acc-card__btn" type="button">+</button>
-                            </div>
-                        </div>
-                    </article>
+                        <article class="acc-card">
+                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                <div class="acc-card__media">
+                                    <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    @if($categoryLabel)
+                                        <span class="acc-card__category">{{ $categoryLabel }}</span>
+                                    @endif
+                                </div>
+                            </a>
 
-                    <article class="acc-card">
-                        <div class="acc-card__media">
-                            <img src="https://images.unsplash.com/photo-1617325247661-675ab4b64b2a?w=400&h=400&fit=crop" alt="Couette" loading="lazy" />
-                            <span class="acc-card__category">Couettes</span>
-                        </div>
-                        <div class="acc-card__body">
-                            <h3 class="acc-card__name">Couette 4 Saisons</h3>
-                            <p class="acc-card__desc">Duvet naturel • Thermorégulante</p>
-                            <div class="acc-card__footer">
-                                <span class="acc-card__price">55.000<small>F</small></span>
-                                <button class="acc-card__btn" type="button">+</button>
+                            <div class="acc-card__body">
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <h3 class="acc-card__name">{{ $product->name }}</h3>
+                                </a>
+                                <p class="acc-card__desc">{{ $product->short_description ?: ' ' }}</p>
+                                <div class="acc-card__footer">
+                                    <span class="acc-card__price">{{ number_format((float) $product->price, 0, ',', '.') }}<small>F</small></span>
+                                    <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button class="acc-card__btn" type="submit" aria-label="Ajouter au panier">+</button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </article>
-
-                    <article class="acc-card">
-                        <div class="acc-card__media">
-                            <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=400&h=400&fit=crop" alt="Protège-matelas" loading="lazy" />
-                            <span class="acc-card__category">Protection</span>
-                        </div>
-                        <div class="acc-card__body">
-                            <h3 class="acc-card__name">Protège-Matelas Impermeable</h3>
-                            <p class="acc-card__desc">Respirant • Anti-acariens</p>
-                            <div class="acc-card__footer">
-                                <span class="acc-card__price">18.000<small>F</small></span>
-                                <button class="acc-card__btn" type="button">+</button>
-                            </div>
-                        </div>
-                    </article>
+                        </article>
+                    @endforeach
                 </div>
             </div>
         </section>

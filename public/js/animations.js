@@ -1,25 +1,25 @@
 // Smooth scroll animations on page load and scroll
 document.addEventListener('DOMContentLoaded', function() {
-  
+
   // Hamburger menu toggle
   const hamburger = document.getElementById('hamburger');
   const nav = document.querySelector('.header-new__nav');
   const navClose = document.getElementById('nav-close');
-  
+
   const closeMenu = () => {
     hamburger.classList.remove('active');
     nav.classList.remove('active');
     document.body.style.overflow = '';
     hamburger.setAttribute('aria-expanded', 'false');
   };
-  
+
   const openMenu = () => {
     hamburger.classList.add('active');
     nav.classList.add('active');
     document.body.style.overflow = 'hidden';
     hamburger.setAttribute('aria-expanded', 'true');
   };
-  
+
   if (hamburger && nav) {
     hamburger.addEventListener('click', () => {
       if (nav.classList.contains('active')) {
@@ -28,17 +28,17 @@ document.addEventListener('DOMContentLoaded', function() {
         openMenu();
       }
     });
-    
+
     // Close button
     if (navClose) {
       navClose.addEventListener('click', closeMenu);
     }
-    
+
     // Close menu when clicking a link
     nav.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
-    
+
     // Close on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && nav.classList.contains('active')) {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  
+
   // Elements to animate on scroll
   const observerOptions = {
     root: null,
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        
+
         // Stagger children animations
         const children = entry.target.querySelectorAll('.stagger-child');
         children.forEach((child, index) => {
@@ -121,11 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
       const ripple = document.createElement('span');
       ripple.classList.add('ripple');
       this.appendChild(ripple);
-      
+
       const rect = this.getBoundingClientRect();
       ripple.style.left = `${e.clientX - rect.left}px`;
       ripple.style.top = `${e.clientY - rect.top}px`;
-      
+
       setTimeout(() => ripple.remove(), 600);
     });
   });
@@ -136,16 +136,16 @@ document.addEventListener('DOMContentLoaded', function() {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       const rotateX = (y - centerY) / 20;
       const rotateY = (centerX - x) / 20;
-      
+
       card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
     });
-    
+
     card.addEventListener('mouseleave', () => {
       card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
     });
@@ -177,6 +177,49 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Sticky pink nav (desktop) fallback
+  const desktopNav = document.querySelector('.header-new__nav');
+  if (desktopNav) {
+    const isDesktop = () => window.matchMedia('(min-width: 768px)').matches;
+    const headerEl = document.querySelector('.header-new');
+    let triggerY = null;
+
+    const measure = () => {
+      if (!isDesktop()) {
+        desktopNav.classList.remove('is-fixed');
+        triggerY = null;
+        return;
+      }
+
+      desktopNav.classList.remove('is-fixed');
+
+      if (headerEl) {
+        const headerRect = headerEl.getBoundingClientRect();
+        const navHeight = desktopNav.getBoundingClientRect().height;
+        triggerY = headerRect.top + window.scrollY + headerRect.height - navHeight;
+      } else {
+        triggerY = desktopNav.getBoundingClientRect().top + window.scrollY;
+      }
+    };
+
+    const onScroll = () => {
+      if (!isDesktop() || triggerY === null) return;
+      if (window.scrollY >= triggerY) {
+        desktopNav.classList.add('is-fixed');
+      } else {
+        desktopNav.classList.remove('is-fixed');
+      }
+    };
+
+    measure();
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', () => {
+      measure();
+      onScroll();
+    });
+  }
+
   // Scroll to top button
   const scrollTopBtn = document.getElementById('scrollTop');
   if (scrollTopBtn) {
@@ -187,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollTopBtn.classList.remove('visible');
       }
     });
-    
+
     scrollTopBtn.addEventListener('click', () => {
       window.scrollTo({
         top: 0,

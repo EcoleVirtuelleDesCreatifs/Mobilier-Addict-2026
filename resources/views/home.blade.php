@@ -12,7 +12,7 @@
 @include('sections.electro')
 @include('sections.guarantees')
 @include('sections.best-sellers')
-@include('sections.inspire')
+@include('sections.refuge')
 @include('sections.collection')
 @include('sections.accessories')
 @include('sections.favorites')
