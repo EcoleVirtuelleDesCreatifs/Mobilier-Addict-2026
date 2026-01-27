@@ -1,6 +1,8 @@
-@extends('admin.layout')
+@extends('layouts.admin')
 
 @section('content')
+    <div class="content-body">
+        <div class="container-fluid">
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div>
             <h1 class="h3 fw-bold mb-1">Sections Home</h1>
@@ -18,7 +20,7 @@
                 <thead style="color: var(--admin-muted);">
                     <tr>
                         <th>Section</th>
-                        <th>Slug</th>
+                        <th>Catégories associées</th>
                         <th class="text-center">Active</th>
                         <th class="text-end" style="width: 140px;"></th>
                     </tr>
@@ -30,9 +32,21 @@
                                 <div class="fw-semibold">{{ $section->title }}</div>
                                 <div class="small" style="color: var(--admin-muted);">{{ $section->badge }}</div>
                             </td>
-                            <td class="small">{{ $section->slug }}</td>
+                            <td>
+                                @if(($section->categories_count ?? 0) > 0)
+                                    <div class="small fw-semibold">{{ (int) $section->categories_count }} catégorie(s)</div>
+                                    <div class="small" style="color: var(--admin-muted);">
+                                        {{ $section->categories->take(3)->pluck('name')->join(', ') }}@if(($section->categories_count ?? 0) > 3)…@endif
+                                    </div>
+                                @else
+                                    <div class="small" style="color: var(--admin-muted);">—</div>
+                                @endif
+                            </td>
                             <td class="text-center">
-                                <span class="badge {{ $section->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $section->is_active ? 'Oui' : 'Non' }}</span>
+                                <span class="online-pill {{ $section->is_active ? 'is-online' : 'is-offline' }}">
+                                    <span class="online-dot" aria-hidden="true"></span>
+                                    {{ $section->is_active ? 'En ligne' : 'Hors ligne' }}
+                                </span>
                             </td>
                             <td class="text-end">
                                 <a href="{{ route('admin.home_sections.edit', $section) }}" class="btn btn-sm btn-admin-ghost">Gérer</a>
@@ -45,6 +59,8 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
         </div>
     </div>
 @endsection

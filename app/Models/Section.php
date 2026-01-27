@@ -16,6 +16,7 @@ class Section extends Model
         'slug',
         'description',
         'background_color',
+        'cover_image',
         'type',
         'order',
         'is_active',

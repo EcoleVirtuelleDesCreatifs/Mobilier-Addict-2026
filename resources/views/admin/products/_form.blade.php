@@ -80,28 +80,10 @@
             <option value="bestseller" @selected($selectedSection === 'bestseller')>Best sellers</option>
         </select>
     </div>
-    <div class="col-12 col-lg-4">
-        <label class="form-label">SKU</label>
-        <input type="text" name="sku" value="{{ old('sku', $isEdit ? $product->sku : null) }}" class="form-control">
-    </div>
 
     <div class="col-12 col-lg-4">
         <label class="form-label">Stock</label>
         <input type="number" name="stock" value="{{ old('stock', $isEdit ? $product->stock : 0) }}" class="form-control">
-    </div>
-
-    <div class="col-12 col-lg-3">
-        <label class="form-label">Badge</label>
-        <input type="text" name="badge" value="{{ old('badge', $isEdit ? $product->badge : null) }}" class="form-control">
-    </div>
-    <div class="col-12 col-lg-3">
-        <label class="form-label">Type badge</label>
-        <select name="badge_type" class="form-select">
-            <option value="">—</option>
-            @foreach(['new' => 'New', 'hot' => 'Hot', 'sale' => 'Sale', 'custom' => 'Custom'] as $k => $v)
-                <option value="{{ $k }}" @selected(old('badge_type', $isEdit ? $product->badge_type : null) === $k)>{{ $v }}</option>
-            @endforeach
-        </select>
     </div>
     <div class="col-12 col-lg-3">
         <label class="form-label">Ordre</label>

@@ -107,6 +107,13 @@ class HomeController extends Controller
                 ->get();
         }
 
+        if ($favoriteProducts->isEmpty()) {
+            $favoriteProducts = Product::query()
+                ->ordered()
+                ->take(4)
+                ->get();
+        }
+
         $blogFeaturedPost = BlogPost::query()
             ->active()
             ->featured()

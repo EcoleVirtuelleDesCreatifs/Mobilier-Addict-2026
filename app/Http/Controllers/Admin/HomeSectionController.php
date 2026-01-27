@@ -6,13 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class HomeSectionController extends Controller
 {
     public function index()
     {
         $this->ensureDefaultHomeSections();
-        $sections = Section::query()->ordered()->get();
+        $sections = Section::query()
+            ->withCount('categories')
+            ->with(['categories:id,name,section_id,order'])
+            ->ordered()
+            ->get();
 
         return view('admin.home_sections.index', compact('sections'));
     }
@@ -36,6 +42,7 @@ class HomeSectionController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'background_color' => ['nullable', 'string', 'max:255'],
+            'cover_image' => ['nullable', 'image', 'max:4096'],
             'type' => ['nullable', 'string', 'max:255'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['nullable', 'boolean'],
@@ -48,6 +55,16 @@ class HomeSectionController extends Controller
 
         $categoryIds = collect($data['category_ids'] ?? [])->map(fn ($v) => (int) $v)->values();
         unset($data['category_ids']);
+
+        if ($request->hasFile('cover_image')) {
+            $dir = public_path('uploads/sections');
+            File::ensureDirectoryExists($dir);
+
+            $file = $request->file('cover_image');
+            $filename = 'section-' . $home_section->id . '-' . Str::random(12) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['cover_image'] = 'uploads/sections/' . $filename;
+        }
 
         $home_section->update($data);
 
@@ -89,6 +106,48 @@ class HomeSectionController extends Controller
                 'background_color' => null,
                 'type' => 'categories',
                 'order' => 2,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'refuge'],
+            [
+                'badge' => 'Laissez-vous séduire',
+                'badge_icon' => '✨',
+                'title' => 'Créez Votre Refuge de Bien-Être',
+                'description' => "Chaque nuit mérite d’être exceptionnelle. Découvrez nos univers pensés pour éveiller vos sens.",
+                'background_color' => '#fde7f3',
+                'type' => 'custom',
+                'order' => 3,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'essentiels'],
+            [
+                'badge' => 'Coup de Cœur',
+                'badge_icon' => '❤️',
+                'title' => 'Les Essentiels de Votre Bien-Être',
+                'description' => 'Découvrez les produits adorés par notre communauté.',
+                'background_color' => '#fde7f3',
+                'type' => 'custom',
+                'order' => 4,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'univers'],
+            [
+                'badge' => 'Solutions adaptées',
+                'badge_icon' => '🧩',
+                'title' => 'Un Sommeil Sur-Mesure Pour Chaque Univers',
+                'description' => 'Que vous équipiez un hôtel, un appartement ou votre maison familiale, nous avons la solution parfaite.',
+                'background_color' => 'linear-gradient(135deg, #4f46e5 0%, #ec4899 100%)',
+                'type' => 'custom',
+                'order' => 5,
                 'is_active' => true,
             ]
         );

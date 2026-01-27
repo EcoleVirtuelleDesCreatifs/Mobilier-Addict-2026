@@ -14,12 +14,14 @@
 	<meta property="og:description" content="" />
 	<meta property="og:image" content=""/>
 	<meta name="format-detection" content="telephone=no">
-    <title>ADMIN - IN COTE D'IVOIRE </title>
+    <title>@hasSection('title')@yield('title') | Admin - Mobilier Addict@else Admin - Mobilier Addict @endif</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/imgs/logo-2.png") }}">
-	<link rel="stylesheet" href="{{ asset("admin/vendor/chartist/css/chartist.min.css") }}">
-    <link href="{{ asset("admin/vendor/bootstrap-select/dist/css/bootstrap-select.min.css") }}" rel="stylesheet">
-    <link href="{{ asset("admin/css/style.css") }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset("assets/admin/vendor/chartist/css/chartist.min.css") }}">
+    <link href="{{ asset("assets/admin/vendor/bootstrap-select/dist/css/bootstrap-select.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/admin/css/style.css") }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
+    @stack('styles')
 
 
 
@@ -251,6 +253,34 @@
                     </ul>
                     </li>
 
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <i class="flaticon-381-box"></i>
+                        <span class="nav-text">Produits</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('admin.products.index') }}">Voir tous</a></li>
+                        <li><a href="{{ route('admin.products.create') }}">Créer</a></li>
+                    </ul>
+                    </li>
+
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <i class="flaticon-381-list"></i>
+                        <span class="nav-text">Commandes</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('admin.orders.index') }}">Toutes les commandes</a></li>
+                    </ul>
+                    </li>
+
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <i class="flaticon-381-settings"></i>
+                        <span class="nav-text">Home</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('admin.home_sections.index') }}">Sections</a></li>
+                    </ul>
+                    </li>
+
                     {{-- Person Week - accessible aux editors et admins --}}
                     @if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
                         <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
@@ -374,7 +404,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                 <p>Copyright © <a href="" target="_blank">Admin-In Côte d'Ivoire</a> 2025</p>
+                 <p>Copyright © <a href="" target="_blank">Mobilier Addict</a> 2026</p>
             </div>
         </div>
         <!--**********************************
@@ -399,21 +429,21 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{ asset("admin/vendor/global/global.min.js") }}"></script>
-	<script src="{{ asset("admin/vendor/bootstrap-select/dist/js/bootstrap-select.min.js") }}"></script>
-	<script src="{{ asset("admin/vendor/chart.js/Chart.bundle.min.js") }}"></script>
+	<script src="{{ asset("assets/admin/vendor/global/global.min.js") }}"></script>
+	<script src="{{ asset("assets/admin/vendor/bootstrap-select/dist/js/bootstrap-select.min.js") }}"></script>
+	<script src="{{ asset("assets/admin/vendor/chart.js/Chart.bundle.min.js") }}"></script>
 
 	<!-- Chart piety plugin files -->
-    <script src="{{ asset("admn/vendor/peity/jquery.peity.min.js") }}"></script>
+    <script src="{{ asset("assets/admin/vendor/peity/jquery.peity.min.js") }}"></script>
 
 	<!-- Apex Chart -->
-	<script src="{{ asset("admin/vendor/apexchart/apexchart.js") }}"></script>
+	<script src="{{ asset("assets/admin/vendor/apexchart/apexchart.js") }}"></script>
 
 	<!-- Dashboard 1 -->
-	<script src="{{ asset("admin/js/dashboard/dashboard-1.js") }}"></script>
+	<script src="{{ asset("assets/admin/js/dashboard/dashboard-1.js") }}"></script>
 
-    <script src="{{ asset("admin/js/custom.min.js") }}"></script>
-	<script src="{{ asset("admin/js/deznav-init.js") }}"></script>
+    <script src="{{ asset("assets/admin/js/custom.min.js") }}"></script>
+	<script src="{{ asset("assets/admin/js/deznav-init.js") }}"></script>
 
 
 	<script>

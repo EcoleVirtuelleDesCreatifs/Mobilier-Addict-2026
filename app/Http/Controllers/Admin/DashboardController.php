@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
@@ -55,20 +56,28 @@ class DashboardController extends Controller
         $articlesCount = BlogPost::count();
         $categoriesCount = Category::count();
         $usersCount = User::count();
-        $totalViews = (int) BlogPost::query()->sum('views_count');
+        $hasViewsCount = Schema::hasColumn('blog_posts', 'views_count');
+        $totalViews = $hasViewsCount ? (int) BlogPost::query()->sum('views_count') : 0;
 
-        $monthlyViews = (int) BlogPost::query()
-            ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-            ->sum('views_count');
+        $monthlyViews = $hasViewsCount
+            ? (int) BlogPost::query()
+                ->whereBetween('created_at', [$selectedMonth, $monthEnd])
+                ->sum('views_count')
+            : 0;
 
         $monthlyVisitors = 0;
 
-        $topArticles = BlogPost::query()
+        $topArticlesQuery = BlogPost::query()
             ->with('category')
-            ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-            ->orderByDesc('views_count')
-            ->limit(5)
-            ->get();
+            ->whereBetween('created_at', [$selectedMonth, $monthEnd]);
+
+        if ($hasViewsCount) {
+            $topArticlesQuery->orderByDesc('views_count');
+        } else {
+            $topArticlesQuery->orderByDesc('created_at');
+        }
+
+        $topArticles = $topArticlesQuery->limit(5)->get();
 
         $bestArticle = $topArticles->first();
 
@@ -104,16 +113,22 @@ class DashboardController extends Controller
         $selectedMonth = $monthParam ? Carbon::createFromFormat('Y-m', $monthParam)->startOfMonth() : Carbon::now()->startOfMonth();
         $monthEnd = $selectedMonth->copy()->endOfMonth();
 
-        $monthlyViews = (int) BlogPost::query()
-            ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-            ->sum('views_count');
+        $hasViewsCount = Schema::hasColumn('blog_posts', 'views_count');
+        $monthlyViews = $hasViewsCount
+            ? (int) BlogPost::query()
+                ->whereBetween('created_at', [$selectedMonth, $monthEnd])
+                ->sum('views_count')
+            : 0;
 
         $monthlyVisitors = 0;
 
-        $bestArticle = BlogPost::query()
-            ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-            ->orderByDesc('views_count')
-            ->first();
+        $bestArticleQuery = BlogPost::query()->whereBetween('created_at', [$selectedMonth, $monthEnd]);
+        if ($hasViewsCount) {
+            $bestArticleQuery->orderByDesc('views_count');
+        } else {
+            $bestArticleQuery->orderByDesc('created_at');
+        }
+        $bestArticle = $bestArticleQuery->first();
 
         return response()->json([
             'monthlyViews' => $monthlyViews,

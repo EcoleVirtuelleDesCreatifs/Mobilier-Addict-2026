@@ -1,6 +1,8 @@
-@extends('admin.layout')
+@extends('layouts.admin')
 
 @section('content')
+    <div class="content-body">
+        <div class="container-fluid">
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div>
             <h1 class="h3 fw-bold mb-1">Gérer la section</h1>
@@ -20,7 +22,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.home_sections.update', $section) }}" class="row g-3">
+    <form method="POST" action="{{ route('admin.home_sections.update', $section) }}" class="row g-3" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -46,6 +48,16 @@
                 <div class="mb-3">
                     <label class="form-label">Description</label>
                     <textarea name="description" class="form-control" rows="4">{{ old('description', $section->description) }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Image de couverture</label>
+                    <input type="file" name="cover_image" class="form-control" accept="image/*">
+                    @if($section->cover_image)
+                        <div class="rounded-3 overflow-hidden mt-2" style="width:100%;height:140px;border:1px solid var(--admin-border);">
+                            <img src="{{ asset($section->cover_image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                        </div>
+                    @endif
                 </div>
 
                 <div class="row g-2">
@@ -96,4 +108,6 @@
             </div>
         </div>
     </form>
+        </div>
+    </div>
 @endsection

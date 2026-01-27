@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -24,7 +26,39 @@ class ProductController extends Controller
 
         $products = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
-        return view('admin.products.index', compact('products'));
+        $productsTotalCount = Product::query()->count();
+        $productsOnlineCount = Product::query()->where('is_active', true)->count();
+        $productsOfflineCount = Product::query()->where('is_active', false)->count();
+
+        $bestSellingProduct = null;
+        if (Schema::hasTable('order_items')) {
+            $row = DB::table('order_items')
+                ->selectRaw('product_id, SUM(quantity) as qty')
+                ->whereNotNull('product_id')
+                ->groupBy('product_id')
+                ->orderByDesc('qty')
+                ->first();
+
+            if ($row && !empty($row->product_id)) {
+                $product = Product::query()->select(['id', 'name', 'slug'])->find($row->product_id);
+                if ($product) {
+                    $bestSellingProduct = [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'slug' => $product->slug,
+                        'qty' => (int) ($row->qty ?? 0),
+                    ];
+                }
+            }
+        }
+
+        return view('admin.products.index', compact(
+            'products',
+            'productsTotalCount',
+            'productsOnlineCount',
+            'productsOfflineCount',
+            'bestSellingProduct',
+        ));
     }
 
     public function create()
@@ -68,6 +102,15 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('status', 'Produit supprimé.');
+    }
+
+    public function toggleActive(Product $product)
+    {
+        $product->update([
+            'is_active' => !$product->is_active,
+        ]);
+
+        return redirect()->back()->with('status', $product->is_active ? 'Produit activé (en ligne).' : 'Produit désactivé (hors ligne).');
     }
 
     private function storeUploadedImage($file, string $folder): string
@@ -124,7 +167,7 @@ class ProductController extends Controller
             $promoPrice = (float) $data['promo_price'];
 
             if ($promoPrice > 0 && $promoPrice < $currentPrice) {
-                $data['old_price'] = $data['old_price'] ?: $data['price'];
+                $data['old_price'] = ($data['old_price'] ?? null) ?: $data['price'];
                 $data['price'] = $data['promo_price'];
             }
         }

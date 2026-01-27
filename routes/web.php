@@ -125,9 +125,49 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
 
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
+
+    Route::get('/editor', fn () => redirect()->route('admin.dashboard'))->name('admin.editor');
+    Route::get('/writer', fn () => redirect()->route('admin.dashboard'))->name('admin.writer');
+
+    Route::get('/articles', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.index');
+    Route::get('/articles/create', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.create');
+    Route::post('/articles', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.store');
+    Route::get('/articles/{article}/edit', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.edit');
+    Route::put('/articles/{article}', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.update');
+    Route::delete('/articles/{article}', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.destroy');
+    Route::post('/articles/upload-image', fn () => response()->json(['url' => null], 501))->name('admin.articles.upload-image');
+
+    Route::get('/person-week', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.index');
+    Route::get('/person-week/create', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.create');
+
+    Route::get('/jobs', fn () => redirect()->route('admin.dashboard'))->name('admin.jobs.index');
+    Route::get('/jobs/create', fn () => redirect()->route('admin.dashboard'))->name('admin.jobs.create');
+
+    Route::get('/flash-news', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.index');
+    Route::get('/flash-news/create', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.create');
+
+    Route::get('/menus', fn () => redirect()->route('admin.dashboard'))->name('admin.menus.index');
+
+    Route::get('/users', fn () => redirect()->route('admin.dashboard'))->name('admin.users.index');
+    Route::get('/users/create', fn () => redirect()->route('admin.dashboard'))->name('admin.users.create');
+    Route::get('/users/stats', fn () => redirect()->route('admin.dashboard'))->name('admin.users.stats');
+
+    Route::get('/roles', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.index');
+    Route::get('/roles/create', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.create');
+
+    Route::get('/slider', fn () => redirect()->route('admin.dashboard'))->name('admin.slider.index');
+    Route::get('/slider/create', fn () => redirect()->route('admin.dashboard'))->name('admin.slider.create');
+
+    Route::get('/save-the-date', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.index');
+    Route::get('/save-the-date/create', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.create');
+
+    Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->name('admin.products.toggle-active');
     Route::resource('products', AdminProductController::class)->names('admin.products');
     Route::resource('categories', CategoryController::class)->names('admin.categories');
     Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.status');
 
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
     Route::get('/home-sections/{home_section}/edit', [HomeSectionController::class, 'edit'])->name('admin.home_sections.edit');
