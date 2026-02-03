@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\NewUserCredentialsNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,6 +39,8 @@ class UserController extends Controller
             'profile_picture' => ['nullable', 'image', 'max:2048'],
         ]);
 
+        $plainPassword = $data['password'];
+
         if ($request->hasFile('profile_picture')) {
             $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
@@ -47,6 +50,12 @@ class UserController extends Controller
         $data['is_active'] = true;
 
         $user = User::create($data);
+
+        try {
+            $user->notify(new NewUserCredentialsNotification($plainPassword));
+        } catch (\Throwable $e) {
+            // If mail is not configured, we still want to create the user.
+        }
 
         return redirect()->route('admin.users.show', $user)->with('success', 'Utilisateur créé avec succès.');
     }

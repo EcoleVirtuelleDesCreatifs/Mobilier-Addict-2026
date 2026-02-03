@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\AdminOrderPlacedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class CartController extends Controller
 {
@@ -147,6 +150,16 @@ class CartController extends Controller
 
             return $order;
         });
+
+        $admins = User::query()
+            ->where('is_admin', true)
+            ->where('is_active', true)
+            ->whereNotNull('email')
+            ->get();
+
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminOrderPlacedNotification($order));
+        }
 
         session()->forget('cart');
         session()->forget('checkout.shipping');

@@ -10,11 +10,20 @@
 	<meta name="robots" content="index, follow" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="" />
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta property="og:title" content="" />
 	<meta property="og:description" content="" />
 	<meta property="og:image" content=""/>
 	<meta name="format-detection" content="telephone=no">
-    <title>@hasSection('title')@yield('title') | Mobilier Addict@else Administration | Mobilier Addict @endif</title>
+    @php
+        $routeName = \Illuminate\Support\Facades\Route::currentRouteName();
+        $routeTitle = $routeName
+            ? ucwords(str_replace(['.', '-', '_'], ' ', $routeName))
+            : 'Administration';
+        $pageTitle = trim($__env->yieldContent('title')) !== '' ? trim($__env->yieldContent('title')) : $routeTitle;
+    @endphp
+
+    <title>{{ $pageTitle }} | Mobilier Addict</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/imgs/logo-2.png") }}">
 	<link rel="stylesheet" href="{{ asset("assets/admin/vendor/chartist/css/chartist.min.css") }}">

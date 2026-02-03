@@ -4,12 +4,20 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@hasSection('title')@yield('title')@else Mobilier Addict @endif</title>
+        @php
+            $routeName = \Illuminate\Support\Facades\Route::currentRouteName();
+            $routeTitle = $routeName
+                ? ucwords(str_replace(['.', '-', '_'], ' ', $routeName))
+                : 'Mobilier Addict';
+            $pageTitle = trim($__env->yieldContent('title')) !== '' ? trim($__env->yieldContent('title')) : $routeTitle;
+        @endphp
+
+        <title>{{ $pageTitle }}</title>
         <meta name="description" content="@yield('meta_description', 'Mobilier Addict : literie, mobilier et équipements pour la maison.')">
         <meta name="robots" content="index,follow">
 
         @php
-            $seoTitle = trim($__env->yieldContent('title')) !== '' ? trim($__env->yieldContent('title')) : 'Mobilier Addict';
+            $seoTitle = $pageTitle;
             $seoDescription = trim($__env->yieldContent('meta_description')) !== '' ? trim($__env->yieldContent('meta_description')) : 'Mobilier Addict : literie, mobilier et équipements pour la maison.';
             $seoUrl = trim($__env->yieldContent('canonical')) !== '' ? trim($__env->yieldContent('canonical')) : url()->current();
             $seoImage = trim($__env->yieldContent('meta_image')) !== '' ? trim($__env->yieldContent('meta_image')) : asset('assets/logo/desktop/logo.png');

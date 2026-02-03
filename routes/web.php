@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\HomeSectionController;
@@ -219,22 +222,23 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
 
-    Route::get('/stats', [StatsController::class, 'index'])->name('admin.stats.index');
+    Route::get('/stats', [StatsController::class, 'index'])->middleware('permission:stats.view')->name('admin.stats.index');
 
-    Route::get('/newsletter', [NewsletterSubscriptionController::class, 'index'])->name('admin.newsletter.index');
+    Route::get('/newsletter', [NewsletterSubscriptionController::class, 'index'])->middleware('permission:newsletter.view')->name('admin.newsletter.index');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('admin.profile');
+    Route::put('/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 
     Route::get('/editor', fn () => redirect()->route('admin.dashboard'))->name('admin.editor');
     Route::get('/writer', fn () => redirect()->route('admin.dashboard'))->name('admin.writer');
 
-    Route::get('/articles', [ArticleController::class, 'index'])->name('admin.articles.index');
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('admin.articles.create');
-    Route::post('/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
-    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('admin.articles.edit');
-    Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('admin.articles.update');
-    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
-    Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage'])->name('admin.articles.upload-image');
+    Route::get('/articles', [ArticleController::class, 'index'])->middleware('permission:articles.manage')->name('admin.articles.index');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->middleware('permission:articles.manage')->name('admin.articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->middleware('permission:articles.manage')->name('admin.articles.store');
+    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->middleware('permission:articles.manage')->name('admin.articles.edit');
+    Route::put('/articles/{article}', [ArticleController::class, 'update'])->middleware('permission:articles.manage')->name('admin.articles.update');
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.articles.destroy');
+    Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage'])->middleware('permission:articles.manage')->name('admin.articles.upload-image');
 
     Route::get('/person-week', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.index');
     Route::get('/person-week/create', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.create');
@@ -245,14 +249,15 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/flash-news', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.index');
     Route::get('/flash-news/create', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.create');
 
-    Route::resource('menus', MenuController::class)->names('admin.menus');
+    Route::resource('menus', MenuController::class)->middleware('permission:menus.manage')->names('admin.menus');
 
-    Route::get('/users', fn () => redirect()->route('admin.dashboard'))->name('admin.users.index');
-    Route::get('/users/create', fn () => redirect()->route('admin.dashboard'))->name('admin.users.create');
-    Route::get('/users/stats', fn () => redirect()->route('admin.dashboard'))->name('admin.users.stats');
+    Route::resource('users', AdminUserController::class)->middleware('permission:users.manage')->names('admin.users');
+    Route::get('/users/stats', [AdminUserController::class, 'stats'])->middleware('permission:users.manage')->name('admin.users.stats');
+    Route::post('/users/{user}/role', [AdminUserController::class, 'changeRole'])->middleware('permission:users.manage')->name('admin.users.role');
+    Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->middleware('permission:users.manage')->name('admin.users.toggle-status');
 
-    Route::get('/roles', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.index');
-    Route::get('/roles/create', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.create');
+    Route::post('/roles/{role}/toggle', [RoleController::class, 'toggle'])->middleware('permission:roles.manage')->name('admin.roles.toggle');
+    Route::resource('roles', RoleController::class)->middleware('permission:roles.manage')->names('admin.roles');
 
     Route::get('/slider', [SliderController::class, 'index'])->name('admin.slider.index');
     Route::get('/slider/create', [SliderController::class, 'create'])->name('admin.slider.create');
@@ -264,12 +269,12 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/save-the-date', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.index');
     Route::get('/save-the-date/create', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.create');
 
-    Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->name('admin.products.toggle-active');
-    Route::resource('products', AdminProductController::class)->names('admin.products');
-    Route::resource('categories', CategoryController::class)->names('admin.categories');
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
-    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.status');
+    Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
+    Route::resource('products', AdminProductController::class)->middleware('permission:products.manage')->names('admin.products');
+    Route::resource('categories', CategoryController::class)->middleware('permission:categories.manage')->names('admin.categories');
+    Route::get('/orders', [OrderController::class, 'index'])->middleware('permission:orders.view')->name('admin.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view')->name('admin.orders.show');
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.orders.status');
 
     Route::get('/quotes', [QuoteController::class, 'index'])->name('admin.quotes.index');
     Route::get('/quotes/{quote}', [QuoteController::class, 'show'])->name('admin.quotes.show');

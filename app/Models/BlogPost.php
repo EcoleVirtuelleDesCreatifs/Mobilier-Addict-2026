@@ -12,6 +12,7 @@ class BlogPost extends Model
 
     protected $fillable = [
         'blog_category_id',
+        'user_id',
         'title',
         'slug',
         'excerpt',

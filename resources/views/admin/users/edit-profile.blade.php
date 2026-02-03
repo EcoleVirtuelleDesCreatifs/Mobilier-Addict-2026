@@ -15,6 +15,14 @@
                         <p class="mb-0">Mettez à jour vos informations personnelles</p>
                     </div>
                     <div>
+                        @if(auth()->user()?->hasPermission('users.manage'))
+                            <a href="{{ route('admin.users.create') }}" class="btn btn-primary me-2">
+                                <i class="fas fa-user-plus me-2"></i>Ajouter un utilisateur
+                            </a>
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary me-2">
+                                <i class="fas fa-users me-2"></i>Gérer les utilisateurs
+                            </a>
+                        @endif
                         <a href="{{ route('admin.profile') }}" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-left me-2"></i>Retour au profil
                         </a>
@@ -59,11 +67,11 @@
                             <!-- Nom -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nom complet <span class="text-danger">*</span></label>
-                                <input type="text" 
-                                       class="form-control @error('name') is-invalid @enderror" 
-                                       id="name" 
-                                       name="name" 
-                                       value="{{ old('name', $user->name) }}" 
+                                <input type="text"
+                                       class="form-control @error('name') is-invalid @enderror"
+                                       id="name"
+                                       name="name"
+                                       value="{{ old('name', $user->name) }}"
                                        required>
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -73,11 +81,11 @@
                             <!-- Email -->
                             <div class="mb-3">
                                 <label for="email" class="form-label">Adresse email <span class="text-danger">*</span></label>
-                                <input type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ old('email', $user->email) }}" 
+                                <input type="email"
+                                       class="form-control @error('email') is-invalid @enderror"
+                                       id="email"
+                                       name="email"
+                                       value="{{ old('email', $user->email) }}"
                                        required>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -87,10 +95,10 @@
                             <!-- Bio -->
                             <div class="mb-3">
                                 <label for="bio" class="form-label">Biographie</label>
-                                <textarea class="form-control @error('bio') is-invalid @enderror" 
-                                          id="bio" 
-                                          name="bio" 
-                                          rows="4" 
+                                <textarea class="form-control @error('bio') is-invalid @enderror"
+                                          id="bio"
+                                          name="bio"
+                                          rows="4"
                                           maxlength="500"
                                           placeholder="Parlez-nous de vous... (max 500 caractères)">{{ old('bio', $user->bio) }}</textarea>
                                 <div class="form-text">
@@ -104,10 +112,10 @@
                             <!-- Photo de profil -->
                             <div class="mb-3">
                                 <label for="profile_picture" class="form-label">Photo de profil</label>
-                                <input type="file" 
-                                       class="form-control @error('profile_picture') is-invalid @enderror" 
-                                       id="profile_picture" 
-                                       name="profile_picture" 
+                                <input type="file"
+                                       class="form-control @error('profile_picture') is-invalid @enderror"
+                                       id="profile_picture"
+                                       name="profile_picture"
                                        accept="image/*">
                                 <div class="form-text">
                                     Formats acceptés : JPEG, PNG, JPG, GIF. Taille maximale : 2MB
@@ -122,10 +130,10 @@
                             <div class="mb-3">
                                 <label class="form-label">Photo actuelle</label>
                                 <div>
-                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" 
-                                         class="rounded-circle" 
-                                         width="80" 
-                                         height="80" 
+                                    <img src="{{ asset('storage/' . $user->profile_picture) }}"
+                                         class="rounded-circle"
+                                         width="80"
+                                         height="80"
                                          alt="Photo de profil actuelle">
                                 </div>
                             </div>
@@ -143,10 +151,10 @@
                             <!-- Nouveau mot de passe -->
                             <div class="mb-3">
                                 <label for="password" class="form-label">Nouveau mot de passe</label>
-                                <input type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       id="password" 
-                                       name="password" 
+                                <input type="password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       id="password"
+                                       name="password"
                                        minlength="8">
                                 <div class="form-text">
                                     Laissez vide si vous ne souhaitez pas changer votre mot de passe. Minimum 8 caractères.
@@ -159,10 +167,10 @@
                             <!-- Confirmation mot de passe -->
                             <div class="mb-4">
                                 <label for="password_confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
-                                <input type="password" 
-                                       class="form-control" 
-                                       id="password_confirmation" 
-                                       name="password_confirmation" 
+                                <input type="password"
+                                       class="form-control"
+                                       id="password_confirmation"
+                                       name="password_confirmation"
                                        minlength="8">
                             </div>
 
@@ -277,7 +285,7 @@ document.getElementById('bio').addEventListener('input', function() {
     const bioCount = document.getElementById('bio-count');
     const currentLength = this.value.length;
     bioCount.textContent = currentLength;
-    
+
     // Changer la couleur selon la limite
     if (currentLength > 450) {
         bioCount.className = 'text-warning';

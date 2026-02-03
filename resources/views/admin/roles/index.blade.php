@@ -172,7 +172,7 @@ function toggleRoleStatus(roleId) {
     // Désactiver temporairement le checkbox
     checkbox.disabled = true;
 
-    fetch(`/in/admin/roles/${roleId}/toggle`, {
+    fetch(`/ma/admin/roles/${roleId}/toggle`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
