@@ -60,6 +60,17 @@
                     </div>
 
                     <div class="col-12 col-lg-4">
+                        <label class="form-label">Menus rattachés</label>
+                        <select name="menu_ids[]" class="form-select" multiple>
+                            @foreach(($menus ?? collect()) as $menu)
+                                <option value="{{ $menu->id }}" @selected(in_array($menu->id, old('menu_ids', [])))>
+                                    {{ $menu->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
                         <label class="form-label">Taille</label>
                         <select name="size" class="form-select" required>
                             @foreach(['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large'] as $k => $v)

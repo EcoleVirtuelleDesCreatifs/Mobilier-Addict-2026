@@ -169,7 +169,7 @@
                                 </table>
 
 
-                                {{ $articles->links('vendor.pagination.bootstrap-4') }}
+                                {{ $articles->links('pagination::bootstrap-5') }}
 
 
                             </div>

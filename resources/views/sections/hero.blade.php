@@ -34,11 +34,32 @@
                     </div>
                 </div>
                 <div class="hero__visual">
-                    <div class="hero__card">
-                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" />
+                    <div class="hero__card" data-slider>
+                        <div class="hero__card-track" data-slider-track>
+                            <div class="hero__card-slide" data-slide>
+                                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" />
+                            </div>
+                            <div class="hero__card-slide" data-slide>
+                                <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre moderne" loading="eager" />
+                            </div>
+                            <div class="hero__card-slide" data-slide>
+                                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre premium" loading="eager" />
+                            </div>
+                        </div>
+                        <button class="hero__card-nav hero__card-nav--prev" type="button" data-slider-prev aria-label="Image précédente">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </button>
+                        <button class="hero__card-nav hero__card-nav--next" type="button" data-slider-next aria-label="Image suivante">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </button>
                         <div class="hero__card-badge">
                             <span class="hero__card-discount">-30%</span>
                             <span class="hero__card-text">Offre limitée</span>
+                        </div>
+                        <div class="hero__card-dots" aria-label="Changer d'image">
+                            <button class="hero__card-dot" type="button" data-dot="0" aria-label="Image 1"></button>
+                            <button class="hero__card-dot" type="button" data-dot="1" aria-label="Image 2"></button>
+                            <button class="hero__card-dot" type="button" data-dot="2" aria-label="Image 3"></button>
                         </div>
                     </div>
                 </div>

@@ -64,6 +64,21 @@
                     </div>
 
                     <div class="col-12 col-lg-4">
+                        <label class="form-label">Menus rattachés</label>
+                        @php
+                            $defaultSelected = $selectedMenuIds ?? [];
+                            $selected = old('menu_ids', $defaultSelected);
+                        @endphp
+                        <select name="menu_ids[]" class="form-select" multiple>
+                            @foreach(($menus ?? collect()) as $menu)
+                                <option value="{{ $menu->id }}" @selected(in_array($menu->id, $selected))>
+                                    {{ $menu->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
                         <label class="form-label">Taille</label>
                         <select name="size" class="form-select" required>
                             @foreach(['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large'] as $k => $v)

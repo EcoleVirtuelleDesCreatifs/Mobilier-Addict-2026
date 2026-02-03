@@ -32,8 +32,6 @@
                                     <h3 class="fav-new__name">{{ $hero->name }}</h3>
                                 </a>
 
-                                <p class="fav-new__desc">{{ $hero->short_description ?: ' ' }}</p>
-
                                 <div class="fav-new__bottom">
                                     <div class="fav-new__price">
                                         <span class="fav-new__price-current">{{ number_format((float) $hero->price, 0, ',', '.') }}<small>F</small></span>

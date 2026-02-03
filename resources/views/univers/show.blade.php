@@ -6,7 +6,13 @@
 
 @section('content')
     @php
-        $designSlug = in_array($slug, ['hotellerie'], true) ? 'matelas' : $slug;
+        $designSlug = match ($slug) {
+            'une-cuisine-pensee-pour-le-plaisir' => 'cuisine',
+            'la-fraicheur-au-coeur-de-votre-confort' => 'froid-climatisation',
+            'lelegance-au-coeur-de-votre-salon' => 'salon',
+            'vivez-chaque-image-ressentez-chaque-son' => 'multi-media',
+            default => (in_array($slug, ['hotellerie', 'entrez-dans-lunivers-de-vos-nuits'], true) ? 'matelas' : $slug),
+        };
 
         $page = match ($designSlug) {
             'matelas' => [
@@ -136,9 +142,33 @@
                 'inspire_title' => 'Créez Votre Cocon de Douceur',
                 'inspire_desc' => 'Des matières nobles et des finitions soignées pour transformer chaque nuit.',
                 'inspire_cards' => [
-                    ['img' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=1000&fit=crop', 'tag' => 'Coton Égyptien', 'title' => 'Luxe Absolu', 'text' => 'La douceur incomparable du coton longues fibres.'],
-                    ['img' => 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=600&h=400&fit=crop', 'tag' => 'Percale', 'title' => 'Fraîcheur Naturelle'],
-                    ['img' => 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&h=400&fit=crop', 'tag' => 'Satin', 'title' => 'Élégance Soyeuse'],
+                    ['img' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=1000&fit=crop', 'tag' => 'Coton Égyptien', 'title' => 'drap couleur unie ( Drap addict)', 'text' => 'La douceur incomparable du coton longues fibres.'],
+                    ['img' => 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=600&h=400&fit=crop', 'tag' => 'Percale', 'title' => 'Drap avec motif (Fleurie)'],
+                    ['img' => 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&h=400&fit=crop', 'tag' => 'Satin', 'title' => 'Drap en coton'],
+                ],
+                'categories_title' => 'Couettes & Oreillers',
+                'categories_badge' => 'CATÉGORIES',
+                'categories_cards' => [
+                    [
+                        'img' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+                        'tag' => 'COUETTES',
+                        'title' => 'COUETTES',
+                        'items' => [
+                            'Couleur unique',
+                            'Avec motif',
+                        ],
+                    ],
+                    [
+                        'img' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=1200&h=800&fit=crop',
+                        'tag' => 'OREILLERS',
+                        'title' => 'OREILLERS',
+                        'items' => [
+                            'Oreiller pH2 avec motif',
+                            'Oreiller basique avec motif',
+                            'Oreiller en Ouate mini',
+                            'Oreiller en ouate extra',
+                        ],
+                    ],
                 ],
                 'mission_title' => 'Le Linge de Lit Qui Fait la Différence',
                 'mission_desc' => 'Des draps qui respirent, des couettes qui enveloppent, des matières qui durent. Transformez votre lit en véritable refuge.',
@@ -680,7 +710,7 @@
         };
     @endphp
 
-    @if(in_array($slug, ['lits-sommiers', 'matelas', 'oreillers', 'draps-couettes', 'cuisine', 'froid-climatisation', 'salon', 'multi-media']))
+    @if(in_array($designSlug, ['lits-sommiers', 'matelas', 'oreillers', 'draps-couettes', 'cuisine', 'froid-climatisation', 'salon', 'multi-media']))
         <div class="evc-page">
             <!-- HERO Section - Style EVC -->
             <section class="evc-hero">
@@ -704,8 +734,7 @@
                 </div>
             </section>
 
-            <!-- CAROUSEL PRODUITS Section - Dynamic & Fluid -->
-            <section class="evc-carousel-section">
+            <section class="evc-carousel-section" aria-label="Best-sellers">
                 <div class="evc-carousel-section__bg"></div>
                 <div class="container">
                     <div class="evc-carousel__header">
@@ -713,84 +742,67 @@
                         <h2 class="evc-section-title">{{ $page['carousel_title'] ?? 'Nos Best-Sellers' }}</h2>
                         <p class="evc-section-desc">{{ $page['carousel_desc'] ?? 'Les produits préférés de nos clients.' }}</p>
                     </div>
-                </div>
-                <div class="evc-carousel-wrapper">
-                    <div class="evc-carousel" id="productCarousel">
+
+                    <div class="evc-products__grid">
                         @php
                             $carouselProducts = $products->getCollection()->take(8);
                         @endphp
+
                         @if($carouselProducts->count())
                             @foreach($carouselProducts as $index => $product)
-                                <div class="evc-carousel__slide">
-                                    <a href="{{ route('product.show', $product->slug) }}" class="evc-carousel-card">
-                                        <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
-                                        @if($product->discount_percent)
-                                            <div class="evc-carousel-card__badge">-{{ (int) $product->discount_percent }}%</div>
-                                        @elseif($product->badge)
-                                            <div class="evc-carousel-card__badge evc-carousel-card__badge--alt">{{ $product->badge }}</div>
-                                        @endif
-                                        <div class="evc-carousel-card__media">
-                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
-                                        </div>
-                                        <div class="evc-carousel-card__body">
-                                            <h3 class="evc-carousel-card__name">{{ $product->name }}</h3>
-                                            <p class="evc-carousel-card__desc">{{ Str::limit($product->short_description, 60) }}</p>
-                                            <div class="evc-carousel-card__footer">
-                                                <div class="evc-carousel-card__prices">
-                                                    <span class="evc-carousel-card__price">{{ $product->formatted_price }}</span>
-                                                    @if($product->formatted_old_price)
-                                                        <span class="evc-carousel-card__old">{{ $product->formatted_old_price }}</span>
-                                                    @endif
-                                                </div>
-                                                <span class="evc-carousel-card__btn" aria-label="Voir le produit">
-                                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
-                                                </span>
+                                <a href="{{ route('product.show', $product->slug) }}" class="evc-carousel-card">
+                                    <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
+                                    @if($product->discount_percent)
+                                        <div class="evc-carousel-card__badge">-{{ (int) $product->discount_percent }}%</div>
+                                    @elseif($product->badge)
+                                        <div class="evc-carousel-card__badge evc-carousel-card__badge--alt">{{ $product->badge }}</div>
+                                    @endif
+                                    <div class="evc-carousel-card__media">
+                                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                    </div>
+                                    <div class="evc-carousel-card__body">
+                                        <h3 class="evc-carousel-card__name">{{ $product->name }}</h3>
+                                        <div class="evc-carousel-card__footer">
+                                            <div class="evc-carousel-card__prices">
+                                                <span class="evc-carousel-card__price">{{ $product->formatted_price }}</span>
+                                                @if($product->formatted_old_price)
+                                                    <span class="evc-carousel-card__old">{{ $product->formatted_old_price }}</span>
+                                                @endif
                                             </div>
+                                            <span class="evc-carousel-card__btn" aria-label="Voir le produit">
+                                                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
+                                            </span>
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             @endforeach
                         @else
                             @foreach(collect($fakeProducts)->take(8) as $index => $fp)
-                                <div class="evc-carousel__slide">
-                                    <a href="#selection" class="evc-carousel-card">
-                                        <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
-                                        @if($fp['badge'])
-                                            <div class="evc-carousel-card__badge">{{ $fp['badge'] }}</div>
-                                        @endif
-                                        <div class="evc-carousel-card__media">
-                                            <img src="{{ $fp['img'] }}" alt="{{ $fp['name'] }}" loading="lazy" />
-                                        </div>
-                                        <div class="evc-carousel-card__body">
-                                            <h3 class="evc-carousel-card__name">{{ $fp['name'] }}</h3>
-                                            <p class="evc-carousel-card__desc">{{ Str::limit($fp['desc'], 60) }}</p>
-                                            <div class="evc-carousel-card__footer">
-                                                <div class="evc-carousel-card__prices">
-                                                    <span class="evc-carousel-card__price">{{ $fp['price'] }}</span>
-                                                    @if($fp['old'])
-                                                        <span class="evc-carousel-card__old">{{ $fp['old'] }}</span>
-                                                    @endif
-                                                </div>
-                                                <span class="evc-carousel-card__btn" aria-label="Voir le produit">
-                                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
-                                                </span>
+                                <a href="#selection" class="evc-carousel-card">
+                                    <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
+                                    @if($fp['badge'])
+                                        <div class="evc-carousel-card__badge">{{ $fp['badge'] }}</div>
+                                    @endif
+                                    <div class="evc-carousel-card__media">
+                                        <img src="{{ $fp['img'] }}" alt="{{ $fp['name'] }}" loading="lazy" />
+                                    </div>
+                                    <div class="evc-carousel-card__body">
+                                        <h3 class="evc-carousel-card__name">{{ $fp['name'] }}</h3>
+                                        <div class="evc-carousel-card__footer">
+                                            <div class="evc-carousel-card__prices">
+                                                <span class="evc-carousel-card__price">{{ $fp['price'] }}</span>
+                                                @if($fp['old'])
+                                                    <span class="evc-carousel-card__old">{{ $fp['old'] }}</span>
+                                                @endif
                                             </div>
+                                            <span class="evc-carousel-card__btn" aria-label="Voir le produit">
+                                                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
+                                            </span>
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             @endforeach
                         @endif
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="evc-carousel__nav">
-                        <button class="evc-carousel__arrow evc-carousel__arrow--prev" id="carouselPrev" aria-label="Précédent">
-                            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
-                        </button>
-                        <div class="evc-carousel__dots" id="carouselDots"></div>
-                        <button class="evc-carousel__arrow evc-carousel__arrow--next" id="carouselNext" aria-label="Suivant">
-                            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>
-                        </button>
                     </div>
                 </div>
             </section>
@@ -864,7 +876,6 @@
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $product->name }}</h3>
-                                        <p class="evc-product-card__desc">{{ $product->short_description }}</p>
                                         <div class="evc-product-card__footer">
                                             <div class="evc-product-card__prices">
                                                 <span class="evc-product-card__price">{{ $product->formatted_price }}</span>
@@ -890,7 +901,6 @@
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $fp['name'] }}</h3>
-                                        <p class="evc-product-card__desc">{{ $fp['desc'] }}</p>
                                         <div class="evc-product-card__footer">
                                             <div class="evc-product-card__prices">
                                                 <span class="evc-product-card__price">{{ $fp['price'] }}</span>
@@ -1014,7 +1024,6 @@
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $product->name }}</h3>
-                                        <p class="evc-product-card__desc">{{ $product->short_description }}</p>
                                         <div class="evc-product-card__footer">
                                             <div class="evc-product-card__prices">
                                                 <span class="evc-product-card__price">{{ $product->formatted_price }}</span>
@@ -1040,7 +1049,6 @@
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $fp['name'] }}</h3>
-                                        <p class="evc-product-card__desc">{{ $fp['desc'] }}</p>
                                         <div class="evc-product-card__footer">
                                             <div class="evc-product-card__prices">
                                                 <span class="evc-product-card__price">{{ $fp['price'] }}</span>
@@ -1243,7 +1251,6 @@
                                 </div>
                                 <div class="product-card__body">
                                     <h3 class="product-card__name">{{ $product->name }}</h3>
-                                    <p class="product-card__desc">{{ $product->short_description }}</p>
                                     <div class="product-card__footer">
                                         <div class="product-card__prices">
                                             <span class="product-card__price">{{ $product->formatted_price }}</span>
@@ -1269,7 +1276,6 @@
                                 </div>
                                 <div class="product-card__body">
                                     <h3 class="product-card__name">{{ $fp['name'] }}</h3>
-                                    <p class="product-card__desc">{{ $fp['desc'] }}</p>
                                     <div class="product-card__footer">
                                         <div class="product-card__prices">
                                             <span class="product-card__price">{{ $fp['price'] }}</span>
@@ -1382,7 +1388,18 @@
                     <p class="univers-section__subtitle">Choisis le modèle qui te correspond — et passe à l’action en toute confiance.</p>
                 </div>
 
-                <div class="best-modern__grid">
+                <div class="univers-products__toolbar">
+                    <div class="univers-products__count">
+                        @if(method_exists($products, 'total'))
+                            {{ number_format((int) $products->total(), 0, ',', '.') }} produit(s)
+                        @else
+                            {{ number_format((int) $products->count(), 0, ',', '.') }} produit(s)
+                        @endif
+                    </div>
+                    <a class="univers-products__jump" href="#faq">Voir la FAQ</a>
+                </div>
+
+                <div class="univers-products__grid">
                 @if($products->count())
                     @foreach($products as $product)
                         <a href="{{ route('product.show', $product->slug) }}" class="product-card">
@@ -1397,7 +1414,6 @@
                             </div>
                             <div class="product-card__body">
                                 <h3 class="product-card__name">{{ $product->name }}</h3>
-                                <p class="product-card__desc">{{ $product->short_description }}</p>
                                 <div class="product-card__footer">
                                     <div class="product-card__prices">
                                         <span class="product-card__price">{{ $product->formatted_price }}</span>
@@ -1423,7 +1439,6 @@
                             </div>
                             <div class="product-card__body">
                                 <h3 class="product-card__name">{{ $fp['name'] }}</h3>
-                                <p class="product-card__desc">{{ $fp['desc'] }}</p>
                                 <div class="product-card__footer">
                                     <div class="product-card__prices">
                                         <span class="product-card__price">{{ $fp['price'] }}</span>
@@ -1484,112 +1499,41 @@
     </div>
     @endif
 
+@push('styles')
+<style>
+    .univers-products{padding:70px 0;background:radial-gradient(circle at 20% 0%,rgba(236,72,153,.10),transparent 55%),radial-gradient(circle at 80% 20%,rgba(59,130,246,.10),transparent 45%)}
+    .univers-products__toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 26px;padding:12px 14px;border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border-radius:14px}
+    .univers-products__count{font-weight:700;color:#0f172a;font-size:13px;letter-spacing:.2px}
+    .univers-products__jump{font-size:13px;font-weight:600;color:#be185d;text-decoration:none;padding:8px 10px;border-radius:10px;background:rgba(236,72,153,.10)}
+    .univers-products__jump:hover{background:rgba(236,72,153,.16);color:#9d174d}
+    .univers-products__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+    @media (max-width:1200px){.univers-products__grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:900px){.univers-products__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.univers-products__toolbar{flex-direction:column;align-items:flex-start}}
+    @media (max-width:520px){.univers-products__grid{grid-template-columns:1fr}}
+
+    .univers-products .product-card{background:#fff;border-radius:18px;box-shadow:0 12px 30px rgba(15,23,42,.08);border:1px solid rgba(15,23,42,.06);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;text-decoration:none;color:inherit}
+    .univers-products .product-card:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(15,23,42,.12);border-color:rgba(236,72,153,.25)}
+    .univers-products .product-card__media{aspect-ratio:1/1;background:#f8fafc}
+    .univers-products .product-card__media img{width:100%;height:100%;object-fit:cover}
+    .univers-products .product-card__body{padding:14px 14px 16px}
+    .univers-products .product-card__name{font-size:14px;line-height:1.25;font-weight:800;color:#0f172a;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px}
+    .univers-products .product-card__footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .univers-products .product-card__prices{display:flex;align-items:baseline;gap:8px}
+    .univers-products .product-card__price{color:#ec4899;font-weight:900;font-size:16px}
+    .univers-products .product-card__old{color:#94a3b8;font-weight:700;font-size:12px;text-decoration:line-through}
+    .univers-products .product-card__btn{width:40px;height:40px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,#ec4899,#be185d);border:0;box-shadow:0 10px 18px rgba(236,72,153,.22)}
+    .univers-products .product-card__btn svg{color:#fff}
+    .univers-products .product-card__badge{position:absolute;top:12px;left:12px;z-index:2;background:rgba(15,23,42,.88);color:#fff;font-weight:800;font-size:12px;padding:6px 10px;border-radius:999px}
+    .univers-products .product-card{position:relative}
+
+    .univers-pagination{margin-top:28px}
+    .univers-pagination .pagination{gap:8px;justify-content:center}
+    .univers-pagination .page-link{border-radius:12px;border:1px solid rgba(15,23,42,.10);background:rgba(255,255,255,.70);color:#0f172a;font-weight:700;min-width:44px;text-align:center;padding:10px 12px}
+    .univers-pagination .page-link:hover{background:rgba(236,72,153,.10);border-color:rgba(236,72,153,.25);color:#9d174d}
+    .univers-pagination .page-item.active .page-link{background:linear-gradient(135deg,#ec4899,#be185d);border-color:transparent;color:#fff}
+</style>
+@endpush
+
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.getElementById('productCarousel');
-    if (!carousel) return;
-
-    const slides = carousel.querySelectorAll('.evc-carousel__slide');
-    const prevBtn = document.getElementById('carouselPrev');
-    const nextBtn = document.getElementById('carouselNext');
-    const dotsContainer = document.getElementById('carouselDots');
-
-    if (slides.length === 0) return;
-
-    let currentIndex = 0;
-    const slideWidth = 324; // 300px + 24px gap
-    const visibleSlides = Math.floor(window.innerWidth / slideWidth);
-    const maxIndex = Math.max(0, slides.length - visibleSlides);
-
-    // Create dots
-    for (let i = 0; i <= maxIndex; i++) {
-        const dot = document.createElement('button');
-        dot.className = 'evc-carousel__dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-        dot.addEventListener('click', () => goToSlide(i));
-        dotsContainer.appendChild(dot);
-    }
-
-    const dots = dotsContainer.querySelectorAll('.evc-carousel__dot');
-
-    function updateCarousel() {
-        const offset = currentIndex * slideWidth;
-        carousel.style.transform = `translateX(-${offset}px)`;
-
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === currentIndex);
-        });
-
-        if (prevBtn) prevBtn.disabled = currentIndex === 0;
-        if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
-    }
-
-    function goToSlide(index) {
-        currentIndex = Math.max(0, Math.min(index, maxIndex));
-        updateCarousel();
-    }
-
-    function nextSlide() {
-        if (currentIndex < maxIndex) {
-            currentIndex++;
-            updateCarousel();
-        }
-    }
-
-    function prevSlide() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-        }
-    }
-
-    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-
-    // Touch/Drag support
-    let startX = 0;
-    let isDragging = false;
-
-    carousel.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.pageX;
-        carousel.style.transition = 'none';
-    });
-
-    carousel.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-    });
-
-    carousel.addEventListener('mouseup', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        carousel.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
-        const diff = startX - e.pageX;
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) nextSlide();
-            else prevSlide();
-        }
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            carousel.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
-        }
-    });
-
-    // Auto-play (optional)
-    let autoplayInterval = setInterval(nextSlide, 5000);
-
-    carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-    carousel.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(nextSlide, 5000);
-    });
-
-    updateCarousel();
-});
-</script>
 @endpush
 @endsection

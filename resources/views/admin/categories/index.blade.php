@@ -35,12 +35,17 @@
                                 <th style="width:72px;">Image</th>
                                 <th>Catégorie</th>
                                 <th>Parent</th>
+                                <th>Section</th>
                                 <th class="text-center">Actif</th>
                                 <th style="width:160px;"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($categories as $category)
+                            <tr style="border-top: 1px solid var(--admin-border);">
+                                <td colspan="6" class="fw-semibold" style="color: var(--admin-muted);">Catégories produits</td>
+                            </tr>
+
+                            @forelse($productCategories as $category)
                                 <tr style="border-top: 1px solid var(--admin-border);">
                                     <td>
                                         <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
@@ -52,6 +57,7 @@
                                         <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
                                     </td>
                                     <td class="small">{{ $category->parent?->name ?: '—' }}</td>
+                                    <td class="small">—</td>
                                     <td class="text-center">
                                         <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
                                     </td>
@@ -68,7 +74,44 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-5" style="color: var(--admin-muted);">Aucune catégorie.</td>
+                                    <td colspan="6" class="text-center py-4" style="color: var(--admin-muted);">Aucune catégorie produit.</td>
+                                </tr>
+                            @endforelse
+
+                            <tr style="border-top: 1px solid var(--admin-border);">
+                                <td colspan="6" class="fw-semibold" style="color: var(--admin-muted);">Catégories par section</td>
+                            </tr>
+
+                            @forelse($sectionCategories as $category)
+                                <tr style="border-top: 1px solid var(--admin-border);">
+                                    <td>
+                                        <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
+                                            <img src="{{ asset($category->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">{{ $category->name }}</div>
+                                        <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
+                                    </td>
+                                    <td class="small">{{ $category->parent?->name ?: '—' }}</td>
+                                    <td class="small">{{ $category->section?->title ?: '—' }}</td>
+                                    <td class="text-center">
+                                        <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
+                                            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4" style="color: var(--admin-muted);">Aucune catégorie liée à une section.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -77,7 +120,15 @@
             </div>
 
             <div class="mt-3">
-                {{ $categories->links('pagination::bootstrap-5') }}
+                @if($productCategories->hasPages())
+                    {{ $productCategories->links('pagination::bootstrap-5') }}
+                @endif
+
+                @if($sectionCategories->hasPages())
+                    <div class="mt-2">
+                        {{ $sectionCategories->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

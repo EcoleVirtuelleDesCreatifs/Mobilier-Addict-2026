@@ -15,11 +15,13 @@
                 <img class="logo__img" src="{{ asset('assets/logo/desktop/logo.png') }}" alt="Mobilier Addict" />
             </a>
 
-            <form class="searchbar" action="#" method="get" role="search">
-                <input class="searchbar__input" type="search" name="q" placeholder="Rechercher matelas, oreillers, draps..." />
+            <form class="searchbar" action="{{ route('search.index') }}" method="get" role="search" data-searchbar>
+                <input class="searchbar__input" type="search" name="q" placeholder="Rechercher matelas, oreillers, draps..." autocomplete="off" data-search-input />
                 <button class="searchbar__btn" type="submit" aria-label="Rechercher">
                     <svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                 </button>
+                <button class="searchbar__clear" type="button" aria-label="Effacer" data-search-clear>×</button>
+                <div class="searchbar__suggest" data-search-suggest aria-label="Suggestions" role="listbox"></div>
             </form>
 
             <div class="header-new__actions">
@@ -51,30 +53,52 @@
                 <h3 class="mobile-nav__title"><i class="fa-solid fa-bed"></i> Mobilier Addict</h3>
                 <p class="mobile-nav__subtitle">Votre partenaire sommeil premium</p>
             </div>
-            <a class="nav-link nav-link--active" href="{{ route('home') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-house"></i></span>
-                Accueil
-            </a>
-            <a class="nav-link" href="{{ route('univers.show', 'matelas') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-bed"></i></span>
-                Matelas
-            </a>
-            <a class="nav-link" href="{{ route('univers.show', 'oreillers') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-cloud"></i></span>
-                Oreillers
-            </a>
-            <a class="nav-link" href="{{ route('univers.show', 'draps-couettes') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-sheet-plastic"></i></span>
-                Draps & Couettes
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-plug"></i></span>
-                Électroménager & Meubles
-            </a>
-            <a class="nav-link" href="{{ route('univers.show', 'lits-sommiers') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-couch"></i></span>
-                Lits
-            </a>
+            @forelse(($headerMenus ?? collect()) as $menu)
+                @php
+                    $menuSlug = strtolower((string) ($menu->slug ?? ''));
+                    $menuUrl = $menu->url ?: (in_array($menuSlug, ['accueil', 'home'], true) ? route('home') : route('menu.show', $menu->slug));
+                    $resolvedUrl = preg_match('#^https?://#', $menuUrl) ? $menuUrl : url($menuUrl);
+                    $isActive = $menuUrl !== '#' && rtrim($resolvedUrl, '/') === rtrim(url()->current(), '/');
+                    $targetAttr = $menu->open_new_tab ? ' target="_blank" rel="noopener"' : '';
+                @endphp
+                <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
+                    <span class="nav-link__icon">
+                        @if($menu->icon)
+                            <i class="{{ $menu->icon }}"></i>
+                        @else
+                            <i class="fa-solid fa-circle"></i>
+                        @endif
+                    </span>
+                    {{ $menu->name }}
+                </a>
+
+                @if($menu->children && $menu->children->count() > 0)
+                    @foreach($menu->children as $child)
+                        @php
+                            $childSlug = strtolower((string) ($child->slug ?? ''));
+                            $childUrl = $child->url ?: (in_array($childSlug, ['accueil', 'home'], true) ? route('home') : route('menu.show', $child->slug));
+                            $childResolvedUrl = preg_match('#^https?://#', $childUrl) ? $childUrl : url($childUrl);
+                            $childIsActive = $childUrl !== '#' && rtrim($childResolvedUrl, '/') === rtrim(url()->current(), '/');
+                            $childTargetAttr = $child->open_new_tab ? ' target="_blank" rel="noopener"' : '';
+                        @endphp
+                        <a class="nav-link {{ $childIsActive ? 'nav-link--active' : '' }}" style="padding-left: 56px" href="{{ $childUrl === '#' ? '#' : $childResolvedUrl }}"{!! $childTargetAttr !!}>
+                            <span class="nav-link__icon">
+                                @if($child->icon)
+                                    <i class="{{ $child->icon }}"></i>
+                                @else
+                                    <i class="fa-solid fa-angle-right"></i>
+                                @endif
+                            </span>
+                            {{ $child->name }}
+                        </a>
+                    @endforeach
+                @endif
+            @empty
+                <a class="nav-link nav-link--active" href="{{ route('home') }}">
+                    <span class="nav-link__icon"><i class="fa-solid fa-house"></i></span>
+                    Accueil
+                </a>
+            @endforelse
             <div class="mobile-nav__footer">
                 <a class="mobile-nav__cta" href="#">Explorer la collection <i class="fa-solid fa-arrow-right"></i></a>
                 <p style="color:rgba(255,255,255,.6);font-size:13px;margin:12px 0">Besoin d'aide ? Contactez-nous</p>

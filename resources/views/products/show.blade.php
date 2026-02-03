@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', $product->name . ' - Mobilier Addict')
+@section('title', $product->name)
 @section('meta_description', $product->short_description ?: $product->name)
 @section('canonical', route('product.show', $product->slug))
 
@@ -196,7 +196,7 @@
             <div class="product-desc__grid">
                 <div class="product-desc__content">
                     <div class="product-desc__text">
-                        {!! nl2br(e($product->description)) !!}
+                        {!! $product->description !!}
                     </div>
                 </div>
                 <div class="product-desc__features">

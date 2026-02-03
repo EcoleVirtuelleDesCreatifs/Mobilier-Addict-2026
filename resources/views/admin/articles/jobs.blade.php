@@ -72,7 +72,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if($job->link)
-                                                        <a href="{{ $job->link }}" target="_blank" 
+                                                        <a href="{{ $job->link }}" target="_blank"
                                                            class="btn btn-outline-success btn-xs" title="Voir l'offre">
                                                             <i class="fa fa-external-link"></i>
                                                         </a>
@@ -82,15 +82,15 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('admin.jobs.show', $job) }}" 
+                                                        <a href="{{ route('admin.jobs.show', $job) }}"
                                                            class="btn btn-info btn-xs mr-1" title="Voir">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('admin.jobs.edit', $job) }}" 
+                                                        <a href="{{ route('admin.jobs.edit', $job) }}"
                                                            class="btn btn-warning btn-xs mr-1" title="Modifier">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.jobs.destroy', $job) }}" 
+                                                        <form action="{{ route('admin.jobs.destroy', $job) }}"
                                                               method="POST" class="d-inline"
                                                               onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre d\'emploi ?')">
                                                             @csrf
@@ -109,7 +109,7 @@
 
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center mt-3">
-                                {{ $jobs->links('vendor.pagination.bootstrap-4') }}
+                                {{ $jobs->links('pagination::bootstrap-5') }}
                             </div>
                         @else
                             <div class="text-center py-4">

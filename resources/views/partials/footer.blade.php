@@ -10,6 +10,18 @@
                 <input type="email" name="email" placeholder="Votre adresse email" required />
                 <button type="submit">S'inscrire <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
             </form>
+
+            @if (session('success'))
+                <div class="mt-2" style="color: #ffffff; font-size: 0.95rem;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mt-2" style="color: #ffffff; font-size: 0.95rem;">
+                    {{ $errors->first('email') ?: $errors->first() }}
+                </div>
+            @endif
         </div>
     </div>
 

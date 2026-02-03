@@ -38,9 +38,51 @@ class HomeController extends Controller
             ]
         );
 
+        Section::query()->firstOrCreate(
+            ['slug' => 'refuge'],
+            [
+                'badge' => 'Laissez-vous séduire',
+                'badge_icon' => '✨',
+                'title' => 'Créez Votre Refuge de Bien-Être',
+                'description' => "Chaque nuit mérite d’être exceptionnelle. Découvrez nos univers pensés pour éveiller vos sens.",
+                'background_color' => '#fde7f3',
+                'type' => 'custom',
+                'order' => 3,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'oreillers'],
+            [
+                'badge' => 'Oreillers',
+                'badge_icon' => '🛏️',
+                'title' => 'Oreillers',
+                'description' => null,
+                'background_color' => null,
+                'type' => 'custom',
+                'order' => 10,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'draps'],
+            [
+                'badge' => 'Draps',
+                'badge_icon' => '🧺',
+                'title' => 'Draps',
+                'description' => null,
+                'background_color' => null,
+                'type' => 'custom',
+                'order' => 11,
+                'is_active' => true,
+            ]
+        );
+
         $homeSections = Section::query()
             ->active()
-            ->whereIn('slug', ['categories', 'electro'])
+            ->whereIn('slug', ['categories', 'electro', 'refuge', 'oreillers', 'draps'])
             ->with([
                 'categories' => function ($query) {
                     $query->active()->ordered()->withCount(['products as products_rel_count'])->take(4);

@@ -137,9 +137,6 @@
                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="acc-card__media">
                                     <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
-                                    @if($categoryLabel)
-                                        <span class="acc-card__category">{{ $categoryLabel }}</span>
-                                    @endif
                                 </div>
                             </a>
 
@@ -147,7 +144,6 @@
                                 <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                     <h3 class="acc-card__name">{{ $product->name }}</h3>
                                 </a>
-                                <p class="acc-card__desc">{{ $product->short_description ?: ' ' }}</p>
                                 <div class="acc-card__footer">
                                     <span class="acc-card__price">{{ number_format((float) $product->price, 0, ',', '.') }}<small>F</small></span>
                                     <form action="{{ route('cart.add') }}" method="POST" style="margin:0">

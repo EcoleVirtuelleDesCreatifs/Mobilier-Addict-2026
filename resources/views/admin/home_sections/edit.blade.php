@@ -60,6 +60,11 @@
                     @endif
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Contenu (JSON)</label>
+                    <textarea name="content" class="form-control" rows="10">{{ old('content', $section->content ? json_encode($section->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : '') }}</textarea>
+                </div>
+
                 <div class="row g-2">
                     <div class="col-6">
                         <label class="form-label">Ordre</label>

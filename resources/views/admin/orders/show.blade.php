@@ -107,10 +107,17 @@
                                     @forelse($order->items as $item)
                                         <tr style="border-top: 1px solid var(--admin-border);">
                                             <td>
-                                                <div class="fw-semibold">{{ $item->product_name }}</div>
-                                                @if($item->product)
-                                                    <div class="small" style="color: var(--admin-muted);">#{{ $item->product->id }}</div>
-                                                @endif
+                                                <div class="d-flex align-items-center gap-3">
+                                                    @if($item->product && !empty($item->product->image))
+                                                        <img src="{{ asset($item->product->image) }}" alt="{{ $item->product_name }}" width="150" height="150" style="border-radius: 14px; object-fit: cover; border: 1px solid var(--admin-border);">
+                                                    @endif
+                                                    <div>
+                                                        <div class="fw-semibold">{{ $item->product_name }}</div>
+                                                        @if($item->product)
+                                                            <div class="small" style="color: var(--admin-muted);">#{{ $item->product->id }}</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td class="text-end">{{ number_format((float) $item->unit_price, 0, ',', '.') }}F</td>
                                             <td class="text-center">{{ $item->quantity }}</td>

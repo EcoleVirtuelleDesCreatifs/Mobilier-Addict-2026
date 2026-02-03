@@ -14,6 +14,10 @@ class UniversController extends Controller
                 'title' => 'Hôtellerie',
                 'description' => "Solutions professionnelles pour hôtels, chambres d'hôtes et résidences de tourisme.",
             ],
+            'entrez-dans-lunivers-de-vos-nuits' => [
+                'title' => "Entrez dans l'univers de vos nuits",
+                'description' => "Matelas, lits, draps et ambiance réunis dans un seul espace pour imaginer des nuits paisibles et élégantes.",
+            ],
             'appartement-meuble' => [
                 'title' => 'Appartement Meublé',
                 'description' => 'Des essentiels confortables et durables pour équiper vos locations et appartements.',
@@ -68,12 +72,12 @@ class UniversController extends Controller
             ],
         ];
 
-        $category = Category::query()->active()->where('slug', $slug)->first();
+        $category = Category::query()->where('slug', $slug)->first();
 
-        $sleepSpaceSlugs = ['hotellerie', 'appartement-meuble', 'studio', 'famille'];
+        $sleepSpaceSlugs = ['hotellerie', 'entrez-dans-lunivers-de-vos-nuits', 'appartement-meuble', 'studio', 'famille'];
         $filterCategory = $category;
         if (!$filterCategory && in_array($slug, $sleepSpaceSlugs, true)) {
-            $filterCategory = Category::query()->active()->where('slug', 'matelas')->first();
+            $filterCategory = Category::query()->where('slug', 'matelas')->first();
         }
 
         $pageTitle = $category?->name ?? ($fallbackPages[$slug]['title'] ?? null);
@@ -83,16 +87,28 @@ class UniversController extends Controller
 
         $pageDescription = $category?->description ?? ($fallbackPages[$slug]['description'] ?? null);
 
-        $products = Product::query()
-            ->active()
-            ->when($filterCategory, fn ($q) => $q->where('category_id', $filterCategory->id))
+        $productsQuery = Product::query()->active();
+
+        if ($filterCategory) {
+            $categoryIds = $this->collectCategoryAndDescendantIds($filterCategory);
+
+            $productsQuery->whereIn('category_id', $categoryIds);
+        } else {
+            $productsQuery->whereRaw('1=0');
+        }
+
+        $products = $productsQuery
             ->orderBy('created_at', 'desc')
             ->paginate(12)
             ->withQueryString();
 
         $promoProducts = Product::query()
             ->active()
-            ->when($filterCategory, fn ($q) => $q->where('category_id', $filterCategory->id))
+            ->when($filterCategory, function ($q) use ($filterCategory) {
+                $categoryIds = $this->collectCategoryAndDescendantIds($filterCategory);
+                $q->whereIn('category_id', $categoryIds);
+            })
+            ->when(!$filterCategory, fn ($q) => $q->whereRaw('1=0'))
             ->whereNotNull('discount_percent')
             ->orderByDesc('discount_percent')
             ->limit(4)
@@ -110,5 +126,29 @@ class UniversController extends Controller
         }
 
         return view('univers.show', compact('slug', 'category', 'pageTitle', 'pageDescription', 'products', 'promoProducts', 'mattressProducts'));
+    }
+
+    private function collectCategoryAndDescendantIds(Category $category)
+    {
+        $ids = collect([(int) $category->id]);
+        $frontier = collect([(int) $category->id]);
+
+        while ($frontier->isNotEmpty()) {
+            $children = Category::query()
+                ->whereIn('parent_id', $frontier)
+                ->pluck('id')
+                ->map(fn ($v) => (int) $v)
+                ->values();
+
+            $children = $children->diff($ids)->values();
+            if ($children->isEmpty()) {
+                break;
+            }
+
+            $ids = $ids->concat($children)->unique()->values();
+            $frontier = $children;
+        }
+
+        return $ids;
     }
 }

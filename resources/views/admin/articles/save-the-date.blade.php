@@ -135,7 +135,7 @@
                                 </table>
 
 
-                                {{ $saveTheDates->links('vendor.pagination.bootstrap-4') }}
+                                {{ $saveTheDates->links('pagination::bootstrap-5') }}
 
 
                             </div>

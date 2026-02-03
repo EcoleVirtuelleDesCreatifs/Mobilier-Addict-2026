@@ -130,6 +130,158 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Searchbar autocomplete
+  const searchbar = document.querySelector('[data-searchbar]');
+  if (searchbar) {
+    const input = searchbar.querySelector('[data-search-input]');
+    const suggest = searchbar.querySelector('[data-search-suggest]');
+    const clearBtn = searchbar.querySelector('[data-search-clear]');
+    let abortController = null;
+    let debounceTimer = null;
+    let activeIndex = -1;
+    let items = [];
+
+    const closeSuggest = () => {
+      searchbar.classList.remove('is-open');
+      activeIndex = -1;
+      items = [];
+      if (suggest) suggest.innerHTML = '';
+    };
+
+    const openSuggest = () => {
+      if (!items.length) return;
+      searchbar.classList.add('is-open');
+    };
+
+    const setActiveItem = (idx) => {
+      activeIndex = idx;
+      if (!suggest) return;
+      Array.from(suggest.querySelectorAll('.searchbar__suggest-item')).forEach((el, i) => {
+        el.classList.toggle('is-active', i === activeIndex);
+      });
+    };
+
+    const render = (data) => {
+      items = Array.isArray(data) ? data : [];
+      if (!suggest) return;
+
+      if (!items.length) {
+        closeSuggest();
+        return;
+      }
+
+      const html = items.map((p, i) => {
+        const img = p.image ? p.image : '';
+        const href = p.slug ? `/produit/${encodeURIComponent(p.slug)}` : '#';
+        const price = p.price ? p.price : '';
+
+        return `\
+<a class="searchbar__suggest-item" role="option" aria-selected="false" data-index="${i}" href="${href}">\
+  <span class="searchbar__suggest-thumb">\
+    ${img ? `<img src="${img}" alt="" loading="lazy" />` : ''}\
+  </span>\
+  <span class="searchbar__suggest-meta">\
+    <span class="searchbar__suggest-name">${p.name || ''}</span>\
+    <span class="searchbar__suggest-price">${price}</span>\
+  </span>\
+</a>`;
+      }).join('');
+
+      suggest.innerHTML = html;
+      openSuggest();
+      setActiveItem(-1);
+
+      suggest.querySelectorAll('.searchbar__suggest-item').forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          const i = Number(el.getAttribute('data-index'));
+          if (!Number.isNaN(i)) setActiveItem(i);
+        });
+      });
+    };
+
+    const fetchSuggest = (q) => {
+      if (!suggest) return;
+      if (abortController) abortController.abort();
+      abortController = new AbortController();
+
+      fetch(`/search/suggest?q=${encodeURIComponent(q)}`, {
+        headers: { 'Accept': 'application/json' },
+        signal: abortController.signal,
+      })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((data) => render(data))
+        .catch((err) => {
+          if (err && err.name === 'AbortError') return;
+          closeSuggest();
+        });
+    };
+
+    const onInput = () => {
+      const q = (input && input.value ? input.value : '').trim();
+
+      if (clearBtn) {
+        if (q.length) searchbar.classList.add('is-open');
+        else searchbar.classList.remove('is-open');
+      }
+
+      if (debounceTimer) window.clearTimeout(debounceTimer);
+      if (q.length < 2) {
+        closeSuggest();
+        return;
+      }
+
+      debounceTimer = window.setTimeout(() => fetchSuggest(q), 180);
+    };
+
+    if (input) {
+      input.addEventListener('input', onInput);
+      input.addEventListener('focus', () => {
+        if (items.length) searchbar.classList.add('is-open');
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (!items.length) return;
+
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSuggest();
+          return;
+        }
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = Math.min(activeIndex + 1, items.length - 1);
+          setActiveItem(next);
+          return;
+        }
+
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          const next = Math.max(activeIndex - 1, 0);
+          setActiveItem(next);
+          return;
+        }
+
+        if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex] && items[activeIndex].slug) {
+          e.preventDefault();
+          window.location.href = `/produit/${encodeURIComponent(items[activeIndex].slug)}`;
+        }
+      });
+    }
+
+    if (clearBtn && input) {
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        input.focus();
+        closeSuggest();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!searchbar.contains(e.target)) closeSuggest();
+    });
+  }
+
   // Magnetic effect on cards
   document.querySelectorAll('.product-card, .cat-card, .fav-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {

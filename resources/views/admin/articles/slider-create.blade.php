@@ -10,25 +10,36 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">AJOUTER UN ARTICLE AU SLIDER</h4>
+                    <h4 class="card-title">AJOUTER UN SLIDE AU SLIDER</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <form action="{{ route('admin.slider.store') }}" method="POST">
+                        <form action="{{ route('admin.slider.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            {{-- Sélection de l'article --}}
+                            {{-- Titre --}}
                             <div class="form-group mb-3">
-                                <label for="article_id">Article à ajouter</label>
-                                <select name="article_id" id="article_id" class="form-control" required>
-                                    <option value="">-- Sélectionner un article --</option>
-                                    @foreach($articles as $article)
-                                        <option value="{{ $article->id }}" {{ old('article_id') == $article->id ? 'selected' : '' }}>
-                                            {{ $article->title }} ({{ $article->category->name ?? 'Non catégorisé' }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('article_id')
+                                <label for="title">Titre</label>
+                                <input type="text" id="title" name="title" class="form-control" value="{{ old('title') }}" required maxlength="255" />
+                                @error('title')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            {{-- Badge (optionnel) --}}
+                            <div class="form-group mb-3">
+                                <label for="badge">Badge (optionnel)</label>
+                                <input type="text" id="badge" name="badge" class="form-control" value="{{ old('badge') }}" maxlength="255" />
+                                @error('badge')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            {{-- Image --}}
+                            <div class="form-group mb-3">
+                                <label for="image">Image</label>
+                                <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
+                                @error('image')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -36,17 +47,16 @@
                             {{-- Ordre --}}
                             <div class="form-group mb-3">
                                 <label for="order">Ordre d'affichage (optionnel)</label>
-                                <select name="order" id="order" class="form-control">
-                                    <option value="">-- Ordre automatique --</option>
-                                    @for($i = 1; $i <= 8; $i++)
-                                        <option value="{{ $i }}" {{ old('order') == $i ? 'selected' : '' }}>
-                                            Position {{ $i }}
-                                        </option>
-                                    @endfor
-                                </select>
+                                <input type="number" name="order" id="order" class="form-control" value="{{ old('order', 0) }}" min="0" />
                                 @error('order')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
+                            </div>
+
+                            {{-- Actif --}}
+                            <div class="form-group mb-3 form-check">
+                                <input type="checkbox" id="is_active" name="is_active" class="form-check-input" value="1" {{ old('is_active', 1) ? 'checked' : '' }}>
+                                <label for="is_active" class="form-check-label">Activer ce slide</label>
                             </div>
 
                             {{-- Boutons --}}
@@ -71,54 +81,3 @@
 ***********************************-->
 
 @endsection
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-    // Aperçu de l'article sélectionné
-    $('#article_id').change(function() {
-        var articleId = $(this).val();
-
-        if (articleId) {
-            // Récupérer les données de l'article via AJAX
-            $.get('/in/admin/articles/' + articleId + '/preview', function(data) {
-                var previewHtml = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${data.title}</h5>
-                            <div class="mb-2">
-                                <strong>Catégorie:</strong>
-                                <span class="badge badge-info">${data.category}</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Vues:</strong>
-                                <span class="badge badge-warning">${data.views}</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Publié le:</strong> ${data.published}
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                $('#article-preview').html(previewHtml);
-            }).fail(function() {
-                $('#article-preview').html(`
-                    <div class="alert alert-warning">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        Impossible de charger l'aperçu de l'article
-                    </div>
-                `);
-            });
-        } else {
-            $('#article-preview').html(`
-                <div class="text-center text-muted">
-                    <i class="fa fa-image fa-3x mb-3"></i>
-                    <p>Sélectionnez un article pour voir l'aperçu</p>
-                </div>
-            `);
-        }
-    });
-});
-</script>
-@endpush

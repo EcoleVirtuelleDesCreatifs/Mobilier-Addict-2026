@@ -58,32 +58,34 @@
             <!-- Cart Items -->
             <div class="cart-main">
                 <!-- Free Shipping Banner -->
-                @if($shipping > 0)
-                <div class="cart-shipping-banner">
-                    <div class="cart-shipping-banner__icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.96 2.5H17V9.5h2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 8l3 4v5h-2c0 1.66-1.34 3-3 3s-3-1.34-3-3H9c0 1.66-1.34 3-3 3s-3-1.34-3-3H1V6c0-1.11.89-2 2-2h14v4h3zM3 6v9h.76c.55-.61 1.35-1 2.24-1s1.69.39 2.24 1H15V6H3z" fill="currentColor"/></svg>
-                    </div>
-                    <div class="cart-shipping-banner__content">
-                        <p class="cart-shipping-banner__text">
-                            Plus que <strong>{{ number_format(50000 - $subtotal, 0, ',', '.') }}F</strong> pour bénéficier de la <strong>livraison gratuite !</strong>
-                        </p>
-                        <div class="cart-shipping-banner__progress">
-                            <div class="cart-shipping-banner__bar" style="width: {{ min(100, ($subtotal / 50000) * 100) }}%"></div>
-                        </div>
-                    </div>
-                </div>
-                @else
-                <div class="cart-shipping-banner cart-shipping-banner--success">
-                    <div class="cart-shipping-banner__icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>
-                    </div>
-                    <div class="cart-shipping-banner__content">
-                        <p class="cart-shipping-banner__text">
-                            <strong>Félicitations !</strong> Vous bénéficiez de la livraison gratuite 🎉
-                        </p>
-                    </div>
-                </div>
-                @endif
+				@if(empty($usesProductShipping) || !$usesProductShipping)
+					@if($shipping > 0)
+					<div class="cart-shipping-banner">
+						<div class="cart-shipping-banner__icon">
+							<svg viewBox="0 0 24 24" width="24" height="24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.96 2.5H17V9.5h2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 8l3 4v5h-2c0 1.66-1.34 3-3 3s-3-1.34-3-3H9c0 1.66-1.34 3-3 3s-3-1.34-3-3H1V6c0-1.11.89-2 2-2h14v4h3zM3 6v9h.76c.55-.61 1.35-1 2.24-1s1.69.39 2.24 1H15V6H3z" fill="currentColor"/></svg>
+						</div>
+						<div class="cart-shipping-banner__content">
+							<p class="cart-shipping-banner__text">
+								Plus que <strong>{{ number_format(50000 - $subtotal, 0, ',', '.') }}F</strong> pour bénéficier de la <strong>livraison gratuite !</strong>
+							</p>
+							<div class="cart-shipping-banner__progress">
+								<div class="cart-shipping-banner__bar" style="width: {{ min(100, ($subtotal / 50000) * 100) }}%"></div>
+							</div>
+						</div>
+					</div>
+					@else
+					<div class="cart-shipping-banner cart-shipping-banner--success">
+						<div class="cart-shipping-banner__icon">
+							<svg viewBox="0 0 24 24" width="24" height="24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>
+						</div>
+						<div class="cart-shipping-banner__content">
+							<p class="cart-shipping-banner__text">
+								<strong>Félicitations !</strong> Vous bénéficiez de la livraison gratuite 🎉
+							</p>
+						</div>
+					</div>
+					@endif
+				@endif
 
                 <!-- Cart Items List -->
                 <div class="cart-items">
@@ -272,9 +274,9 @@
                             <span class="cart-suggestion-card__old">{{ $product->formatted_old_price }}</span>
                             @endif
                         </div>
-                        <button class="cart-suggestion-card__btn" type="button">
+                        <button class="cart-suggestion-card__btn cart-suggestion-card__btn--pink" type="button">
                             <svg viewBox="0 0 24 24" width="16" height="16"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
-                            Ajouter
+                            AJOUTER AU PANIER
                         </button>
                     </div>
                 </a>
@@ -437,6 +439,11 @@ document.addEventListener('DOMContentLoaded', () => {
 .cart-summary__checkout::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .5s}
 .cart-summary__checkout:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(236,72,153,.4)}
 .cart-summary__checkout:hover::before{left:100%}
+
+/* Suggested products button */
+.cart-suggestion-card__btn.cart-suggestion-card__btn--pink{background:linear-gradient(135deg,#ec4899,#be185d) !important;color:#fff !important;border-color:#ec4899 !important}
+.cart-suggestion-card__btn.cart-suggestion-card__btn--pink:hover{background:linear-gradient(135deg,#f472b6,#be185d) !important;border-color:#f472b6 !important;color:#fff !important}
+.cart-suggestion-card__btn.cart-suggestion-card__btn--pink svg{color:#fff !important}
 .cart-summary__payment-methods{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;text-align:center}
 .cart-summary__payment-methods>span{display:block;font-size:11px;color:#94a3b8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
 .cart-summary__payment-icons{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}

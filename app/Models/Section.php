@@ -17,6 +17,7 @@ class Section extends Model
         'description',
         'background_color',
         'cover_image',
+        'content',
         'type',
         'order',
         'is_active',
@@ -24,6 +25,7 @@ class Section extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'content' => 'array',
     ];
 
     public function categories()

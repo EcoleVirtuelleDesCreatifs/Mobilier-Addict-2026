@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Menu;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('partials.header', function ($view) {
+            $headerMenus = Menu::query()
+                ->active()
+                ->where('position', 'header')
+                ->whereNull('parent_id')
+                ->with(['children'])
+                ->orderBy('order')
+                ->get();
+
+            $view->with('headerMenus', $headerMenus);
+        });
     }
 }

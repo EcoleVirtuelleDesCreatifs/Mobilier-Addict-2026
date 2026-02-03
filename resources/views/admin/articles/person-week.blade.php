@@ -56,12 +56,12 @@
                                             <tr>
                                                 <td class="text-center">
                                                     @if($person->image)
-                                                        <img src="{{ asset('storage/' . $person->image) }}" 
-                                                             alt="{{ $person->name }}" 
-                                                             class="rounded-circle" 
+                                                        <img src="{{ asset('storage/' . $person->image) }}"
+                                                             alt="{{ $person->name }}"
+                                                             class="rounded-circle"
                                                              style="width: 50px; height: 50px; object-fit: cover;">
                                                     @else
-                                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" 
+                                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center"
                                                              style="width: 50px; height: 50px;">
                                                             <i class="fa fa-user text-white"></i>
                                                         </div>
@@ -87,7 +87,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if($person->link_bio)
-                                                        <a href="{{ $person->link_bio }}" target="_blank" 
+                                                        <a href="{{ $person->link_bio }}" target="_blank"
                                                            class="btn btn-outline-primary btn-xs" title="Voir la bio complète">
                                                             <i class="fa fa-external-link"></i>
                                                         </a>
@@ -97,15 +97,15 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('admin.person-week.show', $person) }}" 
+                                                        <a href="{{ route('admin.person-week.show', $person) }}"
                                                            class="btn btn-info btn-xs mr-1" title="Voir">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('admin.person-week.edit', $person) }}" 
+                                                        <a href="{{ route('admin.person-week.edit', $person) }}"
                                                            class="btn btn-warning btn-xs mr-1" title="Modifier">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.person-week.destroy', $person) }}" 
+                                                        <form action="{{ route('admin.person-week.destroy', $person) }}"
                                                               method="POST" class="d-inline"
                                                               onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette personne de la semaine ?')">
                                                             @csrf
@@ -124,7 +124,7 @@
 
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center mt-3">
-                                {{ $personWeeks->links('vendor.pagination.bootstrap-4') }}
+                                {{ $personWeeks->links('pagination::bootstrap-5') }}
                             </div>
                         @else
                             <div class="text-center py-4">

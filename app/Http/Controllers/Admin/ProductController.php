@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -64,8 +66,13 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::query()->orderBy('name')->get();
+        $menus = Menu::query()
+            ->orderBy('position')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
 
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create', compact('categories', 'menus'));
     }
 
     public function store(Request $request)
@@ -74,7 +81,20 @@ class ProductController extends Controller
         $data = $this->normalizeProductData($data);
         $data = $this->handleProductUploads($request, $data);
 
-        Product::create($data);
+        $product = Product::create($data);
+
+        $menuIds = $request->input('menu_ids', []);
+        $menuIds = is_array($menuIds) ? $menuIds : [];
+
+        if (!empty($menuIds) && !Schema::hasTable('menu_product')) {
+            throw ValidationException::withMessages([
+                'menu_ids' => "La table pivot 'menu_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → menus.",
+            ]);
+        }
+
+        if (Schema::hasTable('menu_product')) {
+            $product->menus()->sync($menuIds);
+        }
 
         return redirect()->route('admin.products.index')->with('status', 'Produit créé avec succès.');
     }
@@ -82,8 +102,15 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::query()->orderBy('name')->get();
+        $menus = Menu::query()
+            ->orderBy('position')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        $selectedMenuIds = $product->menus()->pluck('menus.id')->all();
+
+        return view('admin.products.edit', compact('product', 'categories', 'menus', 'selectedMenuIds'));
     }
 
     public function update(Request $request, Product $product)
@@ -93,6 +120,19 @@ class ProductController extends Controller
         $data = $this->handleProductUploads($request, $data, $product);
 
         $product->update($data);
+
+        $menuIds = $request->input('menu_ids', []);
+        $menuIds = is_array($menuIds) ? $menuIds : [];
+
+        if (!empty($menuIds) && !Schema::hasTable('menu_product')) {
+            throw ValidationException::withMessages([
+                'menu_ids' => "La table pivot 'menu_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → menus.",
+            ]);
+        }
+
+        if (Schema::hasTable('menu_product')) {
+            $product->menus()->sync($menuIds);
+        }
 
         return redirect()->route('admin.products.index')->with('status', 'Produit mis à jour.');
     }
@@ -136,10 +176,14 @@ class ProductController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug' . ($isUpdate ? ',' . $product->id : '')],
             'short_description' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
+            'seo_title' => ['nullable', 'string', 'max:255'],
+            'seo_description' => ['nullable', 'string'],
+            'seo_keywords' => ['nullable', 'string', 'max:255'],
             'image' => [$isUpdate ? 'nullable' : 'required', 'image', 'max:4096'],
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['nullable', 'image', 'max:4096'],
             'price' => ['required', 'numeric', 'min:0'],
+            'shipping_price' => ['nullable', 'numeric', 'min:0'],
             'promo_price' => ['nullable', 'numeric', 'min:0'],
             'old_price' => ['nullable', 'numeric', 'min:0'],
             'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
@@ -155,13 +199,38 @@ class ProductController extends Controller
             'is_bestseller' => ['nullable', 'boolean'],
             'is_collection' => ['nullable', 'boolean'],
             'section' => ['nullable', 'in:collection,featured,bestseller'],
+            'sections' => ['nullable', 'array'],
+            'sections.*' => ['in:collection,featured,bestseller'],
             'is_active' => ['nullable', 'boolean'],
             'order' => ['nullable', 'integer'],
+            'menu_ids' => ['nullable', 'array'],
+            'menu_ids.*' => ['integer', 'exists:menus,id'],
         ]);
     }
 
     private function normalizeProductData(array $data): array
     {
+        if (!Schema::hasColumn('products', 'seo_title')) {
+            unset($data['seo_title']);
+        }
+        if (!Schema::hasColumn('products', 'seo_description')) {
+            unset($data['seo_description']);
+        }
+        if (!Schema::hasColumn('products', 'seo_keywords')) {
+            unset($data['seo_keywords']);
+        }
+
+        if (!Schema::hasColumn('products', 'shipping_price')) {
+            if (!empty($data['shipping_price']) && (float) $data['shipping_price'] > 0) {
+                throw ValidationException::withMessages([
+                    'shipping_price' => "La colonne 'shipping_price' n'existe pas encore en base. Lancez la migration pour activer le prix de livraison.",
+                ]);
+            }
+            unset($data['shipping_price']);
+        } else {
+            $data['shipping_price'] = $data['shipping_price'] ?? 0;
+        }
+
         if (!empty($data['promo_price'])) {
             $currentPrice = (float) $data['price'];
             $promoPrice = (float) $data['promo_price'];
@@ -180,6 +249,14 @@ class ProductController extends Controller
         $data['is_collection'] = (bool) ($data['is_collection'] ?? false);
         $data['is_active'] = (bool) ($data['is_active'] ?? false);
         $data['order'] = $data['order'] ?? 0;
+
+        if (!empty($data['sections']) && is_array($data['sections'])) {
+            $sections = array_values(array_unique(array_filter($data['sections'], fn ($v) => is_string($v) && $v !== '')));
+            $data['is_collection'] = in_array('collection', $sections, true);
+            $data['is_featured'] = in_array('featured', $sections, true);
+            $data['is_bestseller'] = in_array('bestseller', $sections, true);
+        }
+        unset($data['sections']);
 
         if (!empty($data['section'])) {
             if ($data['section'] === 'collection') {

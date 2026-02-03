@@ -49,6 +49,11 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class, 'category_menu')->withTimestamps();
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

@@ -66,7 +66,7 @@ class OrderController extends Controller
             abort(404);
         }
 
-        $order->load(['items', 'user']);
+        $order->load(['items.product', 'user']);
 
         return view('admin.orders.show', [
             'order' => $order,

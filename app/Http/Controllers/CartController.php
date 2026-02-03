@@ -228,6 +228,7 @@ class CartController extends Controller
                     'slug' => $product->slug,
                     'image' => asset($product->image),
                     'price' => (float) $product->price,
+                    'shipping_price' => (float) ($product->shipping_price ?? 0),
                     'old_price' => $product->old_price ? (float) $product->old_price : null,
                     'quantity' => $quantity,
                     'options' => null,
@@ -237,7 +238,13 @@ class CartController extends Controller
         $subtotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
         $savings = $cartItems->sum(fn($item) => $item->old_price ? ($item->old_price - $item->price) * $item->quantity : 0);
 
-        $shipping = $subtotal >= 50000 ? 0 : 5000;
+        $shipping = 0;
+        $usesProductShipping = \Illuminate\Support\Facades\Schema::hasColumn('products', 'shipping_price');
+        if ($usesProductShipping) {
+            $shipping = (float) $cartItems
+                ->map(fn ($item) => (float) ($item->shipping_price ?? 0))
+                ->max();
+        }
 
         $shippingData = session()->get('checkout.shipping');
         if (is_array($shippingData) && ($shippingData['shipping_method'] ?? null) === 'express') {
@@ -246,7 +253,7 @@ class CartController extends Controller
 
         $total = $subtotal + $shipping;
 
-        return compact('cartItems', 'subtotal', 'savings', 'shipping', 'total');
+        return compact('cartItems', 'subtotal', 'savings', 'shipping', 'total', 'usesProductShipping');
     }
 
     private function getCart(): array

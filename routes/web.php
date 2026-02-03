@@ -1,21 +1,110 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\HomeSectionController;
+use App\Http\Controllers\Admin\StatsController;
+use App\Http\Controllers\Admin\QuoteController;
+use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MenuController as FrontMenuController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UniversController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\NewsletterController;
+use App\Models\BlogPost;
+use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/sitemap.xml', function () {
+    $urls = [];
+
+    $add = function (string $loc, ?string $lastmod = null) use (&$urls) {
+        $urls[] = [
+            'loc' => $loc,
+            'lastmod' => $lastmod,
+        ];
+    };
+
+    $add(route('home'), Carbon::now()->toDateString());
+    $add(route('collection.index'));
+    $add(route('blog.index'));
+    $add(route('pages.about'));
+    $add(route('pages.contact'));
+    $add(route('pages.customer-service'));
+    $add(route('pages.shipping-returns'));
+    $add(route('pages.faq'));
+    $add(route('pages.legal'));
+    $add(route('pages.privacy'));
+    $add(route('pages.cgv'));
+    $add(route('pages.guides.mattress'));
+    $add(route('pages.guides.pillow'));
+    $add(route('pages.guides.care'));
+
+    if (Schema::hasTable('categories')) {
+        Category::query()->select(['slug', 'updated_at'])->whereNotNull('slug')->get()->each(function ($category) use ($add) {
+            $add(route('univers.show', $category->slug), optional($category->updated_at)->toDateString());
+        });
+    }
+
+    if (Schema::hasTable('menus') && Schema::hasTable('menu_product')) {
+        Menu::query()
+            ->select(['slug', 'updated_at', 'is_active'])
+            ->where('is_active', true)
+            ->whereNotNull('slug')
+            ->get()
+            ->each(function ($menu) use ($add) {
+                $slug = strtolower((string) $menu->slug);
+                if (in_array($slug, ['accueil', 'home'], true)) {
+                    return;
+                }
+                $add(route('menu.show', $menu->slug), optional($menu->updated_at)->toDateString());
+            });
+    }
+
+    if (Schema::hasTable('products')) {
+        Product::query()->select(['slug', 'updated_at', 'is_active'])->where('is_active', true)->whereNotNull('slug')->get()->each(function ($product) use ($add) {
+            $add(route('product.show', $product->slug), optional($product->updated_at)->toDateString());
+        });
+    }
+
+    if (Schema::hasTable('blog_posts')) {
+        BlogPost::query()->select(['slug', 'updated_at'])->whereNotNull('slug')->get()->each(function ($post) use ($add) {
+            $add(route('blog.show', $post->slug), optional($post->updated_at)->toDateString());
+        });
+    }
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+    foreach ($urls as $row) {
+        $xml .= "  <url>\n";
+        $xml .= '    <loc>' . htmlspecialchars($row['loc'], ENT_XML1) . "</loc>\n";
+        if (!empty($row['lastmod'])) {
+            $xml .= '    <lastmod>' . htmlspecialchars($row['lastmod'], ENT_XML1) . "</lastmod>\n";
+        }
+        $xml .= "  </url>\n";
+    }
+
+    $xml .= "</urlset>\n";
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
 
 Route::get('/prix', function () {
     return view('pricing');
@@ -39,6 +128,9 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+Route::get('/search/suggest', [SearchController::class, 'suggest'])->name('search.suggest');
 
 Route::get('/collection', function () {
     $products = Product::query()
@@ -68,6 +160,8 @@ Route::get('/panier/paiement', [CartController::class, 'payment'])->name('cart.p
 Route::post('/panier/paiement', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
 Route::get('/panier/confirmation/{order}', [CartController::class, 'confirmation'])->name('cart.confirmation');
 
+Route::get('/menu', fn () => redirect()->route('home'));
+Route::get('/menu/{slug}', [FrontMenuController::class, 'show'])->name('menu.show');
 Route::get('/univers/{slug}', [UniversController::class, 'show'])->name('univers.show');
 Route::get('/produit/{slug}', [ProductController::class, 'show'])->name('product.show');
 
@@ -125,18 +219,22 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
 
+    Route::get('/stats', [StatsController::class, 'index'])->name('admin.stats.index');
+
+    Route::get('/newsletter', [NewsletterSubscriptionController::class, 'index'])->name('admin.newsletter.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
 
     Route::get('/editor', fn () => redirect()->route('admin.dashboard'))->name('admin.editor');
     Route::get('/writer', fn () => redirect()->route('admin.dashboard'))->name('admin.writer');
 
-    Route::get('/articles', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.index');
-    Route::get('/articles/create', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.create');
-    Route::post('/articles', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.store');
-    Route::get('/articles/{article}/edit', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.edit');
-    Route::put('/articles/{article}', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.update');
-    Route::delete('/articles/{article}', fn () => redirect()->route('admin.dashboard'))->name('admin.articles.destroy');
-    Route::post('/articles/upload-image', fn () => response()->json(['url' => null], 501))->name('admin.articles.upload-image');
+    Route::get('/articles', [ArticleController::class, 'index'])->name('admin.articles.index');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('admin.articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
+    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('admin.articles.edit');
+    Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('admin.articles.update');
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
+    Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage'])->name('admin.articles.upload-image');
 
     Route::get('/person-week', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.index');
     Route::get('/person-week/create', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.create');
@@ -147,7 +245,7 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/flash-news', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.index');
     Route::get('/flash-news/create', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.create');
 
-    Route::get('/menus', fn () => redirect()->route('admin.dashboard'))->name('admin.menus.index');
+    Route::resource('menus', MenuController::class)->names('admin.menus');
 
     Route::get('/users', fn () => redirect()->route('admin.dashboard'))->name('admin.users.index');
     Route::get('/users/create', fn () => redirect()->route('admin.dashboard'))->name('admin.users.create');
@@ -156,8 +254,12 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/roles', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.index');
     Route::get('/roles/create', fn () => redirect()->route('admin.dashboard'))->name('admin.roles.create');
 
-    Route::get('/slider', fn () => redirect()->route('admin.dashboard'))->name('admin.slider.index');
-    Route::get('/slider/create', fn () => redirect()->route('admin.dashboard'))->name('admin.slider.create');
+    Route::get('/slider', [SliderController::class, 'index'])->name('admin.slider.index');
+    Route::get('/slider/create', [SliderController::class, 'create'])->name('admin.slider.create');
+    Route::post('/slider', [SliderController::class, 'store'])->name('admin.slider.store');
+    Route::get('/slider/{slider}/edit', [SliderController::class, 'edit'])->name('admin.slider.edit');
+    Route::put('/slider/{slider}', [SliderController::class, 'update'])->name('admin.slider.update');
+    Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
 
     Route::get('/save-the-date', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.index');
     Route::get('/save-the-date/create', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.create');
@@ -169,7 +271,19 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.status');
 
+    Route::get('/quotes', [QuoteController::class, 'index'])->name('admin.quotes.index');
+    Route::get('/quotes/{quote}', [QuoteController::class, 'show'])->name('admin.quotes.show');
+    Route::post('/orders/{order}/quotes', [QuoteController::class, 'storeFromOrder'])->name('admin.orders.quotes.store');
+    Route::post('/quotes/{quote}/status', [QuoteController::class, 'updateStatus'])->name('admin.quotes.status');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('admin.invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoices.show');
+    Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->name('admin.orders.invoices.store');
+    Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->name('admin.invoices.status');
+
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
+    Route::get('/home-sections/create', [HomeSectionController::class, 'create'])->name('admin.home_sections.create');
+    Route::post('/home-sections', [HomeSectionController::class, 'store'])->name('admin.home_sections.store');
     Route::get('/home-sections/{home_section}/edit', [HomeSectionController::class, 'edit'])->name('admin.home_sections.edit');
     Route::put('/home-sections/{home_section}', [HomeSectionController::class, 'update'])->name('admin.home_sections.update');
 });

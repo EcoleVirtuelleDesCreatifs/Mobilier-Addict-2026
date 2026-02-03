@@ -8,6 +8,9 @@
             <h1 class="h3 fw-bold mb-1">Sections Home</h1>
             <div class="small" style="color: var(--admin-muted);">Gère les sections comme “Trouvez Votre Bonheur” et “Équipez Votre Maison”.</div>
         </div>
+        <div>
+            <a href="{{ route('admin.home_sections.create') }}" class="btn btn-admin-primary">Créer une section</a>
+        </div>
     </div>
 
     @if (session('status'))

@@ -14,9 +14,13 @@ class Product extends Model
         'slug',
         'short_description',
         'description',
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
         'image',
         'gallery',
         'price',
+        'shipping_price',
         'old_price',
         'discount_percent',
         'category_id',
@@ -42,6 +46,7 @@ class Product extends Model
     protected $casts = [
         'gallery' => 'array',
         'price' => 'decimal:2',
+        'shipping_price' => 'decimal:2',
         'old_price' => 'decimal:2',
         'rating' => 'decimal:1',
         'is_featured' => 'boolean',
@@ -53,6 +58,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class, 'menu_product')->withTimestamps();
     }
 
     public function getFormattedPriceAttribute()

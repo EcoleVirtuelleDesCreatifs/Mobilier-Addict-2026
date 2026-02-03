@@ -41,7 +41,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">ARTICLES DU SLIDER PRINCIPAL</h4>
+                    <h4 class="card-title">SLIDER PRINCIPAL</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -53,9 +53,8 @@
                                         <th>Position</th>
                                         <th>Titre</th>
                                         <th>Image</th>
-                                        <th>Catégorie</th>
-                                        <th>Vues</th>
-                                        <th>Status</th>
+                                        <th>Actif</th>
+                                        <th>Période</th>
                                         <th>Ajouté le</th>
                                         <th>Actions</th>
                                     </tr>
@@ -74,45 +73,32 @@
                                             </td>
 
                                             {{-- Titre --}}
-                                            <td>{{ $slider->article->title }}</td>
+                                            <td>{{ $slider->title }}</td>
 
                                             {{-- Image --}}
                                             <td>
-                                                @if ($slider->article->image)
-                                                    <img src="{{ asset('storage/' . $slider->article->image) }}" alt="Image article" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
+                                                @if ($slider->image)
+                                                    <img src="{{ asset('storage/' . $slider->image) }}" alt="Image slide" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
                                                 @else
                                                     <img src="https://placehold.co/60x40?text=Pas+d%27image" alt="Image par défaut" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
                                                 @endif
                                             </td>
 
-                                            {{-- Catégorie --}}
-                                            <td>{{ $slider->article->category->name ?? 'Aucune' }}</td>
-
-                                            {{-- Vues --}}
+                                            {{-- Actif --}}
                                             <td>
-                                                <span class="badge badge-rounded badge-outline-warning">
-                                                    {{ $slider->article->views ?? 0 }}
-                                                </span>
+                                                @if($slider->is_active)
+                                                    <span class="badge badge-rounded badge-outline-primary"><span class="blinking-green-dot"></span>Actif</span>
+                                                @else
+                                                    <span class="badge badge-rounded badge-outline-danger">Inactif</span>
+                                                @endif
                                             </td>
 
-                                            {{-- Statut --}}
+                                            {{-- Période --}}
                                             <td>
-                                                @php
-                                                    $statusClass = match ($slider->article->status) {
-                                                        'published' => 'badge badge-rounded badge-outline-primary',
-                                                        'draft' => 'badge badge-rounded badge-outline-danger',
-                                                        default => 'badge badge-rounded badge-outline-secondary',
-                                                    };
-
-                                                    $statusLabel = match ($slider->article->status) {
-                                                        'published' => 'En ligne',
-                                                        'draft' => 'Brouillon',
-                                                        default => ucfirst($slider->article->status),
-                                                    };
-                                                @endphp
-
-                                                <span class="{{ $statusClass }}">
-                                                    {{ $statusLabel }}
+                                                <span class="badge badge-rounded badge-outline-secondary">
+                                                    {{ $slider->start_date ? $slider->start_date->format('d/m/Y') : '—' }}
+                                                    →
+                                                    {{ $slider->end_date ? $slider->end_date->format('d/m/Y') : '—' }}
                                                 </span>
                                             </td>
 
@@ -124,10 +110,10 @@
                                             {{-- Actions --}}
                                             <td>
                                                 <div class="d-flex">
-                                                    <a href="{{ route('admin.articles.edit', $slider->article->id) }}" class="btn btn-primary btn-sm me-2">
+                                                    <a href="{{ route('admin.slider.edit', $slider) }}" class="btn btn-primary btn-sm me-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.slider.destroy', $slider) }}" method="POST" onsubmit="return confirm('Retirer cet article du slider ?')">
+                                                    <form action="{{ route('admin.slider.destroy', $slider) }}" method="POST" onsubmit="return confirm('Supprimer ce slide ?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-danger btn-sm">
@@ -141,14 +127,14 @@
                                 </tbody>
                             </table>
 
-                            {{ $sliders->links('vendor.pagination.bootstrap-4') }}
+                            {{ $sliders->links('pagination::bootstrap-5') }}
                         @else
                             <div class="text-center py-5">
                                 <i class="fa fa-images fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">Aucun article dans le slider</h5>
-                                <p class="text-muted">Commencez par ajouter des articles au slider principal.</p>
+                                <h5 class="text-muted">Aucun slide dans le slider</h5>
+                                <p class="text-muted">Commencez par ajouter des slides au slider principal.</p>
                                 <a href="{{ route('admin.slider.create') }}" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Ajouter le premier article
+                                    <i class="fa fa-plus"></i> Ajouter le premier slide
                                 </a>
                             </div>
                         @endif

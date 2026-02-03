@@ -44,12 +44,12 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Position</th>
+                                            <th>Emplacement</th>
                                             <th>Titre</th>
                                             <th>Slug</th>
                                             <th>URL</th>
-                                            <th>Type</th>
-                                            <th>Articles</th>
+                                            <th>Ordre</th>
+                                            <th class="text-center">Actif</th>
                                             <th>Créé le</th>
                                             <th>Actions</th>
                                         </tr>
@@ -64,13 +64,13 @@
                                                 {{-- Position --}}
                                                 <td>
                                                     <span class="badge badge-rounded badge-outline-warning">
-                                                        #{{ $menu->position }}
+                                                        {{ $menu->position }}
                                                     </span>
                                                 </td>
 
                                                 {{-- Titre --}}
                                                 <td>
-                                                    <strong><i class="fa fa-folder"></i> {{ $menu->title }}</strong>
+                                                    <strong><i class="fa fa-folder"></i> {{ $menu->name }}</strong>
                                                     @if($menu->children->count() > 0)
                                                         <small class="text-muted d-block">
                                                             {{ $menu->children->count() }} sous-menu(s)
@@ -94,17 +94,10 @@
                                                     @endif
                                                 </td>
 
-                                                {{-- Type --}}
-                                                <td>
-                                                    <span class="badge badge-rounded badge-outline-primary">
-                                                        Menu principal
-                                                    </span>
-                                                </td>
-
-                                                {{-- Nombre d'articles --}}
-                                                <td>
-                                                    <span class="badge badge-rounded badge-outline-success">
-                                                        {{ $menu->article_menus_count }}
+                                                <td>{{ (int) $menu->order }}</td>
+                                                <td class="text-center">
+                                                    <span class="badge {{ $menu->is_active ? 'badge-success' : 'badge-secondary' }}">
+                                                        {{ $menu->is_active ? 'Oui' : 'Non' }}
                                                     </span>
                                                 </td>
 
@@ -119,7 +112,7 @@
                                                         <a href="{{ route('admin.menus.edit', $menu) }}" class="btn btn-primary btn-sm me-2">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        @if($menu->children->count() == 0 && $menu->article_menus_count == 0)
+                                                        @if($menu->children->count() == 0)
                                                             <form action="{{ route('admin.menus.destroy', $menu) }}" method="POST" onsubmit="return confirm('Supprimer ce menu ?')" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -128,7 +121,7 @@
                                                                 </button>
                                                             </form>
                                                         @else
-                                                            <button class="btn btn-secondary btn-sm" disabled title="Impossible de supprimer : contient des sous-menus ou des articles">
+                                                            <button class="btn btn-secondary btn-sm" disabled title="Impossible de supprimer : contient des sous-menus">
                                                                 <i class="fas fa-lock"></i>
                                                             </button>
                                                         @endif
@@ -145,15 +138,15 @@
                                                     {{-- Position --}}
                                                     <td>
                                                         <span class="badge badge-rounded badge-outline-info">
-                                                            #{{ $submenu->position }}
+                                                            {{ $submenu->position }}
                                                         </span>
                                                     </td>
 
                                                     {{-- Titre --}}
                                                     <td>
                                                         <span class="ml-3">
-                                                            <i class="fa fa-angle-right text-muted"></i> 
-                                                            <i class="fa fa-file-o"></i> {{ $submenu->title }}
+                                                            <i class="fa fa-angle-right text-muted"></i>
+                                                            <i class="fa fa-file-o"></i> {{ $submenu->name }}
                                                         </span>
                                                     </td>
 
@@ -173,17 +166,10 @@
                                                         @endif
                                                     </td>
 
-                                                    {{-- Type --}}
-                                                    <td>
-                                                        <span class="badge badge-rounded badge-outline-secondary">
-                                                            Sous-menu
-                                                        </span>
-                                                    </td>
-
-                                                    {{-- Nombre d'articles --}}
-                                                    <td>
-                                                        <span class="badge badge-rounded badge-outline-success">
-                                                            {{ $submenu->article_menus()->count() }}
+                                                    <td>{{ (int) $submenu->order }}</td>
+                                                    <td class="text-center">
+                                                        <span class="badge {{ $submenu->is_active ? 'badge-success' : 'badge-secondary' }}">
+                                                            {{ $submenu->is_active ? 'Oui' : 'Non' }}
                                                         </span>
                                                     </td>
 
@@ -198,19 +184,13 @@
                                                             <a href="{{ route('admin.menus.edit', $submenu) }}" class="btn btn-primary btn-sm me-2">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            @if($submenu->article_menus()->count() == 0)
-                                                                <form action="{{ route('admin.menus.destroy', $submenu) }}" method="POST" onsubmit="return confirm('Supprimer ce sous-menu ?')" class="d-inline">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button class="btn btn-danger btn-sm">
-                                                                        <i class="fas fa-trash-alt"></i>
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <button class="btn btn-secondary btn-sm" disabled title="Impossible de supprimer : contient des articles">
-                                                                    <i class="fas fa-lock"></i>
+                                                            <form action="{{ route('admin.menus.destroy', $submenu) }}" method="POST" onsubmit="return confirm('Supprimer ce sous-menu ?')" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="btn btn-danger btn-sm">
+                                                                    <i class="fas fa-trash-alt"></i>
                                                                 </button>
-                                                            @endif
+                                                            </form>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -220,7 +200,7 @@
                                 </table>
 
 
-                                {{ $menus->links('vendor.pagination.bootstrap-4') }}
+                                {{ $menus->links('pagination::bootstrap-5') }}
 
 
                             </div>

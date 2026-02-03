@@ -27,9 +27,9 @@
 
                                     {{-- Titre --}}
                                     <div class="form-group mb-3">
-                                        <label for="title">Titre du menu</label>
-                                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
-                                        @error('title')
+                                        <label for="name">Titre du menu</label>
+                                        <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
+                                        @error('name')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -54,6 +54,23 @@
                                         @enderror
                                     </div>
 
+                                    <div class="form-group mb-3">
+                                        <label for="product_ids">Produits rattachés (optionnel)</label>
+                                        <select name="product_ids[]" id="product_ids" class="form-control" multiple>
+                                            @foreach(($products ?? collect()) as $product)
+                                                <option value="{{ $product->id }}" @selected(in_array($product->id, old('product_ids', [])))>
+                                                    {{ $product->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('product_ids')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                        @error('product_ids.*')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
                                     {{-- Menu parent --}}
                                     <div class="form-group mb-3">
                                         <label for="parent_id">Menu parent (optionnel)</label>
@@ -61,7 +78,7 @@
                                             <option value="">-- Menu principal --</option>
                                             @foreach($parentMenus as $parentMenu)
                                                 <option value="{{ $parentMenu->id }}" {{ old('parent_id') == $parentMenu->id ? 'selected' : '' }}>
-                                                    {{ $parentMenu->title }}
+                                                    {{ $parentMenu->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -73,12 +90,37 @@
 
                                     {{-- Position --}}
                                     <div class="form-group mb-3">
-                                        <label for="position">Position d'affichage (optionnel)</label>
-                                        <input type="number" name="position" id="position" class="form-control" value="{{ old('position') }}" min="0">
-                                        <small class="form-text text-muted">Laissez vide pour position automatique</small>
+                                        <label for="position">Emplacement</label>
+                                        <select name="position" id="position" class="form-control" required>
+                                            <option value="header" {{ old('position', 'header') === 'header' ? 'selected' : '' }}>Header</option>
+                                            <option value="footer" {{ old('position') === 'footer' ? 'selected' : '' }}>Footer</option>
+                                            <option value="sidebar" {{ old('position') === 'sidebar' ? 'selected' : '' }}>Sidebar</option>
+                                        </select>
                                         @error('position')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="order">Ordre</label>
+                                        <input type="number" name="order" id="order" class="form-control" value="{{ old('order') }}" min="0">
+                                        @error('order')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_active">Actif</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="open_new_tab" id="open_new_tab" value="1" {{ old('open_new_tab') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="open_new_tab">Ouvrir dans un nouvel onglet</label>
+                                        </div>
                                     </div>
 
                                     {{-- Boutons --}}

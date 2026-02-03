@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\NewsletterSubscription;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Slide;
@@ -84,6 +86,39 @@ class DashboardController extends Controller
         $categoryStats = collect();
         $bestCategory = null;
 
+        $ordersMissing = !Schema::hasTable('orders');
+        $ordersTotalCount = 0;
+        $ordersPendingCount = 0;
+        $ordersDeliveredCount = 0;
+        $ordersMonthCount = 0;
+        $revenueTotal = 0;
+        $revenueMonth = 0;
+        $latestOrders = collect();
+
+        if (!$ordersMissing) {
+            $ordersTotalCount = Order::query()->count();
+            $ordersPendingCount = Order::query()->where('status', 'pending')->count();
+            $ordersDeliveredCount = Order::query()->where('status', 'delivered')->count();
+            $ordersMonthCount = Order::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->count();
+            $revenueTotal = (float) Order::query()->sum('total');
+            $revenueMonth = (float) Order::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->sum('total');
+            $latestOrders = Order::query()->orderByDesc('created_at')->limit(6)->get();
+        }
+
+        $lowStockCount = Product::query()->where('stock', '<=', 5)->count();
+        $productsOnlineCount = Product::query()->where('is_active', true)->count();
+        $productsOfflineCount = Product::query()->where('is_active', false)->count();
+        $latestProducts = Product::query()->orderByDesc('created_at')->limit(6)->get();
+
+        $headerMenus = Menu::query()
+            ->active()
+            ->where('position', 'header')
+            ->whereNull('parent_id')
+            ->with(['children'])
+            ->orderBy('order')
+            ->limit(12)
+            ->get();
+
         return view('admin.dashboard', [
             'stats' => [
                 'products' => Product::count(),
@@ -92,6 +127,7 @@ class DashboardController extends Controller
                 'slides' => Slide::count(),
                 'newsletter' => NewsletterSubscription::count(),
             ],
+            'headerMenus' => $headerMenus,
             'homeSections' => $homeSections,
             'currentMonth' => $selectedMonth->translatedFormat('F Y'),
             'articlesCount' => $articlesCount,
@@ -104,6 +140,18 @@ class DashboardController extends Controller
             'bestCategory' => $bestCategory,
             'topArticles' => $topArticles,
             'categoryStats' => $categoryStats,
+            'ordersMissing' => $ordersMissing,
+            'ordersTotalCount' => $ordersTotalCount,
+            'ordersPendingCount' => $ordersPendingCount,
+            'ordersDeliveredCount' => $ordersDeliveredCount,
+            'ordersMonthCount' => $ordersMonthCount,
+            'revenueTotal' => $revenueTotal,
+            'revenueMonth' => $revenueMonth,
+            'latestOrders' => $latestOrders,
+            'lowStockCount' => $lowStockCount,
+            'productsOnlineCount' => $productsOnlineCount,
+            'productsOfflineCount' => $productsOfflineCount,
+            'latestProducts' => $latestProducts,
         ]);
     }
 

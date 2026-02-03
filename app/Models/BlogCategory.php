@@ -27,6 +27,11 @@ class BlogCategory extends Model
         return $this->hasMany(\App\Models\BlogPost::class);
     }
 
+    public function getTitleAttribute()
+    {
+        return $this->name;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

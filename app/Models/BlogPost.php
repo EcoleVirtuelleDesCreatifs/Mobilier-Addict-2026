@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class BlogPost extends Model
 {
@@ -33,6 +34,44 @@ class BlogPost extends Model
     public function category()
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getCategoryIdAttribute()
+    {
+        return $this->blog_category_id;
+    }
+
+    public function setCategoryIdAttribute($value)
+    {
+        $this->attributes['blog_category_id'] = $value;
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->published_at ? 'published' : 'draft';
+    }
+
+    public function getViewsAttribute()
+    {
+        if (Schema::hasColumn('blog_posts', 'views_count')) {
+            return (int) ($this->attributes['views_count'] ?? 0);
+        }
+
+        return 0;
+    }
+
+    public function getIsSliderAttribute()
+    {
+        if (Schema::hasColumn('blog_posts', 'is_slider')) {
+            return (bool) ($this->attributes['is_slider'] ?? false);
+        }
+
+        return false;
     }
 
     public function scopeActive($query)

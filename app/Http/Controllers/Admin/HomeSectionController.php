@@ -23,6 +23,75 @@ class HomeSectionController extends Controller
         return view('admin.home_sections.index', compact('sections'));
     }
 
+    public function create()
+    {
+        $this->ensureDefaultHomeSections();
+        $categories = Category::query()->ordered()->get();
+        $nextOrder = (int) (Section::query()->max('order') ?? 0) + 1;
+
+        return view('admin.home_sections.create', [
+            'categories' => $categories,
+            'nextOrder' => $nextOrder,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $this->ensureDefaultHomeSections();
+
+        $data = $request->validate([
+            'badge' => ['nullable', 'string', 'max:255'],
+            'badge_icon' => ['nullable', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'background_color' => ['nullable', 'string', 'max:255'],
+            'cover_image' => ['nullable', 'image', 'max:4096'],
+            'content' => ['nullable', 'string'],
+            'type' => ['nullable', 'string', 'max:255'],
+            'order' => ['nullable', 'integer'],
+            'is_active' => ['nullable', 'boolean'],
+            'category_ids' => ['nullable', 'array'],
+            'category_ids.*' => ['integer', 'exists:categories,id'],
+        ]);
+
+        $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['title']));
+        $data['order'] = $data['order'] ?? 0;
+        $data['is_active'] = (bool) ($data['is_active'] ?? false);
+
+        $categoryIds = collect($data['category_ids'] ?? [])->map(fn ($v) => (int) $v)->values();
+        unset($data['category_ids']);
+
+        if (array_key_exists('content', $data) && is_string($data['content']) && trim($data['content']) !== '') {
+            $decoded = json_decode($data['content'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return back()->withErrors(['content' => 'Le contenu doit être un JSON valide.'])->withInput();
+            }
+            $data['content'] = $decoded;
+        } else {
+            $data['content'] = null;
+        }
+
+        $section = Section::create($data);
+
+        if ($request->hasFile('cover_image')) {
+            $dir = public_path('uploads/sections');
+            File::ensureDirectoryExists($dir);
+
+            $file = $request->file('cover_image');
+            $filename = 'section-' . $section->id . '-' . Str::random(12) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $section->cover_image = 'uploads/sections/' . $filename;
+            $section->save();
+        }
+
+        if ($categoryIds->isNotEmpty()) {
+            Category::query()->whereIn('id', $categoryIds)->update(['section_id' => $section->id]);
+        }
+
+        return redirect()->route('admin.home_sections.edit', $section)->with('status', 'Section créée.');
+    }
+
     public function edit(Section $home_section)
     {
         $this->ensureDefaultHomeSections();
@@ -43,6 +112,7 @@ class HomeSectionController extends Controller
             'description' => ['nullable', 'string'],
             'background_color' => ['nullable', 'string', 'max:255'],
             'cover_image' => ['nullable', 'image', 'max:4096'],
+            'content' => ['nullable', 'string'],
             'type' => ['nullable', 'string', 'max:255'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['nullable', 'boolean'],
@@ -55,6 +125,16 @@ class HomeSectionController extends Controller
 
         $categoryIds = collect($data['category_ids'] ?? [])->map(fn ($v) => (int) $v)->values();
         unset($data['category_ids']);
+
+        if (array_key_exists('content', $data) && is_string($data['content']) && trim($data['content']) !== '') {
+            $decoded = json_decode($data['content'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return back()->withErrors(['content' => 'Le contenu doit être un JSON valide.'])->withInput();
+            }
+            $data['content'] = $decoded;
+        } else {
+            $data['content'] = null;
+        }
 
         if ($request->hasFile('cover_image')) {
             $dir = public_path('uploads/sections');
@@ -125,6 +205,34 @@ class HomeSectionController extends Controller
         );
 
         Section::query()->firstOrCreate(
+            ['slug' => 'oreillers'],
+            [
+                'badge' => 'Oreillers',
+                'badge_icon' => '🛏️',
+                'title' => 'Oreillers',
+                'description' => null,
+                'background_color' => null,
+                'type' => 'custom',
+                'order' => 10,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'draps'],
+            [
+                'badge' => 'Draps',
+                'badge_icon' => '🧺',
+                'title' => 'Draps',
+                'description' => null,
+                'background_color' => null,
+                'type' => 'custom',
+                'order' => 11,
+                'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
             ['slug' => 'essentiels'],
             [
                 'badge' => 'Coup de Cœur',
@@ -151,5 +259,21 @@ class HomeSectionController extends Controller
                 'is_active' => true,
             ]
         );
+    }
+
+    private function makeUniqueSlug(string $baseSlug): string
+    {
+        $baseSlug = trim($baseSlug);
+        $baseSlug = $baseSlug !== '' ? $baseSlug : Str::random(8);
+
+        $slug = $baseSlug;
+        $i = 2;
+
+        while (Section::query()->where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $i;
+            $i++;
+        }
+
+        return $slug;
     }
 }
