@@ -69,6 +69,7 @@
                                 <th style="width:72px;">Image</th>
                                 <th>Produit</th>
                                 <th>Catégorie</th>
+                                <th>Menus</th>
                                 <th class="text-end">Prix</th>
                                 <th class="text-center">Actif</th>
                                 <th style="width:160px;"></th>
@@ -88,6 +89,17 @@
                                     </td>
                                     <td>
                                         <div class="small">{{ $product->category?->name ?: '—' }}</div>
+                                    </td>
+                                    <td>
+                                        @if(($product->menus ?? collect())->isNotEmpty())
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @foreach($product->menus as $menu)
+                                                    <span class="badge badge-admin-pink">{{ $menu->name }}</span>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="small" style="color: var(--admin-muted);">—</div>
+                                        @endif
                                     </td>
                                     <td class="text-end">
                                         <div class="fw-semibold">{{ $product->formatted_price }}</div>
@@ -120,7 +132,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5" style="color: var(--admin-muted);">Aucun produit.</td>
+                                    <td colspan="7" class="text-center py-5" style="color: var(--admin-muted);">Aucun produit.</td>
                                 </tr>
                             @endforelse
                         </tbody>

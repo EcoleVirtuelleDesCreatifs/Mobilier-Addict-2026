@@ -97,7 +97,7 @@
             <div class="col-12 col-lg-4">
                 <label class="form-label">Menus rattachés</label>
                 @php
-                    $defaultSelected = $selectedMenuIds ?? [];
+                    $defaultSelected = $selectedMenuIds ?? ($isEdit ? $product->menus->pluck('id')->all() : []);
                     $selected = old('menu_ids', $defaultSelected);
                     $selected = is_array($selected) ? $selected : [];
                 @endphp

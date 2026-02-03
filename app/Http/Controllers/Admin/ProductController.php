@@ -16,7 +16,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query()->with('category');
+        $query = Product::query()->with(['category', 'menus']);
 
         if ($search = $request->string('q')->trim()->toString()) {
             $query->where(function ($q) use ($search) {
