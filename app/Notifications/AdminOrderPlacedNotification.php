@@ -17,7 +17,20 @@ class AdminOrderPlacedNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
+    }
+
+    public function toArray(object $notifiable): array
+    {
+        $order = $this->order;
+
+        return [
+            'order_id' => $order->id,
+            'title' => 'Nouvelle commande #' . $order->id,
+            'message' => 'Total : ' . number_format((float) $order->total, 0, ',', '.') . ' F',
+            'url' => url(route('admin.orders.show', $order, false)),
+            'created_at' => now()->toISOString(),
+        ];
     }
 
     public function toMail(object $notifiable): MailMessage

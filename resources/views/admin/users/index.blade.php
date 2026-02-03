@@ -208,13 +208,18 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const changeRoleUrlTemplate = @json(route('admin.users.role', ['user' => '__ID__']));
+    const toggleStatusUrlTemplate = @json(route('admin.users.toggle-status', ['user' => '__ID__']));
+
     // Gestion du changement de rôle
     document.querySelectorAll('.role-selector').forEach(function(select) {
         select.addEventListener('change', function() {
             const userId = this.dataset.userId;
             const newRole = this.value;
 
-            fetch(`/in/admin/users/${userId}/change-role`, {
+            const url = changeRoleUrlTemplate.replace('__ID__', userId);
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -249,7 +254,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const userId = this.dataset.userId;
             const statusText = this.closest('td').querySelector('.status-text');
 
-            fetch(`/in/admin/users/${userId}/toggle-status`, {
+            const url = toggleStatusUrlTemplate.replace('__ID__', userId);
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

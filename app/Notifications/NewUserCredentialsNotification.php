@@ -12,8 +12,7 @@ class NewUserCredentialsNotification extends Notification
 
     public function __construct(
         private readonly string $plainPassword
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {

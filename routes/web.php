@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SaveTheDateController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
@@ -222,6 +224,9 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
 
+    Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
+    Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
+
     Route::get('/stats', [StatsController::class, 'index'])->middleware('permission:stats.view')->name('admin.stats.index');
 
     Route::get('/newsletter', [NewsletterSubscriptionController::class, 'index'])->middleware('permission:newsletter.view')->name('admin.newsletter.index');
@@ -266,8 +271,10 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/slider/{slider}', [SliderController::class, 'update'])->name('admin.slider.update');
     Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
 
-    Route::get('/save-the-date', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.index');
-    Route::get('/save-the-date/create', fn () => redirect()->route('admin.dashboard'))->name('admin.save-the-date.create');
+    Route::get('/save-the-date', [SaveTheDateController::class, 'index'])->middleware('permission:articles.manage')->name('admin.save-the-date.index');
+    Route::get('/save-the-date/create', [SaveTheDateController::class, 'create'])->middleware('permission:articles.manage')->name('admin.save-the-date.create');
+    Route::post('/save-the-date', [SaveTheDateController::class, 'store'])->middleware('permission:articles.manage')->name('admin.save-the-date.store');
+    Route::delete('/save-the-date/{saveTheDate}', [SaveTheDateController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.save-the-date.destroy');
 
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
     Route::resource('products', AdminProductController::class)->middleware('permission:products.manage')->names('admin.products');
@@ -276,15 +283,15 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view')->name('admin.orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.orders.status');
 
-    Route::get('/quotes', [QuoteController::class, 'index'])->name('admin.quotes.index');
-    Route::get('/quotes/{quote}', [QuoteController::class, 'show'])->name('admin.quotes.show');
-    Route::post('/orders/{order}/quotes', [QuoteController::class, 'storeFromOrder'])->name('admin.orders.quotes.store');
-    Route::post('/quotes/{quote}/status', [QuoteController::class, 'updateStatus'])->name('admin.quotes.status');
+    Route::get('/quotes', [QuoteController::class, 'index'])->middleware('permission:orders.view')->name('admin.quotes.index');
+    Route::get('/quotes/{quote}', [QuoteController::class, 'show'])->middleware('permission:orders.view')->name('admin.quotes.show');
+    Route::post('/orders/{order}/quotes', [QuoteController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.quotes.store');
+    Route::post('/quotes/{quote}/status', [QuoteController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.quotes.status');
 
-    Route::get('/invoices', [InvoiceController::class, 'index'])->name('admin.invoices.index');
-    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoices.show');
-    Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->name('admin.orders.invoices.store');
-    Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->name('admin.invoices.status');
+    Route::get('/invoices', [InvoiceController::class, 'index'])->middleware('permission:orders.view')->name('admin.invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->middleware('permission:orders.view')->name('admin.invoices.show');
+    Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.invoices.store');
+    Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.invoices.status');
 
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
     Route::get('/home-sections/create', [HomeSectionController::class, 'create'])->name('admin.home_sections.create');

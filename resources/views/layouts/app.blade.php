@@ -303,7 +303,7 @@
 
                         <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 							    <i class="flaticon-user"></i>
-							    <span class="nav-text">Gestion Utilisateurs</span>
+							    <span class="nav-text">Gestion Admin</span>
 						    </a>
                             <ul aria-expanded="false">
                                 <li><a href="{{ route('admin.users.index') }}">Voir tous</a></li>

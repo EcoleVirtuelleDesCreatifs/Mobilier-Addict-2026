@@ -117,28 +117,72 @@
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M23.3333 19.8333H23.1187C23.2568 19.4597 23.3295 19.065 23.3333 18.6666V12.8333C23.3294 10.7663 22.6402 8.75902 21.3735 7.12565C20.1068 5.49228 18.3343 4.32508 16.3333 3.80679V3.49996C16.3333 2.88112 16.0875 2.28763 15.6499 1.85004C15.2123 1.41246 14.6188 1.16663 14 1.16663C13.3812 1.16663 12.7877 1.41246 12.3501 1.85004C11.9125 2.28763 11.6667 2.88112 11.6667 3.49996V3.80679C9.66574 4.32508 7.89317 5.49228 6.6265 7.12565C5.35983 8.75902 4.67058 10.7663 4.66667 12.8333V18.6666C4.67053 19.065 4.74316 19.4597 4.88133 19.8333H4.66667C4.35725 19.8333 4.0605 19.9562 3.84171 20.175C3.62292 20.3938 3.5 20.6905 3.5 21C3.5 21.3094 3.62292 21.6061 3.84171 21.8249C4.0605 22.0437 4.35725 22.1666 4.66667 22.1666H23.3333C23.6428 22.1666 23.9395 22.0437 24.1583 21.8249C24.3771 21.6061 24.5 21.3094 24.5 21C24.5 20.6905 24.3771 20.3938 24.1583 20.175C23.9395 19.9562 23.6428 19.8333 23.3333 19.8333Z" fill="#67636D"/>
 										<path d="M9.98193 24.5C10.3863 25.2088 10.971 25.7981 11.6767 26.2079C12.3823 26.6178 13.1839 26.8337 13.9999 26.8337C14.816 26.8337 15.6175 26.6178 16.3232 26.2079C17.0289 25.7981 17.6136 25.2088 18.0179 24.5H9.98193Z" fill="#67636D"/>
-									</svg>
-									<span class="badge light text-white bg-primary rounded-circle">4</span>
+								</svg>
+									@php
+										$unreadCount = auth()->user()?->unreadNotifications()->count() ?? 0;
+										$notifications = auth()->user()?->notifications()->latest()->limit(10)->get() ?? collect();
+									@endphp
+								@if($unreadCount > 0)
+									<span class="badge light text-white bg-primary rounded-circle">{{ $unreadCount }}</span>
+								@endif
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <div id="dlab_W_Notification1" class="widget-media dz-scroll p-3 height380">
-										<ul class="timeline">
+									<ul class="timeline">
+										@if($notifications->count() === 0)
 											<li>
 												<div class="timeline-panel">
-													<div class="media me-2">
-														<img alt="image" width="50" src="images/avatar/1.jpg">
-													</div>
 													<div class="media-body">
-														<h6 class="mb-1">Dr sultads Send you Photo</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
+														<small class="d-block">Aucune notification</small>
 													</div>
 												</div>
 											</li>
+										@else
+											@foreach($notifications as $notification)
+												@php
+													$data = is_array($notification->data) ? $notification->data : [];
+													$title = $data['title'] ?? 'Notification';
+													$message = $data['message'] ?? '';
+													$url = $data['url'] ?? null;
+												@endphp
+												<li>
+													<div class="timeline-panel">
+														<div class="media-body">
+															<h6 class="mb-1">
+																@if($url)
+																	<a href="{{ $url }}" style="color: inherit;">
+																		{{ $title }}
+																	</a>
+																@else
+																	{{ $title }}
+																@endif
+															</h6>
+															@if($message)
+																<small class="d-block">{{ $message }}</small>
+															@endif
+															<small class="d-block">{{ $notification->created_at?->format('d/m/Y H:i') }}</small>
+															@if(is_null($notification->read_at))
+																<form method="POST" action="{{ route('admin.notifications.read', $notification->id) }}" class="mt-1">
+																	@csrf
+																	<input type="hidden" name="redirect_to" value="{{ $url ?? url()->current() }}">
+																	<button type="submit" class="btn btn-link p-0" style="font-size: 12px;">Marquer comme lu</button>
+																</form>
+															@endif
+														</div>
+													</div>
+												</li>
+											@endforeach
+										@endif
 
 
 										</ul>
-									</div>
-                                    <a class="all-notification" href="javascript:void(0)">Voir toutes les notifications <i class="ti-arrow-right"></i></a>
+								</div>
+								@if($unreadCount > 0)
+									<form method="POST" action="{{ route('admin.notifications.read-all') }}" class="px-3 pb-3">
+										@csrf
+										<button type="submit" class="btn btn-outline-primary w-100">Tout marquer comme lu</button>
+									</form>
+								@endif
                                 </div>
                             </li>
                             <li class="nav-item dropdown header-profile">
@@ -307,7 +351,7 @@
 					@if($isAdmin)
 						<li class="{{ $openUsersGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsersGroup ? 'true' : 'false' }}">
 							<i class="flaticon-user"></i>
-							<span class="nav-text">Gestion des utilisateurs</span>
+							<span class="nav-text">Gestion Admin</span>
 						</a>
 							<ul aria-expanded="false" class="{{ $openUsersGroup ? 'mm-show' : '' }}">
 								<li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
@@ -318,16 +362,16 @@
 
 					<li class="{{ ($openPersonWeek || $openJobs || $openFlashNews || $openMenus || $openUsers || $openRoles || $openSaveTheDate) ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 						<i class="flaticon-monitor"></i>
-						<span class="nav-text">Modules (bientôt)</span>
+						<span class="nav-text">Boîte à outils</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Save the date</a></li>
-						<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Factures</a></li>
-						<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Devis</a></li>
+						<li><a href="{{ route('admin.save-the-date.index') }}">Save the date</a></li>
+						<li><a href="{{ route('admin.invoices.index') }}">Factures</a></li>
+						<li><a href="{{ route('admin.quotes.index') }}">Devis</a></li>
 						@if($isAdmin)
-							<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Utilisateurs</a></li>
-							<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Rôles</a></li>
-							<li><a href="javascript:void(0)" aria-disabled="true" class="text-muted">Menus</a></li>
+							<li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
+							<li><a href="{{ route('admin.roles.index') }}">Rôles</a></li>
+							<li><a href="{{ route('admin.menus.index') }}">Menus</a></li>
 						@endif
 					</ul>
 					</li>
@@ -389,7 +433,7 @@
 
 						<li class="{{ $openUsers ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsers ? 'true' : 'false' }}">
 							    <i class="flaticon-user"></i>
-							    <span class="nav-text">Gestion Utilisateurs</span>
+							    <span class="nav-text">Gestion Admin</span>
 						    </a>
 							<ul aria-expanded="false" class="{{ $openUsers ? 'mm-show' : '' }}">
                                 <li><a href="{{ route('admin.users.index') }}">Voir tous</a></li>
