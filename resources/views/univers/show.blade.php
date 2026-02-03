@@ -8,6 +8,7 @@
     @php
         $designSlug = match ($slug) {
             'une-cuisine-pensee-pour-le-plaisir' => 'cuisine',
+            'draps-couleur-unie' => 'draps-couettes',
             'la-fraicheur-au-coeur-de-votre-confort' => 'froid-climatisation',
             'lelegance-au-coeur-de-votre-salon' => 'salon',
             'vivez-chaque-image-ressentez-chaque-son' => 'multi-media',
@@ -710,7 +711,7 @@
         };
     @endphp
 
-    @if(in_array($designSlug, ['lits-sommiers', 'matelas', 'oreillers', 'draps-couettes', 'cuisine', 'froid-climatisation', 'salon', 'multi-media']))
+    @if(true)
         <div class="evc-page">
             <!-- HERO Section - Style EVC -->
             <section class="evc-hero">
