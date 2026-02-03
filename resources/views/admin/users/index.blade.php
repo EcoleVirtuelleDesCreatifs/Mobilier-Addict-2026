@@ -125,7 +125,7 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 @if($user->profile_picture)
-                                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" class="rounded-circle me-2" width="40" height="40" alt="">
+                                                    <img src="@image_url($user->profile_picture)" class="rounded-circle me-2" width="40" height="40" alt="">
                                                 @else
                                                     <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                                         <i class="fas fa-user text-white"></i>

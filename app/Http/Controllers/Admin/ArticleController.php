@@ -151,7 +151,7 @@ class ArticleController extends Controller
         $path = $request->file('upload')->store('articles', 'public');
 
         return response()->json([
-            'url' => asset('storage/' . $path),
+            'url' => \Illuminate\Support\Facades\Storage::disk('public')->url($path),
         ]);
     }
 }
