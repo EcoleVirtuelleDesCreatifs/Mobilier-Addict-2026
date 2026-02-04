@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Section;
 
@@ -182,6 +183,42 @@ class HomeController extends Controller
             $blogPosts = $items->slice(1, 3)->values();
         }
 
-        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts'));
+        $mattressProducts = collect();
+        $mattressCategory = Category::query()->active()->where('slug', 'matelas')->first();
+        if ($mattressCategory) {
+            $categoryIds = $this->collectCategoryAndDescendantIds($mattressCategory);
+            $mattressProducts = Product::query()
+                ->active()
+                ->whereIn('category_id', $categoryIds)
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+        }
+
+        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts'));
+    }
+
+    private function collectCategoryAndDescendantIds(Category $category)
+    {
+        $ids = collect([(int) $category->id]);
+        $frontier = collect([(int) $category->id]);
+
+        while ($frontier->isNotEmpty()) {
+            $children = Category::query()
+                ->whereIn('parent_id', $frontier)
+                ->pluck('id')
+                ->map(fn ($v) => (int) $v)
+                ->values();
+
+            $children = $children->diff($ids)->values();
+            if ($children->isEmpty()) {
+                break;
+            }
+
+            $ids = $ids->concat($children)->unique()->values();
+            $frontier = $children;
+        }
+
+        return $ids;
     }
 }
