@@ -235,6 +235,8 @@ class ProductController extends Controller
             return;
         }
 
+        $hasVariantTypeColumn = Schema::hasColumn('product_variants', 'variant_type');
+
         $rows = $request->input('variants', []);
         $rows = is_array($rows) ? $rows : [];
 
@@ -275,23 +277,30 @@ class ProductController extends Controller
             }
 
             if ($variant) {
-                $variant->update([
-                    'variant_type' => $variantType,
+                $payload = [
                     'thickness_cm' => $thickness,
                     'places' => $places,
                     'price' => $price,
                     'stock' => $stock,
                     'is_active' => $isActive,
-                ]);
+                ];
+                if ($hasVariantTypeColumn) {
+                    $payload['variant_type'] = $variantType;
+                }
+                $variant->update($payload);
                 $keptIds[] = (int) $variant->id;
             } else {
+                $identity = [
+                    'product_id' => $product->id,
+                    'thickness_cm' => $thickness,
+                    'places' => $places,
+                ];
+                if ($hasVariantTypeColumn) {
+                    $identity['variant_type'] = $variantType;
+                }
+
                 $created = ProductVariant::updateOrCreate(
-                    [
-                        'product_id' => $product->id,
-                        'thickness_cm' => $thickness,
-                        'places' => $places,
-                        'variant_type' => $variantType,
-                    ],
+                    $identity,
                     [
                         'price' => $price,
                         'stock' => $stock,

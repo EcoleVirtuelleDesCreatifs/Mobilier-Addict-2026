@@ -92,15 +92,17 @@
                     @if(($product->variants ?? collect())->isNotEmpty())
                         @php
                             $variants = $product->variants->values();
-                            $usesVariantType = $variants->pluck('variant_type')->filter(fn ($v) => (string) $v !== '')->isNotEmpty();
+                            $categorySlug = (string) ($product->category?->slug ?? '');
+                            $categoryName = (string) ($product->category?->name ?? '');
+                            $categoryHaystack = mb_strtolower(trim($categorySlug . ' ' . $categoryName));
+                            $isMattressCategory = str_contains($categoryHaystack, 'matelas');
+
+                            $usesVariantType = !$isMattressCategory
+                                && $variants->pluck('variant_type')->filter(fn ($v) => (string) $v !== '')->isNotEmpty();
                             $variantTypes = $variants->pluck('variant_type')->filter(fn ($v) => (string) $v !== '')->unique()->sort()->values();
                             $thicknesses = $variants->pluck('thickness_cm')->unique()->sort()->values();
                             $places = $variants->pluck('places')->unique()->sort()->values();
                             $defaultVariant = $variants->first();
-
-                            $categorySlug = (string) ($product->category?->slug ?? '');
-                            $categoryName = (string) ($product->category?->name ?? '');
-                            $categoryHaystack = mb_strtolower(trim($categorySlug . ' ' . $categoryName));
                             $variantTypeLabel = 'Type';
                             if (str_contains($categoryHaystack, 'drap')) {
                                 $variantTypeLabel = 'Type de drap';
@@ -706,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const hasVariantType = variants.some(v => v && v.variant_type);
+    const hasVariantType = document.querySelectorAll('[data-variant-type]').length > 0;
 
     const getVariant = (a, places) => {
         if (hasVariantType) {
