@@ -107,7 +107,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load(['variants' => fn ($q) => $q->orderBy('thickness_cm')->orderBy('places')]);
+        $product->load(['variants' => fn($q) => $q->orderBy('thickness_cm')->orderBy('places')]);
         $categories = Category::query()->orderBy('name')->get();
         $menus = Menu::query()
             ->orderBy('position')
@@ -363,7 +363,7 @@ class ProductController extends Controller
         $data['order'] = $data['order'] ?? 0;
 
         if (!empty($data['sections']) && is_array($data['sections'])) {
-            $sections = array_values(array_unique(array_filter($data['sections'], fn ($v) => is_string($v) && $v !== '')));
+            $sections = array_values(array_unique(array_filter($data['sections'], fn($v) => is_string($v) && $v !== '')));
             $data['is_collection'] = in_array('collection', $sections, true);
             $data['is_featured'] = in_array('featured', $sections, true);
             $data['is_bestseller'] = in_array('bestseller', $sections, true);

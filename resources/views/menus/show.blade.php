@@ -57,6 +57,43 @@
         .matelas-actions form{margin:0;}
         .matelas-cartbtn{border:0;cursor:pointer;}
 
+        .matelas-cat{padding:34px 0 14px;}
+        .matelas-cat__head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:12px;}
+        .matelas-cat__title{margin:0;font-weight:1000;letter-spacing:-.02em;color:var(--ma-ink);font-size:22px;}
+        .matelas-cat__meta{color:var(--ma-muted);font-weight:800;font-size:13px;margin:6px 0 0;}
+        .matelas-cat__rail{display:flex;gap:12px;overflow:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory;scrollbar-width:none;}
+        .matelas-cat__rail::-webkit-scrollbar{display:none;}
+        .matelas-cat__card{flex:0 0 340px;scroll-snap-align:start;background:#fff;border:1px solid var(--ma-border);border-radius:26px;overflow:hidden;box-shadow:0 16px 40px rgba(2,6,23,.06);transition:transform .18s ease, box-shadow .18s ease;}
+        .matelas-cat__card:hover{transform:translateY(-2px);box-shadow:0 22px 54px rgba(2,6,23,.10);}
+        .matelas-cat__media{aspect-ratio: 4 / 3;background:linear-gradient(135deg,#f8fafc,#fff);}
+        .matelas-cat__media img{width:100%;height:100%;object-fit:cover;display:block;}
+        .matelas-cat__body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px;}
+        .matelas-cat__name{margin:0;font-weight:1000;color:var(--ma-ink);font-size:15px;line-height:1.15;}
+        .matelas-cat__desc{margin:0;color:#475569;font-weight:700;font-size:12px;min-height:34px;}
+        .matelas-cat__foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;}
+        .matelas-cat__price{font-weight:1000;color:var(--ma-ink);}
+        .matelas-quick{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:999px;background:var(--ma-navy);color:#fff;font-weight:950;border:0;cursor:pointer;}
+        .matelas-quick:hover{filter:brightness(1.06);}
+
+        .matelas-modal{position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;z-index:60;}
+        .matelas-modal.is-open{display:flex;}
+        .matelas-modal__backdrop{position:absolute;inset:0;background:rgba(2,6,23,.55);backdrop-filter: blur(6px);}
+        .matelas-modal__panel{position:relative;width:min(860px, calc(100% - 24px));margin:12px 12px 18px;border-radius:24px;overflow:hidden;background:#fff;border:1px solid var(--ma-border);box-shadow:0 30px 90px rgba(0,0,0,.28);}
+        .matelas-modal__bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:linear-gradient(135deg,rgba(255,58,127,.10),rgba(11,27,58,.10));border-bottom:1px solid var(--ma-border);}
+        .matelas-modal__title{font-weight:1000;color:var(--ma-ink);margin:0;font-size:14px;}
+        .matelas-modal__close{border:0;background:#fff;color:var(--ma-navy);font-weight:1000;border-radius:999px;padding:10px 12px;cursor:pointer;border:1px solid var(--ma-border);}
+        .matelas-modal__content{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;}
+        .matelas-modal__media{border-radius:18px;overflow:hidden;border:1px solid var(--ma-border);background:linear-gradient(135deg,#f8fafc,#fff);}
+        .matelas-modal__media img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio: 4 / 3;}
+        .matelas-modal__form{display:grid;gap:10px;align-content:start;}
+        .matelas-field label{display:block;font-weight:950;color:var(--ma-navy);font-size:12px;margin-bottom:6px;}
+        .matelas-select{width:100%;border:1px solid var(--ma-border);border-radius:14px;padding:12px 12px;font-weight:800;color:var(--ma-ink);background:#fff;}
+        .matelas-modal__cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+        .matelas-modal__hint{color:#64748b;font-weight:800;font-size:12px;margin:0;}
+        .matelas-modal__price{font-weight:1000;color:var(--ma-ink);font-size:18px;}
+
+        .matelas-chip.is-active{border-color:rgba(255,58,127,.45);box-shadow:0 12px 24px rgba(255,58,127,.14);}
+
         .matelas-all{padding:40px 0 58px;}
         .matelas-all__title{font-size:22px;font-weight:1000;letter-spacing:-.02em;color:var(--ma-ink);margin:0;}
         .matelas-all__desc{color:var(--ma-muted);font-weight:700;margin:8px 0 0;}
@@ -78,6 +115,7 @@
             .matelas-hero__title{font-size:44px;}
             .matelas-section__grid{grid-template-columns:1fr;}
             .matelas-all__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+            .matelas-modal__content{grid-template-columns:1fr;}
         }
         @media (max-width: 520px){
             .matelas-hero{padding-top:46px;}
@@ -100,14 +138,17 @@
             </div>
         </section>
 
-        <nav class="matelas-subnav" aria-label="Navigation modèles">
+        <nav class="matelas-subnav" aria-label="Navigation catégories">
             <div class="container">
                 <div class="matelas-subnav__inner">
-                    <div class="matelas-subnav__title">Modèles</div>
+                    <div class="matelas-subnav__title">Catégories</div>
                     <div class="matelas-subnav__links">
-                        @foreach(($matelasModels ?? collect()) as $i => $row)
-                            @php $label = (string) ($row['label'] ?? 'Matelas'); @endphp
-                            <a class="matelas-chip" href="#modele-{{ $i }}">{{ $label }}</a>
+                        @foreach(($matelasCategories ?? collect()) as $cat)
+                            @php
+                                $catKey = (string) ($cat['key'] ?? 'confort');
+                                $catLabel = (string) ($cat['label'] ?? 'Confort');
+                            @endphp
+                            <a class="matelas-chip" href="#cat-{{ $catKey }}">{{ $catLabel }}</a>
                         @endforeach
                         <a class="matelas-chip" href="#tous">Tous les matelas</a>
                     </div>
@@ -117,67 +158,65 @@
 
         <div id="decouvrir"></div>
 
-        @foreach(($matelasModels ?? collect()) as $i => $row)
+        @foreach(($matelasCategoryGroups ?? collect()) as $g)
             @php
-                $p = $row['product'] ?? null;
-                $label = (string) ($row['label'] ?? 'Matelas');
-                $img = $p && $p->image ? asset($p->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&h=900&fit=crop';
-                $slug = $p?->slug;
-                $defaultVariant = $p?->variants?->sortBy('price')->first();
-                $price = $defaultVariant?->price ?? $p?->price;
-                $desc = $p?->short_description ?: 'Soutien du dos • Confort durable • Livraison rapide';
-                $isAlt = $i % 2 === 1;
-                $benefits = [
-                    'Soutien précis' => 'Réduit la pression et améliore la posture.',
-                    'Confort durable' => 'Conçu pour garder sa tenue dans le temps.',
-                    'Variantes disponibles' => 'Choisis l’épaisseur et le nombre de places.',
-                ];
+                $catKey = (string) ($g['key'] ?? 'confort');
+                $catLabel = (string) ($g['label'] ?? 'Confort');
+                $catProducts = $g['products'] ?? collect();
             @endphp
-            <section class="matelas-section{{ $isAlt ? ' matelas-section--alt' : '' }}" id="modele-{{ $i }}" aria-label="{{ $label }}">
+
+            <div id="cat-{{ $catKey }}" data-spy-section="{{ $catKey }}" style="position:relative;top:-84px;height:0;"></div>
+
+            <section class="matelas-cat" aria-label="{{ $catLabel }}">
                 <div class="container">
-                    <div class="matelas-section__grid">
+                    <div class="matelas-cat__head">
                         <div>
-                            <div class="matelas-section__eyebrow">{{ $isAlt ? 'Série signature' : 'Série confort' }}</div>
-                            <h2 class="matelas-section__name">{{ $label }}</h2>
-                            <p class="matelas-section__desc">{{ $desc }}</p>
-
-                            <ul class="matelas-bullets">
-                                @foreach($benefits as $t => $sub)
-                                    <li>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        <div>
-                                            {{ $t }}
-                                            <span>{{ $sub }}</span>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-
-                            <div class="matelas-actions">
-                                @if($slug)
-                                    <a class="matelas-btn matelas-btn--primary" href="{{ route('product.show', $slug) }}">Voir le produit</a>
-                                @endif
-
-                                @if($p)
-                                    <form action="{{ route('cart.add') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $p->id }}">
-                                        <input type="hidden" name="product_variant_id" value="{{ $defaultVariant?->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button class="matelas-btn matelas-btn--primary matelas-cartbtn" type="submit">Ajouter au panier</button>
-                                    </form>
-                                @endif
-
-                                <a class="matelas-btn matelas-btn--ghost" href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20veux%20commander%20{{ urlencode($label) }}." target="_blank" rel="noopener">Commander via WhatsApp</a>
-                                @if($price !== null)
-                                    <a class="matelas-link" href="{{ $slug ? route('product.show', $slug) : '#' }}">À partir de {{ number_format((float) $price, 0, ',', '.') }}F <span aria-hidden="true">→</span></a>
-                                @endif
-                            </div>
+                            <h2 class="matelas-cat__title">{{ $catLabel }}</h2>
+                            <p class="matelas-cat__meta">Fais défiler, compare, puis ajoute au panier sans quitter la page.</p>
                         </div>
+                    </div>
 
-                        <div class="matelas-media">
-                            <img src="{{ $img }}" alt="{{ $label }}" loading="lazy" />
-                        </div>
+                    <div class="matelas-cat__rail" role="list">
+                        @foreach(($catProducts ?? collect()) as $product)
+                            @php
+                                $img = $product && $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1100&h=800&fit=crop';
+                                $defaultVariant = $product?->variants?->sortBy('price')->first();
+                                $price = $defaultVariant?->price ?? $product?->price;
+                                $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
+                                    'id' => (int) $v->id,
+                                    'thickness_cm' => $v->thickness_cm,
+                                    'places' => $v->places,
+                                    'price' => (float) $v->price,
+                                    'stock' => $v->stock,
+                                ])->values();
+                            @endphp
+
+                            <article class="matelas-cat__card" role="listitem">
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <div class="matelas-cat__media"><img src="{{ $img }}" alt="{{ $product->name }}" loading="lazy"></div>
+                                </a>
+                                <div class="matelas-cat__body">
+                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                        <h3 class="matelas-cat__name">{{ $product->name }}</h3>
+                                    </a>
+                                    <p class="matelas-cat__desc">{{ $product->short_description ?: ($product->material ?: ' ') }}</p>
+                                    <div class="matelas-cat__foot">
+                                        <div class="matelas-cat__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
+                                        <button
+                                            class="matelas-quick"
+                                            type="button"
+                                            data-quick-add
+                                            data-product-id="{{ $product->id }}"
+                                            data-product-name="{{ e($product->name) }}"
+                                            data-product-image="{{ $img }}"
+                                            data-product-slug="{{ $product->slug }}"
+                                            data-default-variant-id="{{ $defaultVariant?->id }}"
+                                            data-variants='@json($variantsData)'
+                                        >Ajouter</button>
+                                    </div>
+                                </div>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
             </section>
@@ -232,7 +271,198 @@
                 @endif
             </div>
         </section>
+
+        <div class="matelas-modal" id="matelasQuickAdd" aria-hidden="true">
+            <div class="matelas-modal__backdrop" data-quick-close></div>
+            <div class="matelas-modal__panel" role="dialog" aria-modal="true" aria-label="Ajouter au panier">
+                <div class="matelas-modal__bar">
+                    <p class="matelas-modal__title" id="quickTitle">Ajouter au panier</p>
+                    <button class="matelas-modal__close" type="button" data-quick-close>Fermer</button>
+                </div>
+                <div class="matelas-modal__content">
+                    <div class="matelas-modal__media"><img id="quickImage" alt="" src=""></div>
+                    <div>
+                        <form class="matelas-modal__form" action="{{ route('cart.add') }}" method="POST" id="quickForm">
+                            @csrf
+                            <input type="hidden" name="product_id" id="quickProductId" value="">
+                            <input type="hidden" name="product_variant_id" id="quickVariantId" value="">
+                            <input type="hidden" name="quantity" value="1">
+
+                            <p class="matelas-modal__hint">Sélectionne une épaisseur et le nombre de places. Le prix se met à jour instantanément.</p>
+
+                            <div class="matelas-field">
+                                <label for="quickThickness">Épaisseur</label>
+                                <select class="matelas-select" id="quickThickness"></select>
+                            </div>
+
+                            <div class="matelas-field">
+                                <label for="quickPlaces">Places</label>
+                                <select class="matelas-select" id="quickPlaces"></select>
+                            </div>
+
+                            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                                <div class="matelas-modal__price" id="quickPrice"></div>
+                                <a class="matelas-link" id="quickLink" href="#">Voir le produit <span aria-hidden="true">→</span></a>
+                            </div>
+
+                            <div class="matelas-modal__cta">
+                                <button class="matelas-btn matelas-btn--primary matelas-cartbtn" type="submit">Ajouter au panier</button>
+                                <a class="matelas-btn matelas-btn--ghost" id="quickWhats" href="#" target="_blank" rel="noopener">Commander via WhatsApp</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        (function(){
+            const chips = Array.from(document.querySelectorAll('.matelas-subnav__links .matelas-chip'))
+                .filter(a => (a.getAttribute('href') || '').startsWith('#cat-'));
+
+            const sections = Array.from(document.querySelectorAll('[data-spy-section]'));
+            if (chips.length && sections.length && 'IntersectionObserver' in window) {
+                const obs = new IntersectionObserver((entries) => {
+                    const visible = entries
+                        .filter(e => e.isIntersecting)
+                        .sort((a,b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0];
+                    if (!visible) return;
+                    const key = visible.target.getAttribute('data-spy-section');
+                    chips.forEach(c => c.classList.toggle('is-active', (c.getAttribute('href') || '') === '#cat-' + key));
+                }, { root: null, threshold: [0.15, 0.25, 0.35], rootMargin: '-20% 0px -60% 0px' });
+                sections.forEach(s => obs.observe(s));
+            }
+
+            const modal = document.getElementById('matelasQuickAdd');
+            const form = document.getElementById('quickForm');
+            const title = document.getElementById('quickTitle');
+            const img = document.getElementById('quickImage');
+            const pid = document.getElementById('quickProductId');
+            const vid = document.getElementById('quickVariantId');
+            const thick = document.getElementById('quickThickness');
+            const places = document.getElementById('quickPlaces');
+            const price = document.getElementById('quickPrice');
+            const link = document.getElementById('quickLink');
+            const whats = document.getElementById('quickWhats');
+
+            let currentVariants = [];
+
+            function money(v){
+                try { return (Number(v) || 0).toLocaleString('fr-FR', {maximumFractionDigits:0}) + 'F'; } catch(e) { return v + 'F'; }
+            }
+
+            function uniq(arr){
+                return Array.from(new Set(arr.filter(v => v !== null && v !== undefined && v !== '')));
+            }
+
+            function renderOptions(select, values, fmt){
+                select.innerHTML = '';
+                values.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = String(v);
+                    opt.textContent = fmt ? fmt(v) : String(v);
+                    select.appendChild(opt);
+                });
+            }
+
+            function findVariant(th, pl){
+                const t = th === null ? null : String(th);
+                const p = pl === null ? null : String(pl);
+                return currentVariants.find(v => String(v.thickness_cm) === t && String(v.places) === p) || null;
+            }
+
+            function syncFromSelection(){
+                if (!currentVariants.length) {
+                    vid.value = '';
+                    price.textContent = '';
+                    return;
+                }
+
+                let v = findVariant(thick.value, places.value);
+                if (!v) {
+                    const first = currentVariants[0];
+                    renderOptions(thick, uniq(currentVariants.map(x => x.thickness_cm)).sort((a,b) => Number(a)-Number(b)), (x) => String(x) + ' cm');
+                    renderOptions(places, uniq(currentVariants.map(x => x.places)).sort((a,b) => Number(a)-Number(b)), (x) => String(x) + ' places');
+                    thick.value = String(first.thickness_cm);
+                    places.value = String(first.places);
+                    v = first;
+                }
+
+                vid.value = String(v.id);
+                price.textContent = money(v.price);
+            }
+
+            function openModal(btn){
+                const productId = btn.getAttribute('data-product-id');
+                const productName = btn.getAttribute('data-product-name') || 'Produit';
+                const productImage = btn.getAttribute('data-product-image') || '';
+                const productSlug = btn.getAttribute('data-product-slug') || '';
+                const variantsRaw = btn.getAttribute('data-variants') || '[]';
+
+                try { currentVariants = JSON.parse(variantsRaw) || []; } catch(e) { currentVariants = []; }
+
+                title.textContent = 'Ajouter — ' + productName;
+                img.src = productImage;
+                img.alt = productName;
+                pid.value = productId || '';
+                link.href = productSlug ? (window.location.origin + '/produit/' + productSlug) : '#';
+                whats.href = 'https://wa.me/2250700000000?text=' + encodeURIComponent('Bonjour, je veux commander ' + productName + '.');
+
+                if (!currentVariants.length) {
+                    thick.innerHTML = '<option value="">—</option>';
+                    places.innerHTML = '<option value="">—</option>';
+                    vid.value = '';
+                    price.textContent = '';
+                } else {
+                    const thicknesses = uniq(currentVariants.map(v => v.thickness_cm)).sort((a,b) => Number(a)-Number(b));
+                    const placesList = uniq(currentVariants.map(v => v.places)).sort((a,b) => Number(a)-Number(b));
+                    renderOptions(thick, thicknesses, (v) => String(v) + ' cm');
+                    renderOptions(places, placesList, (v) => String(v) + ' places');
+                    const cheapest = currentVariants.slice().sort((a,b) => Number(a.price)-Number(b.price))[0];
+                    thick.value = String(cheapest.thickness_cm);
+                    places.value = String(cheapest.places);
+                    syncFromSelection();
+                }
+
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden','false');
+            }
+
+            function closeModal(){
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden','true');
+            }
+
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-quick-add]');
+                if (btn) {
+                    e.preventDefault();
+                    openModal(btn);
+                    return;
+                }
+                if (e.target.closest('[data-quick-close]')) {
+                    e.preventDefault();
+                    closeModal();
+                }
+            });
+
+            thick && thick.addEventListener('change', syncFromSelection);
+            places && places.addEventListener('change', syncFromSelection);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+            });
+
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    if (currentVariants.length && !vid.value) {
+                        e.preventDefault();
+                    }
+                });
+            }
+        })();
+    </script>
 @else
     <section class="collection" aria-label="{{ $pageTitle }}">
         <div class="container">
