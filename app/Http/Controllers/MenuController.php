@@ -20,6 +20,9 @@ class MenuController extends Controller
         $matelasModels = null;
         if (strtolower(trim((string) $menu->slug)) === 'matelas') {
             $all = $menu->products()
+                ->with([
+                    'variants' => fn ($q) => $q->active()->orderBy('thickness_cm')->orderBy('places'),
+                ])
                 ->where('products.is_active', true)
                 ->orderByDesc('products.created_at')
                 ->get();
@@ -47,9 +50,30 @@ class MenuController extends Controller
                     'product' => $product,
                 ];
             })->values();
+
+            $pickedIds = $matelasModels
+                ->map(fn ($row) => $row['product']?->id)
+                ->filter()
+                ->unique()
+                ->values();
+
+            $extras = $all
+                ->whereNotIn('id', $pickedIds->all())
+                ->take(6)
+                ->map(fn ($p) => ['label' => (string) ($p->name ?? 'Matelas'), 'product' => $p])
+                ->values();
+
+            $matelasModels = $matelasModels
+                ->filter(fn ($row) => !empty($row['product']))
+                ->merge($extras)
+                ->take(10)
+                ->values();
         }
 
         $products = $menu->products()
+            ->with([
+                'variants' => fn ($q) => $q->active()->orderBy('thickness_cm')->orderBy('places'),
+            ])
             ->where('products.is_active', true)
             ->orderByDesc('products.created_at')
             ->paginate(12)
