@@ -77,14 +77,103 @@
 
                     <!-- Price -->
                     <div class="product-price">
-                        <div class="product-price__current">{{ $product->formatted_price }}</div>
+                        <div class="product-price__current" id="productPriceCurrent">{{ $product->formatted_price }}</div>
                         @if($product->formatted_old_price)
-                            <div class="product-price__old">{{ $product->formatted_old_price }}</div>
+                            <div class="product-price__old" id="productPriceOld">{{ $product->formatted_old_price }}</div>
                             @if($product->discount_percent)
-                                <div class="product-price__save">Économisez {{ (int) $product->discount_percent }}%</div>
+                                <div class="product-price__save" id="productPriceSave">Économisez {{ (int) $product->discount_percent }}%</div>
                             @endif
+                        @else
+                            <div class="product-price__old" id="productPriceOld" style="display:none"></div>
+                            <div class="product-price__save" id="productPriceSave" style="display:none"></div>
                         @endif
                     </div>
+
+                    @if(($product->variants ?? collect())->isNotEmpty())
+                        @php
+                            $variants = $product->variants->values();
+                            $usesVariantType = $variants->pluck('variant_type')->filter(fn ($v) => (string) $v !== '')->isNotEmpty();
+                            $variantTypes = $variants->pluck('variant_type')->filter(fn ($v) => (string) $v !== '')->unique()->sort()->values();
+                            $thicknesses = $variants->pluck('thickness_cm')->unique()->sort()->values();
+                            $places = $variants->pluck('places')->unique()->sort()->values();
+                            $defaultVariant = $variants->first();
+
+                            $categorySlug = (string) ($product->category?->slug ?? '');
+                            $categoryName = (string) ($product->category?->name ?? '');
+                            $categoryHaystack = mb_strtolower(trim($categorySlug . ' ' . $categoryName));
+                            $variantTypeLabel = 'Type';
+                            if (str_contains($categoryHaystack, 'drap')) {
+                                $variantTypeLabel = 'Type de drap';
+                            } elseif (str_contains($categoryHaystack, 'oreiller')) {
+                                $variantTypeLabel = "Type d’oreiller";
+                            } elseif (str_contains($categoryHaystack, 'couette')) {
+                                $variantTypeLabel = 'Type de couette';
+                            }
+                        @endphp
+                        <div class="variant-picker" style="margin-top: 14px;">
+                            <div class="variant-picker__grid">
+                                <div class="variant-picker__group">
+                                    <div class="variant-picker__label">{{ $usesVariantType ? $variantTypeLabel : 'Épaisseur' }}</div>
+                                    <div class="variant-picker__chips" role="group" aria-label="Choisir une option">
+                                        @if($usesVariantType)
+                                            @foreach($variantTypes as $t)
+                                                <button
+                                                    type="button"
+                                                    class="variant-chip"
+                                                    data-variant-type="{{ (string) $t }}"
+                                                    aria-pressed="{{ (string) $t === (string) $defaultVariant?->variant_type ? 'true' : 'false' }}"
+                                                >
+                                                    <span class="variant-chip__value">{{ (string) $t }}</span>
+                                                </button>
+                                            @endforeach
+                                        @else
+                                            @foreach($thicknesses as $t)
+                                                <button
+                                                    type="button"
+                                                    class="variant-chip"
+                                                    data-variant-thickness="{{ (int) $t }}"
+                                                    aria-pressed="{{ $t === $defaultVariant?->thickness_cm ? 'true' : 'false' }}"
+                                                >
+                                                    <span class="variant-chip__value">{{ (int) $t }}</span>
+                                                    <span class="variant-chip__unit">cm</span>
+                                                </button>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="variant-picker__group">
+                                    <div class="variant-picker__label">Places</div>
+                                    <div class="variant-picker__chips" role="group" aria-label="Choisir un nombre de places">
+                                        @foreach($places as $p)
+                                            <button
+                                                type="button"
+                                                class="variant-chip"
+                                                data-variant-places="{{ (int) $p }}"
+                                                aria-pressed="{{ $p === $defaultVariant?->places ? 'true' : 'false' }}"
+                                            >
+                                                <span class="variant-chip__value">{{ (int) $p }}</span>
+                                                <span class="variant-chip__unit">place(s)</span>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="variant-picker__hint" id="variantHint"></div>
+                            <input type="hidden" id="selectedVariantId" value="{{ $defaultVariant?->id }}">
+                            <script type="application/json" id="variantsData">{!! $variants->map(fn($v) => [
+                                'id' => (int) $v->id,
+                                'variant_type' => $v->variant_type ? (string) $v->variant_type : null,
+                                'thickness_cm' => (int) $v->thickness_cm,
+                                'places' => (int) $v->places,
+                                'price' => (float) $v->price,
+                                'formatted_price' => $v->formatted_price,
+                                'formatted_old_price' => $v->formatted_old_price,
+                                'discount_percent' => $v->discount_percent ? (int) $v->discount_percent : null,
+                                'in_stock' => ((int) ($v->stock ?? 0)) > 0,
+                            ])->values()->toJson(JSON_UNESCAPED_UNICODE) !!}</script>
+                        </div>
+                    @endif
 
                     <!-- CTA Section Redesigned -->
                     <div class="product-cta-section">
@@ -99,6 +188,7 @@
                             <form action="{{ route('cart.add') }}" method="POST" id="addToCartForm" style="flex:1">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="product_variant_id" id="addToCartVariantId" value="">
                                 <input type="hidden" name="quantity" id="addToCartQty" value="1">
                                 <button class="product-cta-main product-cta-main--dark" type="submit" style="width:100%">
                                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
@@ -132,6 +222,7 @@
                         <form action="{{ route('cart.add') }}" method="POST" style="width:100%">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="product_variant_id" id="directOrderVariantId" value="">
                             <input type="hidden" name="quantity" id="directOrderQty" value="1">
                             <input type="hidden" name="redirect_to" value="shipping">
                             <button class="product-cta-direct" type="submit" data-role="checkout">
@@ -501,6 +592,26 @@
     .product-desc__title { font-size: 1.75rem; }
     .product-desc__content { padding: 1.5rem; }
 }
+
+.variant-picker { padding: 14px; border: 1px solid rgba(15, 23, 42, .08); border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(248,250,252,.9)); box-shadow: 0 20px 45px rgba(2, 6, 23, .06); }
+.variant-picker__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.variant-picker__group { display: flex; flex-direction: column; gap: 10px; }
+.variant-picker__label { font-weight: 900; letter-spacing: -.01em; color: #0f172a; }
+.variant-picker__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.variant-chip { appearance: none; border: 1.5px solid rgba(15, 23, 42, .18); background: #fff; border-radius: 14px; padding: 10px 12px; min-width: 78px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
+.variant-chip__value { font-weight: 950; color: #0f172a; font-size: 16px; line-height: 1; }
+.variant-chip__unit { font-size: 11px; font-weight: 700; color: #64748b; line-height: 1; }
+.variant-chip:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(2, 6, 23, .10); border-color: rgba(236, 72, 153, .55); }
+.variant-chip[aria-pressed="true"] { border-color: rgba(236, 72, 153, .85); background: rgba(236, 72, 153, .08); box-shadow: 0 14px 28px rgba(236, 72, 153, .18); }
+.variant-chip[aria-pressed="true"] .variant-chip__value { color: #be185d; }
+.variant-chip:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.variant-chip:disabled:hover { border-color: rgba(15, 23, 42, .18); }
+.variant-picker__hint { margin-top: 10px; font-size: 12px; font-weight: 700; color: #64748b; }
+
+@media (max-width: 576px) {
+    .variant-picker__grid { grid-template-columns: 1fr; }
+    .variant-chip { min-width: 84px; }
+}
 </style>
 
 <script>
@@ -514,8 +625,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderCalcEl = document.getElementById('orderCalc');
     const addToCartQty = document.getElementById('addToCartQty');
     const directOrderQty = document.getElementById('directOrderQty');
-    const unitPrice = qtyInput ? parseFloat(qtyInput.dataset.price) || 0 : 0;
-    const formattedUnitPrice = unitPrice.toLocaleString('fr-FR') + 'F';
+    const priceCurrentEl = document.getElementById('productPriceCurrent');
+    const priceOldEl = document.getElementById('productPriceOld');
+    const priceSaveEl = document.getElementById('productPriceSave');
+    const addToCartVariantId = document.getElementById('addToCartVariantId');
+    const directOrderVariantId = document.getElementById('directOrderVariantId');
+    const variantHintEl = document.getElementById('variantHint');
+
+    let unitPrice = qtyInput ? parseFloat(qtyInput.dataset.price) || 0 : 0;
+    let formattedUnitPrice = unitPrice.toLocaleString('fr-FR') + 'F';
 
     const updateTotal = () => {
         const qty = parseInt(qtyInput.value) || 1;
@@ -535,6 +653,204 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const setVariant = (variant) => {
+        if (!variant) {
+            return;
+        }
+        if (addToCartVariantId) {
+            addToCartVariantId.value = String(variant.id || '');
+        }
+        if (directOrderVariantId) {
+            directOrderVariantId.value = String(variant.id || '');
+        }
+
+        if (qtyInput) {
+            qtyInput.dataset.price = String(variant.price || 0);
+        }
+        unitPrice = parseFloat(variant.price) || 0;
+        formattedUnitPrice = unitPrice.toLocaleString('fr-FR') + 'F';
+
+        if (priceCurrentEl && variant.formatted_price) {
+            priceCurrentEl.textContent = variant.formatted_price;
+        }
+        if (priceOldEl) {
+            if (variant.formatted_old_price) {
+                priceOldEl.style.display = '';
+                priceOldEl.textContent = variant.formatted_old_price;
+            } else {
+                priceOldEl.style.display = 'none';
+                priceOldEl.textContent = '';
+            }
+        }
+        if (priceSaveEl) {
+            if (variant.discount_percent) {
+                priceSaveEl.style.display = '';
+                priceSaveEl.textContent = 'Économisez ' + String(variant.discount_percent) + '%';
+            } else {
+                priceSaveEl.style.display = 'none';
+                priceSaveEl.textContent = '';
+            }
+        }
+
+        updateTotal();
+    };
+
+    const variantsJsonEl = document.getElementById('variantsData');
+    const selectedVariantIdEl = document.getElementById('selectedVariantId');
+    let variants = [];
+    if (variantsJsonEl) {
+        try {
+            variants = JSON.parse(variantsJsonEl.textContent || '[]') || [];
+        } catch (e) {
+            variants = [];
+        }
+    }
+
+    const hasVariantType = variants.some(v => v && v.variant_type);
+
+    const getVariant = (a, places) => {
+        if (hasVariantType) {
+            return variants.find(v => String(v.variant_type || '') === String(a || '') && String(v.places) === String(places));
+        }
+        return variants.find(v => String(v.thickness_cm) === String(a) && String(v.places) === String(places));
+    };
+
+    const initVariantUI = () => {
+        if (!variants.length) {
+            if (addToCartVariantId) addToCartVariantId.value = '';
+            if (directOrderVariantId) directOrderVariantId.value = '';
+            updateTotal();
+            return;
+        }
+
+        const thicknessBtns = document.querySelectorAll('[data-variant-thickness]');
+        const typeBtns = document.querySelectorAll('[data-variant-type]');
+        const placesBtns = document.querySelectorAll('[data-variant-places]');
+
+        const getActivePrimary = () => {
+            if (hasVariantType) {
+                const active = document.querySelector('[data-variant-type][aria-pressed="true"]');
+                return active ? active.getAttribute('data-variant-type') : null;
+            }
+            const active = document.querySelector('[data-variant-thickness][aria-pressed="true"]');
+            return active ? active.getAttribute('data-variant-thickness') : null;
+        };
+        const getActivePlaces = () => {
+            const active = document.querySelector('[data-variant-places][aria-pressed="true"]');
+            return active ? active.getAttribute('data-variant-places') : null;
+        };
+
+        const setPressed = (btns, btn) => {
+            btns.forEach(b => b.setAttribute('aria-pressed', 'false'));
+            btn.setAttribute('aria-pressed', 'true');
+        };
+
+        const setDisabledFromSelection = () => {
+            const a = getActivePrimary();
+            const p = getActivePlaces();
+
+            if (hasVariantType) {
+                typeBtns.forEach(btn => {
+                    const tv = btn.getAttribute('data-variant-type');
+                    const ok = p ? !!getVariant(tv, p) : variants.some(v => String(v.variant_type || '') === String(tv || ''));
+                    btn.disabled = !ok;
+                });
+            } else {
+                thicknessBtns.forEach(btn => {
+                    const tv = btn.getAttribute('data-variant-thickness');
+                    const ok = p ? !!getVariant(tv, p) : variants.some(v => String(v.thickness_cm) === String(tv));
+                    btn.disabled = !ok;
+                });
+            }
+
+            placesBtns.forEach(btn => {
+                const pv = btn.getAttribute('data-variant-places');
+                const ok = a ? !!getVariant(a, pv) : variants.some(v => String(v.places) === String(pv));
+                btn.disabled = !ok;
+            });
+        };
+
+        const normalizeSelection = () => {
+            const a = getActivePrimary();
+            const p = getActivePlaces();
+            if (a && p && getVariant(a, p)) {
+                return;
+            }
+
+            const first = variants[0];
+            const aTarget = hasVariantType
+                ? (a && variants.some(v => String(v.variant_type || '') === String(a || '')) ? a : String(first.variant_type || ''))
+                : (a && variants.some(v => String(v.thickness_cm) === String(a)) ? a : String(first.thickness_cm));
+            const pTarget = p && variants.some(v => String(v.places) === String(p)) ? p : String(first.places);
+            const candidate = getVariant(aTarget, pTarget) || (hasVariantType
+                ? variants.find(v => String(v.variant_type || '') === String(aTarget || ''))
+                : variants.find(v => String(v.thickness_cm) === String(aTarget))) || first;
+
+            if (hasVariantType) {
+                typeBtns.forEach(btn => {
+                    const tv = btn.getAttribute('data-variant-type');
+                    btn.setAttribute('aria-pressed', String(tv || '') === String(candidate.variant_type || '') ? 'true' : 'false');
+                });
+            } else {
+                thicknessBtns.forEach(btn => {
+                    const tv = btn.getAttribute('data-variant-thickness');
+                    btn.setAttribute('aria-pressed', String(tv) === String(candidate.thickness_cm) ? 'true' : 'false');
+                });
+            }
+            placesBtns.forEach(btn => {
+                const pv = btn.getAttribute('data-variant-places');
+                btn.setAttribute('aria-pressed', String(pv) === String(candidate.places) ? 'true' : 'false');
+            });
+        };
+
+        const applySelection = () => {
+            normalizeSelection();
+            setDisabledFromSelection();
+            const a = getActivePrimary();
+            const p = getActivePlaces();
+            const v = getVariant(a, p) || variants[0];
+            if (selectedVariantIdEl) {
+                selectedVariantIdEl.value = String(v.id || '');
+            }
+            setVariant(v);
+
+            if (variantHintEl) {
+                const okText = v && v.in_stock === false ? 'Indisponible' : 'Disponible';
+                const leftText = hasVariantType
+                    ? (a ? String(a) : '')
+                    : (a ? (a + ' cm') : '');
+                variantHintEl.textContent = (leftText ? leftText : '') + (p ? (' • ' + p + ' place(s)') : '') + (a && p ? (' • ' + okText) : '');
+            }
+        };
+
+        if (hasVariantType) {
+            typeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    setPressed(typeBtns, btn);
+                    applySelection();
+                });
+            });
+        } else {
+            thicknessBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    setPressed(thicknessBtns, btn);
+                    applySelection();
+                });
+            });
+        }
+        placesBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.disabled) return;
+                setPressed(placesBtns, btn);
+                applySelection();
+            });
+        });
+
+        applySelection();
+    };
+
     if (qtyMinus && qtyPlus && qtyInput) {
         qtyMinus.addEventListener('click', () => {
             const val = parseInt(qtyInput.value) || 1;
@@ -552,6 +868,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         qtyInput.addEventListener('change', updateTotal);
     }
+
+    initVariantUI();
 
     // Gallery thumbnails
     const mainImage = document.getElementById('mainImage');

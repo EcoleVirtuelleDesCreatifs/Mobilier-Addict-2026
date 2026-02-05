@@ -90,7 +90,7 @@
                 <!-- Cart Items List -->
                 <div class="cart-items">
                     @foreach($cartItems as $item)
-                    <div class="cart-item" data-id="{{ $item->id }}">
+                    <div class="cart-item" data-id="{{ $item->cart_key ?? $item->id }}">
                         <div class="cart-item__image">
                             <a href="{{ $item->slug ? route('product.show', $item->slug) : route('cart.index') }}">
                                 <img src="{{ $item->image }}" alt="{{ $item->name }}" loading="lazy">
@@ -113,6 +113,7 @@
                             <div class="cart-item__actions">
                                 <form class="cart-item__quantity" action="{{ route('cart.update') }}" method="POST">
                                     @csrf
+                                    <input type="hidden" name="cart_key" value="{{ $item->cart_key ?? '' }}">
                                     <input type="hidden" name="product_id" value="{{ $item->id }}">
                                     <button class="cart-item__qty-btn" type="button" aria-label="Diminuer" data-action="minus">
                                         <svg viewBox="0 0 24 24" width="16" height="16"><path d="M19 13H5v-2h14v2z" fill="currentColor"/></svg>
@@ -136,6 +137,7 @@
                                 </button>
                                 <form action="{{ route('cart.remove') }}" method="POST">
                                     @csrf
+                                    <input type="hidden" name="cart_key" value="{{ $item->cart_key ?? '' }}">
                                     <input type="hidden" name="product_id" value="{{ $item->id }}">
                                     <button class="cart-item__remove" type="submit">
                                         <svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg>

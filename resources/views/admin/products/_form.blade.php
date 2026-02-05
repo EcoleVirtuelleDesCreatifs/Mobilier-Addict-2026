@@ -18,9 +18,27 @@
         }
     }
     $selectedSections = is_array($selectedSections) ? $selectedSections : [];
+
+    $variantRows = old('variants');
+    if ($variantRows === null && $isEdit) {
+        $variantRows = ($product->variants ?? collect())
+            ->map(fn ($v) => [
+                'id' => $v->id,
+                'variant_type' => $v->variant_type,
+                'thickness_cm' => $v->thickness_cm,
+                'places' => $v->places,
+                'price' => $v->price,
+                'stock' => $v->stock,
+                'is_active' => $v->is_active ? 1 : 0,
+            ])
+            ->values()
+            ->all();
+    }
+    $variantRows = is_array($variantRows) ? $variantRows : [];
 @endphp
 
 <input type="hidden" name="slug" value="{{ old('slug', $isEdit ? $product->slug : null) }}">
+<input type="hidden" name="variants_enabled" value="1">
 
 <div class="d-grid gap-3">
     <div class="admin-card p-3">
@@ -79,6 +97,157 @@
                 @endif
             </div>
         </div>
+    </div>
+
+    <div class="admin-card p-3">
+        <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+            <div class="fw-semibold">Variantes (Matelas: Épaisseur/Places • Couette: Type/Places)</div>
+            <button type="button" class="btn btn-sm btn-admin-ghost" id="addVariantRow">Ajouter une variante</button>
+        </div>
+        <div class="small mb-3" style="color: var(--admin-muted);">Pour les matelas: renseigne Épaisseur + Places. Pour les couettes: renseigne Type + Places (Épaisseur = 0).</div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent; min-width: 760px;">
+                <thead style="color: var(--admin-muted);">
+                    <tr>
+                        <th style="width:220px;">Type (Couette)</th>
+                        <th style="width:160px;">Épaisseur (cm)</th>
+                        <th style="width:140px;">Places</th>
+                        <th style="width:200px;">Prix (FCFA)</th>
+                        <th style="width:160px;">Stock</th>
+                        <th style="width:160px;">Actif</th>
+                        <th style="width:80px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="variantsTbody" style="border-top: 1px solid var(--admin-border);">
+                    @forelse($variantRows as $i => $row)
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" name="variants[{{ $i }}][variant_type]" value="{{ $row['variant_type'] ?? '' }}" placeholder="Ex: Type A / Drap coton">
+                            </td>
+                            <td>
+                                <input type="hidden" name="variants[{{ $i }}][id]" value="{{ $row['id'] ?? '' }}">
+                                <input type="number" class="form-control" name="variants[{{ $i }}][thickness_cm]" value="{{ $row['thickness_cm'] ?? '' }}" min="0" step="1" placeholder="Ex: 30">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" min="1" step="1" placeholder="Ex: 2">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="variants[{{ $i }}][price]" value="{{ $row['price'] ?? '' }}" min="0" step="1" placeholder="Ex: 105000">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="variants[{{ $i }}][stock]" value="{{ $row['stock'] ?? 0 }}" min="0" step="1">
+                            </td>
+                            <td>
+                                @php $va = isset($row['is_active']) ? (int) $row['is_active'] : 1; @endphp
+                                <select class="form-select" name="variants[{{ $i }}][is_active]">
+                                    <option value="1" @selected($va === 1)>Actif</option>
+                                    <option value="0" @selected($va === 0)>Inactif</option>
+                                </select>
+                            </td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-danger" data-role="remove-variant">×</button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr id="variantsEmptyRow">
+                            <td colspan="7" style="color: var(--admin-muted);">Aucune variante. Clique sur “Ajouter une variante”.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <template id="variantRowTemplate">
+            <tr>
+                <td>
+                    <input type="text" class="form-control" data-name="variant_type" placeholder="Ex: Type A / Drap coton">
+                </td>
+                <td>
+                    <input type="hidden" data-name="id" value="">
+                    <input type="number" class="form-control" data-name="thickness_cm" min="0" step="1" placeholder="Ex: 30">
+                </td>
+                <td>
+                    <input type="number" class="form-control" data-name="places" min="1" step="1" placeholder="Ex: 2">
+                </td>
+                <td>
+                    <input type="number" class="form-control" data-name="price" min="0" step="1" placeholder="Ex: 105000">
+                </td>
+                <td>
+                    <input type="number" class="form-control" data-name="stock" min="0" step="1" value="0">
+                </td>
+                <td>
+                    <select class="form-select" data-name="is_active">
+                        <option value="1">Actif</option>
+                        <option value="0">Inactif</option>
+                    </select>
+                </td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-danger" data-role="remove-variant">×</button>
+                </td>
+            </tr>
+        </template>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('variantsTbody');
+            const addBtn = document.getElementById('addVariantRow');
+            const tpl = document.getElementById('variantRowTemplate');
+
+            if (!tbody || !addBtn || !tpl) return;
+
+            const getNextIndex = () => {
+                const rows = tbody.querySelectorAll('tr');
+                let max = -1;
+                rows.forEach(r => {
+                    const any = r.querySelector('input[name^="variants["]');
+                    if (!any) return;
+                    const name = any.getAttribute('name') || '';
+                    const m = name.match(/^variants\[(\d+)\]/);
+                    if (m) max = Math.max(max, parseInt(m[1], 10));
+                });
+                return max + 1;
+            };
+
+            const syncRowNames = (row, index) => {
+                row.querySelectorAll('[data-name]').forEach(el => {
+                    const field = el.getAttribute('data-name');
+                    el.setAttribute('name', `variants[${index}][${field}]`);
+                    el.removeAttribute('data-name');
+                });
+            };
+
+            const removeEmptyRow = () => {
+                const empty = document.getElementById('variantsEmptyRow');
+                if (empty) empty.remove();
+            };
+
+            const addRow = () => {
+                removeEmptyRow();
+                const frag = tpl.content.cloneNode(true);
+                const tr = frag.querySelector('tr');
+                const idx = getNextIndex();
+                syncRowNames(tr, idx);
+                tbody.appendChild(tr);
+            };
+
+            addBtn.addEventListener('click', addRow);
+
+            tbody.addEventListener('click', (e) => {
+                const btn = e.target && e.target.closest ? e.target.closest('[data-role="remove-variant"]') : null;
+                if (!btn) return;
+                const tr = btn.closest('tr');
+                if (tr) tr.remove();
+
+                if (tbody.querySelectorAll('tr').length === 0) {
+                    const empty = document.createElement('tr');
+                    empty.id = 'variantsEmptyRow';
+                    empty.innerHTML = '<td colspan="7" style="color: var(--admin-muted);">Aucune variante. Clique sur “Ajouter une variante”.</td>';
+                    tbody.appendChild(empty);
+                }
+            });
+        });
+        </script>
     </div>
 
     <div class="admin-card p-3">

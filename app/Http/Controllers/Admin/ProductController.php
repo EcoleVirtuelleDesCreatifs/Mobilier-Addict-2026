@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Menu;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -81,7 +82,12 @@ class ProductController extends Controller
         $data = $this->normalizeProductData($data);
         $data = $this->handleProductUploads($request, $data);
 
-        $product = Product::create($data);
+        $product = DB::transaction(function () use ($data, $request) {
+            $product = Product::create($data);
+            $this->syncVariants($request, $product);
+
+            return $product;
+        });
 
         $menuIds = $request->input('menu_ids', []);
         $menuIds = is_array($menuIds) ? $menuIds : [];
@@ -101,6 +107,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $product->load(['variants' => fn ($q) => $q->orderBy('thickness_cm')->orderBy('places')]);
         $categories = Category::query()->orderBy('name')->get();
         $menus = Menu::query()
             ->orderBy('position')
@@ -119,7 +126,10 @@ class ProductController extends Controller
         $data = $this->normalizeProductData($data);
         $data = $this->handleProductUploads($request, $data, $product);
 
-        $product->update($data);
+        DB::transaction(function () use ($data, $request, $product) {
+            $product->update($data);
+            $this->syncVariants($request, $product);
+        });
 
         $menuIds = $request->input('menu_ids', []);
         $menuIds = is_array($menuIds) ? $menuIds : [];
@@ -205,7 +215,100 @@ class ProductController extends Controller
             'order' => ['nullable', 'integer'],
             'menu_ids' => ['nullable', 'array'],
             'menu_ids.*' => ['integer', 'exists:menus,id'],
+
+            'variants_enabled' => ['nullable', 'boolean'],
+
+            'variants' => ['nullable', 'array'],
+            'variants.*.id' => ['nullable', 'integer', 'exists:product_variants,id'],
+            'variants.*.variant_type' => ['nullable', 'string', 'max:100'],
+            'variants.*.thickness_cm' => ['nullable', 'integer', 'min:0', 'max:200'],
+            'variants.*.places' => ['required_with:variants.*.price', 'integer', 'min:1', 'max:10'],
+            'variants.*.price' => ['required_with:variants.*.places', 'numeric', 'min:0'],
+            'variants.*.stock' => ['nullable', 'integer', 'min:0'],
+            'variants.*.is_active' => ['nullable', 'boolean'],
         ]);
+    }
+
+    private function syncVariants(Request $request, Product $product): void
+    {
+        if (!$request->has('variants_enabled')) {
+            return;
+        }
+
+        $rows = $request->input('variants', []);
+        $rows = is_array($rows) ? $rows : [];
+
+        if (empty($rows)) {
+            ProductVariant::query()
+                ->where('product_id', $product->id)
+                ->delete();
+            return;
+        }
+
+        $keptIds = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $variantType = isset($row['variant_type']) ? trim((string) $row['variant_type']) : '';
+            $variantType = $variantType !== '' ? $variantType : null;
+
+            $thickness = isset($row['thickness_cm']) ? (int) $row['thickness_cm'] : 0;
+            $places = isset($row['places']) ? (int) $row['places'] : null;
+            $price = isset($row['price']) ? (float) $row['price'] : null;
+
+            if ((!$variantType && $thickness <= 0) || !$places || $price === null) {
+                continue;
+            }
+
+            $variantId = isset($row['id']) && $row['id'] !== '' ? (int) $row['id'] : null;
+            $stock = isset($row['stock']) ? (int) $row['stock'] : 0;
+            $isActive = (bool) ($row['is_active'] ?? true);
+
+            $variant = null;
+            if ($variantId) {
+                $variant = ProductVariant::query()
+                    ->where('id', $variantId)
+                    ->where('product_id', $product->id)
+                    ->first();
+            }
+
+            if ($variant) {
+                $variant->update([
+                    'variant_type' => $variantType,
+                    'thickness_cm' => $thickness,
+                    'places' => $places,
+                    'price' => $price,
+                    'stock' => $stock,
+                    'is_active' => $isActive,
+                ]);
+                $keptIds[] = (int) $variant->id;
+            } else {
+                $created = ProductVariant::updateOrCreate(
+                    [
+                        'product_id' => $product->id,
+                        'thickness_cm' => $thickness,
+                        'places' => $places,
+                        'variant_type' => $variantType,
+                    ],
+                    [
+                        'price' => $price,
+                        'stock' => $stock,
+                        'is_active' => $isActive,
+                    ]
+                );
+                $keptIds[] = (int) $created->id;
+            }
+        }
+
+        $keep = array_values(array_unique(array_filter($keptIds)));
+        if (!empty($keep)) {
+            ProductVariant::query()
+                ->where('product_id', $product->id)
+                ->whereNotIn('id', $keep)
+                ->delete();
+        }
     }
 
     private function normalizeProductData(array $data): array

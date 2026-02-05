@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\User;
 use App\Notifications\AdminOrderPlacedNotification;
 use Illuminate\Http\Request;
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Notification;
 
 class CartController extends Controller
 {
+    private function makeCartKey(int $productId, ?int $variantId): string
+    {
+        return $productId . ':' . (int) ($variantId ?? 0);
+    }
+
     public function index()
     {
         $cartData = $this->getCartData();
@@ -31,17 +37,33 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'integer', 'exists:products,id'],
+            'product_variant_id' => ['nullable', 'integer', 'exists:product_variants,id'],
             'quantity' => ['nullable', 'integer', 'min:1', 'max:10'],
             'redirect_to' => ['nullable', 'string'],
         ]);
 
         $product = Product::findOrFail($validated['product_id']);
+        $variantId = isset($validated['product_variant_id']) ? (int) $validated['product_variant_id'] : null;
+        $variant = null;
+        if ($variantId) {
+            $variant = ProductVariant::query()
+                ->active()
+                ->where('id', $variantId)
+                ->where('product_id', $product->id)
+                ->first();
+
+            if (!$variant) {
+                return redirect()->back()->with('error', 'Variante invalide.');
+            }
+        }
         $qty = (int) ($validated['quantity'] ?? 1);
 
         $cart = $this->getCart();
-        $currentQty = (int) ($cart[$product->id]['quantity'] ?? 0);
-        $cart[$product->id] = [
+        $cartKey = $this->makeCartKey((int) $product->id, $variant?->id ? (int) $variant->id : null);
+        $currentQty = (int) ($cart[$cartKey]['quantity'] ?? 0);
+        $cart[$cartKey] = [
             'product_id' => $product->id,
+            'product_variant_id' => $variant?->id,
             'quantity' => min(10, $currentQty + $qty),
         ];
 
@@ -58,18 +80,24 @@ class CartController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => ['required', 'integer'],
+            'cart_key' => ['nullable', 'string'],
+            'product_id' => ['nullable', 'integer'],
             'quantity' => ['required', 'integer', 'min:1', 'max:10'],
         ]);
 
         $cart = $this->getCart();
-        $productId = (int) $validated['product_id'];
+        $cartKey = is_string($validated['cart_key'] ?? null) ? (string) $validated['cart_key'] : null;
 
-        if (!isset($cart[$productId])) {
-            return redirect()->route('cart.index');
+        if ($cartKey && isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity'] = (int) $validated['quantity'];
+        } else {
+            $productId = (int) ($validated['product_id'] ?? 0);
+            $legacyKey = $productId > 0 ? (string) $productId : null;
+            if (!$legacyKey || !isset($cart[$legacyKey])) {
+                return redirect()->route('cart.index');
+            }
+            $cart[$legacyKey]['quantity'] = (int) $validated['quantity'];
         }
-
-        $cart[$productId]['quantity'] = (int) $validated['quantity'];
         $this->putCart($cart);
 
         return redirect()->route('cart.index')->with('success', 'Quantité mise à jour.');
@@ -78,13 +106,21 @@ class CartController extends Controller
     public function remove(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => ['required', 'integer'],
+            'cart_key' => ['nullable', 'string'],
+            'product_id' => ['nullable', 'integer'],
         ]);
 
         $cart = $this->getCart();
-        $productId = (int) $validated['product_id'];
-
-        unset($cart[$productId]);
+        $cartKey = is_string($validated['cart_key'] ?? null) ? (string) $validated['cart_key'] : null;
+        if ($cartKey && isset($cart[$cartKey])) {
+            unset($cart[$cartKey]);
+        } else {
+            $productId = (int) ($validated['product_id'] ?? 0);
+            $legacyKey = $productId > 0 ? (string) $productId : null;
+            if ($legacyKey && isset($cart[$legacyKey])) {
+                unset($cart[$legacyKey]);
+            }
+        }
         $this->putCart($cart);
 
         return redirect()->route('cart.index')->with('success', 'Produit supprimé du panier.');
@@ -141,6 +177,7 @@ class CartController extends Controller
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->id,
+                    'product_variant_id' => $item->variant_id,
                     'product_name' => $item->name,
                     'unit_price' => $item->price,
                     'quantity' => $item->quantity,
@@ -193,10 +230,36 @@ class CartController extends Controller
             ->get()
             ->keyBy('id');
 
-        $cartItems = $items->map(function ($item) use ($products) {
+        $variantIds = $items
+            ->pluck('product_variant_id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+
+        $variants = ProductVariant::query()
+            ->whereIn('id', $variantIds)
+            ->get()
+            ->keyBy('id');
+
+        $cartItems = $items->map(function ($item) use ($products, $variants) {
             $product = null;
             if ($item->product_id) {
                 $product = $products->get((int) $item->product_id);
+            }
+
+            $variant = null;
+            if ($item->product_variant_id) {
+                $variant = $variants->get((int) $item->product_variant_id);
+            }
+
+            $options = null;
+            if ($variant) {
+                if (!empty($variant->variant_type)) {
+                    $options = $variant->variant_type . ' • ' . $variant->places . ' place(s)';
+                } else {
+                    $options = $variant->thickness_cm . ' cm • ' . $variant->places . ' place(s)';
+                }
             }
 
             return (object) [
@@ -207,7 +270,7 @@ class CartController extends Controller
                 'price' => $item->unit_price,
                 'old_price' => null,
                 'quantity' => $item->quantity,
-                'options' => null,
+                'options' => $options,
             ];
         });
 
@@ -222,31 +285,72 @@ class CartController extends Controller
     private function getCartData()
     {
         $cart = $this->getCart();
-        $productIds = array_map('intval', array_keys($cart));
+        $rows = collect($cart)
+            ->filter(fn ($row) => is_array($row) && isset($row['product_id']))
+            ->values();
+
+        $productIds = $rows
+            ->pluck('product_id')
+            ->map(fn ($v) => (int) $v)
+            ->unique()
+            ->values()
+            ->all();
+
+        $variantIds = $rows
+            ->map(fn ($row) => isset($row['product_variant_id']) ? (int) $row['product_variant_id'] : null)
+            ->filter()
+            ->values()
+            ->all();
 
         $products = Product::query()
             ->whereIn('id', $productIds)
             ->get()
             ->keyBy('id');
 
-        $cartItems = collect($productIds)
-            ->filter(fn ($id) => $products->has($id))
-            ->map(function ($id) use ($products, $cart) {
-                $product = $products[$id];
-                $quantity = (int) ($cart[$id]['quantity'] ?? 1);
+        $variants = ProductVariant::query()
+            ->whereIn('id', $variantIds)
+            ->get()
+            ->keyBy('id');
+
+        $cartItems = collect($cart)
+            ->filter(fn ($row) => is_array($row) && isset($row['product_id']))
+            ->map(function ($row, $key) use ($products, $variants) {
+                $productId = (int) ($row['product_id'] ?? 0);
+                if (!$productId || !$products->has($productId)) {
+                    return null;
+                }
+                $product = $products[$productId];
+                $quantity = (int) ($row['quantity'] ?? 1);
+                $variantId = isset($row['product_variant_id']) ? (int) $row['product_variant_id'] : null;
+                $variant = $variantId ? $variants->get($variantId) : null;
+
+                $price = (float) ($variant?->price ?? $product->price);
+                $oldPrice = $variant?->old_price ? (float) $variant->old_price : ($product->old_price ? (float) $product->old_price : null);
+                $options = null;
+                if ($variant) {
+                    if (!empty($variant->variant_type)) {
+                        $options = $variant->variant_type . ' • ' . $variant->places . ' place(s)';
+                    } else {
+                        $options = $variant->thickness_cm . ' cm • ' . $variant->places . ' place(s)';
+                    }
+                }
 
                 return (object) [
+                    'cart_key' => (string) $key,
                     'id' => $product->id,
+                    'variant_id' => $variant?->id,
                     'name' => $product->name,
                     'slug' => $product->slug,
                     'image' => asset($product->image),
-                    'price' => (float) $product->price,
+                    'price' => $price,
                     'shipping_price' => (float) ($product->shipping_price ?? 0),
-                    'old_price' => $product->old_price ? (float) $product->old_price : null,
+                    'old_price' => $oldPrice,
                     'quantity' => $quantity,
-                    'options' => null,
+                    'options' => $options,
                 ];
-            });
+            })
+            ->filter()
+            ->values();
 
         $subtotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
         $savings = $cartItems->sum(fn($item) => $item->old_price ? ($item->old_price - $item->price) * $item->quantity : 0);

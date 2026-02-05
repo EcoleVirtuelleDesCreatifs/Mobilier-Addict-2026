@@ -141,6 +141,9 @@
                             </div>
                             <div class="order-item-mini__info">
                                 <span class="order-item-mini__name">{{ $item->name }}</span>
+                                @if($item->options)
+                                    <span class="order-item-mini__name" style="font-size:12px;opacity:.75;">{{ $item->options }}</span>
+                                @endif
                                 <span class="order-item-mini__price">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}F</span>
                             </div>
                         </div>

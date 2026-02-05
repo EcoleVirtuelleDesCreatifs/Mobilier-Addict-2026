@@ -184,7 +184,18 @@ class HomeController extends Controller
         }
 
         $mattressProducts = collect();
-        $mattressCategory = Category::query()->active()->where('slug', 'matelas')->first();
+        $mattressCategory = Category::query()
+            ->where('slug', 'matelas')
+            ->first();
+
+        if (!$mattressCategory) {
+            $mattressCategory = Category::query()
+                ->where('name', 'like', '%matelas%')
+                ->orderByRaw("CASE WHEN slug = 'matelas' THEN 0 ELSE 1 END")
+                ->orderBy('id')
+                ->first();
+        }
+
         if ($mattressCategory) {
             $categoryIds = $this->collectCategoryAndDescendantIds($mattressCategory);
             $mattressProducts = Product::query()
@@ -193,9 +204,196 @@ class HomeController extends Controller
                 ->orderByDesc('created_at')
                 ->take(12)
                 ->get();
+
+            if ($mattressProducts->isEmpty()) {
+                $mattressProducts = Product::query()
+                    ->whereIn('category_id', $categoryIds)
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+
+            if ($mattressProducts->isEmpty()) {
+                $mattressProducts = Product::query()
+                    ->active()
+                    ->whereHas('category', function ($query) {
+                        $query->where('slug', 'matelas')
+                            ->orWhere('slug', 'like', 'matelas%')
+                            ->orWhere('name', 'like', '%matelas%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+        } else {
+            $mattressProducts = Product::query()
+                ->active()
+                ->whereHas('category', function ($query) {
+                    $query->where('slug', 'matelas')
+                        ->orWhere('slug', 'like', 'matelas%')
+                        ->orWhere('name', 'like', '%matelas%');
+                })
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+
+            if ($mattressProducts->isEmpty()) {
+                $mattressProducts = Product::query()
+                    ->whereHas('category', function ($query) {
+                        $query->where('slug', 'matelas')
+                            ->orWhere('slug', 'like', 'matelas%')
+                            ->orWhere('name', 'like', '%matelas%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
         }
 
-        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts'));
+        $pillowProducts = collect();
+        $pillowCategory = Category::query()
+            ->where('slug', 'oreillers')
+            ->first();
+
+        if (!$pillowCategory) {
+            $pillowCategory = Category::query()
+                ->where('name', 'like', '%oreiller%')
+                ->orderByRaw("CASE WHEN slug = 'oreillers' THEN 0 ELSE 1 END")
+                ->orderBy('id')
+                ->first();
+        }
+
+        if ($pillowCategory) {
+            $categoryIds = $this->collectCategoryAndDescendantIds($pillowCategory);
+            $pillowProducts = Product::query()
+                ->active()
+                ->whereIn('category_id', $categoryIds)
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+
+            if ($pillowProducts->isEmpty()) {
+                $pillowProducts = Product::query()
+                    ->whereIn('category_id', $categoryIds)
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+
+            if ($pillowProducts->isEmpty()) {
+                $pillowProducts = Product::query()
+                    ->active()
+                    ->whereHas('category', function ($query) {
+                        $query->where('slug', 'oreillers')
+                            ->orWhere('slug', 'like', 'oreiller%')
+                            ->orWhere('name', 'like', '%oreiller%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+        } else {
+            $pillowProducts = Product::query()
+                ->active()
+                ->whereHas('category', function ($query) {
+                    $query->where('slug', 'oreillers')
+                        ->orWhere('slug', 'like', 'oreiller%')
+                        ->orWhere('name', 'like', '%oreiller%');
+                })
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+
+            if ($pillowProducts->isEmpty()) {
+                $pillowProducts = Product::query()
+                    ->whereHas('category', function ($query) {
+                        $query->where('slug', 'oreillers')
+                            ->orWhere('slug', 'like', 'oreiller%')
+                            ->orWhere('name', 'like', '%oreiller%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+        }
+
+        $drapsProducts = collect();
+        $drapsCategory = Category::query()
+            ->where('slug', 'draps')
+            ->first();
+
+        if (!$drapsCategory) {
+            $drapsCategory = Category::query()
+                ->where('slug', 'draps-couettes')
+                ->first();
+        }
+
+        if (!$drapsCategory) {
+            $drapsCategory = Category::query()
+                ->where('name', 'like', '%drap%')
+                ->orderByRaw("CASE WHEN slug IN ('draps', 'draps-couettes') THEN 0 ELSE 1 END")
+                ->orderBy('id')
+                ->first();
+        }
+
+        if ($drapsCategory) {
+            $categoryIds = $this->collectCategoryAndDescendantIds($drapsCategory);
+            $drapsProducts = Product::query()
+                ->active()
+                ->whereIn('category_id', $categoryIds)
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+
+            if ($drapsProducts->isEmpty()) {
+                $drapsProducts = Product::query()
+                    ->whereIn('category_id', $categoryIds)
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+
+            if ($drapsProducts->isEmpty()) {
+                $drapsProducts = Product::query()
+                    ->active()
+                    ->whereHas('category', function ($query) {
+                        $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                            ->orWhere('slug', 'like', 'drap%')
+                            ->orWhere('name', 'like', '%drap%')
+                            ->orWhere('name', 'like', '%couette%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+        } else {
+            $drapsProducts = Product::query()
+                ->active()
+                ->whereHas('category', function ($query) {
+                    $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                        ->orWhere('slug', 'like', 'drap%')
+                        ->orWhere('name', 'like', '%drap%')
+                        ->orWhere('name', 'like', '%couette%');
+                })
+                ->orderByDesc('created_at')
+                ->take(12)
+                ->get();
+
+            if ($drapsProducts->isEmpty()) {
+                $drapsProducts = Product::query()
+                    ->whereHas('category', function ($query) {
+                        $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                            ->orWhere('slug', 'like', 'drap%')
+                            ->orWhere('name', 'like', '%drap%')
+                            ->orWhere('name', 'like', '%couette%');
+                    })
+                    ->orderByDesc('created_at')
+                    ->take(12)
+                    ->get();
+            }
+        }
+
+        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts', 'pillowProducts', 'drapsProducts'));
     }
 
     private function collectCategoryAndDescendantIds(Category $category)
@@ -207,7 +405,9 @@ class HomeController extends Controller
             $children = Category::query()
                 ->whereIn('parent_id', $frontier)
                 ->pluck('id')
-                ->map(fn ($v) => (int) $v)
+                ->map(function ($v) {
+                    return (int) $v;
+                })
                 ->values();
 
             $children = $children->diff($ids)->values();

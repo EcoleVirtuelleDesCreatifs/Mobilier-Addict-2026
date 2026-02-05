@@ -618,44 +618,44 @@
 
         $testimonials = match ($designSlug) {
             'lits-sommiers' => [
-                ['text' => '"Très beau rendu. La chambre a changé d’ambiance, on s’y sent vraiment bien."', 'meta' => 'Nadia • Abidjan'],
-                ['text' => '"Stable et silencieux. On dort mieux parce qu’on ne se réveille plus pour rien."', 'meta' => 'Koffi • Bouaké'],
-                ['text' => '"Montage simple, qualité au top. Franchement c’est premium."', 'meta' => 'Aïssata • Yamoussoukro'],
+                ['text' => '"Très beau rendu. La chambre a changé d’ambiance, on s’y sent vraiment bien."', 'meta' => 'Awa • Dakar'],
+                ['text' => '"Stable et silencieux. On dort mieux parce qu’on ne se réveille plus pour rien."', 'meta' => 'Moussa • Thiès'],
+                ['text' => '"Montage simple, qualité au top. Franchement c’est premium."', 'meta' => 'Fatou • Saint‑Louis'],
             ],
             'oreillers' => [
-                ['text' => '"Je n’ai plus la nuque bloquée au réveil. Ça change tout."', 'meta' => 'Mariame • Abidjan'],
-                ['text' => '"Maintien parfait, et pas trop chaud. J’adore."', 'meta' => 'Yao • Korhogo'],
-                ['text' => '"On a pris le pack, super rapport qualité/prix."', 'meta' => 'Koné • Daloa'],
+                ['text' => '"Je n’ai plus la nuque bloquée au réveil. Ça change tout."', 'meta' => 'Aïssatou • Rufisque'],
+                ['text' => '"Maintien parfait, et pas trop chaud. J’adore."', 'meta' => 'Cheikh • Dakar'],
+                ['text' => '"On a pris le pack, super rapport qualité/prix."', 'meta' => 'Mariama • Thiès'],
             ],
             'draps-couettes' => [
-                ['text' => '"Sensation hôtel direct. C’est doux et ça respire."', 'meta' => 'Affoué • Abidjan'],
-                ['text' => '"La chambre fait plus premium, et on dort mieux."', 'meta' => 'Kouassi • Yamoussoukro'],
-                ['text' => '"Livraison rapide, qualité nickel. Je recommande."', 'meta' => 'Aminata • San‑Pédro'],
+                ['text' => '"Sensation hôtel direct. C’est doux et ça respire."', 'meta' => 'Khady • Dakar'],
+                ['text' => '"La chambre fait plus premium, et on dort mieux."', 'meta' => 'Mamadou • Saint‑Louis'],
+                ['text' => '"Livraison rapide, qualité nickel. Je recommande."', 'meta' => 'Aminata • Thiès'],
             ],
             'cuisine' => [
-                ['text' => '"La gazinière est puissante et facile à nettoyer. Un vrai plaisir de cuisiner."', 'meta' => 'Adjoua • Abidjan'],
-                ['text' => '"Le frigo est silencieux et garde tout bien frais. Parfait pour la famille."', 'meta' => 'N’Guessan • Bouaké'],
-                ['text' => '"Mixeur ultra efficace, je fais mes jus en 2 minutes."', 'meta' => 'Aya • Daloa'],
+                ['text' => '"La gazinière est puissante et facile à nettoyer. Un vrai plaisir de cuisiner."', 'meta' => 'Ndèye • Dakar'],
+                ['text' => '"Le frigo est silencieux et garde tout bien frais. Parfait pour la famille."', 'meta' => 'Ibrahima • Thiès'],
+                ['text' => '"Mixeur ultra efficace, je fais mes jus en 2 minutes."', 'meta' => 'Coumba • Saint‑Louis'],
             ],
             'froid-climatisation' => [
-                ['text' => '"Le climatiseur est silencieux et rafraîchit toute la pièce rapidement."', 'meta' => 'Sery • Abidjan'],
-                ['text' => '"Avec la chaleur, ce ventilateur est devenu indispensable."', 'meta' => 'Mariam • Bouaké'],
-                ['text' => '"Installation facile et efficacité immédiate. Je recommande."', 'meta' => 'Djakaridja • Korhogo'],
+                ['text' => '"Le climatiseur est silencieux et rafraîchit toute la pièce rapidement."', 'meta' => 'Ousmane • Dakar'],
+                ['text' => '"Avec la chaleur de Dakar, ce ventilateur est devenu indispensable."', 'meta' => 'Rama • Rufisque'],
+                ['text' => '"Installation facile et efficacité immédiate. Je recommande."', 'meta' => 'Abdou • Thiès'],
             ],
             'salon' => [
-                ['text' => '"Le canapé est très confortable et le tissu résiste bien. Parfait pour la famille."', 'meta' => 'Aminata • Abidjan'],
-                ['text' => '"Le meuble TV a modernisé tout le salon. Très beau design."', 'meta' => 'Kouamé • Yamoussoukro'],
-                ['text' => '"Fauteuil relax au top. Après le travail, c’est mon coin préféré."', 'meta' => 'Djeneba • San‑Pédro'],
+                ['text' => '"Le canapé est très confortable et le tissu résiste bien. Parfait pour la famille."', 'meta' => 'Mame Diarra • Dakar'],
+                ['text' => '"Le meuble TV a modernisé tout le salon. Très beau design."', 'meta' => 'Pape • Saint‑Louis'],
+                ['text' => '"Fauteuil relax au top. Après le travail, c’est mon coin préféré."', 'meta' => 'Sokhna • Thiès'],
             ],
             'multi-media' => [
-                ['text' => '"Image 4K sublime, Netflix fluide. La famille adore."', 'meta' => 'Yacouba • Abidjan'],
-                ['text' => '"La barre de son transforme l’expérience. On se croirait au cinéma."', 'meta' => 'Clarisse • Bouaké'],
-                ['text' => '"Le woofer Bluetooth a un son puissant. Parfait pour les fêtes."', 'meta' => 'Drogba • Daloa'],
+                ['text' => '"Image 4K sublime, Netflix fluide. La famille adore."', 'meta' => 'Modou • Dakar'],
+                ['text' => '"La barre de son transforme l’expérience. On se croirait au cinéma."', 'meta' => 'Bineta • Rufisque'],
+                ['text' => '"Le woofer Bluetooth a un son puissant. Parfait pour les fêtes."', 'meta' => 'Lamine • Thiès'],
             ],
             default => [
-                ['text' => '"Je dors mieux dès la première semaine. Le matin, je suis moins cassée et plus en forme."', 'meta' => 'Nadia • Abidjan'],
-                ['text' => '"Super qualité, très beau rendu dans la chambre. On sent que c’est solide et bien fini."', 'meta' => 'Koffi • Bouaké'],
-                ['text' => '"Livraison rapide, service réactif. J’ai choisi facilement grâce aux conseils."', 'meta' => 'Aïssata • Yamoussoukro'],
+                ['text' => '"Je dors mieux dès la première semaine. Le matin, je suis moins cassée et plus en forme."', 'meta' => 'Awa • Dakar'],
+                ['text' => '"Super qualité, très beau rendu dans la chambre. On sent que c’est solide et bien fini."', 'meta' => 'Moussa • Thiès'],
+                ['text' => '"Livraison rapide, service réactif. J’ai choisi facilement grâce aux conseils."', 'meta' => 'Fatou • Saint‑Louis'],
             ],
         };
 
