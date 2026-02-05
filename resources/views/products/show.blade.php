@@ -754,20 +754,20 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hasVariantType) {
                 typeBtns.forEach(btn => {
                     const tv = btn.getAttribute('data-variant-type');
-                    const ok = p ? !!getVariant(tv, p) : variants.some(v => String(v.variant_type || '') === String(tv || ''));
+                    const ok = variants.some(v => String(v.variant_type || '') === String(tv || ''));
                     btn.disabled = !ok;
                 });
             } else {
                 thicknessBtns.forEach(btn => {
                     const tv = btn.getAttribute('data-variant-thickness');
-                    const ok = p ? !!getVariant(tv, p) : variants.some(v => String(v.thickness_cm) === String(tv));
+                    const ok = variants.some(v => String(v.thickness_cm) === String(tv));
                     btn.disabled = !ok;
                 });
             }
 
             placesBtns.forEach(btn => {
                 const pv = btn.getAttribute('data-variant-places');
-                const ok = a ? !!getVariant(a, pv) : variants.some(v => String(v.places) === String(pv));
+                const ok = variants.some(v => String(v.places) === String(pv));
                 btn.disabled = !ok;
             });
         };
