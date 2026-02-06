@@ -68,10 +68,17 @@
         .matelas-quick{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:999px;background:#0a1733;color:#fff;font-weight:950;border:0;cursor:pointer;}
         .matelas-quick:hover{filter:brightness(1.06);}
 
-        .matelas-banner{padding:34px 0;background:linear-gradient(180deg, rgba(11,27,58,.94), rgba(11,27,58,.90));color:#fff;}
-        .matelas-banner__inner{text-align:center;max-width:980px;margin:0 auto;}
-        .matelas-banner__title{margin:0;font-weight:1000;letter-spacing:-.03em;line-height:1.05;font-size:22px;}
-        .matelas-banner__desc{margin:10px auto 0;max-width:78ch;color:rgba(241,245,249,.84);font-weight:700;font-size:13px;}
+        .matelas-banner{padding:40px 0;background:linear-gradient(180deg, #0b1b3a 0%, #071126 100%);color:#fff;position:relative;overflow:hidden;}
+        .matelas-banner::before{content:"";position:absolute;inset:-2px;background:radial-gradient(900px 520px at 18% 30%, rgba(255,58,127,.22), rgba(255,58,127,0) 62%), radial-gradient(900px 520px at 82% 14%, rgba(110,231,255,.12), rgba(110,231,255,0) 60%);pointer-events:none;}
+        .matelas-banner__grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:center;position:relative;}
+        .matelas-banner__title{margin:0;font-weight:1000;letter-spacing:-.03em;line-height:1.05;font-size:24px;}
+        .matelas-banner__desc{margin:10px 0 0;color:rgba(241,245,249,.86);font-weight:700;font-size:13px;max-width:70ch;}
+        .matelas-banner__meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+        .matelas-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);font-weight:950;font-size:11px;color:rgba(241,245,249,.92);}
+        .matelas-banner__cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center;}
+        .matelas-banner__media{border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);box-shadow:0 30px 80px rgba(0,0,0,.35);}
+        .matelas-banner__media img{width:100%;height:100%;display:block;object-fit:cover;aspect-ratio: 4 / 3;transform:scale(1.02);}
+        .matelas-banner__media:hover img{transform:scale(1.05);transition:transform .55s ease;}
 
         .matelas-tabs{padding:30px 0 10px;}
         .matelas-tabs__wrap{background:#fff;border:1px solid var(--ma-border);border-radius:22px;padding:18px;box-shadow:0 18px 50px rgba(2,6,23,.06);}
@@ -126,6 +133,7 @@
             .matelas-all__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
             .matelas-modal__content{grid-template-columns:1fr;}
             .matelas-tabs__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+            .matelas-banner__grid{grid-template-columns:1fr;}
         }
         @media (max-width: 520px){
             .matelas-hero{padding:54px 0 32px;}
@@ -240,14 +248,75 @@
             </div>
         </section>
 
-        <section class="matelas-banner" aria-label="Bandeau soutien">
-            <div class="container">
-                <div class="matelas-banner__inner">
-                    <h2 class="matelas-banner__title">Le soutien qui prend soin de votre dos</h2>
-                    <p class="matelas-banner__desc">Le matelas Medicosoins PH6 Extra Ferme assure un maintien optimal du dos. Idéal pour soulager les tensions, améliorer la posture et retrouver un sommeil réparateur.</p>
+        @php
+            $supportPick = $allMatelas->first(function ($p) {
+                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
+                $firm = \Illuminate\Support\Str::lower((string) ($p->firmness ?? ''));
+                return str_contains($name, 'medicosoins') || $firm === 'medicosoins';
+            }) ?: $allMatelas->first();
+
+            $supportImg = $supportPick && $supportPick->image ? asset($supportPick->image) : 'https://via.placeholder.com/900x700?text=Matelas';
+            $supportDefaultVariant = $supportPick?->variants?->sortBy('price')->first();
+            $supportPrice = $supportDefaultVariant?->price ?? $supportPick?->price;
+            $supportVariantsData = ($supportPick?->variants ?? collect())->map(fn($v) => [
+                'id' => (int) $v->id,
+                'thickness_cm' => $v->thickness_cm,
+                'places' => $v->places,
+                'price' => (float) $v->price,
+                'stock' => $v->stock,
+            ])->values();
+
+            $supportTag = $supportPick?->firmness ? strtoupper(str_replace('_', '-', (string) $supportPick->firmness)) : null;
+        @endphp
+
+        @if($supportPick)
+            <section class="matelas-banner" aria-label="Le soutien qui prend soin de votre dos">
+                <div class="container">
+                    <div class="matelas-banner__grid">
+                        <div>
+                            <h2 class="matelas-banner__title">Le soutien qui prend soin de votre dos</h2>
+                            <p class="matelas-banner__desc">{{ $supportPick->short_description ?: 'Un maintien optimal pour soulager les tensions, améliorer la posture et retrouver un sommeil réparateur.' }}</p>
+
+                            <div class="matelas-banner__meta">
+                                @if($supportTag)
+                                    <span class="matelas-badge">{{ $supportTag }}</span>
+                                @endif
+                                @if(!empty($supportPick->material))
+                                    <span class="matelas-badge">{{ $supportPick->material }}</span>
+                                @endif
+                                @if(!empty($supportPick->reviews_count))
+                                    <span class="matelas-badge">{{ (int) $supportPick->reviews_count }} avis</span>
+                                @endif
+                            </div>
+
+                            <div class="matelas-banner__cta">
+                                <button
+                                    class="matelas-btn matelas-btn--primary"
+                                    type="button"
+                                    data-quick-add
+                                    data-product-id="{{ $supportPick->id }}"
+                                    data-product-name="{{ e($supportPick->name) }}"
+                                    data-product-image="{{ $supportImg }}"
+                                    data-product-slug="{{ $supportPick->slug }}"
+                                    data-default-variant-id="{{ $supportDefaultVariant?->id }}"
+                                    data-variants='@json($supportVariantsData)'
+                                >Commander</button>
+
+                                <a class="matelas-btn matelas-btn--navy" href="{{ route('product.show', $supportPick->slug) }}">Voir le produit</a>
+
+                                <div style="font-weight:1000;color:rgba(241,245,249,.92)">
+                                    {{ $supportPrice !== null ? number_format((float) $supportPrice, 0, ',', '.') . 'F' : '' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="matelas-banner__media" href="{{ route('product.show', $supportPick->slug) }}" style="text-decoration:none;color:inherit">
+                            <img src="{{ $supportImg }}" alt="{{ $supportPick->name }}" loading="lazy">
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
 
         @php
             $tabDefs = [
