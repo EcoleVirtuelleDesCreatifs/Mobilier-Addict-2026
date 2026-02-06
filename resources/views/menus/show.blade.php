@@ -63,15 +63,6 @@
         .matelas-block{padding:22px 0;}
         .matelas-block__pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:999px;background:var(--ma-rose);color:#fff;font-weight:1000;text-transform:uppercase;letter-spacing:.05em;font-size:11px;}
         .matelas-block__head{text-align:center;margin-bottom:16px;}
-        .matelas-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
-        .matelas-card{background:linear-gradient(180deg,#ff3a7f,#ff1f6f);border-radius:22px;min-height:168px;position:relative;overflow:hidden;box-shadow:0 18px 44px rgba(255,58,127,.28);}
-        .matelas-card__inner{padding:14px 14px 16px;color:#fff;display:flex;flex-direction:column;gap:8px;height:100%;}
-        .matelas-card__kicker{font-weight:950;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78);}
-        .matelas-card__title{margin:0;font-weight:1000;letter-spacing:-.02em;line-height:1.15;font-size:13px;}
-        .matelas-card__price{margin-top:auto;font-weight:1000;font-size:13px;}
-        .matelas-card__actions{display:flex;gap:10px;justify-content:space-between;align-items:center;}
-        .matelas-card__btn{width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.24);display:inline-flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;}
-        .matelas-card__btn:hover{background:rgba(255,255,255,.22);}
         .matelas-quick{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:999px;background:#0a1733;color:#fff;font-weight:950;border:0;cursor:pointer;}
         .matelas-quick:hover{filter:brightness(1.06);}
 
@@ -131,14 +122,12 @@
             .matelas-section__grid{grid-template-columns:1fr;}
             .matelas-all__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
             .matelas-modal__content{grid-template-columns:1fr;}
-            .matelas-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
             .matelas-tabs__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
         }
         @media (max-width: 520px){
             .matelas-hero{padding-top:56px;}
             .matelas-hero__title{font-size:30px;}
             .matelas-all__grid{grid-template-columns:1fr;}
-            .matelas-grid{grid-template-columns:1fr;}
             .matelas-tabs__grid{grid-template-columns:1fr;}
         }
     </style>
@@ -179,46 +168,68 @@
                     <span class="matelas-block__pill">Nos matelas à petit prix</span>
                 </div>
 
-                <div class="matelas-grid">
-                    @foreach($cheapMatelas as $product)
-                        @php
-                            $img = $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&h=700&fit=crop';
-                            $defaultVariant = $product?->variants?->sortBy('price')->first();
-                            $price = $defaultVariant?->price ?? $product?->price;
-                            $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
-                                'id' => (int) $v->id,
-                                'thickness_cm' => $v->thickness_cm,
-                                'places' => $v->places,
-                                'price' => (float) $v->price,
-                                'stock' => $v->stock,
-                            ])->values();
-                        @endphp
+                <section class="best-modern" aria-label="Nos matelas à petit prix">
+                    <div class="best-modern__grid">
+                        @foreach($cheapMatelas as $product)
+                            @php
+                                $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
+                                $defaultVariant = $product?->variants?->sortBy('price')->first();
+                                $price = $defaultVariant?->price ?? $product?->price;
+                                $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
+                                    'id' => (int) $v->id,
+                                    'thickness_cm' => $v->thickness_cm,
+                                    'places' => $v->places,
+                                    'price' => (float) $v->price,
+                                    'stock' => $v->stock,
+                                ])->values();
+                            @endphp
 
-                        <article class="matelas-card" aria-label="{{ $product->name }}">
-                            <div class="matelas-card__inner">
-                                <div class="matelas-card__kicker">Matelas</div>
-                                <h3 class="matelas-card__title">{{ $product->name }}</h3>
-                                <div class="matelas-card__actions">
-                                    <div class="matelas-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
-                                    <button
-                                        class="matelas-card__btn"
-                                        type="button"
-                                        data-quick-add
-                                        data-product-id="{{ $product->id }}"
-                                        data-product-name="{{ e($product->name) }}"
-                                        data-product-image="{{ $img }}"
-                                        data-product-slug="{{ $product->slug }}"
-                                        data-default-variant-id="{{ $defaultVariant?->id }}"
-                                        data-variants='@json($variantsData)'
-                                        aria-label="Ajouter {{ $product->name }}"
-                                    >
-                                        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                                    </button>
+                            <article class="product-card" aria-label="{{ $product->name }}">
+                                @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                                    <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
+                                @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
+                                    <div class="product-card__badge product-card__badge--new">NEW</div>
+                                @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
+                                    <div class="product-card__badge product-card__badge--hot">HOT</div>
+                                @endif
+
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <div class="product-card__media">
+                                        <img src="{{ $img }}" alt="{{ $product->name }}" loading="lazy" />
+                                    </div>
+                                </a>
+
+                                <div class="product-card__body">
+                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                        <h3 class="product-card__name">{{ $product->name }}</h3>
+                                    </a>
+                                    <div class="product-card__footer">
+                                        <div class="product-card__prices">
+                                            <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
+                                            @if(!empty($product->formatted_old_price))
+                                                <span class="product-card__old">{{ $product->formatted_old_price }}</span>
+                                            @endif
+                                        </div>
+                                        <button
+                                            class="product-card__btn"
+                                            type="button"
+                                            data-quick-add
+                                            data-product-id="{{ $product->id }}"
+                                            data-product-name="{{ e($product->name) }}"
+                                            data-product-image="{{ $img }}"
+                                            data-product-slug="{{ $product->slug }}"
+                                            data-default-variant-id="{{ $defaultVariant?->id }}"
+                                            data-variants='@json($variantsData)'
+                                            aria-label="Ajouter au panier"
+                                        >
+                                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                </section>
 
                 <div style="display:flex;justify-content:center;margin-top:14px;">
                     <a class="matelas-btn matelas-btn--navy" href="#tous">Charger</a>
@@ -266,10 +277,11 @@
                         @endphp
 
                         <div class="matelas-tabs__panel{{ $idx === 0 ? ' is-active' : '' }}" data-tab-panel="{{ $tab['key'] }}" role="tabpanel">
-                            <div class="matelas-tabs__grid">
+                            <section class="best-modern" aria-label="{{ $tab['label'] }}">
+                                <div class="best-modern__grid">
                                 @foreach($items as $product)
                                     @php
-                                        $img = $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&h=700&fit=crop';
+                                        $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
                                         $defaultVariant = $product?->variants?->sortBy('price')->first();
                                         $price = $defaultVariant?->price ?? $product?->price;
                                         $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
@@ -281,14 +293,34 @@
                                         ])->values();
                                     @endphp
 
-                                    <article class="matelas-card" aria-label="{{ $product->name }}">
-                                        <div class="matelas-card__inner">
-                                            <div class="matelas-card__kicker">Matelas</div>
-                                            <h3 class="matelas-card__title">{{ $product->name }}</h3>
-                                            <div class="matelas-card__actions">
-                                                <div class="matelas-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
+                                    <article class="product-card" aria-label="{{ $product->name }}">
+                                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
+                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
+                                            <div class="product-card__badge product-card__badge--new">NEW</div>
+                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
+                                            <div class="product-card__badge product-card__badge--hot">HOT</div>
+                                        @endif
+
+                                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                            <div class="product-card__media">
+                                                <img src="{{ $img }}" alt="{{ $product->name }}" loading="lazy" />
+                                            </div>
+                                        </a>
+
+                                        <div class="product-card__body">
+                                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                                <h3 class="product-card__name">{{ $product->name }}</h3>
+                                            </a>
+                                            <div class="product-card__footer">
+                                                <div class="product-card__prices">
+                                                    <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
+                                                    @if(!empty($product->formatted_old_price))
+                                                        <span class="product-card__old">{{ $product->formatted_old_price }}</span>
+                                                    @endif
+                                                </div>
                                                 <button
-                                                    class="matelas-card__btn"
+                                                    class="product-card__btn"
                                                     type="button"
                                                     data-quick-add
                                                     data-product-id="{{ $product->id }}"
@@ -297,15 +329,16 @@
                                                     data-product-slug="{{ $product->slug }}"
                                                     data-default-variant-id="{{ $defaultVariant?->id }}"
                                                     data-variants='@json($variantsData)'
-                                                    aria-label="Ajouter {{ $product->name }}"
+                                                    aria-label="Ajouter au panier"
                                                 >
-                                                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                                                 </button>
                                             </div>
                                         </div>
                                     </article>
                                 @endforeach
-                            </div>
+                                </div>
+                            </section>
 
                             <div style="display:flex;justify-content:center;margin-top:14px;">
                                 <a class="matelas-btn matelas-btn--navy" href="#tous">Charger</a>
