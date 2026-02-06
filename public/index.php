@@ -5,6 +5,12 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// Static maintenance toggle (works even if Laravel cannot boot)
+if (file_exists(__DIR__ . '/.maintenance')) {
+    require __DIR__ . '/maintenance.php';
+    exit;
+}
+
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
