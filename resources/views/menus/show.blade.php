@@ -17,7 +17,7 @@
             --ma-muted:#64748b;
             background:linear-gradient(180deg,#fff,#f8fafc);
         }
-        .matelas-hero{padding:70px 0 46px;background:linear-gradient(180deg, #1f2a45 0%, #2b3650 100%);color:#fff;position:relative;overflow:hidden;}
+        .matelas-hero{padding:140px 0 110px;min-height:520px;display:flex;align-items:center;background:linear-gradient(180deg, #1f2a45 0%, #2b3650 100%);color:#fff;position:relative;overflow:hidden;}
         .matelas-hero::before{content:"";position:absolute;inset:-2px;background:radial-gradient(900px 420px at 30% 20%, rgba(255,58,127,.20), rgba(255,58,127,0) 60%), radial-gradient(900px 520px at 80% 10%, rgba(110,231,255,.14), rgba(110,231,255,0) 62%);pointer-events:none;}
         .matelas-hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:rgba(255,255,255,.10);pointer-events:none;}
         .matelas-hero__inner{text-align:center;max-width:960px;margin:0 auto;position:relative;}
@@ -63,8 +63,25 @@
         .matelas-cartbtn{border:0;cursor:pointer;}
 
         .matelas-block{padding:22px 0;}
-        .matelas-block__pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:999px;background:var(--ma-rose);color:#fff;font-weight:1000;text-transform:uppercase;letter-spacing:.05em;font-size:11px;}
-        .matelas-block__head{text-align:center;margin-bottom:16px;}
+        .matelas-block__head{position:relative;text-align:center;margin-bottom:18px;padding:46px 16px 22px;border-radius:28px;background:linear-gradient(180deg, rgba(11,27,58,.07), rgba(11,27,58,0));overflow:hidden;border:1px solid rgba(226,232,240,.85);}
+        .matelas-block__head::before{content:"";position:absolute;inset:-2px;background:radial-gradient(760px 260px at 18% 30%, rgba(255,58,127,.18), rgba(255,58,127,0) 60%), radial-gradient(760px 320px at 82% 20%, rgba(110,231,255,.14), rgba(110,231,255,0) 62%);pointer-events:none;}
+        .matelas-block__head::after{content:"PETIT PRIX";position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-weight:1000;letter-spacing:.18em;text-transform:uppercase;font-size:72px;line-height:1;color:rgba(11,27,58,.06);white-space:nowrap;pointer-events:none;}
+        .matelas-block__head > *{position:relative;}
+        .matelas-block__pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,var(--ma-rose),#ff2e72);color:#fff;font-weight:1000;text-transform:uppercase;letter-spacing:.08em;font-size:10px;box-shadow:0 18px 46px rgba(255,58,127,.25);}
+        .matelas-block__title{margin:16px 0 10px;font-weight:1000;letter-spacing:-.05em;line-height:1.00;font-size:42px;color:var(--ma-ink);}
+        .matelas-block__title span{background:linear-gradient(135deg,var(--ma-navy),#0b1b3a 35%, var(--ma-rose));-webkit-background-clip:text;background-clip:text;color:transparent;}
+        .matelas-block__subtitle{margin:0 auto;max-width:70ch;color:#475569;font-weight:800;font-size:13px;line-height:1.6;}
+        .matelas-block__cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+
+        .matelas-block__title::after{content:"";display:block;height:4px;width:min(260px, 70%);margin:14px auto 0;border-radius:999px;background:linear-gradient(90deg, rgba(255,58,127,0), rgba(255,58,127,.95), rgba(110,231,255,.55), rgba(255,58,127,0));filter:blur(.2px);animation:maSweep 2.8s ease-in-out infinite;}
+
+        .matelas-orb{position:absolute;width:220px;height:220px;border-radius:999px;filter:blur(26px);opacity:.55;pointer-events:none;}
+        .matelas-orb--a{left:-60px;top:-70px;background:radial-gradient(circle at 30% 30%, rgba(255,58,127,.55), rgba(255,58,127,0) 60%);animation:maFloatA 8s ease-in-out infinite;}
+        .matelas-orb--b{right:-70px;bottom:-80px;background:radial-gradient(circle at 30% 30%, rgba(110,231,255,.40), rgba(110,231,255,0) 60%);animation:maFloatB 10s ease-in-out infinite;}
+
+        @keyframes maSweep{0%,100%{transform:translateX(-18px);opacity:.75}50%{transform:translateX(18px);opacity:1}}
+        @keyframes maFloatA{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,22px)}}
+        @keyframes maFloatB{0%,100%{transform:translate(0,0)}50%{transform:translate(-22px,-16px)}}
         .matelas-quick{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:999px;background:#0a1733;color:#fff;font-weight:950;border:0;cursor:pointer;}
         .matelas-quick:hover{filter:brightness(1.06);}
 
@@ -127,7 +144,7 @@
         .matelas-mini__add:hover{filter:brightness(1.06);}
 
         @media (max-width: 991px){
-            .matelas-hero{padding:60px 0 38px;}
+            .matelas-hero{padding:110px 0 86px;min-height:460px;}
             .matelas-hero__title{font-size:36px;}
             .matelas-section__grid{grid-template-columns:1fr;}
             .matelas-all__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -136,10 +153,13 @@
             .matelas-banner__grid{grid-template-columns:1fr;}
         }
         @media (max-width: 520px){
-            .matelas-hero{padding:54px 0 32px;}
+            .matelas-hero{padding:96px 0 66px;min-height:420px;}
             .matelas-hero__title{font-size:30px;}
             .matelas-all__grid{grid-template-columns:1fr;}
             .matelas-tabs__grid{grid-template-columns:1fr;}
+            .matelas-block__head{padding:36px 14px 18px;}
+            .matelas-block__head::after{font-size:46px;}
+            .matelas-block__title{font-size:32px;}
         }
     </style>
 
@@ -176,7 +196,15 @@
         <section class="matelas-block" id="petit-prix" aria-label="Nos matelas à petit prix">
             <div class="container">
                 <div class="matelas-block__head">
+                    <span class="matelas-orb matelas-orb--a" aria-hidden="true"></span>
+                    <span class="matelas-orb matelas-orb--b" aria-hidden="true"></span>
                     <span class="matelas-block__pill">Nos matelas à petit prix</span>
+                    <h2 class="matelas-block__title">Le confort <span>sans exploser</span> ton budget</h2>
+                    <p class="matelas-block__subtitle">Des modèles sélectionnés pour t’offrir un excellent soutien, au meilleur prix. Ajoute au panier en 2 clics, puis choisis l’épaisseur et le nombre de places.</p>
+                    <div class="matelas-block__cta">
+                        <a class="matelas-btn matelas-btn--primary" href="#differents">Voir les 4 modèles</a>
+                        <a class="matelas-btn matelas-btn--navy" href="#tous">Tous les matelas</a>
+                    </div>
                 </div>
 
                 <section class="best-modern" aria-label="Nos matelas à petit prix">
