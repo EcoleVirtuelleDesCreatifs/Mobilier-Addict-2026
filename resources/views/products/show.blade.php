@@ -53,7 +53,7 @@
                         @if($product->category)
                             <span class="product-info__category">{{ $product->category->name }}</span>
                         @endif
-                        <h1 class="product-info__title">{{ $product->name }}</h1>
+                        <h1 class="product-info__title" data-original-title="{{ e($product->name) }}">{{ $product->name }}</h1>
                         @if($product->short_description)
                             <p class="product-info__subtitle">{{ $product->short_description }}</p>
                         @endif
@@ -346,18 +346,22 @@
             </div>
             <div class="product-related__grid">
                 @foreach($relatedProducts as $index => $related)
-                    <a href="{{ route('product.show', $related->slug) }}" class="evc-carousel-card">
+                    <article class="evc-carousel-card" aria-label="{{ $related->name }}">
                         <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
                         @if($related->discount_percent)
                             <div class="evc-carousel-card__badge">-{{ (int) $related->discount_percent }}%</div>
                         @elseif($index === 0)
                             <div class="evc-carousel-card__badge evc-carousel-card__badge--alt">Top</div>
                         @endif
-                        <div class="evc-carousel-card__media">
-                            <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" loading="lazy" />
-                        </div>
+                        <a href="{{ route('product.show', $related->slug) }}" style="text-decoration:none;color:inherit">
+                            <div class="evc-carousel-card__media">
+                                <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" loading="lazy" />
+                            </div>
+                        </a>
                         <div class="evc-carousel-card__body">
-                            <h3 class="evc-carousel-card__name">{{ $related->name }}</h3>
+                            <a href="{{ route('product.show', $related->slug) }}" style="text-decoration:none;color:inherit">
+                                <h3 class="evc-carousel-card__name">{{ $related->name }}</h3>
+                            </a>
                             <p class="evc-carousel-card__desc">Qualité premium • Livraison rapide</p>
                             <div class="evc-carousel-card__footer">
                                 <div class="evc-carousel-card__prices">
@@ -366,12 +370,16 @@
                                         <span class="evc-carousel-card__old">{{ $related->formatted_old_price }}</span>
                                     @endif
                                 </div>
-                                <span class="evc-carousel-card__btn" aria-label="Voir le produit">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
-                                </span>
                             </div>
+
+                            <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $related->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                            </form>
                         </div>
-                    </a>
+                    </article>
                 @endforeach
             </div>
         </div>
@@ -618,6 +626,42 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const titleContainerEl = document.querySelector('.product-info__header') || document;
+    const baseTitle = (() => {
+        const el = document.querySelector('.product-info__title');
+        if (!el) return '';
+        const attr = el.getAttribute('data-original-title');
+        return String(attr || el.textContent || '').trim();
+    })();
+
+    const setDynamicTitle = (variant, a, p) => {
+        const el = document.querySelector('.product-info__title');
+        if (!el || !baseTitle) return;
+
+        const places = p !== null && p !== undefined && String(p).trim() !== ''
+            ? String(p).padStart(2, '0')
+            : '';
+
+        let suffix = '';
+        if (hasVariantType) {
+            const t = a ? String(a).trim() : '';
+            if (t && places) suffix = t + ' - ' + places + ' places';
+            else if (t) suffix = t;
+            else if (places) suffix = places + ' places';
+        } else {
+            const th = a ? String(a).trim() : '';
+            if (places && th) suffix = places + ' places épasseurs ' + th + ' CM';
+            else if (places) suffix = places + ' places';
+            else if (th) suffix = 'épasseurs ' + th + ' CM';
+        }
+
+        const next = suffix ? (baseTitle + ' - ' + suffix) : baseTitle;
+        el.textContent = next;
+        if (document && document.title) {
+            document.title = next;
+        }
+    };
+
     // Quantity controls
     const qtyInput = document.getElementById('qtyInput');
     const qtyMinus = document.getElementById('qtyMinus');
@@ -815,6 +859,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedVariantIdEl.value = String(v.id || '');
             }
             setVariant(v);
+
+            setDynamicTitle(v, a, p);
 
             if (variantHintEl) {
                 const okText = v && v.in_stock === false ? 'Indisponible' : 'Disponible';

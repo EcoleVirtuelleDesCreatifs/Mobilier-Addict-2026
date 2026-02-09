@@ -325,7 +325,7 @@
 <div class="mobile-menu-overlay"></div>
 <div class="mobile-menu-sidebar">
     <div class="mobile-menu-header">
-        <img src="{{ asset('assets/imgs/logo-2.png') }}" alt="InCotedivoire" class="mobile-logo">
+        <img src="{{ asset('assets/logo/mobile/logo.png') }}" alt="Mobilier Addict" class="mobile-logo">
         <button class="mobile-menu-close" aria-label="Fermer menu">
             <i class="ti-close"></i>
         </button>

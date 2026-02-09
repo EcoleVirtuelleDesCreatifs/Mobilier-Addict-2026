@@ -751,18 +751,22 @@
 
                         @if($carouselProducts->count())
                             @foreach($carouselProducts as $index => $product)
-                                <a href="{{ route('product.show', $product->slug) }}" class="evc-carousel-card">
+                                <article class="evc-carousel-card" aria-label="{{ $product->name }}">
                                     <div class="evc-carousel-card__rank">#{{ $index + 1 }}</div>
                                     @if($product->discount_percent)
                                         <div class="evc-carousel-card__badge">-{{ (int) $product->discount_percent }}%</div>
                                     @elseif($product->badge)
                                         <div class="evc-carousel-card__badge evc-carousel-card__badge--alt">{{ $product->badge }}</div>
                                     @endif
-                                    <div class="evc-carousel-card__media">
-                                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
-                                    </div>
+                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                        <div class="evc-carousel-card__media">
+                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                        </div>
+                                    </a>
                                     <div class="evc-carousel-card__body">
-                                        <h3 class="evc-carousel-card__name">{{ $product->name }}</h3>
+                                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                            <h3 class="evc-carousel-card__name">{{ $product->name }}</h3>
+                                        </a>
                                         <div class="evc-carousel-card__footer">
                                             <div class="evc-carousel-card__prices">
                                                 <span class="evc-carousel-card__price">{{ $product->formatted_price }}</span>
@@ -770,12 +774,15 @@
                                                     <span class="evc-carousel-card__old">{{ $product->formatted_old_price }}</span>
                                                 @endif
                                             </div>
-                                            <span class="evc-carousel-card__btn" aria-label="Voir le produit">
-                                                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
-                                            </span>
                                         </div>
+                                        <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                        </form>
                                     </div>
-                                </a>
+                                </article>
                             @endforeach
                         @else
                             @foreach(collect($fakeProducts)->take(8) as $index => $fp)
@@ -796,9 +803,6 @@
                                                     <span class="evc-carousel-card__old">{{ $fp['old'] }}</span>
                                                 @endif
                                             </div>
-                                            <span class="evc-carousel-card__btn" aria-label="Voir le produit">
-                                                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
-                                            </span>
                                         </div>
                                     </div>
                                 </a>

@@ -4,7 +4,7 @@
 @section('meta_description', "Découvrez toute notre collection de matelas et trouvez celui qui vous correspond.")
 
 @section('content')
-<section class="collection" aria-label="Toute la collection">
+<section class="collection" aria-label="Toute la collection" data-collection-page>
     <div class="container">
         <div class="collection__header">
             <div class="collection__intro">

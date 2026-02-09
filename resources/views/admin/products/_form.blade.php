@@ -53,8 +53,18 @@
                 <label class="form-label">Image{{ $isEdit ? ' (laisser vide pour conserver)' : '' }}</label>
                 <input type="file" name="image" class="form-control" {{ $isEdit ? '' : 'required' }}>
                 @if($isEdit)
-                    <div class="mt-2 rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
-                        <img src="{{ asset($product->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                    <div class="mt-2 d-flex align-items-end gap-2">
+                        <div class="rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
+                            <img src="{{ asset($product->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                        </div>
+                        @if(!empty($product->image))
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-danger"
+                                data-delete-url="{{ route('admin.products.image.destroy', $product) }}"
+                                data-confirm="Supprimer l'image principale ?"
+                            >Supprimer</button>
+                        @endif
                     </div>
                 @endif
             </div>
@@ -88,9 +98,18 @@
                 <input type="file" name="gallery[]" class="form-control" multiple>
                 @if($isEdit && !empty($product->gallery))
                     <div class="d-flex flex-wrap gap-2 mt-2">
-                        @foreach($product->gallery as $img)
-                            <div class="rounded-3 overflow-hidden" style="width:72px;height:72px;border:1px solid var(--admin-border);">
-                                <img src="{{ asset($img) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                        @foreach($product->gallery as $i => $img)
+                            <div class="d-flex flex-column gap-1">
+                                <div class="rounded-3 overflow-hidden" style="width:72px;height:72px;border:1px solid var(--admin-border);">
+                                    <img src="{{ asset($img) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                </div>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-danger"
+                                    style="padding:2px 8px;"
+                                    data-delete-url="{{ route('admin.products.gallery.destroy', [$product, $i]) }}"
+                                    data-confirm="Supprimer cette image ?"
+                                >Supprimer</button>
                             </div>
                         @endforeach
                     </div>
@@ -98,6 +117,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            document.querySelectorAll('[data-delete-url]').forEach(function (btn) {
+                btn.addEventListener('click', async function () {
+                    const url = btn.getAttribute('data-delete-url');
+                    if (!url) return;
+
+                    const message = btn.getAttribute('data-confirm') || 'Confirmer la suppression ?';
+                    if (!confirm(message)) return;
+
+                    btn.disabled = true;
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrf,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({ _method: 'DELETE' }),
+                            credentials: 'same-origin',
+                        });
+
+                        if (!res.ok) {
+                            window.location.href = url;
+                            return;
+                        }
+
+                        window.location.reload();
+                    } catch (e) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
 
     <div class="admin-card p-3">
         <div class="d-flex align-items-center justify-content-between gap-3 mb-2">

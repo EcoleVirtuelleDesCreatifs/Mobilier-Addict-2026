@@ -1,4 +1,4 @@
-        <section class="categories" aria-label="Nos univers">
+        <section class="categories" id="categories" aria-label="Nos univers">
             <div class="container">
                 @php($section = $homeSections['categories'] ?? null)
 
@@ -63,14 +63,53 @@
                 </div>
 
                 @if(($mattressProducts ?? collect())->count())
-                    <div class="best-modern__header" style="margin-top: 40px;">
-                        <h2 class="best-modern__title">Nos Matelas</h2>
-                        <p class="best-modern__subtitle">Tous les produits des catégories Matelas — découvrez la sélection complète</p>
+                    <div class="best-modern__header section-head section-head--mattress">
+                        <div class="section-head__reassurance" aria-label="Réassurance">
+                            <div class="section-head__reassurance-track" aria-hidden="true">
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Paiement sécurisé
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 7h13l3 4v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M16 7v4h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor" opacity=".15"/></svg>
+                                    Livraison rapide
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h10v16H7z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 8h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Garantie 10 ans
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11.5a8.5 8.5 0 1 1-4.2-7.3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M22 2l-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Support réactif
+                                </span>
+
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Paiement sécurisé
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 7h13l3 4v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M16 7v4h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor" opacity=".15"/></svg>
+                                    Livraison rapide
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4h10v16H7z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 8h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Garantie 10 ans
+                                </span>
+                                <span class="section-head__reassurance-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11.5a8.5 8.5 0 1 1-4.2-7.3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M22 2l-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                                    Support réactif
+                                </span>
+                            </div>
+                        </div>
+                        <span class="section-head__badge">Sélection sommeil</span>
+                        <h2 class="best-modern__title section-head__title">Nos Matelas</h2>
+                        <p class="best-modern__subtitle section-head__subtitle">Tous les produits des catégories Matelas — découvrez la sélection complète</p>
+                        <a class="section-head__cta" href="{{ route('univers.show', 'matelas') }}">Voir toute la collection</a>
                     </div>
 
                     <div class="best-modern__grid">
                         @foreach($mattressProducts as $product)
-                            <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="product-card">
+                            <article class="product-card" aria-label="{{ $product->name }}">
                                 @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
                                     <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
                                 @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
@@ -79,15 +118,19 @@
                                     <div class="product-card__badge product-card__badge--hot">HOT</div>
                                 @endif
 
-                                <div class="product-card__media">
-                                    @if($product->image)
-                                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                    @else
-                                        <img src="https://via.placeholder.com/400x400?text=Produit" alt="{{ $product->name }}" loading="lazy" />
-                                    @endif
-                                </div>
+                                <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                                    <div class="product-card__media">
+                                        @if($product->image)
+                                            <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                                        @else
+                                            <img src="https://via.placeholder.com/400x400?text=Produit" alt="{{ $product->name }}" loading="lazy" />
+                                        @endif
+                                    </div>
+                                </a>
                                 <div class="product-card__body">
-                                    <h3 class="product-card__name">{{ $product->name }}</h3>
+                                    <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                                        <h3 class="product-card__name">{{ $product->name }}</h3>
+                                    </a>
                                     <div class="product-card__footer">
                                         <div class="product-card__prices">
                                             <span class="product-card__price">{{ $product->formatted_price }}</span>
@@ -95,12 +138,16 @@
                                                 <span class="product-card__old">{{ $product->formatted_old_price }}</span>
                                             @endif
                                         </div>
-                                        <span class="product-card__btn">
-                                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
-                                        </span>
                                     </div>
+
+                                    <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                    </form>
                                 </div>
-                            </a>
+                            </article>
                         @endforeach
                     </div>
                 @endif

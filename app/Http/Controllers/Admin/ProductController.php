@@ -163,6 +163,63 @@ class ProductController extends Controller
         return redirect()->back()->with('status', $product->is_active ? 'Produit activé (en ligne).' : 'Produit désactivé (hors ligne).');
     }
 
+    public function destroyImage(Product $product)
+    {
+        $path = (string) ($product->image ?? '');
+        $this->deletePublicUploadIfLocal($path);
+
+        $product->update([
+            'image' => null,
+        ]);
+
+        return redirect()->back()->with('status', "Image principale supprimée.");
+    }
+
+    public function destroyGalleryImage(Product $product, $index)
+    {
+        $gallery = $product->gallery ?: [];
+        $gallery = is_array($gallery) ? $gallery : [];
+
+        $i = is_numeric($index) ? (int) $index : -1;
+        if (!array_key_exists($i, $gallery)) {
+            return redirect()->back()->with('status', "Image introuvable.");
+        }
+
+        $path = (string) ($gallery[$i] ?? '');
+        $this->deletePublicUploadIfLocal($path);
+
+        unset($gallery[$i]);
+        $gallery = array_values($gallery);
+
+        $product->update([
+            'gallery' => !empty($gallery) ? $gallery : null,
+        ]);
+
+        return redirect()->back()->with('status', "Image de la galerie supprimée.");
+    }
+
+    private function deletePublicUploadIfLocal(string $path): void
+    {
+        $path = trim($path);
+        if ($path === '') {
+            return;
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return;
+        }
+
+        $normalized = ltrim($path, '/');
+        if (!Str::startsWith($normalized, 'uploads/')) {
+            return;
+        }
+
+        $fullPath = public_path($normalized);
+        if (is_file($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
+
     private function storeUploadedImage($file, string $folder): string
     {
         $dir = public_path('uploads/' . $folder);

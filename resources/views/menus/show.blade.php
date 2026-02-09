@@ -84,9 +84,9 @@
         .matelas-block__head::before{content:"";position:absolute;inset:-2px;background:radial-gradient(760px 260px at 18% 30%, rgba(255,58,127,.18), rgba(255,58,127,0) 60%), radial-gradient(760px 320px at 82% 20%, rgba(110,231,255,.14), rgba(110,231,255,0) 62%);pointer-events:none;}
         .matelas-block__head::after{content:"PETIT PRIX";position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-weight:1000;letter-spacing:.18em;text-transform:uppercase;font-size:72px;line-height:1;color:rgba(11,27,58,.06);white-space:nowrap;pointer-events:none;}
         .matelas-block__head > *{position:relative;}
-        .matelas-marquee{position:absolute;left:-8%;right:-8%;top:14px;height:32px;display:flex;align-items:center;overflow:hidden;opacity:.9;pointer-events:none;transform:rotate(-2deg);}
-        .matelas-marquee__track{display:flex;gap:18px;align-items:center;white-space:nowrap;will-change:transform;animation:maMarquee 16s linear infinite;}
-        .matelas-marquee__item{display:inline-flex;align-items:center;gap:10px;font-weight:1000;letter-spacing:.10em;text-transform:uppercase;font-size:11px;color:rgba(11,27,58,.62);}
+        .matelas-marquee{position:absolute;left:-8%;right:-8%;top:14px;height:32px;display:flex;align-items:center;overflow:hidden;opacity:.9;pointer-events:none;transform:none;}
+        .matelas-marquee__track{display:flex;gap:18px;align-items:center;white-space:nowrap;will-change:transform;animation:maMarquee 16s linear infinite;transform:translateY(0);}
+        .matelas-marquee__item{display:inline-flex;align-items:center;gap:10px;font-weight:1000;letter-spacing:.10em;text-transform:uppercase;font-size:11px;line-height:1;color:rgba(11,27,58,.62);}
         .matelas-marquee__dot{width:6px;height:6px;border-radius:999px;background:linear-gradient(135deg,var(--ma-rose),rgba(110,231,255,.9));box-shadow:0 10px 20px rgba(255,58,127,.18);}
         .matelas-block__pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,var(--ma-rose),#ff2e72);color:#fff;font-weight:1000;text-transform:uppercase;letter-spacing:.08em;font-size:10px;box-shadow:0 18px 46px rgba(255,58,127,.25);}
         .matelas-block__title{margin:18px 0 10px;font-weight:1000;letter-spacing:-.06em;line-height:.98;font-size:48px;color:var(--ma-ink);}
@@ -337,7 +337,20 @@
                             @php
                                 $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
                                 $defaultVariant = $product?->variants?->sortBy('price')->first();
-                                $price = $defaultVariant?->price ?? $product?->price;
+                                $price = $product?->price;
+                                $titleVariant = ($product?->variants ?? collect())
+                                    ->filter(fn ($v) => $v && $v->price !== null)
+                                    ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
+                                    ->first();
+                                $displayName = $product->name;
+                                if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
+                                    $displayName = $product->name
+                                        . ' - '
+                                        . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
+                                        . ' places épasseurs '
+                                        . (int) $titleVariant->thickness_cm
+                                        . ' CM';
+                                }
                                 $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
                                     'id' => (int) $v->id,
                                     'thickness_cm' => $v->thickness_cm,
@@ -364,7 +377,7 @@
 
                                 <div class="product-card__body">
                                     <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                        <h3 class="product-card__name">{{ $product->name }}</h3>
+                                        <h3 class="product-card__name">{{ $displayName }}</h3>
                                     </a>
                                     <div class="product-card__footer">
                                         <div class="product-card__prices">
@@ -373,21 +386,14 @@
                                                 <span class="product-card__old">{{ $product->formatted_old_price }}</span>
                                             @endif
                                         </div>
-                                        <button
-                                            class="product-card__btn"
-                                            type="button"
-                                            data-quick-add
-                                            data-product-id="{{ $product->id }}"
-                                            data-product-name="{{ e($product->name) }}"
-                                            data-product-image="{{ $img }}"
-                                            data-product-slug="{{ $product->slug }}"
-                                            data-default-variant-id="{{ $defaultVariant?->id }}"
-                                            data-variants='@json($variantsData)'
-                                            aria-label="Ajouter au panier"
-                                        >
-                                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                                        </button>
                                     </div>
+
+                                    <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                    </form>
                                 </div>
                             </article>
                         @endforeach
@@ -456,7 +462,17 @@
                                     data-variants='@json($supportVariantsData)'
                                 >Commander</button>
 
-                                <a class="matelas-btn matelas-btn--navy" href="{{ route('product.show', $supportPick->slug) }}">Voir le produit</a>
+                                <button
+                                    class="matelas-btn matelas-btn--navy"
+                                    type="button"
+                                    data-quick-add
+                                    data-product-id="{{ $supportPick->id }}"
+                                    data-product-name="{{ e($supportPick->name) }}"
+                                    data-product-image="{{ $supportImg }}"
+                                    data-product-slug="{{ $supportPick->slug }}"
+                                    data-default-variant-id="{{ $supportDefaultVariant?->id }}"
+                                    data-variants='@json($supportVariantsData)'
+                                >Ajouter au panier</button>
 
                                 <div class="matelas-banner__price">
                                     {{ $supportPrice !== null ? number_format((float) $supportPrice, 0, ',', '.') . 'F' : '' }}
@@ -528,7 +544,20 @@
                                     @php
                                         $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
                                         $defaultVariant = $product?->variants?->sortBy('price')->first();
-                                        $price = $defaultVariant?->price ?? $product?->price;
+                                        $price = $product?->price;
+                                        $titleVariant = ($product?->variants ?? collect())
+                                            ->filter(fn ($v) => $v && $v->price !== null)
+                                            ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
+                                            ->first();
+                                        $displayName = $product->name;
+                                        if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
+                                            $displayName = $product->name
+                                                . ' - '
+                                                . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
+                                                . ' places épasseurs '
+                                                . (int) $titleVariant->thickness_cm
+                                                . ' CM';
+                                        }
                                         $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
                                             'id' => (int) $v->id,
                                             'thickness_cm' => $v->thickness_cm,
@@ -555,7 +584,7 @@
 
                                         <div class="product-card__body">
                                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                                <h3 class="product-card__name">{{ $product->name }}</h3>
+                                                <h3 class="product-card__name">{{ $displayName }}</h3>
                                             </a>
                                             <div class="product-card__footer">
                                                 <div class="product-card__prices">
@@ -564,20 +593,12 @@
                                                         <span class="product-card__old">{{ $product->formatted_old_price }}</span>
                                                     @endif
                                                 </div>
-                                                <button
-                                                    class="product-card__btn"
-                                                    type="button"
-                                                    data-quick-add
-                                                    data-product-id="{{ $product->id }}"
-                                                    data-product-name="{{ e($product->name) }}"
-                                                    data-product-image="{{ $img }}"
-                                                    data-product-slug="{{ $product->slug }}"
-                                                    data-default-variant-id="{{ $defaultVariant?->id }}"
-                                                    data-variants='@json($variantsData)'
-                                                    aria-label="Ajouter au panier"
-                                                >
-                                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                                                </button>
+                                                <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </article>

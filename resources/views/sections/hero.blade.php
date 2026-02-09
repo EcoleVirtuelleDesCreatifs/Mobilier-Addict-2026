@@ -1,19 +1,29 @@
         <section class="hero" aria-label="Accueil">
             <div class="hero__bg">
-                <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="eager" />
+                <video class="hero__bg-video" autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop">
+                    <source src="{{ asset('assets/video/hero.mp4') }}" type="video/mp4">
+                </video>
+                <img class="hero__bg-fallback" src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="eager" />
             </div>
             <div class="hero__overlay"></div>
             <div class="container hero__inner">
                 <div class="hero__content">
                     <span class="hero__badge">✨ Nouvelle collection 2026</span>
-                    <h1 class="hero__title">Réveillez-Vous<br><span>Transformé</span></h1>
+                    <h1 class="hero__title">Réveillez-Vous<br>
+                        <span class="hero__accent" aria-label="Transformé">
+                            <span class="hero__accent-word hero__accent-word--a">Transformé</span>
+                            <span class="hero__accent-word hero__accent-word--b">Reposé</span>
+                            <span class="hero__accent-word hero__accent-word--c">Énergisé</span>
+                            <span class="hero__accent-word hero__accent-word--d">Serein</span>
+                        </span>
+                    </h1>
                     <p class="hero__text">Découvrez nos matelas d'exception, conçus pour offrir à votre corps le repos qu'il mérite. Chaque nuit devient une expérience de bien-être absolu.</p>
                     <div class="hero__actions">
-                        <a class="hero__btn hero__btn--primary" href="#">
+                        <a class="hero__btn hero__btn--primary" href="#collection">
                             Explorer la collection
                             <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                         </a>
-                        <a class="hero__btn hero__btn--secondary" href="#">
+                        <a class="hero__btn hero__btn--secondary" href="#" data-video-trigger>
                             <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M10 8l6 4-6 4V8z" fill="currentColor"/></svg>
                             Voir la vidéo
                         </a>

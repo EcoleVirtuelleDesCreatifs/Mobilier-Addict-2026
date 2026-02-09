@@ -1,7 +1,13 @@
 <header class="header-new">
     <div class="header-new__top">
         <div class="container header-new__top-inner">
-            <span class="header-new__promo">🎁 Livraison GRATUITE dès 50.000F</span>
+            <div class="header-new__promo" aria-label="Promotion">
+                <div class="header-new__promo-swap" aria-hidden="true">
+                    <span class="header-new__promo-msg header-new__promo-msg--a">🎁 Livraison <strong>GRATUITE</strong> dès <strong>50.000F</strong></span>
+                    <span class="header-new__promo-msg header-new__promo-msg--b">Commandez en 30 secondes, c’est simple</span>
+                </div>
+                <span class="header-new__promo-fallback">🎁 Livraison GRATUITE dès 50.000F • Passez une commande rapidement</span>
+            </div>
             <div class="header-new__links">
                 <a href="#">Aide</a>
                 <a href="#">Suivre commande</a>
@@ -50,8 +56,9 @@
         <button class="mobile-nav__close" id="nav-close"><i class="fa-solid fa-xmark"></i></button>
         <div class="container header-new__nav-inner">
             <div class="mobile-nav__header">
-                <h3 class="mobile-nav__title"><i class="fa-solid fa-bed"></i> Mobilier Addict</h3>
-                <p class="mobile-nav__subtitle">Votre partenaire sommeil premium</p>
+                <a class="mobile-nav__logo" href="{{ route('home') }}" aria-label="Accueil">
+                    <img class="mobile-nav__logo-img" src="{{ asset('assets/logo/mobile/logo.png') }}" alt="Mobilier Addict" loading="eager" />
+                </a>
             </div>
             @forelse(($headerMenus ?? collect()) as $menu)
                 @php
@@ -109,5 +116,24 @@
                 </div>
             </div>
         </div>
+    </nav>
+
+    <nav class="mobile-bottom-bar" aria-label="Navigation mobile">
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('home') ? 'is-active' : '' }}" href="{{ route('home') }}">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            <span>Accueil</span>
+        </a>
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('univers.show') && request()->route('slug') === 'matelas' ? 'is-active' : '' }}" href="{{ route('univers.show', 'matelas') }}">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 7V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Matelas</span>
+        </a>
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('univers.show') && request()->route('slug') === 'oreillers' ? 'is-active' : '' }}" href="{{ route('univers.show', 'oreillers') }}">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V9z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 10H5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 10h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Oreillers</span>
+        </a>
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('univers.show') && request()->route('slug') === 'draps-couettes' ? 'is-active' : '' }}" href="{{ route('univers.show', 'draps-couettes') }}">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 5h12a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 13h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Draps</span>
+        </a>
     </nav>
 </header>

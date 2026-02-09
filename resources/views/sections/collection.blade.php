@@ -1,4 +1,4 @@
-        <section class="collection" aria-label="Notre Collection" data-collection>
+        <section class="collection" id="collection" aria-label="Notre Collection" data-collection>
             <div class="container">
                 <div class="collection__header">
                     <div class="collection__intro">

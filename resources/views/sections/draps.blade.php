@@ -167,7 +167,7 @@
 
             <div class="best-modern__grid">
                 @foreach($drapsProducts as $product)
-                    <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="product-card">
+                    <article class="product-card" aria-label="{{ $product->name }}">
                         @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
                             <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
                         @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
@@ -176,15 +176,19 @@
                             <div class="product-card__badge product-card__badge--hot">HOT</div>
                         @endif
 
-                        <div class="product-card__media">
-                            @if($product->image)
-                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                            @else
-                                <img src="https://via.placeholder.com/400x400?text=Produit" alt="{{ $product->name }}" loading="lazy" />
-                            @endif
-                        </div>
+                        <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                            <div class="product-card__media">
+                                @if($product->image)
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                                @else
+                                    <img src="https://via.placeholder.com/400x400?text=Produit" alt="{{ $product->name }}" loading="lazy" />
+                                @endif
+                            </div>
+                        </a>
                         <div class="product-card__body">
-                            <h3 class="product-card__name">{{ $product->name }}</h3>
+                            <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                                <h3 class="product-card__name">{{ $product->name }}</h3>
+                            </a>
                             <div class="product-card__footer">
                                 <div class="product-card__prices">
                                     <span class="product-card__price">{{ $product->formatted_price }}</span>
@@ -192,12 +196,16 @@
                                         <span class="product-card__old">{{ $product->formatted_old_price }}</span>
                                     @endif
                                 </div>
-                                <span class="product-card__btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
-                                </span>
                             </div>
+
+                            <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                            </form>
                         </div>
-                    </a>
+                    </article>
                 @endforeach
             </div>
         @endif

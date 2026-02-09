@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\HomeSectionController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\FacebookPixelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController as FrontMenuController;
 use App\Http\Controllers\ProfileController;
@@ -224,6 +225,9 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
 
+    Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->name('admin.settings.facebook-pixel.edit');
+    Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->name('admin.settings.facebook-pixel.update');
+
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
 
@@ -277,6 +281,8 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/save-the-date/{saveTheDate}', [SaveTheDateController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.save-the-date.destroy');
 
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
+    Route::delete('/products/{product}/image', [AdminProductController::class, 'destroyImage'])->middleware('permission:products.manage')->name('admin.products.image.destroy');
+    Route::delete('/products/{product}/gallery/{index}', [AdminProductController::class, 'destroyGalleryImage'])->middleware('permission:products.manage')->name('admin.products.gallery.destroy');
     Route::resource('products', AdminProductController::class)->middleware('permission:products.manage')->names('admin.products');
     Route::resource('categories', CategoryController::class)->middleware('permission:categories.manage')->names('admin.categories');
     Route::get('/orders', [OrderController::class, 'index'])->middleware('permission:orders.view')->name('admin.orders.index');

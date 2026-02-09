@@ -77,7 +77,7 @@
                 document.body.style.overflow = '';
             };
 
-            section.querySelectorAll('[data-video-trigger]').forEach((el) => {
+            document.querySelectorAll('[data-video-trigger]').forEach((el) => {
                 el.addEventListener('click', (e) => {
                     e.preventDefault();
                     open();
