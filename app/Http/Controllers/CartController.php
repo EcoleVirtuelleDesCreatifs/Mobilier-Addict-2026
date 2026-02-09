@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use App\Notifications\AdminCartItemAddedNotification;
 use App\Notifications\AdminOrderPlacedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,25 @@ class CartController extends Controller
         ];
 
         $this->putCart($cart);
+
+        $shouldNotify = true;
+        $throttleSeconds = 300;
+        $lastNotifiedAt = (int) session()->get('admin_notif.cart_add.last_at', 0);
+        if ($lastNotifiedAt > 0 && (time() - $lastNotifiedAt) < $throttleSeconds) {
+            $shouldNotify = false;
+        }
+
+        if ($shouldNotify) {
+            $admins = User::query()
+                ->where('is_admin', true)
+                ->where('is_active', true)
+                ->get();
+
+            if ($admins->isNotEmpty()) {
+                Notification::send($admins, new AdminCartItemAddedNotification($product, $variant, $qty));
+                session()->put('admin_notif.cart_add.last_at', time());
+            }
+        }
 
         $redirectTo = $validated['redirect_to'] ?? null;
         if ($redirectTo === 'shipping') {

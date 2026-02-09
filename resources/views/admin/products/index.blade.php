@@ -80,7 +80,7 @@
                                 <tr style="border-top: 1px solid var(--admin-border);">
                                     <td>
                                         <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
-                                            <img src="{{ asset($product->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                            <img src="@image_url($product->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                                         </div>
                                     </td>
                                     <td>

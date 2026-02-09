@@ -55,7 +55,7 @@
                 @if($isEdit)
                     <div class="mt-2 d-flex align-items-end gap-2">
                         <div class="rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
-                            <img src="{{ asset($product->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                            <img src="@image_url($product->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                         </div>
                         @if(!empty($product->image))
                             <button
@@ -101,7 +101,7 @@
                         @foreach($product->gallery as $i => $img)
                             <div class="d-flex flex-column gap-1">
                                 <div class="rounded-3 overflow-hidden" style="width:72px;height:72px;border:1px solid var(--admin-border);">
-                                    <img src="{{ asset($img) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                    <img src="@image_url($img)" alt="" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
                                 <button
                                     type="button"
