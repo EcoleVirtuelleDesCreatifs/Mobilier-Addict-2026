@@ -31,16 +31,16 @@
                         @elseif($product->badge)
                             <span class="product-gallery__badge product-gallery__badge--alt">{{ $product->badge }}</span>
                         @endif
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" id="mainImage" />
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" id="mainImage" />
                     </div>
                     @if($product->gallery && count($product->gallery) > 0)
                         <div class="product-gallery__thumbs">
-                            <button class="product-gallery__thumb product-gallery__thumb--active" data-img="{{ asset($product->image) }}">
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" />
+                            <button class="product-gallery__thumb product-gallery__thumb--active" data-img="@image_url($product->image)">
+                                <img src="@image_url($product->image)" alt="{{ $product->name }}" />
                             </button>
                             @foreach($product->gallery as $img)
-                                <button class="product-gallery__thumb" data-img="{{ asset($img) }}">
-                                    <img src="{{ asset($img) }}" alt="{{ $product->name }}" />
+                                <button class="product-gallery__thumb" data-img="@image_url($img)">
+                                    <img src="@image_url($img)" alt="{{ $product->name }}" />
                                 </button>
                             @endforeach
                         </div>
