@@ -27,7 +27,11 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+        $products = $query
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15)
+            ->withQueryString();
 
         $productsTotalCount = Product::query()->count();
         $productsOnlineCount = Product::query()->where('is_active', true)->count();

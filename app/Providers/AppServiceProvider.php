@@ -29,8 +29,10 @@ class AppServiceProvider extends ServiceProvider
 
     echo (function ($path) {
         if (!$path) {
-            return '';
+            return asset('assets/logo/favicon.png');
         }
+
+        $path = str_replace('\\', '/', (string) $path);
 
         if (\Illuminate\Support\Str::startsWith($path, ['http://', 'https://', '//'])) {
             return $path;
