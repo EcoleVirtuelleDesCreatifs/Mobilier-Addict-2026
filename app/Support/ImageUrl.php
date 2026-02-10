@@ -27,8 +27,12 @@ class ImageUrl
 
         $prefix = (string) env('IMAGE_URL_PUBLIC_PREFIX', 'storage');
         $useStorageAppPublic = $prefix === 'storage_app_public';
+        $usePublicStorage = $prefix === 'public_storage';
 
         if (Str::startsWith($path, ['uploads/', 'storage/'])) {
+            if ($usePublicStorage && Str::startsWith($path, ['storage/'])) {
+                return asset('public/' . $path);
+            }
             return asset($path);
         }
 
@@ -36,6 +40,10 @@ class ImageUrl
 
         if ($useStorageAppPublic) {
             return asset('storage/app/public/' . $path);
+        }
+
+        if ($usePublicStorage) {
+            return asset('public/storage/' . $path);
         }
 
         return asset('storage/' . $path);
