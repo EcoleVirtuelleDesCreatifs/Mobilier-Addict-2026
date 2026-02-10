@@ -25,11 +25,18 @@ class ImageUrl
 
         $path = ltrim($path, '/');
 
+        $prefix = (string) env('IMAGE_URL_PUBLIC_PREFIX', 'storage');
+        $useStorageAppPublic = $prefix === 'storage_app_public';
+
         if (Str::startsWith($path, ['uploads/', 'storage/'])) {
             return asset($path);
         }
 
         $path = preg_replace('#^public/#', '', $path);
+
+        if ($useStorageAppPublic) {
+            return asset('storage/app/public/' . $path);
+        }
 
         return asset('storage/' . $path);
     }
