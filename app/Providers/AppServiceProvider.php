@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Menu;
+use App\Support\ImageUrl;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
@@ -23,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::directive('image_url', function ($expression) {
-            return "<?php echo image_url({$expression}); ?>";
+            return "<?php echo \\" . ImageUrl::class . "::url({$expression}); ?>";
         });
 
         View::composer('partials.header', function ($view) {
