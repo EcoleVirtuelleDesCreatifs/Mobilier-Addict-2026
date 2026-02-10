@@ -167,7 +167,7 @@
                                 'id' => (int) $v->id,
                                 'variant_type' => $v->variant_type ? (string) $v->variant_type : null,
                                 'thickness_cm' => (int) $v->thickness_cm,
-                                'places' => (int) $v->places,
+                                'places' => (float) $v->places,
                                 'price' => (float) $v->price,
                                 'formatted_price' => $v->formatted_price,
                                 'formatted_old_price' => $v->formatted_old_price,

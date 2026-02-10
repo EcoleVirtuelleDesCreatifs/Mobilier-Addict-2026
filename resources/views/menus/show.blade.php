@@ -344,9 +344,13 @@
                                     ->first();
                                 $displayName = $product->name;
                                 if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
+                                    $placesValue = (float) $titleVariant->places;
+                                    $placesLabel = fmod($placesValue, 1.0) === 0.0
+                                        ? (string) (int) $placesValue
+                                        : str_replace('.', ',', number_format($placesValue, 1, '.', ''));
                                     $displayName = $product->name
                                         . ' - '
-                                        . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
+                                        . str_pad((string) $placesLabel, 2, '0', STR_PAD_LEFT)
                                         . ' places épasseurs '
                                         . (int) $titleVariant->thickness_cm
                                         . ' CM';

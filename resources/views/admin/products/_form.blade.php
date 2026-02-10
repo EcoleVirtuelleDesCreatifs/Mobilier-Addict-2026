@@ -188,7 +188,7 @@
                                 <input type="number" class="form-control" name="variants[{{ $i }}][thickness_cm]" value="{{ $row['thickness_cm'] ?? '' }}" min="0" step="1" placeholder="Ex: 30">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" min="1" step="1" placeholder="Ex: 2">
+                                <input type="number" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" min="1" step="0.5" placeholder="Ex: 2.5">
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="variants[{{ $i }}][price]" value="{{ $row['price'] ?? '' }}" min="0" step="1" placeholder="Ex: 105000">
@@ -226,7 +226,7 @@
                     <input type="number" class="form-control" data-name="thickness_cm" min="0" step="1" placeholder="Ex: 30">
                 </td>
                 <td>
-                    <input type="number" class="form-control" data-name="places" min="1" step="1" placeholder="Ex: 2">
+                    <input type="number" class="form-control" data-name="places" min="1" step="0.5" placeholder="Ex: 2.5">
                 </td>
                 <td>
                     <input type="number" class="form-control" data-name="price" min="0" step="1" placeholder="Ex: 105000">

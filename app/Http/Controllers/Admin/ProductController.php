@@ -298,7 +298,7 @@ class ProductController extends Controller
             'variants.*.id' => ['nullable', 'integer', 'exists:product_variants,id'],
             'variants.*.variant_type' => ['nullable', 'string', 'max:100'],
             'variants.*.thickness_cm' => ['nullable', 'integer', 'min:0', 'max:200'],
-            'variants.*.places' => ['required_with:variants.*.price', 'integer', 'min:1', 'max:10'],
+            'variants.*.places' => ['required_with:variants.*.price', 'numeric', 'min:1', 'max:10', 'multiple_of:0.5'],
             'variants.*.price' => ['required_with:variants.*.places', 'numeric', 'min:0'],
             'variants.*.stock' => ['nullable', 'integer', 'min:0'],
             'variants.*.is_active' => ['nullable', 'boolean'],
@@ -333,10 +333,17 @@ class ProductController extends Controller
             $variantType = $variantType !== '' ? $variantType : null;
 
             $thickness = isset($row['thickness_cm']) ? (int) $row['thickness_cm'] : 0;
-            $places = isset($row['places']) ? (int) $row['places'] : null;
+            $places = null;
+            if (isset($row['places']) && $row['places'] !== '' && $row['places'] !== null) {
+                $placesFloat = is_numeric($row['places']) ? (float) $row['places'] : null;
+                if ($placesFloat !== null) {
+                    $placesFloat = round($placesFloat * 2) / 2;
+                    $places = number_format($placesFloat, 1, '.', '');
+                }
+            }
             $price = isset($row['price']) ? (float) $row['price'] : null;
 
-            if ((!$variantType && $thickness <= 0) || !$places || $price === null) {
+            if ((!$variantType && $thickness <= 0) || $places === null || $price === null) {
                 continue;
             }
 

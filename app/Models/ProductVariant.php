@@ -23,6 +23,8 @@ class ProductVariant extends Model
     ];
 
     protected $casts = [
+        'thickness_cm' => 'integer',
+        'places' => 'decimal:1',
         'price' => 'decimal:2',
         'old_price' => 'decimal:2',
         'is_active' => 'boolean',
