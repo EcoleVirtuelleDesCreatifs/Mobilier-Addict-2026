@@ -34,6 +34,11 @@ class AppServiceProvider extends ServiceProvider
 
         $path = str_replace('\\', '/', (string) $path);
 
+        $path = preg_replace('#^/?storage/app/public/#', '', $path);
+        $path = preg_replace('#^/?storage/app/#', '', $path);
+        $path = preg_replace('#^/?public/storage/#', 'storage/', $path);
+        $path = preg_replace('#^/?public/#', '', $path);
+
         if (\Illuminate\Support\Str::startsWith($path, ['http://', 'https://', '//'])) {
             return $path;
         }
