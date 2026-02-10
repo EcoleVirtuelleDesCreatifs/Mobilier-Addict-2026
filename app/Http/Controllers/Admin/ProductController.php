@@ -10,6 +10,7 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -214,28 +215,42 @@ class ProductController extends Controller
         }
 
         $normalized = ltrim($path, '/');
-        if (!Str::startsWith($normalized, 'uploads/')) {
+        if (Str::startsWith($normalized, 'uploads/')) {
+            $fullPath = public_path($normalized);
+            if (is_file($fullPath)) {
+                @unlink($fullPath);
+            }
             return;
         }
 
-        $fullPath = public_path($normalized);
-        if (is_file($fullPath)) {
-            @unlink($fullPath);
+        if (Str::startsWith($normalized, 'storage/')) {
+            $normalized = preg_replace('#^storage/#', '', $normalized);
+        }
+
+        try {
+            if ($normalized !== '') {
+                Storage::disk('public')->delete($normalized);
+            }
+        } catch (\Throwable $e) {
+            return;
         }
     }
 
     private function storeUploadedImage($file, string $folder): string
     {
-        $dir = public_path('uploads/' . $folder);
-
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        $ext = (string) $file->getClientOriginalExtension();
+        $ext = trim($ext);
+        if ($ext === '') {
+            $ext = (string) ($file->guessExtension() ?: 'jpg');
         }
+        $ext = ltrim($ext, '.');
 
-        $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-        $file->move($dir, $filename);
+        $filename = time() . '_' . Str::random(10) . '.' . $ext;
 
-        return 'uploads/' . $folder . '/' . $filename;
+        $path = trim($folder, '/') . '/' . $filename;
+        Storage::disk('public')->putFileAs(trim($folder, '/'), $file, $filename);
+
+        return $path;
     }
 
     private function validateProduct(Request $request, ?Product $product = null): array
