@@ -43,7 +43,7 @@ return [
             'root' => env('PUBLIC_DISK_ROOT', 'storage') === 'public'
                 ? public_path('storage')
                 : storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
