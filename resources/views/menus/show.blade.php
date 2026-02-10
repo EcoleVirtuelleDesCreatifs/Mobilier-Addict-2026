@@ -335,7 +335,7 @@
                     <div class="best-modern__grid">
                         @foreach($cheapMatelas as $product)
                             @php
-                                $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
+                                $img = $product->image;
                                 $defaultVariant = $product?->variants?->sortBy('price')->first();
                                 $price = $product?->price;
                                 $titleVariant = ($product?->variants ?? collect())
@@ -371,7 +371,7 @@
 
                                 <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                     <div class="product-card__media">
-                                        <img src="{{ $img }}" alt="{{ $product->name }}" loading="lazy" />
+                                        <img src="@image_url($img)" alt="{{ $product->name }}" loading="lazy" />
                                     </div>
                                 </a>
 
@@ -413,7 +413,6 @@
                 return str_contains($name, 'medicosoins') || $firm === 'medicosoins';
             }) ?: $allMatelas->first();
 
-            $supportImg = $supportPick && $supportPick->image ? asset($supportPick->image) : 'https://via.placeholder.com/900x700?text=Matelas';
             $supportDefaultVariant = $supportPick?->variants?->sortBy('price')->first();
             $supportPrice = $supportDefaultVariant?->price ?? $supportPick?->price;
             $supportVariantsData = ($supportPick?->variants ?? collect())->map(fn($v) => [
@@ -456,7 +455,7 @@
                                     data-quick-add
                                     data-product-id="{{ $supportPick->id }}"
                                     data-product-name="{{ e($supportPick->name) }}"
-                                    data-product-image="{{ $supportImg }}"
+                                    data-product-image="@image_url($supportPick->image)"
                                     data-product-slug="{{ $supportPick->slug }}"
                                     data-default-variant-id="{{ $supportDefaultVariant?->id }}"
                                     data-variants='@json($supportVariantsData)'
@@ -468,7 +467,7 @@
                                     data-quick-add
                                     data-product-id="{{ $supportPick->id }}"
                                     data-product-name="{{ e($supportPick->name) }}"
-                                    data-product-image="{{ $supportImg }}"
+                                    data-product-image="@image_url($supportPick->image)"
                                     data-product-slug="{{ $supportPick->slug }}"
                                     data-default-variant-id="{{ $supportDefaultVariant?->id }}"
                                     data-variants='@json($supportVariantsData)'
@@ -481,7 +480,7 @@
                         </div>
 
                         <a class="matelas-banner__media" data-reveal href="{{ route('product.show', $supportPick->slug) }}" style="text-decoration:none;color:inherit">
-                            <img src="{{ $supportImg }}" alt="{{ $supportPick->name }}" loading="lazy">
+                            <img src="@image_url($supportPick->image)" alt="{{ $supportPick->name }}" loading="lazy">
                         </a>
                     </div>
                 </div>
