@@ -51,11 +51,7 @@ class AppServiceProvider extends ServiceProvider
 
         $path = preg_replace('#^public/#', '', $path);
 
-        try {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
-        } catch (\Throwable $e) {
-            return asset('storage/' . $path);
-        }
+        return asset('storage/' . $path);
     })($__imgPath);
 ?>
 PHP;
