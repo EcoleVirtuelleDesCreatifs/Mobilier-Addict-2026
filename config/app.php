@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'image_url_public_prefix' => env('IMAGE_URL_PUBLIC_PREFIX', 'storage'),
+
 ];

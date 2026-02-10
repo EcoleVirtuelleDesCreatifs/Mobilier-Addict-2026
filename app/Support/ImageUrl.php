@@ -25,7 +25,7 @@ class ImageUrl
 
         $path = ltrim($path, '/');
 
-        $prefix = (string) env('IMAGE_URL_PUBLIC_PREFIX', 'storage');
+        $prefix = (string) config('app.image_url_public_prefix', 'storage');
         $useStorageAppPublic = $prefix === 'storage_app_public';
         $usePublicStorage = $prefix === 'public_storage';
 
