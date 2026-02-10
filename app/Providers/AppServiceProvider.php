@@ -23,40 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::directive('image_url', function ($expression) {
-            $php = <<<'PHP'
-<?php
-    $__imgPath = %s;
-
-    echo (function ($path) {
-        if (!$path) {
-            return asset('assets/logo/favicon.png');
-        }
-
-        $path = str_replace('\\', '/', (string) $path);
-
-        $path = preg_replace('#^/?storage/app/public/#', '', $path);
-        $path = preg_replace('#^/?storage/app/#', '', $path);
-        $path = preg_replace('#^/?public/storage/#', 'storage/', $path);
-        $path = preg_replace('#^/?public/#', '', $path);
-
-        if (\Illuminate\Support\Str::startsWith($path, ['http://', 'https://', '//'])) {
-            return $path;
-        }
-
-        $path = ltrim($path, '/');
-
-        if (\Illuminate\Support\Str::startsWith($path, ['uploads/', 'storage/'])) {
-            return asset($path);
-        }
-
-        $path = preg_replace('#^public/#', '', $path);
-
-        return asset('storage/' . $path);
-    })($__imgPath);
-?>
-PHP;
-
-            return sprintf($php, $expression);
+            return "<?php echo image_url({$expression}); ?>";
         });
 
         View::composer('partials.header', function ($view) {
