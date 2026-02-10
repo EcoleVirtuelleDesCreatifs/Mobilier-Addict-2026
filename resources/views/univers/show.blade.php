@@ -760,7 +760,7 @@
                                     @endif
                                     <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                         <div class="evc-carousel-card__media">
-                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                            <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                         </div>
                                     </a>
                                     <div class="evc-carousel-card__body">
@@ -877,7 +877,7 @@
                                         <div class="evc-product-card__badge evc-product-card__badge--alt">{{ $product->badge }}</div>
                                     @endif
                                     <div class="evc-product-card__media">
-                                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $product->name }}</h3>
@@ -1025,7 +1025,7 @@
                                         <div class="evc-product-card__badge evc-product-card__badge--promo">-{{ (int) $product->discount_percent }}%</div>
                                     @endif
                                     <div class="evc-product-card__media">
-                                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                     </div>
                                     <div class="evc-product-card__body">
                                         <h3 class="evc-product-card__name">{{ $product->name }}</h3>
@@ -1252,7 +1252,7 @@
                                 @endif
 
                                 <div class="product-card__media">
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                 </div>
                                 <div class="product-card__body">
                                     <h3 class="product-card__name">{{ $product->name }}</h3>
@@ -1415,7 +1415,7 @@
                             @endif
 
                             <div class="product-card__media">
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy" />
+                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                             </div>
                             <div class="product-card__body">
                                 <h3 class="product-card__name">{{ $product->name }}</h3>
