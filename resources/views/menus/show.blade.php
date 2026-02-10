@@ -403,10 +403,6 @@
                         @endforeach
                     </div>
                 </section>
-
-                <div style="display:flex;justify-content:center;margin-top:14px;">
-                    <a class="matelas-btn matelas-btn--navy" href="#tous">Charger</a>
-                </div>
             </div>
         </section>
 
@@ -545,7 +541,6 @@
                                 <div class="best-modern__grid">
                                 @foreach($items as $product)
                                     @php
-                                        $img = !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit';
                                         $defaultVariant = $product?->variants?->sortBy('price')->first();
                                         $price = $product?->price;
                                         $titleVariant = ($product?->variants ?? collect())
@@ -581,7 +576,7 @@
 
                                         <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                             <div class="product-card__media">
-                                                <img src="{{ $img }}" alt="{{ $product->name }}" loading="lazy" />
+                                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                             </div>
                                         </a>
 
@@ -599,19 +594,15 @@
                                                 <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
                                                     @csrf
                                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                                                     <input type="hidden" name="quantity" value="1">
                                                     <button class="product-card__buy" type="submit">Ajouter au panier</button>
                                                 </form>
                                             </div>
-                                        </div>
-                                    </article>
-                                @endforeach
+                                        </article>
+                                    @endforeach
                                 </div>
                             </section>
-
-                            <div style="display:flex;justify-content:center;margin-top:14px;">
-                                <a class="matelas-btn matelas-btn--navy" href="#tous">Charger</a>
-                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -646,7 +637,7 @@
                         <article class="matelas-mini" data-reveal>
                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="matelas-mini__media">
-                                    <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&h=700&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                 </div>
                             </a>
                             <div class="matelas-mini__body">
@@ -921,7 +912,7 @@
 
                         <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                             <div class="collection-card__media">
-                                <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=500&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                 @if($tag)
                                     <span class="collection-card__tag">{{ $tag }}</span>
                                 @endif

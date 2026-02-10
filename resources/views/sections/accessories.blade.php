@@ -136,7 +136,7 @@
                         <article class="acc-card">
                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="acc-card__media">
-                                    <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                 </div>
                             </a>
 

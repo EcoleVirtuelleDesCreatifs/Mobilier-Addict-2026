@@ -18,7 +18,7 @@
 
                             <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
                                 <div class="product-card__media">
-                                    <img src="{{ !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/400x400?text=Produit' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                 </div>
                             </a>
                             <div class="product-card__body">

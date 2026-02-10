@@ -266,7 +266,7 @@
                     <div class="cart-suggestion-card__badge">-{{ $product->discount_percent }}%</div>
                     @endif
                     <div class="cart-suggestion-card__image">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}" loading="lazy">
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy">
                     </div>
                     <div class="cart-suggestion-card__content">
                         <h3 class="cart-suggestion-card__name">{{ $product->name }}</h3>

@@ -57,7 +57,7 @@
                         <article class="fav-new">
                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="fav-new__image">
-                                    <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1592789705501-f9ae4287c4a9?w=500&h=600&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
                                     <div class="fav-new__badge-rank">#{{ $i + 2 }}</div>
                                 </div>
                             </a>

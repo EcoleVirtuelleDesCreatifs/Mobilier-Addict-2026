@@ -53,7 +53,7 @@
                 <label class="form-label">Image{{ $isEdit ? ' (laisser vide pour conserver)' : '' }}</label>
                 <input type="file" name="image" class="form-control" {{ $isEdit ? '' : 'required' }}>
                 @if($isEdit)
-                    <div class="mt-2 d-flex align-items-end gap-2">
+                    <div class="mt-2 d-flex align-items-end gap-2" data-image-block>
                         <div class="rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
                             <img src="@image_url($product->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                         </div>
@@ -61,9 +61,12 @@
                             <button
                                 type="button"
                                 class="btn btn-sm btn-danger"
+                                style="width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:10px;"
                                 data-delete-url="{{ route('admin.products.image.destroy', $product) }}"
                                 data-confirm="Supprimer l'image principale ?"
-                            >Supprimer</button>
+                                aria-label="Supprimer l'image"
+                                title="Supprimer"
+                            >&times;</button>
                         @endif
                     </div>
                 @endif
@@ -99,7 +102,7 @@
                 @if($isEdit && !empty($product->gallery))
                     <div class="d-flex flex-wrap gap-2 mt-2">
                         @foreach($product->gallery as $i => $img)
-                            <div class="d-flex flex-column gap-1">
+                            <div class="d-flex flex-column gap-1" data-gallery-item>
                                 <div class="rounded-3 overflow-hidden" style="width:72px;height:72px;border:1px solid var(--admin-border);">
                                     <img src="@image_url($img)" alt="" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
@@ -109,7 +112,9 @@
                                     style="padding:2px 8px;"
                                     data-delete-url="{{ route('admin.products.gallery.destroy', [$product, $i]) }}"
                                     data-confirm="Supprimer cette image ?"
-                                >Supprimer</button>
+                                    aria-label="Supprimer l'image"
+                                    title="Supprimer"
+                                >&times;</button>
                             </div>
                         @endforeach
                     </div>
@@ -148,7 +153,17 @@
                             return;
                         }
 
-                        window.location.reload();
+                        const galleryItem = btn.closest('[data-gallery-item]');
+                        if (galleryItem) {
+                            galleryItem.remove();
+                            return;
+                        }
+
+                        const imageBlock = btn.closest('[data-image-block]');
+                        if (imageBlock) {
+                            imageBlock.remove();
+                            return;
+                        }
                     } catch (e) {
                         window.location.href = url;
                     }
@@ -188,7 +203,7 @@
                                 <input type="number" class="form-control" name="variants[{{ $i }}][thickness_cm]" value="{{ $row['thickness_cm'] ?? '' }}" min="0" step="1" placeholder="Ex: 30">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" min="1" step="0.5" placeholder="Ex: 2.5">
+                                <input type="text" inputmode="decimal" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" placeholder="Ex: 2,5">
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="variants[{{ $i }}][price]" value="{{ $row['price'] ?? '' }}" min="0" step="1" placeholder="Ex: 105000">
@@ -226,7 +241,7 @@
                     <input type="number" class="form-control" data-name="thickness_cm" min="0" step="1" placeholder="Ex: 30">
                 </td>
                 <td>
-                    <input type="number" class="form-control" data-name="places" min="1" step="0.5" placeholder="Ex: 2.5">
+                    <input type="text" inputmode="decimal" class="form-control" data-name="places" placeholder="Ex: 2,5">
                 </td>
                 <td>
                     <input type="number" class="form-control" data-name="price" min="0" step="1" placeholder="Ex: 105000">

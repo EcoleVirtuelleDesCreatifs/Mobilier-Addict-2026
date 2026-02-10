@@ -355,7 +355,7 @@
                         @endif
                         <a href="{{ route('product.show', $related->slug) }}" style="text-decoration:none;color:inherit">
                             <div class="evc-carousel-card__media">
-                                <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" loading="lazy" />
+                                <img src="@image_url($related->image)" alt="{{ $related->name }}" loading="lazy" />
                             </div>
                         </a>
                         <div class="evc-carousel-card__body">
@@ -396,7 +396,7 @@
             <button class="order-modal__close" id="orderModalCloseBtn" type="button">&times;</button>
         </div>
         <div class="order-modal__product">
-            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" />
+            <img src="@image_url($product->image)" alt="{{ $product->name }}" />
             <div>
                 <strong>{{ $product->name }}</strong>
                 <span class="order-modal__calc" id="orderCalc">{{ $product->formatted_price }} x 1 = <b>{{ $product->formatted_price }}</b></span>

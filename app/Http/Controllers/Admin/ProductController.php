@@ -168,7 +168,7 @@ class ProductController extends Controller
         return redirect()->back()->with('status', $product->is_active ? 'Produit activé (en ligne).' : 'Produit désactivé (hors ligne).');
     }
 
-    public function destroyImage(Product $product)
+    public function destroyImage(Request $request, Product $product)
     {
         $path = (string) ($product->image ?? '');
         $this->deletePublicUploadIfLocal($path);
@@ -177,16 +177,24 @@ class ProductController extends Controller
             'image' => null,
         ]);
 
+        if ($request->expectsJson()) {
+            return response()->json(['ok' => true]);
+        }
+
         return redirect()->back()->with('status', "Image principale supprimée.");
     }
 
-    public function destroyGalleryImage(Product $product, $index)
+    public function destroyGalleryImage(Request $request, Product $product, $index)
     {
         $gallery = $product->gallery ?: [];
         $gallery = is_array($gallery) ? $gallery : [];
 
         $i = is_numeric($index) ? (int) $index : -1;
         if (!array_key_exists($i, $gallery)) {
+            if ($request->expectsJson()) {
+                return response()->json(['ok' => false, 'message' => 'Image introuvable.'], 404);
+            }
+
             return redirect()->back()->with('status', "Image introuvable.");
         }
 
@@ -199,6 +207,10 @@ class ProductController extends Controller
         $product->update([
             'gallery' => !empty($gallery) ? $gallery : null,
         ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['ok' => true]);
+        }
 
         return redirect()->back()->with('status', "Image de la galerie supprimée.");
     }
@@ -256,6 +268,22 @@ class ProductController extends Controller
     private function validateProduct(Request $request, ?Product $product = null): array
     {
         $isUpdate = $product !== null;
+
+        if ($request->has('variants')) {
+            $variants = $request->input('variants');
+            if (is_array($variants)) {
+                foreach ($variants as $i => $row) {
+                    if (!is_array($row)) {
+                        continue;
+                    }
+                    if (array_key_exists('places', $row) && $row['places'] !== null && $row['places'] !== '') {
+                        $row['places'] = str_replace(',', '.', (string) $row['places']);
+                        $variants[$i] = $row;
+                    }
+                }
+                $request->merge(['variants' => $variants]);
+            }
+        }
 
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -335,7 +363,8 @@ class ProductController extends Controller
             $thickness = isset($row['thickness_cm']) ? (int) $row['thickness_cm'] : 0;
             $places = null;
             if (isset($row['places']) && $row['places'] !== '' && $row['places'] !== null) {
-                $placesFloat = is_numeric($row['places']) ? (float) $row['places'] : null;
+                $placesRaw = str_replace(',', '.', (string) $row['places']);
+                $placesFloat = is_numeric($placesRaw) ? (float) $placesRaw : null;
                 if ($placesFloat !== null) {
                     $placesFloat = round($placesFloat * 2) / 2;
                     $places = number_format($placesFloat, 1, '.', '');
