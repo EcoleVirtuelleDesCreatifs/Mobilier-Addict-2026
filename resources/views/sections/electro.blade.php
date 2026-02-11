@@ -12,7 +12,7 @@
                         @foreach($section->categories as $i => $category)
                             @php($cardClass = $i === 0 ? 'electro-card electro-card--large' : ($i === 3 ? 'electro-card electro-card--wide' : 'electro-card'))
                             <a class="{{ $cardClass }}" href="{{ route('univers.show', $category->slug) }}">
-                                <img src="{{ asset($category->image) }}" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
+                                <img src="@image_url($category->image)" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
                                 <div class="electro-card__overlay{{ $i === 1 ? ' electro-card__overlay--gradient' : '' }}">
                                     <span class="electro-card__count">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
                                     <h3 class="electro-card__title">{{ $category->name }}</h3>

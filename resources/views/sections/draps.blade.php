@@ -6,7 +6,7 @@
             $badge = $section?->badge ?: 'Draps';
             $title = $section?->title ?: 'Draps';
             $description = $section?->description;
-            $sectionCover = $section?->cover_image ? asset($section->cover_image) : null;
+            $sectionCover = $section?->cover_image ? image_url($section->cover_image) : null;
             $toImageUrl = function ($value) {
                 if (!is_string($value) || trim($value) === '') {
                     return null;
@@ -15,7 +15,7 @@
                 if (preg_match('/^(https?:\/\/|\/\/|data:)/i', $value)) {
                     return $value;
                 }
-                return asset($value);
+                return image_url($value);
             };
             $items = collect();
 

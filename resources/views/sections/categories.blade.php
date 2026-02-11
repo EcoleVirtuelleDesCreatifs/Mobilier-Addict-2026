@@ -11,7 +11,7 @@
                         @foreach($section->categories as $i => $category)
                             @php($cardClass = $i === 0 ? 'cat-card cat-card--large' : ($i === 3 ? 'cat-card cat-card--wide' : 'cat-card'))
                             <a class="{{ $cardClass }}" href="{{ route('univers.show', $category->slug) }}">
-                                <img src="{{ asset($category->image) }}" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
+                                <img src="@image_url($category->image)" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
                                 <div class="cat-card__overlay">
                                     <span class="cat-card__count">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
                                     <h3 class="cat-card__title">{{ $category->name }}</h3>

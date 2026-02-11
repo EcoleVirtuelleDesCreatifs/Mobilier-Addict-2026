@@ -13,7 +13,7 @@
             @if($refugeCategories->count())
                 @php($heroCategory = $refugeCategories->first())
                 <a class="inspire__card inspire__card--large" href="{{ route('univers.show', $heroCategory->slug) }}">
-                    <img src="{{ $section && $section->cover_image ? asset($section->cover_image) : asset($heroCategory->image) }}" alt="{{ $heroCategory->image_alt ?: $heroCategory->name }}" loading="lazy" />
+                    <img src="{{ $section && $section->cover_image ? image_url($section->cover_image) : image_url($heroCategory->image) }}" alt="{{ $heroCategory->image_alt ?: $heroCategory->name }}" loading="lazy" />
                     <div class="inspire__overlay">
                         <span class="inspire__tag">{{ $heroCategory->products_rel_count ?? $heroCategory->products_count ?? 0 }} produits</span>
                         <h3 class="inspire__card-title">{{ $heroCategory->name }}</h3>
@@ -26,7 +26,7 @@
 
                 @foreach($refugeCategories->slice(1, 2) as $category)
                     <a class="inspire__card" href="{{ route('univers.show', $category->slug) }}">
-                        <img src="{{ asset($category->image) }}" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
+                        <img src="@image_url($category->image)" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
                         <div class="inspire__overlay">
                             <span class="inspire__tag">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
                             <h3 class="inspire__card-title">{{ $category->name }}</h3>
@@ -36,7 +36,7 @@
                 @endforeach
             @else
                 <a class="inspire__card inspire__card--large" href="#">
-                    <img src="{{ $section && $section->cover_image ? asset($section->cover_image) : 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=1000&fit=crop' }}" alt="{{ $section?->title ?? 'Inspiration' }}" loading="lazy" />
+                    <img src="{{ $section && $section->cover_image ? image_url($section->cover_image) : 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=1000&fit=crop' }}" alt="{{ $section?->title ?? 'Inspiration' }}" loading="lazy" />
                     <div class="inspire__overlay">
                         <span class="inspire__tag">Luxe & Sérénité</span>
                         <h3 class="inspire__card-title">L'Art du Sommeil Parfait</h3>
