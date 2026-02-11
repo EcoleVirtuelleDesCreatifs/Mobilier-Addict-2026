@@ -30,6 +30,9 @@ class ImageUrl
         $usePublicStorage = $prefix === 'public_storage';
 
         if (Str::startsWith($path, ['uploads/', 'storage/'])) {
+            if (Str::startsWith($path, 'uploads/') && ($useStorageAppPublic || $usePublicStorage)) {
+                return asset('public/' . $path);
+            }
             if (Str::startsWith($path, 'storage/')) {
                 if ($useStorageAppPublic) {
                     return asset('storage/app/public/' . Str::after($path, 'storage/'));
