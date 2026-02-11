@@ -55,7 +55,7 @@
                     <input type="file" name="cover_image" class="form-control" accept="image/*">
                     @if($section->cover_image)
                         <div class="rounded-3 overflow-hidden mt-2" style="width:100%;height:140px;border:1px solid var(--admin-border);">
-                            <img src="{{ asset($section->cover_image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                            <img src="@image_url($section->cover_image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                         </div>
                     @endif
                 </div>
@@ -100,7 +100,7 @@
                             <label class="admin-card p-3 d-flex align-items-center gap-3" style="cursor:pointer; box-shadow:none;">
                                 <input class="form-check-input m-0" type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(old('category_ids') ? in_array($category->id, old('category_ids', [])) : ($category->section_id === $section->id))>
                                 <div class="rounded-3 overflow-hidden" style="width:52px;height:52px;border:1px solid var(--admin-border); flex:0 0 auto;">
-                                    <img src="{{ asset($category->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                    <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
                                 <div class="min-w-0">
                                     <div class="fw-semibold text-truncate">{{ $category->name }}</div>
