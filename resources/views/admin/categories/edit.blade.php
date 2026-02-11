@@ -45,7 +45,7 @@
                         <label class="form-label">Image (laisser vide pour conserver)</label>
                         <input type="file" name="image" class="form-control">
                         <div class="mt-2 rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
-                            <img src="{{ asset($category->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                            <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
