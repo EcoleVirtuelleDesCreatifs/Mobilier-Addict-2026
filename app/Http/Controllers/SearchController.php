@@ -55,7 +55,7 @@ class SearchController extends Controller
                 return [
                     'name' => $p->name,
                     'slug' => $p->slug,
-                    'image' => $p->image,
+                    'image' => image_url($p->image),
                     'price' => number_format((float) $p->price, 0, ',', '.') . 'F',
                 ];
             })->values()
