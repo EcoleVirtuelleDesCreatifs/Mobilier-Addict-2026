@@ -9,6 +9,7 @@ use App\Models\ProductVariant;
 use App\Models\User;
 use App\Notifications\AdminCartItemAddedNotification;
 use App\Notifications\AdminOrderPlacedNotification;
+use App\Support\ImageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -286,7 +287,7 @@ class CartController extends Controller
                 'id' => $item->product_id,
                 'name' => $item->product_name,
                 'slug' => $product?->slug,
-                'image' => $product?->image ? asset($product->image) : null,
+                'image' => $product?->image ? ImageUrl::url($product->image) : null,
                 'price' => $item->unit_price,
                 'old_price' => null,
                 'quantity' => $item->quantity,
@@ -361,7 +362,7 @@ class CartController extends Controller
                     'variant_id' => $variant?->id,
                     'name' => $product->name,
                     'slug' => $product->slug,
-                    'image' => asset($product->image),
+                    'image' => $product->image ? ImageUrl::url($product->image) : null,
                     'price' => $price,
                     'shipping_price' => (float) ($product->shipping_price ?? 0),
                     'old_price' => $oldPrice,
