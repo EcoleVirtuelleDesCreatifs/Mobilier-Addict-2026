@@ -96,13 +96,42 @@
                         $requiresColor = str_contains($categoryHaystackForColors, 'drap') || str_contains($categoryHaystackForColors, 'taie');
                         $availableColors = $product->available_colors ?? [];
                         $availableColors = is_array($availableColors) ? array_values(array_unique(array_filter(array_map('trim', array_map('strval', $availableColors))))) : [];
+
+                        $colorHex = [
+                            'blanc' => '#ffffff',
+                            'white' => '#ffffff',
+                            'bleu' => '#2563eb',
+                            'blue' => '#2563eb',
+                            'gris' => '#9ca3af',
+                            'gray' => '#9ca3af',
+                            'beige' => '#d6c6a6',
+                            'rouge' => '#dc2626',
+                            'red' => '#dc2626',
+                            'violet' => '#7c3aed',
+                            'purple' => '#7c3aed',
+                            'vert' => '#16a34a',
+                            'green' => '#16a34a',
+                            'rose' => '#ec4899',
+                            'pink' => '#ec4899',
+                            'marron' => '#7c4a2d',
+                            'brown' => '#7c4a2d',
+                            'jaune' => '#facc15',
+                            'yellow' => '#facc15',
+                            'noir' => '#0f172a',
+                            'black' => '#0f172a',
+                        ];
                     @endphp
                     @if($requiresColor)
                         <div class="variant-picker" style="margin-top: 14px;">
                             <div class="variant-picker__label">Couleur</div>
                             <div class="variant-picker__chips" role="group" aria-label="Choisir une couleur">
                                 @foreach($availableColors as $c)
-                                    <button type="button" class="variant-chip" data-color="{{ $c }}" aria-pressed="false">
+                                    @php
+                                        $key = mb_strtolower(trim((string) $c));
+                                        $hex = $colorHex[$key] ?? null;
+                                    @endphp
+                                    <button type="button" class="variant-chip variant-chip--color" data-color="{{ $c }}" aria-pressed="false">
+                                        <span class="variant-chip__swatch" style="{{ $hex ? 'background:' . $hex . ';' : '' }}"></span>
                                         <span class="variant-chip__value">{{ $c }}</span>
                                     </button>
                                 @endforeach
@@ -495,7 +524,7 @@
 .product-gallery__main img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
 .product-gallery__badge { position: absolute; top: 1rem; left: 1rem; background: linear-gradient(135deg, #c2185b, #e91e63); color: #fff; padding: .4rem .8rem; border-radius: 6px; font-size: .8rem; font-weight: 600; z-index: 2; }
 .product-gallery__badge--alt { background: linear-gradient(135deg, #7b1fa2, #9c27b0); }
-.product-gallery__thumbs { display: flex; gap: .75rem; margin-top: 1rem; }
+.product-gallery__thumbs { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; max-width: 100%; }
 .product-gallery__thumb { width: 70px; height: 70px; border: 2px solid #eee; border-radius: 10px; overflow: hidden; cursor: pointer; padding: 0; background: #fff; transition: border-color .2s; }
 .product-gallery__thumb:hover, .product-gallery__thumb--active { border-color: #c2185b; }
 .product-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -640,11 +669,14 @@
 .variant-picker__label { font-weight: 900; letter-spacing: -.01em; color: #0f172a; }
 .variant-picker__chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .variant-chip { appearance: none; border: 1.5px solid rgba(15, 23, 42, .18); background: #fff; border-radius: 14px; padding: 10px 12px; min-width: 78px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
+.variant-chip--color { flex-direction: row; justify-content: flex-start; gap: 10px; min-width: unset; }
+.variant-chip__swatch { width: 18px; height: 18px; border-radius: 999px; border: 1px solid rgba(15, 23, 42, .18); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); background: linear-gradient(135deg, rgba(15, 23, 42, .08), rgba(15, 23, 42, .02)); }
 .variant-chip__value { font-weight: 950; color: #0f172a; font-size: 16px; line-height: 1; }
 .variant-chip__unit { font-size: 11px; font-weight: 700; color: #64748b; line-height: 1; }
 .variant-chip:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(2, 6, 23, .10); border-color: rgba(236, 72, 153, .55); }
 .variant-chip[aria-pressed="true"] { border-color: rgba(236, 72, 153, .85); background: rgba(236, 72, 153, .08); box-shadow: 0 14px 28px rgba(236, 72, 153, .18); }
 .variant-chip[aria-pressed="true"] .variant-chip__value { color: #be185d; }
+.variant-chip[aria-pressed="true"] .variant-chip__swatch { border-color: rgba(236, 72, 153, .85); box-shadow: 0 0 0 3px rgba(236, 72, 153, .15), inset 0 0 0 1px rgba(255,255,255,.55); }
 .variant-chip:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
 .variant-chip:disabled:hover { border-color: rgba(15, 23, 42, .18); }
 .variant-picker__hint { margin-top: 10px; font-size: 12px; font-weight: 700; color: #64748b; }
