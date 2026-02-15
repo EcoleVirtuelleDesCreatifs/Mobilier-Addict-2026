@@ -89,6 +89,29 @@
                         @endif
                     </div>
 
+                    @php
+                        $categorySlugForColors = (string) ($product->category?->slug ?? '');
+                        $categoryNameForColors = (string) ($product->category?->name ?? '');
+                        $categoryHaystackForColors = mb_strtolower(trim($categorySlugForColors . ' ' . $categoryNameForColors));
+                        $requiresColor = str_contains($categoryHaystackForColors, 'drap') || str_contains($categoryHaystackForColors, 'taie');
+                        $availableColors = $product->available_colors ?? [];
+                        $availableColors = is_array($availableColors) ? array_values(array_unique(array_filter(array_map('trim', array_map('strval', $availableColors))))) : [];
+                    @endphp
+                    @if($requiresColor)
+                        <div class="variant-picker" style="margin-top: 14px;">
+                            <div class="variant-picker__label">Couleur</div>
+                            <div class="variant-picker__chips" role="group" aria-label="Choisir une couleur">
+                                @foreach($availableColors as $c)
+                                    <button type="button" class="variant-chip" data-color="{{ $c }}" aria-pressed="false">
+                                        <span class="variant-chip__value">{{ $c }}</span>
+                                    </button>
+                                @endforeach
+                            </div>
+                            <input type="hidden" id="selectedColor" value="">
+                            <div class="variant-picker__hint" id="colorHint"></div>
+                        </div>
+                    @endif
+
                     @if(($product->variants ?? collect())->isNotEmpty())
                         @php
                             $variants = $product->variants->values();
@@ -191,6 +214,7 @@
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="hidden" name="product_variant_id" id="addToCartVariantId" value="">
+                                <input type="hidden" name="selected_color" id="addToCartColor" value="">
                                 <input type="hidden" name="quantity" id="addToCartQty" value="1">
                                 <button class="product-cta-main product-cta-main--dark" type="submit" style="width:100%">
                                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M17 18c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-3l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1v2h2l3.6 7.59L3.62 17H19v-2H7z" fill="currentColor"/></svg>
@@ -225,6 +249,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="product_variant_id" id="directOrderVariantId" value="">
+                            <input type="hidden" name="selected_color" id="directOrderColor" value="">
                             <input type="hidden" name="quantity" id="directOrderQty" value="1">
                             <input type="hidden" name="redirect_to" value="shipping">
                             <button class="product-cta-direct" type="submit" data-role="checkout">
@@ -662,6 +687,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const initColorUI = () => {
+        const chips = document.querySelectorAll('[data-color]');
+        if (!chips.length) {
+            return;
+        }
+
+        const setColor = (color) => {
+            if (selectedColorEl) selectedColorEl.value = String(color || '');
+            if (addToCartColor) addToCartColor.value = String(color || '');
+            if (directOrderColor) directOrderColor.value = String(color || '');
+            if (colorHintEl) {
+                colorHintEl.textContent = color ? ('Couleur sélectionnée: ' + color) : 'Veuillez choisir une couleur.';
+            }
+        };
+
+        chips.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const color = btn.getAttribute('data-color') || '';
+                chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                btn.setAttribute('aria-pressed', 'true');
+                setColor(color);
+            });
+        });
+
+        setColor('');
+
+        const form1 = document.getElementById('addToCartForm');
+        const forms = [];
+        if (form1) forms.push(form1);
+        document.querySelectorAll('form[action="{{ route('cart.add') }}"]').forEach(f => {
+            if (!forms.includes(f)) forms.push(f);
+        });
+
+        forms.forEach(f => {
+            f.addEventListener('submit', (e) => {
+                const selected = selectedColorEl ? String(selectedColorEl.value || '') : '';
+                if (!selected) {
+                    e.preventDefault();
+                    if (colorHintEl) colorHintEl.textContent = 'Veuillez choisir une couleur.';
+                }
+            });
+        });
+    };
+
     // Quantity controls
     const qtyInput = document.getElementById('qtyInput');
     const qtyMinus = document.getElementById('qtyMinus');
@@ -677,6 +746,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const addToCartVariantId = document.getElementById('addToCartVariantId');
     const directOrderVariantId = document.getElementById('directOrderVariantId');
     const variantHintEl = document.getElementById('variantHint');
+    const selectedColorEl = document.getElementById('selectedColor');
+    const addToCartColor = document.getElementById('addToCartColor');
+    const directOrderColor = document.getElementById('directOrderColor');
+    const colorHintEl = document.getElementById('colorHint');
 
     let unitPrice = qtyInput ? parseFloat(qtyInput.dataset.price) || 0 : 0;
     let formattedUnitPrice = unitPrice.toLocaleString('fr-FR') + 'F';
@@ -918,6 +991,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     initVariantUI();
+    initColorUI();
 
     // Gallery thumbnails
     const mainImage = document.getElementById('mainImage');

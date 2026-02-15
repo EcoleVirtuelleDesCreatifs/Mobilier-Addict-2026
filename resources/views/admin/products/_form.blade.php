@@ -97,6 +97,36 @@
             </div>
 
             <div class="col-12 col-lg-6">
+                <label class="form-label">Couleurs disponibles (Drap &amp; Taie)</label>
+                @php
+                    $colorsValue = old('available_colors', $isEdit ? ($product->available_colors ?? []) : []);
+                    $colorsValue = is_array($colorsValue) ? $colorsValue : [];
+                    $colorsValue = array_values(array_unique(array_filter(array_map('trim', array_map('strval', $colorsValue)))));
+                    $suggestedColors = [
+                        'Blanc',
+                        'Noir',
+                        'Gris',
+                        'Beige',
+                        'Bleu',
+                        'Rose',
+                        'Vert',
+                        'Marron',
+                        'Rouge',
+                    ];
+                @endphp
+                <select name="available_colors[]" class="form-select" multiple size="6">
+                    @foreach($suggestedColors as $c)
+                        <option value="{{ $c }}" @selected(in_array($c, $colorsValue, true))>{{ $c }}</option>
+                    @endforeach
+                    @foreach($colorsValue as $c)
+                        @if(!in_array($c, $suggestedColors, true))
+                            <option value="{{ $c }}" selected>{{ $c }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-6">
                 <label class="form-label">Images (plusieurs)</label>
                 <input type="file" name="gallery[]" class="form-control" multiple>
                 @if($isEdit && !empty($product->gallery))

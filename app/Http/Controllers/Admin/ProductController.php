@@ -299,6 +299,8 @@ class ProductController extends Controller
             'dimensions' => ['nullable', 'string', 'max:255'],
             'material' => ['nullable', 'string', 'max:255'],
             'color' => ['nullable', 'string', 'max:255'],
+            'available_colors' => ['nullable', 'array'],
+            'available_colors.*' => ['nullable', 'string', 'max:50'],
             'is_featured' => ['nullable', 'boolean'],
             'is_bestseller' => ['nullable', 'boolean'],
             'is_collection' => ['nullable', 'boolean'],
@@ -463,6 +465,14 @@ class ProductController extends Controller
         $data['is_collection'] = (bool) ($data['is_collection'] ?? false);
         $data['is_active'] = (bool) ($data['is_active'] ?? false);
         $data['order'] = $data['order'] ?? 0;
+
+        if (array_key_exists('available_colors', $data)) {
+            $colors = $data['available_colors'];
+            $colors = is_array($colors) ? $colors : [];
+            $colors = array_map(fn ($v) => trim((string) $v), $colors);
+            $colors = array_values(array_unique(array_filter($colors, fn ($v) => $v !== '')));
+            $data['available_colors'] = !empty($colors) ? $colors : null;
+        }
 
         if (!empty($data['sections']) && is_array($data['sections'])) {
             $sections = array_values(array_unique(array_filter($data['sections'], fn($v) => is_string($v) && $v !== '')));

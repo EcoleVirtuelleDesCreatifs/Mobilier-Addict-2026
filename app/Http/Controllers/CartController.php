@@ -17,9 +17,20 @@ use Illuminate\Support\Facades\Notification;
 
 class CartController extends Controller
 {
-    private function makeCartKey(int $productId, ?int $variantId): string
+    private function makeCartKey(int $productId, ?int $variantId, ?string $selectedColor = null): string
     {
-        return $productId . ':' . (int) ($variantId ?? 0);
+        $color = is_string($selectedColor) ? trim($selectedColor) : '';
+        $color = mb_strtolower($color);
+        return $productId . ':' . (int) ($variantId ?? 0) . ':' . $color;
+    }
+
+    private function productRequiresColor(Product $product): bool
+    {
+        $categorySlug = (string) ($product->category?->slug ?? '');
+        $categoryName = (string) ($product->category?->name ?? '');
+        $haystack = mb_strtolower(trim($categorySlug . ' ' . $categoryName));
+
+        return str_contains($haystack, 'drap') || str_contains($haystack, 'taie');
     }
 
     public function index()
@@ -40,11 +51,12 @@ class CartController extends Controller
         $validated = $request->validate([
             'product_id' => ['required', 'integer', 'exists:products,id'],
             'product_variant_id' => ['nullable', 'integer', 'exists:product_variants,id'],
+            'selected_color' => ['nullable', 'string', 'max:50'],
             'quantity' => ['nullable', 'integer', 'min:1', 'max:10'],
             'redirect_to' => ['nullable', 'string'],
         ]);
 
-        $product = Product::findOrFail($validated['product_id']);
+        $product = Product::query()->with('category')->findOrFail($validated['product_id']);
         $variantId = isset($validated['product_variant_id']) ? (int) $validated['product_variant_id'] : null;
         $variant = null;
         if ($variantId) {
@@ -58,14 +70,31 @@ class CartController extends Controller
                 return redirect()->back()->with('error', 'Variante invalide.');
             }
         }
+
+        $selectedColor = isset($validated['selected_color']) ? trim((string) $validated['selected_color']) : '';
+        $selectedColor = $selectedColor !== '' ? $selectedColor : null;
+
+        if ($this->productRequiresColor($product)) {
+            $available = $product->available_colors;
+            $available = is_array($available) ? $available : [];
+
+            if (!$selectedColor) {
+                return redirect()->back()->with('error', 'Veuillez choisir une couleur.');
+            }
+
+            if (!empty($available) && !in_array($selectedColor, $available, true)) {
+                return redirect()->back()->with('error', 'Couleur invalide.');
+            }
+        }
         $qty = (int) ($validated['quantity'] ?? 1);
 
         $cart = $this->getCart();
-        $cartKey = $this->makeCartKey((int) $product->id, $variant?->id ? (int) $variant->id : null);
+        $cartKey = $this->makeCartKey((int) $product->id, $variant?->id ? (int) $variant->id : null, $selectedColor);
         $currentQty = (int) ($cart[$cartKey]['quantity'] ?? 0);
         $cart[$cartKey] = [
             'product_id' => $product->id,
             'product_variant_id' => $variant?->id,
+            'selected_color' => $selectedColor,
             'quantity' => min(10, $currentQty + $qty),
         ];
 
@@ -199,6 +228,7 @@ class CartController extends Controller
                     'order_id' => $order->id,
                     'product_id' => $item->id,
                     'product_variant_id' => $item->variant_id,
+                    'selected_color' => $item->selected_color,
                     'product_name' => $item->name,
                     'unit_price' => $item->price,
                     'quantity' => $item->quantity,
@@ -283,6 +313,10 @@ class CartController extends Controller
                 }
             }
 
+            if (!empty($item->selected_color)) {
+                $options = $options ? ($options . ' • Couleur: ' . $item->selected_color) : ('Couleur: ' . $item->selected_color);
+            }
+
             return (object) [
                 'id' => $item->product_id,
                 'name' => $item->product_name,
@@ -291,6 +325,7 @@ class CartController extends Controller
                 'price' => $item->unit_price,
                 'old_price' => null,
                 'quantity' => $item->quantity,
+                'selected_color' => $item->selected_color ?? null,
                 'options' => $options,
             ];
         });
@@ -344,6 +379,8 @@ class CartController extends Controller
                 $quantity = (int) ($row['quantity'] ?? 1);
                 $variantId = isset($row['product_variant_id']) ? (int) $row['product_variant_id'] : null;
                 $variant = $variantId ? $variants->get($variantId) : null;
+                $selectedColor = isset($row['selected_color']) ? trim((string) $row['selected_color']) : '';
+                $selectedColor = $selectedColor !== '' ? $selectedColor : null;
 
                 $price = (float) ($variant?->price ?? $product->price);
                 $oldPrice = $variant?->old_price ? (float) $variant->old_price : ($product->old_price ? (float) $product->old_price : null);
@@ -354,6 +391,10 @@ class CartController extends Controller
                     } else {
                         $options = $variant->thickness_cm . ' cm • ' . $variant->places . ' place(s)';
                     }
+                }
+
+                if ($selectedColor) {
+                    $options = $options ? ($options . ' • Couleur: ' . $selectedColor) : ('Couleur: ' . $selectedColor);
                 }
 
                 return (object) [
@@ -367,6 +408,7 @@ class CartController extends Controller
                     'shipping_price' => (float) ($product->shipping_price ?? 0),
                     'old_price' => $oldPrice,
                     'quantity' => $quantity,
+                    'selected_color' => $selectedColor,
                     'options' => $options,
                 ];
             })
