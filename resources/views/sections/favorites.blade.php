@@ -17,7 +17,7 @@
                         <article class="fav-new fav-new--hero">
                             <a href="{{ route('product.show', $hero->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="fav-new__image">
-                                    <img src="{{ $hero->image ? asset($hero->image) : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=900&fit=crop' }}" alt="{{ $hero->name }}" loading="lazy" />
+                                    <img src="{{ $hero->image ? image_url($hero->image) : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=900&fit=crop' }}" alt="{{ $hero->name }}" loading="lazy" />
                                     <div class="fav-new__badge-rank"><i class="fa-solid fa-crown"></i> #1</div>
                                 </div>
                             </a>
