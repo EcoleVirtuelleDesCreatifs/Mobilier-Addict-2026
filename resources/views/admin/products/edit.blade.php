@@ -26,7 +26,7 @@
                 @csrf
                 @method('PUT')
 
-                @include('admin.products._form', ['product' => $product, 'categories' => $categories, 'menus' => $menus, 'selectedMenuIds' => $selectedMenuIds])
+                @include('admin.products._form', ['product' => $product, 'categories' => $categories, 'homeSectionCategories' => $homeSectionCategories, 'menus' => $menus, 'selectedMenuIds' => $selectedMenuIds])
 
                 <div class="d-flex justify-content-end gap-2 mt-3">
                     <a href="{{ route('admin.products.index') }}" class="btn btn-admin-ghost">Annuler</a>

@@ -72,14 +72,24 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::query()->orderBy('name')->get();
+        $categories = Category::query()
+            ->whereNull('section_id')
+            ->orderBy('name')
+            ->get();
+
+        $homeSectionCategories = Category::query()
+            ->whereNotNull('section_id')
+            ->orderBy('section_id')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
         $menus = Menu::query()
             ->orderBy('position')
             ->orderBy('order')
             ->orderBy('name')
             ->get();
 
-        return view('admin.products.create', compact('categories', 'menus'));
+        return view('admin.products.create', compact('categories', 'homeSectionCategories', 'menus'));
     }
 
     public function store(Request $request)
@@ -92,9 +102,13 @@ class ProductController extends Controller
         $categoryIds = is_array($categoryIds) ? $categoryIds : [];
         $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
 
-        if (empty($data['category_id']) && !empty($categoryIds)) {
-            $data['category_id'] = $categoryIds[0];
-        }
+        $categoryIds = Category::query()
+            ->whereNotNull('section_id')
+            ->whereIn('id', $categoryIds)
+            ->pluck('id')
+            ->map(fn($v) => (int) $v)
+            ->values()
+            ->all();
 
         $product = DB::transaction(function () use ($data, $request) {
             $product = Product::create($data);
@@ -135,7 +149,18 @@ class ProductController extends Controller
             'variants' => fn($q) => $q->orderBy('thickness_cm')->orderBy('places'),
             'categories',
         ]);
-        $categories = Category::query()->orderBy('name')->get();
+
+        $categories = Category::query()
+            ->whereNull('section_id')
+            ->orderBy('name')
+            ->get();
+
+        $homeSectionCategories = Category::query()
+            ->whereNotNull('section_id')
+            ->orderBy('section_id')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
         $menus = Menu::query()
             ->orderBy('position')
             ->orderBy('order')
@@ -143,9 +168,12 @@ class ProductController extends Controller
             ->get();
 
         $selectedMenuIds = $product->menus()->pluck('menus.id')->all();
-        $selectedCategoryIds = $product->categories->pluck('id')->all();
+        $selectedCategoryIds = $product->categories
+            ->whereNotNull('section_id')
+            ->pluck('id')
+            ->all();
 
-        return view('admin.products.edit', compact('product', 'categories', 'menus', 'selectedMenuIds', 'selectedCategoryIds'));
+        return view('admin.products.edit', compact('product', 'categories', 'homeSectionCategories', 'menus', 'selectedMenuIds', 'selectedCategoryIds'));
     }
 
     public function update(Request $request, Product $product)
@@ -158,9 +186,13 @@ class ProductController extends Controller
         $categoryIds = is_array($categoryIds) ? $categoryIds : [];
         $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
 
-        if (empty($data['category_id']) && !empty($categoryIds)) {
-            $data['category_id'] = $categoryIds[0];
-        }
+        $categoryIds = Category::query()
+            ->whereNotNull('section_id')
+            ->whereIn('id', $categoryIds)
+            ->pluck('id')
+            ->map(fn($v) => (int) $v)
+            ->values()
+            ->all();
 
         DB::transaction(function () use ($data, $request, $product) {
             $product->update($data);
@@ -511,8 +543,8 @@ class ProductController extends Controller
         if (array_key_exists('available_colors', $data)) {
             $colors = $data['available_colors'];
             $colors = is_array($colors) ? $colors : [];
-            $colors = array_map(fn ($v) => trim((string) $v), $colors);
-            $colors = array_values(array_unique(array_filter($colors, fn ($v) => $v !== '')));
+            $colors = array_map(fn($v) => trim((string) $v), $colors);
+            $colors = array_values(array_unique(array_filter($colors, fn($v) => $v !== '')));
             $data['available_colors'] = !empty($colors) ? $colors : null;
         }
 

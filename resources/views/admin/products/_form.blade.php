@@ -475,7 +475,7 @@
             <div class="col-12 col-lg-4">
                 <label class="form-label">Catégories (plusieurs)</label>
                 <select name="category_ids[]" class="form-select" multiple>
-                    @foreach($categories as $category)
+                    @foreach(($homeSectionCategories ?? collect()) as $category)
                         <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategoryIds))>
                             {{ $category->name }}
                         </option>
