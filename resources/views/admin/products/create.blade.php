@@ -25,7 +25,7 @@
             <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" class="admin-card p-4">
                 @csrf
 
-                @include('admin.products._form', ['categories' => $categories, 'homeSectionCategories' => $homeSectionCategories, 'menus' => $menus])
+                @include('admin.products._form', ['homeSectionCategories' => $homeSectionCategories, 'menus' => $menus])
 
                 <div class="d-flex justify-content-end gap-2 mt-3">
                     <a href="{{ route('admin.products.index') }}" class="btn btn-admin-ghost">Annuler</a>

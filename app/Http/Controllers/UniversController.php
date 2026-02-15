@@ -100,7 +100,10 @@ class UniversController extends Controller
         if ($filterCategory) {
             $categoryIds = $this->collectCategoryAndDescendantIds($filterCategory);
 
-            $productsQuery->whereIn('category_id', $categoryIds);
+            $productsQuery->where(function ($q) use ($categoryIds) {
+                $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                    ->orWhereIn('category_id', $categoryIds);
+            });
         } else {
             $productsQuery->whereRaw('1=0');
         }
@@ -114,7 +117,10 @@ class UniversController extends Controller
             ->active()
             ->when($filterCategory, function ($q) use ($filterCategory) {
                 $categoryIds = $this->collectCategoryAndDescendantIds($filterCategory);
-                $q->whereIn('category_id', $categoryIds);
+                $q->where(function ($qq) use ($categoryIds) {
+                    $qq->whereHas('categories', fn ($qqq) => $qqq->whereIn('categories.id', $categoryIds))
+                        ->orWhereIn('category_id', $categoryIds);
+                });
             })
             ->when(!$filterCategory, fn ($q) => $q->whereRaw('1=0'))
             ->whereNotNull('discount_percent')
@@ -127,7 +133,13 @@ class UniversController extends Controller
             $mattressCategory = Category::query()->active()->where('slug', 'matelas')->first();
             $mattressProducts = Product::query()
                 ->active()
-                ->when($mattressCategory, fn ($q) => $q->where('category_id', $mattressCategory->id))
+                ->when($mattressCategory, function ($q) use ($mattressCategory) {
+                    $categoryIds = $this->collectCategoryAndDescendantIds($mattressCategory);
+                    $q->where(function ($qq) use ($categoryIds) {
+                        $qq->whereHas('categories', fn ($qqq) => $qqq->whereIn('categories.id', $categoryIds))
+                            ->orWhereIn('category_id', $categoryIds);
+                    });
+                })
                 ->orderBy('created_at', 'desc')
                 ->limit(4)
                 ->get();

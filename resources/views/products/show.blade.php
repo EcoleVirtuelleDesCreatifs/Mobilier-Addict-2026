@@ -11,8 +11,9 @@
         <div class="container">
             <ol class="product-breadcrumb__list">
                 <li><a href="{{ route('home') }}">Accueil</a></li>
-                @if($product->category)
-                    <li><a href="{{ route('univers.show', $product->category->slug) }}">{{ $product->category->name }}</a></li>
+                @php($primaryCategory = ($product->categories ?? collect())->first() ?: $product->category)
+                @if($primaryCategory)
+                    <li><a href="{{ route('univers.show', $primaryCategory->slug) }}">{{ $primaryCategory->name }}</a></li>
                 @endif
                 <li>{{ $product->name }}</li>
             </ol>
@@ -50,8 +51,8 @@
                 <!-- Product Info -->
                 <div class="product-info">
                     <div class="product-info__header">
-                        @if($product->category)
-                            <span class="product-info__category">{{ $product->category->name }}</span>
+                        @if($primaryCategory)
+                            <span class="product-info__category">{{ $primaryCategory->name }}</span>
                         @endif
                         <h1 class="product-info__title" data-original-title="{{ e($product->name) }}">{{ $product->name }}</h1>
                         @if($product->short_description)
@@ -90,12 +91,13 @@
                     </div>
 
                     @php
-                        $categorySlugForColors = (string) ($product->category?->slug ?? '');
-                        $categoryNameForColors = (string) ($product->category?->name ?? '');
+                        $categorySlugForColors = (string) ($primaryCategory?->slug ?? '');
+                        $categoryNameForColors = (string) ($primaryCategory?->name ?? '');
                         $categoryHaystackForColors = mb_strtolower(trim($categorySlugForColors . ' ' . $categoryNameForColors));
                         $requiresColor = str_contains($categoryHaystackForColors, 'drap') || str_contains($categoryHaystackForColors, 'taie');
                         $availableColors = $product->available_colors ?? [];
                         $availableColors = is_array($availableColors) ? array_values(array_unique(array_filter(array_map('trim', array_map('strval', $availableColors))))) : [];
+                        $showColors = !empty($availableColors) || $requiresColor;
 
                         $colorHex = [
                             'blanc' => '#ffffff',
@@ -121,7 +123,7 @@
                             'black' => '#0f172a',
                         ];
                     @endphp
-                    @if($requiresColor)
+                    @if($showColors && !empty($availableColors))
                         <div class="variant-picker" style="margin-top: 14px;">
                             <div class="variant-picker__label">Couleur</div>
                             <div class="variant-picker__chips" role="group" aria-label="Choisir une couleur">
@@ -144,8 +146,8 @@
                     @if(($product->variants ?? collect())->isNotEmpty())
                         @php
                             $variants = $product->variants->values();
-                            $categorySlug = (string) ($product->category?->slug ?? '');
-                            $categoryName = (string) ($product->category?->name ?? '');
+                            $categorySlug = (string) ($primaryCategory?->slug ?? '');
+                            $categoryName = (string) ($primaryCategory?->name ?? '');
                             $categoryHaystack = mb_strtolower(trim($categorySlug . ' ' . $categoryName));
                             $isMattressCategory = str_contains($categoryHaystack, 'matelas');
 

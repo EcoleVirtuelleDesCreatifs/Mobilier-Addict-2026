@@ -72,11 +72,6 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::query()
-            ->whereNull('section_id')
-            ->orderBy('name')
-            ->get();
-
         $homeSectionCategories = Category::query()
             ->whereNotNull('section_id')
             ->orderBy('section_id')
@@ -89,7 +84,7 @@ class ProductController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.products.create', compact('categories', 'homeSectionCategories', 'menus'));
+        return view('admin.products.create', compact('homeSectionCategories', 'menus'));
     }
 
     public function store(Request $request)
@@ -150,11 +145,6 @@ class ProductController extends Controller
             'categories',
         ]);
 
-        $categories = Category::query()
-            ->whereNull('section_id')
-            ->orderBy('name')
-            ->get();
-
         $homeSectionCategories = Category::query()
             ->whereNotNull('section_id')
             ->orderBy('section_id')
@@ -173,7 +163,7 @@ class ProductController extends Controller
             ->pluck('id')
             ->all();
 
-        return view('admin.products.edit', compact('product', 'categories', 'homeSectionCategories', 'menus', 'selectedMenuIds', 'selectedCategoryIds'));
+        return view('admin.products.edit', compact('product', 'homeSectionCategories', 'menus', 'selectedMenuIds', 'selectedCategoryIds'));
     }
 
     public function update(Request $request, Product $product)
@@ -363,7 +353,6 @@ class ProductController extends Controller
             'promo_price' => ['nullable', 'numeric', 'min:0'],
             'old_price' => ['nullable', 'numeric', 'min:0'],
             'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'category_ids' => ['nullable', 'array'],
             'category_ids.*' => ['integer', 'exists:categories,id'],
             'badge' => ['nullable', 'string', 'max:50'],

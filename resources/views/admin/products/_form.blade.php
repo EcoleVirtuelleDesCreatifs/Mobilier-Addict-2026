@@ -462,18 +462,8 @@
     <div class="admin-card p-3">
         <div class="fw-semibold mb-2">Emplacement du produit</div>
         <div class="row g-3">
-            <div class="col-12 col-lg-4">
-                <label class="form-label">Catégorie</label>
-                <select name="category_id" class="form-select">
-                    <option value="">—</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" @selected(old('category_id', $isEdit ? $product->category_id : null) == $category->id)>{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-12 col-lg-4">
-                <label class="form-label">Catégories (plusieurs)</label>
+            <div class="col-12 col-lg-6">
+                <label class="form-label">Catégories Section Home (plusieurs)</label>
                 <select name="category_ids[]" class="form-select" multiple>
                     @foreach(($homeSectionCategories ?? collect()) as $category)
                         <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategoryIds))>
@@ -483,7 +473,7 @@
                 </select>
             </div>
 
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-6">
                 <label class="form-label">Menus rattachés</label>
                 @php
                     $defaultSelected = $selectedMenuIds ?? ($isEdit ? $product->menus->pluck('id')->all() : []);
