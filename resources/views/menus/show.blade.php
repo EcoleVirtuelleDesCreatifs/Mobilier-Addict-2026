@@ -644,7 +644,9 @@
                                 <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                                     <h3 class="matelas-mini__name">{{ $product->name }}</h3>
                                 </a>
-                                <p class="matelas-mini__meta">{{ $specs ?: ($product->short_description ?: ' ') }}</p>
+                                @if($specs)
+                                    <p class="matelas-mini__meta">{{ $specs }}</p>
+                                @endif
                                 <div class="matelas-mini__footer">
                                     <div class="matelas-mini__price">{{ number_format((float) $gridPrice, 0, ',', '.') }}F</div>
                                     <form action="{{ route('cart.add') }}" method="POST">
