@@ -731,25 +731,107 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const setColor = (color) => {
-            if (selectedColorEl) selectedColorEl.value = String(color || '');
-            if (addToCartColor) addToCartColor.value = String(color || '');
-            if (directOrderColor) directOrderColor.value = String(color || '');
-            if (colorHintEl) {
-                colorHintEl.textContent = color ? ('Couleur sélectionnée: ' + color) : 'Veuillez choisir une couleur.';
+        let selectedColors = [];
+
+        const getQty = () => {
+            const v = qtyInput ? parseInt(qtyInput.value) : 1;
+            return Number.isFinite(v) && v > 0 ? v : 1;
+        };
+
+        const renderHint = () => {
+            if (!colorHintEl) return;
+            const qty = getQty();
+
+            if (qty <= 1) {
+                const c = selectedColors[0] || '';
+                colorHintEl.textContent = c ? ('Couleur sélectionnée: ' + c) : 'Veuillez choisir une couleur.';
+                return;
             }
+
+            if (!selectedColors.length) {
+                colorHintEl.textContent = 'Veuillez choisir ' + qty + ' couleurs.';
+                return;
+            }
+
+            if (selectedColors.length < qty) {
+                colorHintEl.textContent = 'Couleurs: ' + selectedColors.join(', ') + ' (reste ' + (qty - selectedColors.length) + ')';
+                return;
+            }
+
+            colorHintEl.textContent = 'Couleurs sélectionnées: ' + selectedColors.join(', ');
+        };
+
+        const syncHiddenInputs = () => {
+            const qty = getQty();
+            const value = qty <= 1
+                ? String(selectedColors[0] || '')
+                : String(selectedColors.join(', '));
+
+            if (selectedColorEl) selectedColorEl.value = value;
+            if (addToCartColor) addToCartColor.value = value;
+            if (directOrderColor) directOrderColor.value = value;
+
+            renderHint();
+        };
+
+        const normalizeToQty = () => {
+            const qty = getQty();
+            if (qty <= 1) {
+                selectedColors = selectedColors.length ? [selectedColors[0]] : [];
+                chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                if (selectedColors[0]) {
+                    const active = Array.from(chips).find(b => (b.getAttribute('data-color') || '') === selectedColors[0]);
+                    if (active) active.setAttribute('aria-pressed', 'true');
+                }
+                syncHiddenInputs();
+                return;
+            }
+
+            if (selectedColors.length > qty) {
+                selectedColors = selectedColors.slice(0, qty);
+            }
+
+            // In multi mode we don't try to reflect multiple selections on chips.
+            chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
+            syncHiddenInputs();
         };
 
         chips.forEach(btn => {
             btn.addEventListener('click', () => {
                 const color = btn.getAttribute('data-color') || '';
-                chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
-                btn.setAttribute('aria-pressed', 'true');
-                setColor(color);
+
+                const qty = getQty();
+                if (qty <= 1) {
+                    selectedColors = color ? [color] : [];
+                    chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                    btn.setAttribute('aria-pressed', 'true');
+                    syncHiddenInputs();
+                    return;
+                }
+
+                if (!color) {
+                    return;
+                }
+
+                const existingIndex = selectedColors.indexOf(color);
+                if (existingIndex !== -1) {
+                    selectedColors.splice(existingIndex, 1);
+                    normalizeToQty();
+                    return;
+                }
+
+                if (selectedColors.length >= qty) {
+                    // Replace last selection to keep a quick UX
+                    selectedColors[selectedColors.length - 1] = color;
+                } else {
+                    selectedColors.push(color);
+                }
+
+                normalizeToQty();
             });
         });
 
-        setColor('');
+        syncHiddenInputs();
 
         const form1 = document.getElementById('addToCartForm');
         const forms = [];
@@ -760,13 +842,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         forms.forEach(f => {
             f.addEventListener('submit', (e) => {
-                const selected = selectedColorEl ? String(selectedColorEl.value || '') : '';
-                if (!selected) {
+                const qty = getQty();
+                const val = selectedColorEl ? String(selectedColorEl.value || '') : '';
+                const count = val ? val.split(',').map(s => s.trim()).filter(Boolean).length : 0;
+
+                if (!val || count < (qty <= 1 ? 1 : qty)) {
                     e.preventDefault();
-                    if (colorHintEl) colorHintEl.textContent = 'Veuillez choisir une couleur.';
+                    if (colorHintEl) {
+                        colorHintEl.textContent = qty <= 1
+                            ? 'Veuillez choisir une couleur.'
+                            : ('Veuillez choisir ' + qty + ' couleurs.');
+                    }
                 }
             });
         });
+
+        if (qtyInput) {
+            qtyInput.addEventListener('change', normalizeToQty);
+            qtyInput.addEventListener('input', normalizeToQty);
+        }
     };
 
     // Quantity controls
