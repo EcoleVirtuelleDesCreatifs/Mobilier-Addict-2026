@@ -11,7 +11,9 @@
         <div class="container">
             <ol class="product-breadcrumb__list">
                 <li><a href="{{ route('home') }}">Accueil</a></li>
-                @php($primaryCategory = ($product->categories ?? collect())->first() ?: $product->category)
+                @php
+                    $primaryCategory = ($product->categories ?? collect())->first() ?: $product->category;
+                @endphp
                 @if($primaryCategory)
                     <li><a href="{{ route('univers.show', $primaryCategory->slug) }}">{{ $primaryCategory->name }}</a></li>
                 @endif
