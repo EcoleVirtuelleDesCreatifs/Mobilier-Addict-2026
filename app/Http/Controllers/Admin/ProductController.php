@@ -88,12 +88,30 @@ class ProductController extends Controller
         $data = $this->normalizeProductData($data);
         $data = $this->handleProductUploads($request, $data);
 
+        $categoryIds = $request->input('category_ids', []);
+        $categoryIds = is_array($categoryIds) ? $categoryIds : [];
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+
+        if (empty($data['category_id']) && !empty($categoryIds)) {
+            $data['category_id'] = $categoryIds[0];
+        }
+
         $product = DB::transaction(function () use ($data, $request) {
             $product = Product::create($data);
             $this->syncVariants($request, $product);
 
             return $product;
         });
+
+        if (!empty($categoryIds) && !Schema::hasTable('category_product')) {
+            throw ValidationException::withMessages([
+                'category_ids' => "La table pivot 'category_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → catégories.",
+            ]);
+        }
+
+        if (Schema::hasTable('category_product')) {
+            $product->categories()->sync($categoryIds);
+        }
 
         $menuIds = $request->input('menu_ids', []);
         $menuIds = is_array($menuIds) ? $menuIds : [];
@@ -113,7 +131,10 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load(['variants' => fn($q) => $q->orderBy('thickness_cm')->orderBy('places')]);
+        $product->load([
+            'variants' => fn($q) => $q->orderBy('thickness_cm')->orderBy('places'),
+            'categories',
+        ]);
         $categories = Category::query()->orderBy('name')->get();
         $menus = Menu::query()
             ->orderBy('position')
@@ -122,8 +143,9 @@ class ProductController extends Controller
             ->get();
 
         $selectedMenuIds = $product->menus()->pluck('menus.id')->all();
+        $selectedCategoryIds = $product->categories->pluck('id')->all();
 
-        return view('admin.products.edit', compact('product', 'categories', 'menus', 'selectedMenuIds'));
+        return view('admin.products.edit', compact('product', 'categories', 'menus', 'selectedMenuIds', 'selectedCategoryIds'));
     }
 
     public function update(Request $request, Product $product)
@@ -132,10 +154,28 @@ class ProductController extends Controller
         $data = $this->normalizeProductData($data);
         $data = $this->handleProductUploads($request, $data, $product);
 
+        $categoryIds = $request->input('category_ids', []);
+        $categoryIds = is_array($categoryIds) ? $categoryIds : [];
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+
+        if (empty($data['category_id']) && !empty($categoryIds)) {
+            $data['category_id'] = $categoryIds[0];
+        }
+
         DB::transaction(function () use ($data, $request, $product) {
             $product->update($data);
             $this->syncVariants($request, $product);
         });
+
+        if (!empty($categoryIds) && !Schema::hasTable('category_product')) {
+            throw ValidationException::withMessages([
+                'category_ids' => "La table pivot 'category_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → catégories.",
+            ]);
+        }
+
+        if (Schema::hasTable('category_product')) {
+            $product->categories()->sync($categoryIds);
+        }
 
         $menuIds = $request->input('menu_ids', []);
         $menuIds = is_array($menuIds) ? $menuIds : [];
@@ -292,6 +332,8 @@ class ProductController extends Controller
             'old_price' => ['nullable', 'numeric', 'min:0'],
             'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'category_ids' => ['nullable', 'array'],
+            'category_ids.*' => ['integer', 'exists:categories,id'],
             'badge' => ['nullable', 'string', 'max:50'],
             'badge_type' => ['nullable', 'in:new,hot,sale,custom'],
             'stock' => ['nullable', 'integer', 'min:0'],

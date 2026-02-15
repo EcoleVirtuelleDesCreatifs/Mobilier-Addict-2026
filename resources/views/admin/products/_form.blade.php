@@ -35,6 +35,9 @@
             ->all();
     }
     $variantRows = is_array($variantRows) ? $variantRows : [];
+
+    $selectedCategoryIds = old('category_ids', $selectedCategoryIds ?? ($isEdit ? (($product->categories ?? collect())->pluck('id')->all()) : []));
+    $selectedCategoryIds = is_array($selectedCategoryIds) ? $selectedCategoryIds : [];
 @endphp
 
 <input type="hidden" name="slug" value="{{ old('slug', $isEdit ? $product->slug : null) }}">
@@ -465,6 +468,17 @@
                     <option value="">—</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" @selected(old('category_id', $isEdit ? $product->category_id : null) == $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <label class="form-label">Catégories (plusieurs)</label>
+                <select name="category_ids[]" class="form-select" multiple>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategoryIds))>
+                            {{ $category->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
