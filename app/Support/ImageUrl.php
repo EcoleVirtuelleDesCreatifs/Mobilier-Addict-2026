@@ -25,6 +25,20 @@ class ImageUrl
 
         $path = ltrim($path, '/');
 
+        if (preg_match('/\.(jpe?g|png)$/i', $path)) {
+            $webpPath = preg_replace('/\.(jpe?g|png)$/i', '.webp', $path);
+            if (is_string($webpPath) && $webpPath !== $path) {
+                if (Str::startsWith($webpPath, 'uploads/') && is_file(public_path($webpPath))) {
+                    $path = $webpPath;
+                } elseif (Str::startsWith($webpPath, 'storage/')) {
+                    $storageRelative = Str::after($webpPath, 'storage/');
+                    if (is_file(storage_path('app/public/' . $storageRelative)) || is_file(public_path($webpPath))) {
+                        $path = $webpPath;
+                    }
+                }
+            }
+        }
+
         $prefix = (string) config('app.image_url_public_prefix', 'storage');
         $useStorageAppPublic = $prefix === 'storage_app_public';
         $usePublicStorage = $prefix === 'public_storage';

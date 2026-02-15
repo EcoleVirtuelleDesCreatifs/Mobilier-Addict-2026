@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -67,7 +68,7 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $article->image = $request->file('image')->store('articles', 'public');
+            $article->image = ImageOptimizer::storeStoragePublic($request->file('image'), 'articles', 1200, 80);
         }
 
         if (Schema::hasColumn('blog_posts', 'user_id')) {
@@ -123,7 +124,7 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $article->image = $request->file('image')->store('articles', 'public');
+            $article->image = ImageOptimizer::storeStoragePublic($request->file('image'), 'articles', 1200, 80);
         }
 
         if (Schema::hasColumn('blog_posts', 'is_slider')) {
@@ -148,7 +149,7 @@ class ArticleController extends Controller
             'upload' => ['required', 'image', 'max:4096'],
         ]);
 
-        $path = $request->file('upload')->store('articles', 'public');
+        $path = ImageOptimizer::storeStoragePublic($request->file('upload'), 'articles', 1600, 80);
 
         return response()->json([
             'url' => \Illuminate\Support\Facades\Storage::disk('public')->url($path),

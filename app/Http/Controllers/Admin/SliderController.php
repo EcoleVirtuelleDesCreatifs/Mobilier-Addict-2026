@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slide;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -29,7 +30,7 @@ class SliderController extends Controller
         $data = $this->normalize($data);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('slides', 'public');
+            $data['image'] = ImageOptimizer::storeStoragePublic($request->file('image'), 'slides', 1600, 80);
         }
 
         Slide::create($data);
@@ -50,7 +51,7 @@ class SliderController extends Controller
         $data = $this->normalize($data);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('slides', 'public');
+            $data['image'] = ImageOptimizer::storeStoragePublic($request->file('image'), 'slides', 1600, 80);
         }
 
         $slider->update($data);

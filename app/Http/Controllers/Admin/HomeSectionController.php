@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Section;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -75,13 +76,8 @@ class HomeSectionController extends Controller
         $section = Section::create($data);
 
         if ($request->hasFile('cover_image')) {
-            $dir = public_path('uploads/sections');
-            File::ensureDirectoryExists($dir);
-
             $file = $request->file('cover_image');
-            $filename = 'section-' . $section->id . '-' . Str::random(12) . '.' . $file->getClientOriginalExtension();
-            $file->move($dir, $filename);
-            $section->cover_image = 'uploads/sections/' . $filename;
+            $section->cover_image = ImageOptimizer::storePublicUpload($file, 'uploads/sections', 1600, 80);
             $section->save();
         }
 
@@ -137,13 +133,8 @@ class HomeSectionController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            $dir = public_path('uploads/sections');
-            File::ensureDirectoryExists($dir);
-
             $file = $request->file('cover_image');
-            $filename = 'section-' . $home_section->id . '-' . Str::random(12) . '.' . $file->getClientOriginalExtension();
-            $file->move($dir, $filename);
-            $data['cover_image'] = 'uploads/sections/' . $filename;
+            $data['cover_image'] = ImageOptimizer::storePublicUpload($file, 'uploads/sections', 1600, 80);
         }
 
         $home_section->update($data);

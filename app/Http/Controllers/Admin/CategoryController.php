@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Menu;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -145,16 +146,7 @@ class CategoryController extends Controller
 
     private function storeUploadedImage($file, string $folder): string
     {
-        $dir = public_path('uploads/' . $folder);
-
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-        $file->move($dir, $filename);
-
-        return 'uploads/' . $folder . '/' . $filename;
+        return ImageOptimizer::storePublicUpload($file, 'uploads/' . $folder, 800, 80);
     }
 
     private function makeUniqueSlug(string $baseSlug, ?int $ignoreId = null): string

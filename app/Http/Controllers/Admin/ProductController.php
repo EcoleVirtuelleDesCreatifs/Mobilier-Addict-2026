@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Menu;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -250,19 +251,8 @@ class ProductController extends Controller
 
     private function storeUploadedImage($file, string $folder): string
     {
-        $ext = (string) $file->getClientOriginalExtension();
-        $ext = trim($ext);
-        if ($ext === '') {
-            $ext = (string) ($file->guessExtension() ?: 'jpg');
-        }
-        $ext = ltrim($ext, '.');
-
-        $filename = time() . '_' . Str::random(10) . '.' . $ext;
-
-        $path = trim($folder, '/') . '/' . $filename;
-        Storage::disk('public')->putFileAs(trim($folder, '/'), $file, $filename);
-
-        return $path;
+        $maxWidth = $folder === 'products' ? 1600 : 1200;
+        return ImageOptimizer::storeStoragePublic($file, trim($folder, '/'), $maxWidth, 80);
     }
 
     private function validateProduct(Request $request, ?Product $product = null): array
