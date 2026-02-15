@@ -10,6 +10,10 @@ class UniversController extends Controller
     public function show(string $slug)
     {
         $fallbackPages = [
+            'couettes-douces' => [
+                'title' => 'Couettes',
+                'description' => "Découvrez nos couettes douces et confortables.",
+            ],
             'hotellerie' => [
                 'title' => 'Hôtellerie',
                 'description' => "Solutions professionnelles pour hôtels, chambres d'hôtes et résidences de tourisme.",
@@ -78,6 +82,10 @@ class UniversController extends Controller
         $filterCategory = $category;
         if (!$filterCategory && in_array($slug, $sleepSpaceSlugs, true)) {
             $filterCategory = Category::query()->where('slug', 'matelas')->first();
+        }
+
+        if (!$filterCategory && $slug === 'couettes-douces') {
+            $filterCategory = Category::query()->where('slug', 'couettes')->first();
         }
 
         $pageTitle = $category?->name ?? ($fallbackPages[$slug]['title'] ?? null);

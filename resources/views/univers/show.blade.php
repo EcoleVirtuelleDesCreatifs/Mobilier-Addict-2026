@@ -9,6 +9,7 @@
         $designSlug = match ($slug) {
             'une-cuisine-pensee-pour-le-plaisir' => 'cuisine',
             'draps-couleur-unie' => 'draps-couettes',
+            'couettes-douces' => 'couettes',
             'la-fraicheur-au-coeur-de-votre-confort' => 'froid-climatisation',
             'lelegance-au-coeur-de-votre-salon' => 'salon',
             'vivez-chaque-image-ressentez-chaque-son' => 'multi-media',
