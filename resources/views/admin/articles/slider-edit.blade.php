@@ -46,7 +46,7 @@
 
                                 @if($slider->image)
                                     <div class="mt-2">
-                                        <img src="{{ asset('storage/' . $slider->image) }}" alt="Image slide" width="160" height="110" style="object-fit: cover; border-radius: 4px;">
+                                        <img src="@image_url($slider->image)" alt="Image slide" width="160" height="110" style="object-fit: cover; border-radius: 4px;">
                                     </div>
                                 @endif
                             </div>

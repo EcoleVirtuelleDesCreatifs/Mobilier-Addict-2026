@@ -78,7 +78,7 @@
                                             {{-- Image --}}
                                             <td>
                                                 @if ($slider->image)
-                                                    <img src="{{ asset('storage/' . $slider->image) }}" alt="Image slide" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
+                                                    <img src="@image_url($slider->image)" alt="Image slide" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
                                                 @else
                                                     <img src="https://placehold.co/60x40?text=Pas+d%27image" alt="Image par défaut" width="100" height="80" style="object-fit: cover; border-radius: 4px;">
                                                 @endif
