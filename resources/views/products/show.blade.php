@@ -791,8 +791,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedColors = selectedColors.slice(0, qty);
             }
 
-            // In multi mode we don't try to reflect multiple selections on chips.
-            chips.forEach(b => b.setAttribute('aria-pressed', 'false'));
+            // Multi mode: visually keep all selected colors active.
+            chips.forEach(b => {
+                const c = b.getAttribute('data-color') || '';
+                b.setAttribute('aria-pressed', selectedColors.includes(c) ? 'true' : 'false');
+            });
             syncHiddenInputs();
         };
 
