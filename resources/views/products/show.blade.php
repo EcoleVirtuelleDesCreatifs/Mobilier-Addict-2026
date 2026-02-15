@@ -849,6 +849,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         forms.forEach(f => {
             f.addEventListener('submit', (e) => {
+                if (!selectedColorEl) {
+                    return;
+                }
                 const qty = getQty();
                 const val = selectedColorEl ? String(selectedColorEl.value || '') : '';
                 const count = val ? val.split(',').map(s => s.trim()).filter(Boolean).length : 0;
@@ -859,6 +862,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         colorHintEl.textContent = qty <= 1
                             ? 'Veuillez choisir une couleur.'
                             : ('Veuillez choisir ' + qty + ' couleurs.');
+                    }
+
+                    const colorWrap = document.querySelector('.variant-picker__colors')
+                        || document.querySelector('.variant-picker')
+                        || document.getElementById('colorHint');
+                    if (colorWrap && colorWrap.scrollIntoView) {
+                        colorWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 }
             });
