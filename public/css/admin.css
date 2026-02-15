@@ -112,6 +112,33 @@ body.admin-body{
   color:#fff;
 }
 
+.btn-success{
+  background-color:var(--admin-pink)!important;
+  border-color:var(--admin-pink)!important;
+  color:#fff!important;
+}
+
+.btn-success:hover,.btn-success:focus{
+  background-color:#db2777!important;
+  border-color:#db2777!important;
+  color:#fff!important;
+}
+
+.btn-outline-success{
+  color:var(--admin-pink)!important;
+  border-color:var(--admin-pink)!important;
+}
+
+.btn-outline-success:hover,.btn-outline-success:focus{
+  background-color:var(--admin-pink)!important;
+  border-color:var(--admin-pink)!important;
+  color:#fff!important;
+}
+
+.text-success{color:var(--admin-pink)!important}
+.badge-success{background-color:var(--admin-pink)!important;border-color:var(--admin-pink)!important}
+.alert-success{border-color:rgba(236,72,153,.35)!important}
+
 .btn-admin-ghost{
   background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.10);
