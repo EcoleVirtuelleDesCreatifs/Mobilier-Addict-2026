@@ -104,26 +104,129 @@
                     $colorsValue = array_values(array_unique(array_filter(array_map('trim', array_map('strval', $colorsValue)))));
                     $suggestedColors = [
                         'Blanc',
-                        'Noir',
+                        'Bleu',
                         'Gris',
                         'Beige',
-                        'Bleu',
-                        'Rose',
-                        'Vert',
-                        'Marron',
                         'Rouge',
+                        'Violet',
+                        'Vert',
+                        'Rose',
+                        'Marron',
+                        'Jaune',
+                    ];
+
+                    $colorHex = [
+                        'Blanc' => '#ffffff',
+                        'Bleu' => '#2563eb',
+                        'Gris' => '#9ca3af',
+                        'Beige' => '#d6c6a6',
+                        'Rouge' => '#dc2626',
+                        'Violet' => '#7c3aed',
+                        'Vert' => '#16a34a',
+                        'Rose' => '#ec4899',
+                        'Marron' => '#7c4a2d',
+                        'Jaune' => '#facc15',
                     ];
                 @endphp
-                <select name="available_colors[]" class="form-select" multiple size="6">
-                    @foreach($suggestedColors as $c)
-                        <option value="{{ $c }}" @selected(in_array($c, $colorsValue, true))>{{ $c }}</option>
-                    @endforeach
-                    @foreach($colorsValue as $c)
-                        @if(!in_array($c, $suggestedColors, true))
-                            <option value="{{ $c }}" selected>{{ $c }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div data-role="color-picker" class="rounded-3" style="border:1px solid var(--admin-border); padding:10px; background: rgba(255,255,255,.03);">
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach($suggestedColors as $c)
+                            @php
+                                $hex = $colorHex[$c] ?? '#ffffff';
+                                $isSelected = in_array($c, $colorsValue, true);
+                            @endphp
+                            <button
+                                type="button"
+                                data-color="{{ $c }}"
+                                data-selected="{{ $isSelected ? '1' : '0' }}"
+                                class="btn btn-sm"
+                                style="display:flex;align-items:center;gap:8px;border-radius:999px;border:1px solid var(--admin-border); background: {{ $isSelected ? 'rgba(255,255,255,.08)' : 'transparent' }}; color: inherit;"
+                            >
+                                <span style="width:16px;height:16px;border-radius:999px;background: {{ $hex }}; border: 1px solid rgba(255,255,255,.35);"></span>
+                                <span>{{ $c }}</span>
+                                <span data-check style="margin-left:2px; {{ $isSelected ? '' : 'display:none' }}">✓</span>
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <div class="mt-3 d-flex gap-2">
+                        <input type="text" class="form-control" data-role="custom-color" placeholder="Ajouter une couleur (ex: Turquoise)">
+                        <button type="button" class="btn btn-admin" data-role="add-custom-color">Ajouter</button>
+                    </div>
+
+                    <div class="mt-2" data-role="selected-inputs">
+                        @foreach($colorsValue as $c)
+                            <input type="hidden" name="available_colors[]" value="{{ $c }}">
+                        @endforeach
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const root = document.querySelector('[data-role="color-picker"]');
+                        if (!root) return;
+
+                        const inputsWrap = root.querySelector('[data-role="selected-inputs"]');
+                        const customInput = root.querySelector('[data-role="custom-color"]');
+                        const addBtn = root.querySelector('[data-role="add-custom-color"]');
+
+                        const normalize = (v) => String(v || '').trim();
+                        const getSelected = () => {
+                            const values = [];
+                            inputsWrap.querySelectorAll('input[name="available_colors[]"]').forEach(i => {
+                                const v = normalize(i.value);
+                                if (v) values.push(v);
+                            });
+                            return values;
+                        };
+
+                        const setSelected = (values) => {
+                            inputsWrap.innerHTML = '';
+                            const uniq = [];
+                            values.forEach(v => {
+                                const val = normalize(v);
+                                if (!val) return;
+                                if (uniq.includes(val)) return;
+                                uniq.push(val);
+                            });
+                            uniq.forEach(v => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'available_colors[]';
+                                input.value = v;
+                                inputsWrap.appendChild(input);
+                            });
+                        };
+
+                        root.querySelectorAll('[data-color]').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                const color = normalize(btn.getAttribute('data-color'));
+                                if (!color) return;
+                                const selected = getSelected();
+                                const isSelected = selected.includes(color);
+                                const next = isSelected ? selected.filter(v => v !== color) : [...selected, color];
+                                setSelected(next);
+
+                                btn.setAttribute('data-selected', isSelected ? '0' : '1');
+                                btn.style.background = isSelected ? 'transparent' : 'rgba(255,255,255,.08)';
+                                const check = btn.querySelector('[data-check]');
+                                if (check) check.style.display = isSelected ? 'none' : '';
+                            });
+                        });
+
+                        if (addBtn && customInput) {
+                            addBtn.addEventListener('click', () => {
+                                const v = normalize(customInput.value);
+                                if (!v) return;
+                                const selected = getSelected();
+                                if (!selected.includes(v)) {
+                                    setSelected([...selected, v]);
+                                }
+                                customInput.value = '';
+                            });
+                        }
+                    });
+                </script>
             </div>
 
             <div class="col-12 col-lg-6">
