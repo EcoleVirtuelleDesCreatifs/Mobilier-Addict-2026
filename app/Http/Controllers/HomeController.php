@@ -6,6 +6,7 @@ use App\Models\BlogPost;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\Slide;
 
 class HomeController extends Controller
 {
@@ -91,6 +92,11 @@ class HomeController extends Controller
             ])
             ->get()
             ->keyBy('slug');
+
+        $heroSlides = Slide::query()
+            ->active()
+            ->ordered()
+            ->get();
 
         $collectionProducts = Product::query()
             ->active()
@@ -393,7 +399,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('home', compact('homeSections', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts', 'pillowProducts', 'drapsProducts'));
+        return view('home', compact('homeSections', 'heroSlides', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts', 'pillowProducts', 'drapsProducts'));
     }
 
     private function collectCategoryAndDescendantIds(Category $category)
