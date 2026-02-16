@@ -27,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo \\" . ImageUrl::class . "::url({$expression}); ?>";
         });
 
+        View::addExtension('blade.php', 'blade');
+
         View::composer('partials.header', function ($view) {
             $headerMenus = Menu::query()
                 ->active()
