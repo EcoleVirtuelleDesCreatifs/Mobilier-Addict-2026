@@ -9,7 +9,6 @@
 @section('content')
 @include('sections.hero')
 @include('sections.categories')
-@include('sections.oreillers')
 @include('sections.draps')
 @include('sections.guarantees')
 @include('sections.spaces')
