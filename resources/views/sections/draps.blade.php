@@ -1,5 +1,5 @@
-@php($section = $homeSections['draps'] ?? null)
-@if($section)
+<?php $section = $homeSections['draps'] ?? null; ?>
+<?php if ($section) : ?>
 <section class="electro" aria-label="Draps" style="background: {{ $section?->background_color ?: 'radial-gradient(900px circle at 18% 22%, rgba(79, 70, 229, .40) 0%, rgba(79, 70, 229, 0) 60%), radial-gradient(800px circle at 82% 28%, rgba(236, 72, 153, .32) 0%, rgba(236, 72, 153, 0) 58%), linear-gradient(135deg, rgba(79,70,229,.24) 0%, rgba(236,72,153,.18) 100%)' }};">
     <div class="container">
         @php
