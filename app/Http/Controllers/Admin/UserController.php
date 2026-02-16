@@ -9,6 +9,7 @@ use App\Notifications\NewUserCredentialsNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -69,6 +70,12 @@ class UserController extends Controller
             }
         } catch (\Throwable $e) {
             // If mail is not configured, we still want to create the user.
+            Log::error('Admin user creation mail failed', [
+                'user_id' => $user->id ?? null,
+                'email' => $user->email ?? null,
+                'is_admin' => (bool) ($user->is_admin ?? false),
+                'error' => $e->getMessage(),
+            ]);
         }
 
         return redirect()->route('admin.users.show', $user)->with('success', 'Utilisateur créé avec succès.');
