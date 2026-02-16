@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\BlogPost;
+use App\Notifications\MobilierAddictResetPasswordNotification;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -82,5 +83,10 @@ class User extends Authenticatable implements CanResetPasswordContract
     public function articles()
     {
         return $this->hasMany(BlogPost::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MobilierAddictResetPasswordNotification($token));
     }
 }

@@ -37,7 +37,7 @@ class AdminOrderPlacedNotification extends Notification
     {
         $order = $this->order;
 
-        $subject = 'Nouvelle commande #' . $order->id;
+        $subject = 'Nouvelle commande #' . $order->id . ' - Mobilier Addict';
 
         $customerName = trim(($order->firstnames ?? '') . ' ' . ($order->lastname ?? ''));
         $customerLine = $customerName !== '' ? $customerName : 'Client';
@@ -46,10 +46,12 @@ class AdminOrderPlacedNotification extends Notification
 
         return (new MailMessage)
             ->subject($subject)
-            ->greeting('Nouvelle commande à traiter')
-            ->line($customerLine)
+            ->greeting('Nouvelle commande reçue')
+            ->line('Commande #' . $order->id . ' à traiter.')
+            ->line('Client : ' . $customerLine)
+            ->line('Téléphone/WhatsApp : ' . ($order->phone ?: ($order->whatsapp ?: '—')))
             ->line('Total : ' . number_format((float) $order->total, 0, ',', '.') . ' F')
-            ->line('Mode de livraison : ' . ($order->shipping_method ?: '—'))
+            ->line('Livraison : ' . ($order->shipping_method ?: '—') . ' • ' . ($order->delivery_place ?: '—'))
             ->action('Voir la commande', $adminUrl)
             ->line('Merci de prendre en charge la commande rapidement.');
     }
