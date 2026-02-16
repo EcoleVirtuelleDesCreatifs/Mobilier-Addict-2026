@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\FacebookPixelController;
+use App\Http\Controllers\Admin\SpaceSectionController;
+use App\Http\Controllers\Admin\SpaceCardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController as FrontMenuController;
 use App\Http\Controllers\ProfileController;
@@ -304,6 +306,14 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/home-sections', [HomeSectionController::class, 'store'])->name('admin.home_sections.store');
     Route::get('/home-sections/{home_section}/edit', [HomeSectionController::class, 'edit'])->name('admin.home_sections.edit');
     Route::put('/home-sections/{home_section}', [HomeSectionController::class, 'update'])->name('admin.home_sections.update');
+
+    Route::get('/space-sections', [SpaceSectionController::class, 'index'])->name('admin.space_sections.index');
+    Route::get('/space-sections/{space_section}/edit', [SpaceSectionController::class, 'edit'])->name('admin.space_sections.edit');
+    Route::put('/space-sections/{space_section}', [SpaceSectionController::class, 'update'])->name('admin.space_sections.update');
+
+    Route::post('/space-sections/{space_section}/cards', [SpaceCardController::class, 'store'])->name('admin.space_sections.cards.store');
+    Route::put('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'update'])->name('admin.space_sections.cards.update');
+    Route::delete('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'destroy'])->name('admin.space_sections.cards.destroy');
 });
 
 Route::get('/dashboard', function () {

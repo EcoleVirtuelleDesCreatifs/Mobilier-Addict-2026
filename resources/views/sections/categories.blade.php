@@ -1,6 +1,7 @@
+        @php($section = $homeSections['categories'] ?? null)
+        @if($section)
         <section class="categories" id="categories" aria-label="Nos univers">
             <div class="container">
-                @php($section = $homeSections['categories'] ?? null)
 
                 <div class="categories__header">
                     <span class="categories__badge">{{ trim(($section?->badge_icon ? $section->badge_icon . ' ' : '') . ($section?->badge ?? '')) }}</span>
@@ -153,3 +154,4 @@
                 @endif
             </div>
         </section>
+        @endif

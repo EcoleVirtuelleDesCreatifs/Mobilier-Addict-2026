@@ -33,20 +33,20 @@
                     <div class="card-body">
                         <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label">Nom complet <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
                                            id="name" name="name" value="{{ old('name') }}" required>
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
                                            id="email" name="email" value="{{ old('email') }}" required>
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -57,31 +57,31 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                           id="password" name="password" required>
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                           id="password" name="password">
                                     @error('password')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="password_confirmation" class="form-label">Confirmer le mot de passe <span class="text-danger">*</span></label>
-                                    <input type="password" class="form-control" 
-                                           id="password_confirmation" name="password_confirmation" required>
+                                    <input type="password" class="form-control"
+                                           id="password_confirmation" name="password_confirmation">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="fonction" class="form-label">Fonction</label>
-                                    <input type="text" class="form-control @error('fonction') is-invalid @enderror" 
-                                           id="fonction" name="fonction" value="{{ old('fonction') }}" 
+                                    <input type="text" class="form-control @error('fonction') is-invalid @enderror"
+                                           id="fonction" name="fonction" value="{{ old('fonction') }}"
                                            placeholder="Ex: Journaliste, Rédacteur en chef...">
                                     @error('fonction')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="role" class="form-label">Rôle <span class="text-danger">*</span></label>
                                     <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
@@ -100,7 +100,7 @@
 
                             <div class="mb-3">
                                 <label for="profile_picture" class="form-label">Photo de profil</label>
-                                <input type="file" class="form-control @error('profile_picture') is-invalid @enderror" 
+                                <input type="file" class="form-control @error('profile_picture') is-invalid @enderror"
                                        id="profile_picture" name="profile_picture" accept="image/*">
                                 @error('profile_picture')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-xl-4 col-lg-12">
                 <div class="card">
                     <div class="card-header">
@@ -129,12 +129,12 @@
                             <h6 class="text-primary"><i class="fas fa-user-shield me-2"></i>Administrateur</h6>
                             <p class="small text-muted">Accès complet au système, peut gérer tous les utilisateurs et contenus.</p>
                         </div>
-                        
+
                         <div class="mb-3">
                             <h6 class="text-warning"><i class="fas fa-user-edit me-2"></i>Éditeur</h6>
                             <p class="small text-muted">Peut créer, modifier et publier des articles. Accès aux fonctionnalités de gestion de contenu.</p>
                         </div>
-                        
+
                         <div class="mb-3">
                             <h6 class="text-info"><i class="fas fa-user-pen me-2"></i>Rédacteur</h6>
                             <p class="small text-muted">Peut créer et modifier ses propres articles. Accès limité aux fonctionnalités de base.</p>
@@ -153,7 +153,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Aperçu de l'image de profil
     const profilePictureInput = document.getElementById('profile_picture');
-    
+
     profilePictureInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     preview.className = 'mt-2';
                     profilePictureInput.parentNode.appendChild(preview);
                 }
-                
+
                 preview.innerHTML = `
                     <img src="${e.target.result}" class="rounded" width="100" height="100" alt="Aperçu">
                     <p class="small text-muted mt-1">Aperçu de la photo de profil</p>

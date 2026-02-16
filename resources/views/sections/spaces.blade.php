@@ -1,45 +1,38 @@
-        <section class="spaces" aria-label="Solutions par espace">
-            <div class="container">
-                <div class="spaces__header">
-                    <span class="spaces__badge">🏠 Solutions adaptées</span>
-                    <h2 class="spaces__title">Un Sommeil Sur-Mesure<br>Pour Chaque Univers</h2>
-                    <p class="spaces__subtitle">Que vous équipiez un hôtel, un appartement ou votre maison familiale, nous avons la solution parfaite.</p>
+        @if(!empty($spaceSection))
+            <section class="spaces" aria-label="Solutions par espace">
+                <div class="container">
+                    <div class="spaces__header">
+                        <span class="spaces__badge">{{ trim(($spaceSection->badge_icon ? $spaceSection->badge_icon . ' ' : '') . ($spaceSection->badge ?? '')) }}</span>
+                        <h2 class="spaces__title">{!! nl2br(e($spaceSection->title)) !!}</h2>
+                        @if(!empty($spaceSection->subtitle))
+                            <p class="spaces__subtitle">{{ $spaceSection->subtitle }}</p>
+                        @endif
+                    </div>
+
+                    <div class="spaces__grid">
+                        @foreach(($spaceSection->cards ?? collect()) as $card)
+                            @php
+                                $sizeClass = $card->size === 'large' ? 'space-card--large' : '';
+                                $extraClass = '';
+                                if (($card->size === 'large') && ($loop->last)) {
+                                    $extraClass = 'space-card--wide';
+                                }
+                            @endphp
+
+                            <a class="space-card {{ $sizeClass }} {{ $extraClass }}" href="{{ $card->cta_url ?: '#' }}">
+                                <img src="@image_url($card->image)" alt="{{ $card->image_alt ?: $card->title }}" loading="lazy" />
+                                <div class="space-card__overlay">
+                                    <h3 class="space-card__title">{{ $card->title }}</h3>
+                                    @if(!empty($card->description))
+                                        <p class="space-card__desc">{{ $card->description }}</p>
+                                    @endif
+                                    @if(!empty($card->cta_text))
+                                        <span class="space-card__cta">{{ $card->cta_text }}</span>
+                                    @endif
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
-
-                <div class="spaces__grid">
-                    <a class="space-card space-card--large" href="{{ route('univers.show', 'hotellerie') }}">
-                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=900&fit=crop" alt="Hôtellerie" loading="lazy" />
-                        <div class="space-card__overlay">
-                            <h3 class="space-card__title">Hôtellerie</h3>
-                            <p class="space-card__desc">Solutions professionnelles pour hôtels, chambres d'hôtes et résidences de tourisme</p>
-                            <span class="space-card__cta">Voir les offres pro →</span>
-                        </div>
-                    </a>
-
-                    <a class="space-card" href="{{ route('univers.show', 'appartement-meuble') }}">
-                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop" alt="Appartement" loading="lazy" />
-                        <div class="space-card__overlay">
-                            <h3 class="space-card__title">Appartement Meublé</h3>
-                            <span class="space-card__cta">Découvrir →</span>
-                        </div>
-                    </a>
-
-                    <a class="space-card" href="{{ route('univers.show', 'studio') }}">
-                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop" alt="Studio" loading="lazy" />
-                        <div class="space-card__overlay">
-                            <h3 class="space-card__title">Studio</h3>
-                            <span class="space-card__cta">Découvrir →</span>
-                        </div>
-                    </a>
-
-                    <a class="space-card space-card--wide" href="{{ route('univers.show', 'famille') }}">
-                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=900&h=400&fit=crop" alt="Famille" loading="lazy" />
-                        <div class="space-card__overlay">
-                            <h3 class="space-card__title">Famille</h3>
-                            <p class="space-card__desc">Matelas pour toute la famille, du bébé aux grands-parents</p>
-                            <span class="space-card__cta">Explorer les packs famille →</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
+            </section>
+        @endif

@@ -9,6 +9,8 @@ use App\Notifications\NewUserCredentialsNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -33,26 +35,38 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
             'fonction' => ['nullable', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:50'],
             'profile_picture' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $plainPassword = $data['password'];
+        $passwordProvided = !empty($data['password']);
+        $plainPassword = $data['password'] ?? null;
 
         if ($request->hasFile('profile_picture')) {
             $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
 
-        $data['password'] = Hash::make($data['password']);
         $data['is_admin'] = in_array($data['role'], ['admin', 'super_admin']);
         $data['is_active'] = true;
+
+        if (empty($plainPassword)) {
+            $plainPassword = Str::random(24);
+        }
+
+        $data['password'] = Hash::make($plainPassword);
 
         $user = User::create($data);
 
         try {
-            $user->notify(new NewUserCredentialsNotification($plainPassword));
+            if ((bool) $user->is_admin) {
+                Password::broker()->sendResetLink(['email' => $user->email]);
+            } else {
+                if ($passwordProvided) {
+                    $user->notify(new NewUserCredentialsNotification($plainPassword));
+                }
+            }
         } catch (\Throwable $e) {
             // If mail is not configured, we still want to create the user.
         }
