@@ -13,6 +13,7 @@ use App\Support\ImageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class CartController extends Controller
@@ -240,13 +241,23 @@ class CartController extends Controller
         });
 
         $admins = User::query()
-            ->where('is_admin', true)
             ->where('is_active', true)
             ->whereNotNull('email')
+            ->where(function ($q) {
+                $q->where('is_admin', true)
+                    ->orWhereIn('role', ['admin', 'super_admin']);
+            })
             ->get();
 
         if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminOrderPlacedNotification($order));
+            try {
+                Notification::send($admins, new AdminOrderPlacedNotification($order));
+            } catch (\Throwable $e) {
+                Log::error('AdminOrderPlacedNotification failed to send', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         session()->forget('cart');
