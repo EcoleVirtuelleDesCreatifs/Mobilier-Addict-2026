@@ -262,7 +262,7 @@
 							<input id="remember" type="checkbox" name="remember">
 							Se souvenir de moi
 						</label>
-						<a class="link" href="#">Mot de passe oublié ?</a>
+						<a class="link" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
 					</div>
 
 					<button type="submit" class="btn">Accéder au dashboard</button>

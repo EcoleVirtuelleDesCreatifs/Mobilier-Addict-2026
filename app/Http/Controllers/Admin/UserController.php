@@ -60,9 +60,20 @@ class UserController extends Controller
 
         $user = User::create($data);
 
+        $mailWarning = null;
+
         try {
             if ((bool) $user->is_admin) {
-                Password::broker()->sendResetLink(['email' => $user->email]);
+                $status = Password::broker()->sendResetLink(['email' => $user->email]);
+
+                if ($status !== Password::RESET_LINK_SENT) {
+                    $mailWarning = __($status);
+                    Log::warning('Admin reset link not sent', [
+                        'user_id' => $user->id ?? null,
+                        'email' => $user->email ?? null,
+                        'status' => $status,
+                    ]);
+                }
             } else {
                 if ($passwordProvided) {
                     $user->notify(new NewUserCredentialsNotification($plainPassword));
@@ -70,6 +81,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $e) {
             // If mail is not configured, we still want to create the user.
+            $mailWarning = $e->getMessage();
             Log::error('Admin user creation mail failed', [
                 'user_id' => $user->id ?? null,
                 'email' => $user->email ?? null,
@@ -78,7 +90,12 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.users.show', $user)->with('success', 'Utilisateur créé avec succès.');
+        $redirect = redirect()->route('admin.users.show', $user)->with('success', 'Utilisateur créé avec succès.');
+        if (!empty($mailWarning)) {
+            $redirect->with('warning', "L'email d'activation n'a pas pu être envoyé automatiquement : {$mailWarning}");
+        }
+
+        return $redirect;
     }
 
     public function show(User $user)
