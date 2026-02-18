@@ -109,7 +109,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center gap-3">
                                                     @if($item->product && !empty($item->product->image))
-                                                        <img src="{{ asset($item->product->image) }}" alt="{{ $item->product_name }}" width="150" height="150" style="border-radius: 14px; object-fit: cover; border: 1px solid var(--admin-border);">
+                                                        <img src="@image_url($item->product->image)" alt="{{ $item->product_name }}" width="150" height="150" style="border-radius: 14px; object-fit: cover; border: 1px solid var(--admin-border);">
                                                     @endif
                                                     <div>
                                                         <div class="fw-semibold">{{ $item->product_name }}</div>
