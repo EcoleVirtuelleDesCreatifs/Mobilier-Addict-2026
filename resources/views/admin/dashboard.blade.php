@@ -315,7 +315,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if($product->image)
-                                                        <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset($product->image) }}" class="rounded me-2" width="40" height="40" style="object-fit:cover" alt="">
+                                                        <img src="@image_url($product->image)" class="rounded me-2" width="40" height="40" style="object-fit:cover" alt="">
                                                     @else
                                                         <div class="bg-secondary rounded me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                                             <i class="fas fa-box text-white"></i>
