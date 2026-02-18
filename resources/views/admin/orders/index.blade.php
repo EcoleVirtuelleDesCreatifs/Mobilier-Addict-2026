@@ -55,6 +55,15 @@
 
                 <div class="admin-card p-3 p-md-4 mb-3">
                     <form method="GET" action="{{ route('admin.orders.index') }}" class="row g-2 align-items-end">
+                        @php
+                            $statusLabels = [
+                                'pending' => 'En attente',
+                                'confirmed' => 'Confirmée',
+                                'shipping' => 'En cours de livraison',
+                                'delivered' => 'Livrée',
+                                'canceled' => 'Annulée',
+                            ];
+                        @endphp
                         <div class="col-12 col-md-5">
                             <label class="form-label small" style="color: var(--admin-muted);">Recherche</label>
                             <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Nom, WhatsApp, téléphone, id">
@@ -64,7 +73,7 @@
                             <select name="status" class="form-select">
                                 <option value="">Tous</option>
                                 @foreach(($allowedStatuses ?? []) as $s)
-                                    <option value="{{ $s }}" @selected(request('status') === $s)>{{ $s }}</option>
+                                    <option value="{{ $s }}" @selected(request('status') === $s)>{{ $statusLabels[$s] ?? $s }}</option>
                                 @endforeach
                             </select>
                         </div>
