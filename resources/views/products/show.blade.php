@@ -162,6 +162,9 @@
                             $thicknesses = $variants->pluck('thickness_cm')->unique()->sort()->values();
                             $places = $variants->pluck('places')->unique()->sort()->values();
                             $defaultVariant = $variants->first();
+                            $isChairsVariants = $usesVariantType && $variants->pluck('variant_type')->contains('chairs');
+                            $placesLabel = $isChairsVariants ? 'Nombre de chaises' : 'Places';
+                            $placesUnit = $isChairsVariants ? 'chaise(s)' : 'place(s)';
                             $variantTypeLabel = 'Type';
                             if (str_contains($categoryHaystack, 'drap')) {
                                 $variantTypeLabel = 'Type de drap';
@@ -204,8 +207,8 @@
                                 </div>
 
                                 <div class="variant-picker__group">
-                                    <div class="variant-picker__label">Places</div>
-                                    <div class="variant-picker__chips" role="group" aria-label="Choisir un nombre de places">
+                                    <div class="variant-picker__label">{{ $placesLabel }}</div>
+                                    <div class="variant-picker__chips" role="group" aria-label="Choisir {{ mb_strtolower($placesLabel) }}">
                                         @foreach($places as $p)
                                             <button
                                                 type="button"
@@ -214,7 +217,7 @@
                                                 aria-pressed="{{ $p === $defaultVariant?->places ? 'true' : 'false' }}"
                                             >
                                                 <span class="variant-chip__value">{{ (int) $p }}</span>
-                                                <span class="variant-chip__unit">place(s)</span>
+                                                <span class="variant-chip__unit">{{ $placesUnit }}</span>
                                             </button>
                                         @endforeach
                                     </div>
@@ -715,9 +718,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let suffix = '';
         if (hasVariantType) {
             const t = a ? String(a).trim() : '';
-            if (t && places) suffix = t + ' - ' + places + ' places';
+            const unit = t === 'chairs' ? ' chaises' : ' places';
+            if (t && places) suffix = t + ' - ' + places + unit;
             else if (t) suffix = t;
-            else if (places) suffix = places + ' places';
+            else if (places) suffix = places + unit;
         } else {
             const th = a ? String(a).trim() : '';
             if (places && th) suffix = places + ' places épasseurs ' + th + ' CM';
@@ -1089,10 +1093,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (variantHintEl) {
                 const okText = v && v.in_stock === false ? 'Indisponible' : 'Disponible';
+                const isChairs = hasVariantType && String(a || '') === 'chairs';
                 const leftText = hasVariantType
                     ? (a ? String(a) : '')
                     : (a ? (a + ' cm') : '');
-                variantHintEl.textContent = (leftText ? leftText : '') + (p ? (' • ' + p + ' place(s)') : '') + (a && p ? (' • ' + okText) : '');
+                const unit = isChairs ? ' chaise(s)' : ' place(s)';
+                variantHintEl.textContent = (leftText ? leftText : '') + (p ? (' • ' + p + unit) : '') + (a && p ? (' • ' + okText) : '');
             }
         };
 
