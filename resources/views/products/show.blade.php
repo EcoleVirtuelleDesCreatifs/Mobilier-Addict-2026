@@ -179,7 +179,7 @@
                                 $variantTypeLabel = 'Type de couette';
                             }
                         @endphp
-                        <div class="variant-picker" style="margin-top: 14px;">
+                        <div class="variant-picker {{ $hideTypeSelector ? 'variant-picker--single' : '' }}" style="margin-top: 14px;">
                             <div class="variant-picker__grid">
                                 <div class="variant-picker__group">
                                     @if($usesVariantType)
@@ -710,6 +710,9 @@
 
 .variant-picker { padding: 14px; border: 1px solid rgba(15, 23, 42, .08); border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(248,250,252,.9)); box-shadow: 0 20px 45px rgba(2, 6, 23, .06); }
 .variant-picker__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.variant-picker--single .variant-picker__grid { grid-template-columns: 1fr; }
+.variant-picker--single .variant-picker__group { align-items: center; text-align: center; }
+.variant-picker--single .variant-picker__chips { justify-content: center; }
 .variant-picker__group { display: flex; flex-direction: column; gap: 10px; }
 .variant-picker__label { font-weight: 900; letter-spacing: -.01em; color: #0f172a; }
 .variant-picker__chips { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -1139,7 +1142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const okText = v && v.in_stock === false ? 'Indisponible' : 'Disponible';
                 const isChairs = hasVariantType && String(a || '') === 'chairs';
                 const leftText = hasVariantType
-                    ? (a ? String(a) : '')
+                    ? (isChairs ? '' : (a ? String(a) : ''))
                     : (a ? (a + ' cm') : '');
                 const unit = isChairs ? ' chaise(s)' : ' place(s)';
                 variantHintEl.textContent = (leftText ? leftText : '') + (p ? (' • ' + p + unit) : '') + (a && p ? (' • ' + okText) : '');
