@@ -93,83 +93,6 @@
 
         <div class="row mb-4">
             <div class="col-12">
-                <h3 class="text-black font-w600 mb-3">Actions rapides</h3>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap" style="gap:10px">
-                            <a class="btn btn-admin-pink" href="{{ route('admin.products.create') }}"><i class="fas fa-plus me-2"></i>Créer un produit</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.products.index') }}"><i class="fas fa-box me-2"></i>Gérer les produits</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-bag me-2"></i>Voir les commandes</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.home_sections.index') }}"><i class="fas fa-sliders-h me-2"></i>Sections Home</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.categories.index') }}"><i class="fas fa-folder me-2"></i>Catégories</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-12">
-                <h3 class="text-black font-w600 mb-3">Navigation</h3>
-            </div>
-            <div class="col-xl-6 col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Menus (Header)</h4>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('admin.menus.index') }}" class="btn btn-admin-pink btn-sm">Gérer</a>
-                            <a href="{{ route('admin.menus.create') }}" class="btn btn-admin-pink-outline btn-sm">Ajouter</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        @if(($headerMenus ?? collect())->isEmpty())
-                            <div class="text-muted">Aucun menu header.</div>
-                        @else
-                            <div class="table-responsive">
-                                <table class="table table-responsive-md mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th><strong>Nom</strong></th>
-                                            <th><strong>URL</strong></th>
-                                            <th class="text-center"><strong>Ordre</strong></th>
-                                            <th class="text-center"><strong>Actif</strong></th>
-                                            <th class="text-end"><strong>Action</strong></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($headerMenus as $menu)
-                                            <tr>
-                                                <td>
-                                                    <div class="fw-semibold">{{ $menu->name }}</div>
-                                                    @if($menu->children->count() > 0)
-                                                        <small class="text-muted">{{ $menu->children->count() }} sous-menu(s)</small>
-                                                    @endif
-                                                </td>
-                                                <td class="text-muted">{{ $menu->url ?: '—' }}</td>
-                                                <td class="text-center">{{ (int) $menu->order }}</td>
-                                                <td class="text-center">
-                                                    <span class="badge {{ $menu->is_active ? 'badge-success' : 'badge-secondary' }}">{{ $menu->is_active ? 'Oui' : 'Non' }}</span>
-                                                </td>
-                                                <td class="text-end">
-                                                    <a href="{{ route('admin.menus.edit', $menu) }}" class="btn btn-admin-pink shadow btn-xs sharp">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-12">
                 <h3 class="text-black font-w600 mb-3">E-commerce</h3>
             </div>
         </div>
@@ -348,6 +271,83 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="text-black font-w600 mb-3">Actions rapides</h3>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap" style="gap:10px">
+                            <a class="btn btn-admin-pink" href="{{ route('admin.products.create') }}"><i class="fas fa-plus me-2"></i>Créer un produit</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.products.index') }}"><i class="fas fa-box me-2"></i>Gérer les produits</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-bag me-2"></i>Voir les commandes</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.home_sections.index') }}"><i class="fas fa-sliders-h me-2"></i>Sections Home</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.categories.index') }}"><i class="fas fa-folder me-2"></i>Catégories</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="text-black font-w600 mb-3">Navigation</h3>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Menus (Header)</h4>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.menus.index') }}" class="btn btn-admin-pink btn-sm">Gérer</a>
+                            <a href="{{ route('admin.menus.create') }}" class="btn btn-admin-pink-outline btn-sm">Ajouter</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if(($headerMenus ?? collect())->isEmpty())
+                            <div class="text-muted">Aucun menu header.</div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-responsive-md mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th><strong>Nom</strong></th>
+                                            <th><strong>URL</strong></th>
+                                            <th class="text-center"><strong>Ordre</strong></th>
+                                            <th class="text-center"><strong>Actif</strong></th>
+                                            <th class="text-end"><strong>Action</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($headerMenus as $menu)
+                                            <tr>
+                                                <td>
+                                                    <div class="fw-semibold">{{ $menu->name }}</div>
+                                                    @if($menu->children->count() > 0)
+                                                        <small class="text-muted">{{ $menu->children->count() }} sous-menu(s)</small>
+                                                    @endif
+                                                </td>
+                                                <td class="text-muted">{{ $menu->url ?: '—' }}</td>
+                                                <td class="text-center">{{ (int) $menu->order }}</td>
+                                                <td class="text-center">
+                                                    <span class="badge {{ $menu->is_active ? 'badge-success' : 'badge-secondary' }}">{{ $menu->is_active ? 'Oui' : 'Non' }}</span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <a href="{{ route('admin.menus.edit', $menu) }}" class="btn btn-admin-pink shadow btn-xs sharp">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
