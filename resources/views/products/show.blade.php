@@ -165,6 +165,9 @@
                             $isChairsVariants = $usesVariantType && $variants->pluck('variant_type')->contains('chairs');
                             $placesLabel = $isChairsVariants ? 'Nombre de chaises' : 'Places';
                             $placesUnit = $isChairsVariants ? 'chaise(s)' : 'place(s)';
+                            $hideTypeSelector = $usesVariantType
+                                && $variantTypes->count() === 1
+                                && (string) $variantTypes->first() === 'chairs';
                             $variantTypeLabel = 'Type';
                             if (str_contains($categoryHaystack, 'drap')) {
                                 $variantTypeLabel = 'Type de drap';
@@ -177,20 +180,31 @@
                         <div class="variant-picker" style="margin-top: 14px;">
                             <div class="variant-picker__grid">
                                 <div class="variant-picker__group">
-                                    <div class="variant-picker__label">{{ $usesVariantType ? $variantTypeLabel : 'Épaisseur' }}</div>
-                                    <div class="variant-picker__chips" role="group" aria-label="Choisir une option">
-                                        @if($usesVariantType)
-                                            @foreach($variantTypes as $t)
-                                                <button
-                                                    type="button"
-                                                    class="variant-chip"
-                                                    data-variant-type="{{ (string) $t }}"
-                                                    aria-pressed="{{ (string) $t === (string) $defaultVariant?->variant_type ? 'true' : 'false' }}"
-                                                >
-                                                    <span class="variant-chip__value">{{ (string) $t }}</span>
+                                    @if($usesVariantType)
+                                        @if($hideTypeSelector)
+                                            <div style="display:none">
+                                                <button type="button" class="variant-chip" data-variant-type="chairs" aria-pressed="true">
+                                                    <span class="variant-chip__value">chairs</span>
                                                 </button>
-                                            @endforeach
+                                            </div>
                                         @else
+                                            <div class="variant-picker__label">{{ $variantTypeLabel }}</div>
+                                            <div class="variant-picker__chips" role="group" aria-label="Choisir une option">
+                                                @foreach($variantTypes as $t)
+                                                    <button
+                                                        type="button"
+                                                        class="variant-chip"
+                                                        data-variant-type="{{ (string) $t }}"
+                                                        aria-pressed="{{ (string) $t === (string) $defaultVariant?->variant_type ? 'true' : 'false' }}"
+                                                    >
+                                                        <span class="variant-chip__value">{{ (string) $t }}</span>
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    @else
+                                        <div class="variant-picker__label">Épaisseur</div>
+                                        <div class="variant-picker__chips" role="group" aria-label="Choisir une option">
                                             @foreach($thicknesses as $t)
                                                 <button
                                                     type="button"
@@ -202,8 +216,8 @@
                                                     <span class="variant-chip__unit">cm</span>
                                                 </button>
                                             @endforeach
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="variant-picker__group">
