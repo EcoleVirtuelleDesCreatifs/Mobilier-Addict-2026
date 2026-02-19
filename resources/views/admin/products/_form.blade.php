@@ -427,7 +427,7 @@
 
                 if (mode === 'chairs') {
                     row.querySelectorAll('[data-variant-col="type"], [data-variant-col="thickness"]').forEach(el => {
-                        el.style.display = 'none';
+                        el.classList.add('d-none');
                     });
 
                     if (typeInput) {
@@ -451,7 +451,7 @@
                     }
                 } else {
                     row.querySelectorAll('[data-variant-col="type"], [data-variant-col="thickness"]').forEach(el => {
-                        el.style.display = '';
+                        el.classList.remove('d-none');
                     });
 
                     if (typeInput) {
@@ -471,7 +471,18 @@
             };
 
             const applyMode = (mode) => {
+                const typeHeader = document.querySelector('th[data-variant-col="type"]');
+                const thicknessHeader = document.querySelector('th[data-variant-col="thickness"]');
                 const placesHeader = document.querySelector('th[data-variant-col="places"]');
+
+                if (typeHeader) {
+                    typeHeader.classList.toggle('d-none', mode === 'chairs');
+                }
+
+                if (thicknessHeader) {
+                    thicknessHeader.classList.toggle('d-none', mode === 'chairs');
+                }
+
                 if (placesHeader) {
                     placesHeader.textContent = mode === 'chairs' ? 'Nombre de chaises' : 'Places';
                 }
@@ -485,6 +496,12 @@
                     if (tr.id === 'variantsEmptyRow') return;
                     applyModeToRow(tr, mode);
                 });
+
+                const empty = document.getElementById('variantsEmptyRow');
+                if (empty) {
+                    const colSpan = mode === 'chairs' ? 5 : 7;
+                    empty.innerHTML = `<td colspan="${colSpan}" style="color: var(--admin-muted);">Aucune variante. Clique sur “Ajouter une variante”.</td>`;
+                }
             };
 
             const getNextIndex = () => {
@@ -558,7 +575,8 @@
                 if (tbody.querySelectorAll('tr').length === 0) {
                     const empty = document.createElement('tr');
                     empty.id = 'variantsEmptyRow';
-                    empty.innerHTML = '<td colspan="7" style="color: var(--admin-muted);">Aucune variante. Clique sur “Ajouter une variante”.</td>';
+                    const colSpan = (modeSelect && modeSelect.value === 'chairs') ? 5 : 7;
+                    empty.innerHTML = `<td colspan="${colSpan}" style="color: var(--admin-muted);">Aucune variante. Clique sur “Ajouter une variante”.</td>`;
                     tbody.appendChild(empty);
                 }
             });
