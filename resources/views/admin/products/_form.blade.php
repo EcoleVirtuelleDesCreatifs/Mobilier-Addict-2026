@@ -36,6 +36,13 @@
     }
     $variantRows = is_array($variantRows) ? $variantRows : [];
 
+    $defaultVariantMode = 'standard';
+    if ($isEdit && ($product->variants ?? collect())->contains(fn ($v) => ($v->variant_type ?? null) === 'chairs')) {
+        $defaultVariantMode = 'chairs';
+    }
+    $variantMode = old('variant_mode', $defaultVariantMode);
+    $variantMode = in_array($variantMode, ['standard', 'chairs'], true) ? $variantMode : $defaultVariantMode;
+
     $selectedCategoryIds = old('category_ids', $selectedCategoryIds ?? ($isEdit ? (($product->categories ?? collect())->pluck('id')->all()) : []));
     $selectedCategoryIds = is_array($selectedCategoryIds) ? $selectedCategoryIds : [];
 @endphp
@@ -310,18 +317,24 @@
 
     <div class="admin-card p-3">
         <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
-            <div class="fw-semibold">Variantes (Matelas: Épaisseur/Places • Couette: Type/Places)</div>
+            <div class="fw-semibold">Variantes</div>
+            <div class="d-flex align-items-center gap-2">
+                <select class="form-select form-select-sm" name="variant_mode" id="variantModeSelect" style="width: 210px;">
+                    <option value="standard" @selected($variantMode === 'standard')>Standard</option>
+                    <option value="chairs" @selected($variantMode === 'chairs')>Chaises</option>
+                </select>
             <button type="button" class="btn btn-sm btn-admin-ghost" id="addVariantRow">Ajouter une variante</button>
+            </div>
         </div>
-        <div class="small mb-3" style="color: var(--admin-muted);">Pour les matelas: renseigne Épaisseur + Places. Pour les couettes: renseigne Type + Places (Épaisseur = 0).</div>
+        <div class="small mb-3" style="color: var(--admin-muted);" id="variantHelpText">Pour les matelas: renseigne Épaisseur + Places. Pour les couettes: renseigne Type + Places (Épaisseur = 0).</div>
 
         <div class="table-responsive">
             <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent; min-width: 760px;">
                 <thead style="color: var(--admin-muted);">
                     <tr>
-                        <th style="width:220px;">Type (Couette)</th>
-                        <th style="width:160px;">Épaisseur (cm)</th>
-                        <th style="width:140px;">Places</th>
+                        <th style="width:220px;" data-variant-col="type">Type (Couette)</th>
+                        <th style="width:160px;" data-variant-col="thickness">Épaisseur (cm)</th>
+                        <th style="width:140px;" data-variant-col="places">Places</th>
                         <th style="width:200px;">Prix (FCFA)</th>
                         <th style="width:160px;">Stock</th>
                         <th style="width:160px;">Actif</th>
@@ -331,15 +344,15 @@
                 <tbody id="variantsTbody" style="border-top: 1px solid var(--admin-border);">
                     @forelse($variantRows as $i => $row)
                         <tr>
-                            <td>
-                                <input type="text" class="form-control" name="variants[{{ $i }}][variant_type]" value="{{ $row['variant_type'] ?? '' }}" placeholder="Ex: Type A / Drap coton">
+                            <td data-variant-col="type">
+                                <input type="text" class="form-control" name="variants[{{ $i }}][variant_type]" value="{{ $row['variant_type'] ?? '' }}" placeholder="Ex: Type A / Drap coton" data-variant-field="type">
                             </td>
-                            <td>
+                            <td data-variant-col="thickness">
                                 <input type="hidden" name="variants[{{ $i }}][id]" value="{{ $row['id'] ?? '' }}">
-                                <input type="number" class="form-control" name="variants[{{ $i }}][thickness_cm]" value="{{ $row['thickness_cm'] ?? '' }}" min="0" step="1" placeholder="Ex: 30">
+                                <input type="number" class="form-control" name="variants[{{ $i }}][thickness_cm]" value="{{ $row['thickness_cm'] ?? '' }}" min="0" step="1" placeholder="Ex: 30" data-variant-field="thickness">
                             </td>
-                            <td>
-                                <input type="text" inputmode="decimal" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" placeholder="Ex: 2,5">
+                            <td data-variant-col="places">
+                                <input type="text" inputmode="decimal" class="form-control" name="variants[{{ $i }}][places]" value="{{ $row['places'] ?? '' }}" placeholder="Ex: 2,5" data-variant-field="places">
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="variants[{{ $i }}][price]" value="{{ $row['price'] ?? '' }}" min="0" step="1" placeholder="Ex: 105000">
@@ -369,15 +382,15 @@
 
         <template id="variantRowTemplate">
             <tr>
-                <td>
-                    <input type="text" class="form-control" data-name="variant_type" placeholder="Ex: Type A / Drap coton">
+                <td data-variant-col="type">
+                    <input type="text" class="form-control" data-name="variant_type" placeholder="Ex: Type A / Drap coton" data-variant-field="type">
                 </td>
-                <td>
+                <td data-variant-col="thickness">
                     <input type="hidden" data-name="id" value="">
-                    <input type="number" class="form-control" data-name="thickness_cm" min="0" step="1" placeholder="Ex: 30">
+                    <input type="number" class="form-control" data-name="thickness_cm" min="0" step="1" placeholder="Ex: 30" data-variant-field="thickness">
                 </td>
-                <td>
-                    <input type="text" inputmode="decimal" class="form-control" data-name="places" placeholder="Ex: 2,5">
+                <td data-variant-col="places">
+                    <input type="text" inputmode="decimal" class="form-control" data-name="places" placeholder="Ex: 2,5" data-variant-field="places">
                 </td>
                 <td>
                     <input type="number" class="form-control" data-name="price" min="0" step="1" placeholder="Ex: 105000">
@@ -402,8 +415,77 @@
             const tbody = document.getElementById('variantsTbody');
             const addBtn = document.getElementById('addVariantRow');
             const tpl = document.getElementById('variantRowTemplate');
+            const modeSelect = document.getElementById('variantModeSelect');
+            const helpText = document.getElementById('variantHelpText');
 
             if (!tbody || !addBtn || !tpl) return;
+
+            const applyModeToRow = (row, mode) => {
+                const typeInput = row.querySelector('[data-variant-field="type"]');
+                const thicknessInput = row.querySelector('[data-variant-field="thickness"]');
+                const placesInput = row.querySelector('[data-variant-field="places"]');
+
+                if (mode === 'chairs') {
+                    row.querySelectorAll('[data-variant-col="type"], [data-variant-col="thickness"]').forEach(el => {
+                        el.style.display = 'none';
+                    });
+
+                    if (typeInput) {
+                        typeInput.value = 'chairs';
+                        typeInput.setAttribute('type', 'hidden');
+                        typeInput.classList.add('d-none');
+                    }
+
+                    if (thicknessInput) {
+                        thicknessInput.value = '0';
+                        thicknessInput.setAttribute('type', 'hidden');
+                        thicknessInput.classList.add('d-none');
+                    }
+
+                    if (placesInput) {
+                        placesInput.setAttribute('type', 'number');
+                        placesInput.removeAttribute('inputmode');
+                        placesInput.setAttribute('step', '1');
+                        placesInput.setAttribute('min', '1');
+                        placesInput.setAttribute('placeholder', 'Ex: 4');
+                    }
+                } else {
+                    row.querySelectorAll('[data-variant-col="type"], [data-variant-col="thickness"]').forEach(el => {
+                        el.style.display = '';
+                    });
+
+                    if (typeInput) {
+                        typeInput.setAttribute('type', 'text');
+                        typeInput.classList.remove('d-none');
+                    }
+                    if (thicknessInput) {
+                        thicknessInput.setAttribute('type', 'number');
+                        thicknessInput.classList.remove('d-none');
+                    }
+                    if (placesInput) {
+                        placesInput.setAttribute('type', 'text');
+                        placesInput.setAttribute('inputmode', 'decimal');
+                        placesInput.setAttribute('placeholder', 'Ex: 2,5');
+                    }
+                }
+            };
+
+            const applyMode = (mode) => {
+                const placesHeader = document.querySelector('th[data-variant-col="places"]');
+                if (placesHeader) {
+                    placesHeader.textContent = mode === 'chairs' ? 'Nombre de chaises' : 'Places';
+                }
+                if (helpText) {
+                    helpText.textContent = mode === 'chairs'
+                        ? 'Renseigne le nombre de chaises (ex: 4, 6) et le prix correspondant.'
+                        : 'Pour les matelas: renseigne Épaisseur + Places. Pour les couettes: renseigne Type + Places (Épaisseur = 0).';
+                }
+
+                tbody.querySelectorAll('tr').forEach(tr => {
+                    if (tr.id === 'variantsEmptyRow') return;
+                    applyModeToRow(tr, mode);
+                });
+            };
 
             const getNextIndex = () => {
                 const rows = tbody.querySelectorAll('tr');
@@ -437,10 +519,35 @@
                 const tr = frag.querySelector('tr');
                 const idx = getNextIndex();
                 syncRowNames(tr, idx);
+                const mode = modeSelect ? modeSelect.value : 'standard';
+                applyModeToRow(tr, mode);
                 tbody.appendChild(tr);
+                return tr;
             };
 
             addBtn.addEventListener('click', addRow);
+
+            if (modeSelect) {
+                modeSelect.addEventListener('change', () => {
+                    applyMode(modeSelect.value);
+
+                    if (modeSelect.value === 'chairs') {
+                        const hasAnyRow = !!tbody.querySelector('tr:not(#variantsEmptyRow)');
+                        if (!hasAnyRow) {
+                            const row4 = addRow();
+                            const row6 = addRow();
+
+                            const setPlaces = (row, v) => {
+                                const input = row ? row.querySelector('[data-variant-field="places"]') : null;
+                                if (input) input.value = String(v);
+                            };
+                            setPlaces(row4, 4);
+                            setPlaces(row6, 6);
+                        }
+                    }
+                });
+                applyMode(modeSelect.value);
+            }
 
             tbody.addEventListener('click', (e) => {
                 const btn = e.target && e.target.closest ? e.target.closest('[data-role="remove-variant"]') : null;
