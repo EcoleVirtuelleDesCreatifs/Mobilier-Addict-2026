@@ -232,6 +232,9 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
+    Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
+    Route::post('/notifications/{notification}/handled', [AdminNotificationController::class, 'markAsHandled'])->name('admin.notifications.handled');
+    Route::post('/notifications/{notification}/unhandled', [AdminNotificationController::class, 'markAsUnhandled'])->name('admin.notifications.unhandled');
 
     Route::get('/stats', [StatsController::class, 'index'])->middleware('permission:stats.view')->name('admin.stats.index');
 

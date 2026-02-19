@@ -176,13 +176,16 @@
 
 
 										</ul>
-								</div>
-								@if($unreadCount > 0)
-									<form method="POST" action="{{ route('admin.notifications.read-all') }}" class="px-3 pb-3">
-										@csrf
-										<button type="submit" class="btn btn-outline-primary w-100">Tout marquer comme lu</button>
-									</form>
-								@endif
+							</div>
+							<div class="px-3 pb-2">
+								<a href="{{ route('admin.notifications.index') }}" class="btn btn-admin-pink-outline w-100">Voir toutes les notifications</a>
+							</div>
+							@if($unreadCount > 0)
+								<form method="POST" action="{{ route('admin.notifications.read-all') }}" class="px-3 pb-3">
+									@csrf
+									<button type="submit" class="btn btn-admin-pink w-100">Tout marquer comme lu</button>
+								</form>
+							@endif
                                 </div>
                             </li>
                             <li class="nav-item dropdown header-profile">
