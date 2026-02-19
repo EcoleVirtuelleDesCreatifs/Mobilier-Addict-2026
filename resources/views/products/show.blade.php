@@ -15,7 +15,9 @@
                     $primaryCategory = ($product->categories ?? collect())->first() ?: $product->category;
                 @endphp
                 @php
-                    $whatsappNumber = $product->slug === '02-oreillers-ph2-avec-motif' ? '2250799140356' : '2250700000000';
+                    $whatsappNumber = $product->slug === 'table-a-manger-moderne-en-verre-avec-6-chaises-design-elegant-resistant'
+                        ? '2250799140356'
+                        : '2250700000000';
                 @endphp
                 @if($primaryCategory)
                     <li><a href="{{ route('univers.show', $primaryCategory->slug) }}">{{ $primaryCategory->name }}</a></li>
