@@ -352,6 +352,10 @@
             </div>
             <div class="product-desc__grid">
                 <div class="product-desc__content">
+                    <div class="product-desc__content-head">
+                        <div class="product-desc__content-badge">Détails</div>
+                        <div class="product-desc__content-title">Ce que vous devez savoir</div>
+                    </div>
                     <div class="product-desc__text">
                         {!! $product->description !!}
                     </div>
@@ -604,8 +608,23 @@
 .product-desc__kicker { display: inline-block; background: linear-gradient(135deg, #ec4899, #be185d); color: #fff; padding: .5rem 1.5rem; border-radius: 999px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
 .product-desc__title { font-size: 2.25rem; font-weight: 800; color: #1a1a2e; margin: 0; }
 .product-desc__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: start; }
-.product-desc__content { background: #fff; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(190,24,93,.1); }
-.product-desc__text { color: #4b5563; line-height: 1.9; font-size: 1.05rem; }
+.product-desc__content { background: rgba(255,255,255,.92); border-radius: 22px; padding: 2.2rem 2.3rem; border: 1px solid rgba(190,24,93,.10); box-shadow: 0 18px 60px rgba(190,24,93,.12); backdrop-filter: blur(6px); }
+.product-desc__content-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(190,24,93,.12); }
+.product-desc__content-badge { display: inline-flex; align-items: center; justify-content: center; padding: .35rem .8rem; border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #9d174d; background: rgba(236,72,153,.12); border: 1px solid rgba(236,72,153,.22); }
+.product-desc__content-title { font-size: 1.05rem; font-weight: 900; color: #111827; letter-spacing: -.02em; }
+
+.product-desc__text { color: #4b5563; line-height: 1.95; font-size: 1.05rem; }
+.product-desc__text p { margin: 0 0 12px; }
+.product-desc__text p:last-child { margin-bottom: 0; }
+.product-desc__text strong { color: #111827; font-weight: 800; }
+.product-desc__text h2 { font-size: 1.35rem; font-weight: 950; color: #111827; margin: 18px 0 10px; letter-spacing: -.02em; }
+.product-desc__text h3 { font-size: 1.1rem; font-weight: 900; color: #111827; margin: 16px 0 10px; letter-spacing: -.01em; }
+.product-desc__text h4 { font-size: 1rem; font-weight: 900; color: #111827; margin: 14px 0 8px; }
+.product-desc__text ul { margin: 10px 0 14px; padding: 0; list-style: none; display: grid; gap: 8px; }
+.product-desc__text li { position: relative; padding-left: 18px; }
+.product-desc__text li::before { content: ''; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 999px; background: linear-gradient(135deg, #ec4899, #be185d); box-shadow: 0 0 0 3px rgba(236,72,153,.14); }
+.product-desc__text hr { border: 0; height: 1px; margin: 18px 0; background: linear-gradient(90deg, rgba(236,72,153,.0), rgba(236,72,153,.35), rgba(236,72,153,.0)); }
+.product-desc__text a { color: #be185d; font-weight: 800; text-decoration: underline; text-decoration-color: rgba(236,72,153,.35); text-underline-offset: 3px; }
 .product-desc__features { display: flex; flex-direction: column; gap: 1.25rem; }
 .product-desc__feature { display: flex; align-items: center; gap: 1rem; background: #fff; padding: 1.25rem 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(190,24,93,.08); transition: transform .3s, box-shadow .3s; }
 .product-desc__feature:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(190,24,93,.15); }
