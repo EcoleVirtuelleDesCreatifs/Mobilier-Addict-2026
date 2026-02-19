@@ -701,10 +701,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const titleContainerEl = document.querySelector('.product-info__header') || document;
     const baseTitle = (() => {
+        const decodeHtml = (value) => {
+            const str = String(value || '');
+            if (!str.includes('&')) return str;
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = str;
+            return textarea.value;
+        };
         const el = document.querySelector('.product-info__title');
         if (!el) return '';
         const attr = el.getAttribute('data-original-title');
-        return String(attr || el.textContent || '').trim();
+        return decodeHtml(String(attr || el.textContent || '').trim());
     })();
 
     const setDynamicTitle = (variant, a, p) => {
@@ -718,8 +725,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let suffix = '';
         if (hasVariantType) {
             const t = a ? String(a).trim() : '';
-            const unit = t === 'chairs' ? ' chaises' : ' places';
-            if (t && places) suffix = t + ' - ' + places + unit;
+            const isChairs = t === 'chairs';
+            const unit = isChairs ? ' chaises' : ' places';
+            if (isChairs && places) suffix = places + unit;
+            else if (t && places) suffix = t + ' - ' + places + unit;
             else if (t) suffix = t;
             else if (places) suffix = places + unit;
         } else {
