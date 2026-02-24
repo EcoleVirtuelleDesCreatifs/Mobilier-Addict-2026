@@ -160,11 +160,14 @@
                             $places = $variants->pluck('places')->unique()->sort()->values();
                             $defaultVariant = $variants->first();
                             $isChairsVariants = $usesVariantType && $variants->pluck('variant_type')->contains('chairs');
-                            $placesLabel = $isChairsVariants ? 'Nombre de chaises' : 'Places';
+                            $placesLabel = $isChairsVariants
+                                ? 'Nombre de chaises'
+                                : ($isMattressCategory ? 'Nombre de places' : 'Places');
                             $placesUnit = $isChairsVariants ? 'chaise(s)' : 'place(s)';
                             $hideTypeSelector = $usesVariantType
                                 && $variantTypes->count() === 1
                                 && (string) $variantTypes->first() === 'chairs';
+                            $thicknessLabel = $isMattressCategory ? 'Épaisseurs (CM)' : 'Épaisseur';
                             $variantTypeLabel = 'Type';
                             if (str_contains($categoryHaystack, 'drap')) {
                                 $variantTypeLabel = 'Type de drap';
@@ -200,7 +203,7 @@
                                             </div>
                                         @endif
                                     @else
-                                        <div class="variant-picker__label">Épaisseur</div>
+                                        <div class="variant-picker__label">{{ $thicknessLabel }}</div>
                                         <div class="variant-picker__chips" role="group" aria-label="Choisir une option">
                                             @foreach($thicknesses as $t)
                                                 <button
