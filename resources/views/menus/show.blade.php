@@ -761,6 +761,8 @@
             const link = document.getElementById('quickLink');
             const whats = document.getElementById('quickWhats');
 
+            const WHATSAPP_NUMBER = '{{ whatsapp_number() }}';
+
             let currentVariants = [];
 
             function money(v){
@@ -822,7 +824,7 @@
                 img.alt = productName;
                 pid.value = productId || '';
                 link.href = productSlug ? (window.location.origin + '/produit/' + productSlug) : '#';
-                whats.href = 'https://wa.me/2250700000000?text=' + encodeURIComponent('Bonjour, je veux commander ' + productName + '.');
+                whats.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent('Bonjour, je veux commander ' + productName + '.');
 
                 if (!currentVariants.length) {
                     thick.innerHTML = '<option value="">—</option>';

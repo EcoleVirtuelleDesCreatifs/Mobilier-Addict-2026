@@ -37,7 +37,7 @@
                     <p style="margin:0;">Un oreiller bien choisi aligne la nuque et détend les épaules. Résultat : moins de tensions et un sommeil plus profond.</p>
                 </div>
                 <div class="d-flex flex-wrap" style="gap:12px;">
-                    <a class="og-btn og-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Conseils WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="og-btn og-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Conseils WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
                     <a class="og-btn" href="{{ route('univers.show', ['slug' => 'oreillers']) }}"><i class="fa-solid fa-store"></i> Voir les oreillers</a>
                     <a class="og-btn" href="{{ route('pages.contact') }}"><i class="fa-solid fa-headset"></i> Contact</a>
                 </div>
@@ -128,7 +128,7 @@
                 <div class="og-step"><div class="og-dot">4</div><div><p style="margin:0;">La matière correspond à ton ressenti (moelleux/ferme) et à ta chaleur nocturne.</p></div></div>
             </div>
             <div class="d-flex flex-wrap" style="gap:12px;margin-top:14px;">
-                <a class="og-btn og-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Aide au choix <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="og-btn og-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Aide au choix <i class="fa-solid fa-arrow-right"></i></a>
                 <a class="og-btn" href="{{ route('univers.show', ['slug' => 'oreillers']) }}"><i class="fa-solid fa-store"></i> Voir la collection</a>
             </div>
         </div>

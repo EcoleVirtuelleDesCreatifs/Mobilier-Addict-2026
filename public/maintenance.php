@@ -59,7 +59,7 @@ $reopenIso = $reopenDate ? $reopenDate->format('c') : '';
         </div>
 
         <div class="actions">
-            <a class="btn btn-primary" href="https://wa.me/2250700000000?text=Bonjour%2C%20le%20site%20est%20en%20maintenance.%20Je%20veux%20passer%20commande.">Commander via WhatsApp</a>
+            <a class="btn btn-primary" href="https://wa.me/{{ whatsapp_number() }}?text=Bonjour%2C%20le%20site%20est%20en%20maintenance.%20Je%20veux%20passer%20commande.">Commander via WhatsApp</a>
             <a class="btn btn-ghost" href="mailto:contact@mobilier-addict.com">Nous contacter</a>
         </div>
         <div class="small">Code: 503 — Service indisponible</div>

@@ -85,12 +85,12 @@
                     </p>
 
                     <div class="support-actions">
-                        <a class="support-btn support-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="support-btn support-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             WhatsApp (réponse rapide)
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
-                        <a class="support-btn" href="tel:+2250799140356">
+                        <a class="support-btn" href="tel:+{{ whatsapp_number() }}">
                             <i class="fa-solid fa-phone"></i>
                             Appeler
                         </a>
@@ -224,7 +224,7 @@
                     </div>
 
                     <div class="support-actions" style="margin-top: 16px;">
-                        <a class="support-btn support-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="support-btn support-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Ouvrir WhatsApp
                             <i class="fa-solid fa-arrow-right"></i>

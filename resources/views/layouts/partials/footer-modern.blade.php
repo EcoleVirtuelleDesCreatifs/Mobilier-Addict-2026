@@ -39,7 +39,7 @@
                         <img src="{{ asset('assets/imgs/logo/logo.png') }}" alt="InCotedivoire">
                     </div>
                     <p class="footer-description">
-                        Your reliable source of information about Côte d'Ivoire. 
+                        Your reliable source of information about Côte d'Ivoire.
                         News, politics, economy, sports and culture.
                     </p>
                     <div class="footer-social">
@@ -121,7 +121,7 @@
                         </li>
                         <li>
                             <i class="ti-mobile"></i>
-                            <a href="tel:+2250000000000">+225 00 00 00 00 00</a>
+                            <a href="tel:+{{ whatsapp_number() }}">+{{ whatsapp_number() }}</a>
                         </li>
                         <li>
                             <i class="ti-world"></i>
@@ -161,7 +161,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const backToTop = document.getElementById('backToTop');
-    
+
     // Show/hide button on scroll
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
             backToTop.classList.remove('show');
         }
     });
-    
+
     // Scroll to top on click
     backToTop.addEventListener('click', function() {
         window.scrollTo({

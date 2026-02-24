@@ -110,8 +110,8 @@
                 <a class="mobile-nav__cta" href="#">Explorer la collection <i class="fa-solid fa-arrow-right"></i></a>
                 <p style="color:rgba(255,255,255,.6);font-size:13px;margin:12px 0">Besoin d'aide ? Contactez-nous</p>
                 <div class="mobile-nav__contact">
-                    <a href="tel:+2250799140356" aria-label="Téléphone"><i class="fa-solid fa-phone"></i></a>
-                    <a href="https://wa.me/2250799140356" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="tel:+{{ whatsapp_number() }}" aria-label="Téléphone"><i class="fa-solid fa-phone"></i></a>
+                    <a href="https://wa.me/{{ whatsapp_number() }}" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
                     <a href="mailto:contact@mobilier-addict.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
                 </div>
             </div>

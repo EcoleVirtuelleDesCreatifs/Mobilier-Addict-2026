@@ -162,7 +162,7 @@
                     </p>
 
                     <div class="mg-actions">
-                        <a class="mg-btn mg-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="mg-btn mg-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Demander conseil
                             <i class="fa-solid fa-arrow-right"></i>
@@ -294,7 +294,7 @@
                     </div>
 
                     <div class="mg-actions" style="margin-top: 16px;">
-                        <a class="mg-btn mg-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="mg-btn mg-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Je veux un conseil personnalisé
                             <i class="fa-solid fa-arrow-right"></i>

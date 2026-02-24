@@ -157,7 +157,7 @@
                     <p class="faq-subtitle">Les réponses aux questions les plus fréquentes : choix du produit, commandes, livraison et retours. Si tu ne trouves pas ta réponse, écris-nous directement.</p>
 
                     <div class="faq-actions">
-                        <a class="faq-btn faq-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="faq-btn faq-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             WhatsApp
                             <i class="fa-solid fa-arrow-right"></i>
@@ -272,7 +272,7 @@
                     </div>
 
                     <div class="faq-actions" style="margin-top: 16px;">
-                        <a class="faq-btn faq-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="faq-btn faq-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Ouvrir WhatsApp
                             <i class="fa-solid fa-arrow-right"></i>

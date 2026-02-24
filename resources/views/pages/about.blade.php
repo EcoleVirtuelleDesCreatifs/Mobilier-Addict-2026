@@ -84,7 +84,7 @@
                     </p>
 
                     <div class="about-actions">
-                        <a class="about-btn about-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="about-btn about-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Discuter sur WhatsApp
                             <i class="fa-solid fa-arrow-right"></i>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="about-section__body">
                     <div class="about-actions" style="margin-top:0;">
-                        <a class="about-btn about-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="about-btn about-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             Conseils immédiats
                             <i class="fa-solid fa-arrow-right"></i>

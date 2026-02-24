@@ -247,7 +247,7 @@
                     <div class="cart-support__content">
                         <strong>Besoin d'aide ?</strong>
                         <p>Notre équipe est disponible pour vous accompagner</p>
-                        <a href="tel:+2250799140356" class="cart-support__phone">📞 +225 0799140356</a>
+                        <a href="tel:+{{ whatsapp_number() }}" class="cart-support__phone">📞 +225 0799140356</a>
                     </div>
                 </div>
             </div>

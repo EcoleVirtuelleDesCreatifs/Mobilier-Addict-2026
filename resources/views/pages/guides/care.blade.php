@@ -37,7 +37,7 @@
                     <p style="margin:0;">Les bons gestes (simples) qui prolongent la durée de vie de votre matelas, gardent un lit sain et améliorent le confort nuit après nuit.</p>
                 </div>
                 <div class="d-flex flex-wrap" style="gap:12px;">
-                    <a class="cg-btn cg-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Conseils WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="cg-btn cg-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Conseils WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
                     <a class="cg-btn" href="{{ route('univers.show', ['slug' => 'protection']) }}"><i class="fa-solid fa-shield"></i> Protège-matelas</a>
                     <a class="cg-btn" href="{{ route('pages.contact') }}"><i class="fa-solid fa-headset"></i> Contact</a>
                 </div>

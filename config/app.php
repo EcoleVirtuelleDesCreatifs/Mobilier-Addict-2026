@@ -125,4 +125,6 @@ return [
 
     'image_url_public_prefix' => env('IMAGE_URL_PUBLIC_PREFIX', 'storage'),
 
+    'whatsapp_number' => env('WHATSAPP_NUMBER', '2250799140356'),
+
 ];

@@ -30,7 +30,7 @@
             <h1 style="margin:0 0 10px;font-weight:900;letter-spacing:-.4px;">Livraison &amp; Retours</h1>
             <p style="margin:0;max-width:72ch;">Les délais et modalités peuvent varier selon les produits. Pour toute demande, préparez votre <strong style="color:#fff;">numéro de commande</strong> et votre nom.</p>
             <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;">
-                <a class="sr-btn sr-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                <a class="sr-btn sr-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
                 <a class="sr-btn" href="{{ route('pages.contact') }}"><i class="fa-solid fa-headset"></i> Contact</a>
                 <a class="sr-btn" href="mailto:contact@mobilier-addict.com"><i class="fa-solid fa-envelope"></i> Email</a>
             </div>

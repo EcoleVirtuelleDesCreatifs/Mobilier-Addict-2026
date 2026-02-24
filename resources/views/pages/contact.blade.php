@@ -236,12 +236,12 @@
                     Écrivez-nous ou contactez-nous directement — nous vous répondons au plus vite.
                 </p>
                 <div class="contact-hero__actions">
-                    <a class="contact-btn contact-btn--primary" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                    <a class="contact-btn contact-btn--primary" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                         <i class="fa-brands fa-whatsapp"></i>
                         WhatsApp
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
-                    <a class="contact-btn" href="tel:+2250799140356">
+                    <a class="contact-btn" href="tel:+{{ whatsapp_number() }}">
                         <i class="fa-solid fa-phone"></i>
                         Appeler
                     </a>
@@ -266,7 +266,7 @@
                             <div class="contact-mini__icon"><i class="fa-solid fa-phone"></i></div>
                             <div>
                                 <p class="contact-mini__label">Téléphone</p>
-                                <p class="contact-mini__value"><a href="tel:+2250799140356">+225 07 99 14 03 56</a></p>
+                                <p class="contact-mini__value"><a href="tel:+{{ whatsapp_number() }}">+225 07 99 14 03 56</a></p>
                             </div>
                         </div>
                         <div class="contact-mini__item">
@@ -349,11 +349,11 @@
                         src="https://www.google.com/maps?q=Abidjan%2C%20C%C3%B4te%20d'Ivoire&output=embed"></iframe>
 
                     <div class="contact-cta" style="margin-top: 14px;">
-                        <a class="contact-btn" href="https://wa.me/2250799140356" target="_blank" rel="noopener">
+                        <a class="contact-btn" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i>
                             WhatsApp direct
                         </a>
-                        <a class="contact-btn" href="tel:+2250799140356">
+                        <a class="contact-btn" href="tel:+{{ whatsapp_number() }}">
                             <i class="fa-solid fa-phone"></i>
                             Appel rapide
                         </a>

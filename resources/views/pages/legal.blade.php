@@ -46,7 +46,7 @@
                     <div class="legal-actions">
                         <a class="legal-btn legal-btn--primary" href="{{ route('pages.contact') }}"><i class="fa-solid fa-headset"></i> Contacter le support <i class="fa-solid fa-arrow-right"></i></a>
                         <a class="legal-btn" href="mailto:contact@mobilier-addict.com"><i class="fa-regular fa-envelope"></i> Email</a>
-                        <a class="legal-btn" href="https://wa.me/2250799140356" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a class="legal-btn" href="https://wa.me/{{ whatsapp_number() }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
                     </div>
                 </div>
 
