@@ -98,6 +98,54 @@
         </div>
 
         <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="text-black font-w600 mb-3">SEO Produits</h3>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-primary card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700">{{ empty($hasProductSeo) ? '—' : number_format($productsSeoTitleCount) }}</h2>
+                                <span class="fs-14">Meta Title rempli</span>
+                            </div>
+                            <i class="fas fa-heading text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-success card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700">{{ empty($hasProductSeo) ? '—' : number_format($productsSeoDescriptionCount) }}</h2>
+                                <span class="fs-14">Meta Description remplie</span>
+                            </div>
+                            <i class="fas fa-align-left text-success" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-warning card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700">{{ empty($hasProductSeo) ? '—' : number_format($productsSeoKeywordsCount) }}</h2>
+                                <span class="fs-14">Mots-clés renseignés</span>
+                            </div>
+                            <i class="fas fa-tags text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
             <div class="col-xl-3 col-lg-6 col-sm-6">
                 <div class="card card-bd">
                     <div class="bg-danger card-border"></div>

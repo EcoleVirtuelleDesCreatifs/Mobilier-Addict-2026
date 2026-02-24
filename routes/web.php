@@ -29,6 +29,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Middleware\TrackPageView;
 use App\Models\BlogPost;
 use App\Models\Category;
 use App\Models\Menu;
@@ -37,7 +38,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::middleware(TrackPageView::class)->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/sitemap.xml', function () {
     $urls = [];
@@ -219,8 +221,9 @@ Route::get('/admin/login', function () {
     return redirect()->route('login');
 });
 
-Route::get('/admin', function () {
-    return redirect()->route('admin.dashboard');
+    Route::get('/admin', function () {
+        return redirect()->route('admin.dashboard');
+    });
 });
 
 Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {

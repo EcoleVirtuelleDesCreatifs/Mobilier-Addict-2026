@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Menu;
 use App\Models\NewsletterSubscription;
 use App\Models\Order;
+use App\Models\PageView;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Slide;
@@ -58,22 +59,28 @@ class DashboardController extends Controller
         $articlesCount = BlogPost::count();
         $categoriesCount = Category::count();
         $usersCount = User::count();
-        $hasViewsCount = Schema::hasColumn('blog_posts', 'views_count');
-        $totalViews = $hasViewsCount ? (int) BlogPost::query()->sum('views_count') : 0;
+        $hasPageViews = Schema::hasTable('page_views');
+        $hasBlogViewsCount = Schema::hasColumn('blog_posts', 'views_count');
 
-        $monthlyViews = $hasViewsCount
-            ? (int) BlogPost::query()
-                ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-                ->sum('views_count')
+        $totalViews = $hasPageViews
+            ? (int) PageView::query()->count()
+            : ($hasBlogViewsCount ? (int) BlogPost::query()->sum('views_count') : 0);
+
+        $monthlyViews = $hasPageViews
+            ? (int) PageView::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->count()
+            : ($hasBlogViewsCount
+                ? (int) BlogPost::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->sum('views_count')
+                : 0);
+
+        $monthlyVisitors = $hasPageViews
+            ? (int) PageView::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->distinct('visitor_id')->count('visitor_id')
             : 0;
-
-        $monthlyVisitors = 0;
 
         $topArticlesQuery = BlogPost::query()
             ->with('category')
             ->whereBetween('created_at', [$selectedMonth, $monthEnd]);
 
-        if ($hasViewsCount) {
+        if ($hasBlogViewsCount) {
             $topArticlesQuery->orderByDesc('views_count');
         } else {
             $topArticlesQuery->orderByDesc('created_at');
@@ -110,6 +117,20 @@ class DashboardController extends Controller
         $productsOfflineCount = Product::query()->where('is_active', false)->count();
         $latestProducts = Product::query()->orderByDesc('created_at')->limit(6)->get();
 
+        $hasProductSeo = Schema::hasColumn('products', 'seo_title')
+            && Schema::hasColumn('products', 'seo_description')
+            && Schema::hasColumn('products', 'seo_keywords');
+
+        $productsSeoTitleCount = $hasProductSeo
+            ? (int) Product::query()->whereNotNull('seo_title')->where('seo_title', '!=', '')->count()
+            : 0;
+        $productsSeoDescriptionCount = $hasProductSeo
+            ? (int) Product::query()->whereNotNull('seo_description')->where('seo_description', '!=', '')->count()
+            : 0;
+        $productsSeoKeywordsCount = $hasProductSeo
+            ? (int) Product::query()->whereNotNull('seo_keywords')->where('seo_keywords', '!=', '')->count()
+            : 0;
+
         $headerMenus = Menu::query()
             ->active()
             ->where('position', 'header')
@@ -136,6 +157,10 @@ class DashboardController extends Controller
             'totalViews' => $totalViews,
             'monthlyViews' => $monthlyViews,
             'monthlyVisitors' => $monthlyVisitors,
+            'hasProductSeo' => $hasProductSeo,
+            'productsSeoTitleCount' => $productsSeoTitleCount,
+            'productsSeoDescriptionCount' => $productsSeoDescriptionCount,
+            'productsSeoKeywordsCount' => $productsSeoKeywordsCount,
             'bestArticle' => $bestArticle,
             'bestCategory' => $bestCategory,
             'topArticles' => $topArticles,
@@ -161,17 +186,21 @@ class DashboardController extends Controller
         $selectedMonth = $monthParam ? Carbon::createFromFormat('Y-m', $monthParam)->startOfMonth() : Carbon::now()->startOfMonth();
         $monthEnd = $selectedMonth->copy()->endOfMonth();
 
-        $hasViewsCount = Schema::hasColumn('blog_posts', 'views_count');
-        $monthlyViews = $hasViewsCount
-            ? (int) BlogPost::query()
-                ->whereBetween('created_at', [$selectedMonth, $monthEnd])
-                ->sum('views_count')
+        $hasPageViews = Schema::hasTable('page_views');
+        $hasBlogViewsCount = Schema::hasColumn('blog_posts', 'views_count');
+
+        $monthlyViews = $hasPageViews
+            ? (int) PageView::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->count()
+            : ($hasBlogViewsCount
+                ? (int) BlogPost::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->sum('views_count')
+                : 0);
+
+        $monthlyVisitors = $hasPageViews
+            ? (int) PageView::query()->whereBetween('created_at', [$selectedMonth, $monthEnd])->distinct('visitor_id')->count('visitor_id')
             : 0;
 
-        $monthlyVisitors = 0;
-
         $bestArticleQuery = BlogPost::query()->whereBetween('created_at', [$selectedMonth, $monthEnd]);
-        if ($hasViewsCount) {
+        if ($hasBlogViewsCount) {
             $bestArticleQuery->orderByDesc('views_count');
         } else {
             $bestArticleQuery->orderByDesc('created_at');
