@@ -99,6 +99,25 @@
 
         <div class="row mb-4">
             <div class="col-12">
+                <h3 class="text-black font-w600 mb-3">Actions rapides</h3>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap" style="gap:10px">
+                            <a class="btn btn-admin-pink" href="{{ route('admin.products.create') }}"><i class="fas fa-plus me-2"></i>Créer un produit</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.products.index') }}"><i class="fas fa-box me-2"></i>Gérer les produits</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-bag me-2"></i>Voir les commandes</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.home_sections.index') }}"><i class="fas fa-sliders-h me-2"></i>Sections Home</a>
+                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.categories.index') }}"><i class="fas fa-folder me-2"></i>Catégories</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
                 <h3 class="text-black font-w600 mb-3">SEO Produits</h3>
             </div>
             <div class="col-xl-4 col-lg-6 col-sm-6">
@@ -318,25 +337,6 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-12">
-                <h3 class="text-black font-w600 mb-3">Actions rapides</h3>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap" style="gap:10px">
-                            <a class="btn btn-admin-pink" href="{{ route('admin.products.create') }}"><i class="fas fa-plus me-2"></i>Créer un produit</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.products.index') }}"><i class="fas fa-box me-2"></i>Gérer les produits</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-bag me-2"></i>Voir les commandes</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.home_sections.index') }}"><i class="fas fa-sliders-h me-2"></i>Sections Home</a>
-                            <a class="btn btn-admin-pink-outline" href="{{ route('admin.categories.index') }}"><i class="fas fa-folder me-2"></i>Catégories</a>
                         </div>
                     </div>
                 </div>
