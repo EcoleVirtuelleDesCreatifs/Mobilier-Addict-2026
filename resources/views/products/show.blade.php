@@ -247,7 +247,7 @@
                                 'id' => (int) $v->id,
                                 'variant_type' => $v->variant_type ? (string) $v->variant_type : null,
                                 'thickness_cm' => (int) $v->thickness_cm,
-                                'places' => (float) $v->places,
+                                'places' => number_format((float) $v->places, 1, '.', ''),
                                 'price' => (float) $v->price,
                                 'formatted_price' => $v->formatted_price,
                                 'formatted_old_price' => $v->formatted_old_price,
@@ -1036,11 +1036,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const hasVariantType = document.querySelectorAll('[data-variant-type]').length > 0;
 
+    const normalizePlaces = (value) => {
+        if (value === null || value === undefined) return null;
+        const raw = String(value).trim().replace(',', '.');
+        const num = Number.parseFloat(raw);
+        if (!Number.isFinite(num)) return String(value).trim();
+        return num.toFixed(1);
+    };
+
     const getVariant = (a, places) => {
+        const placesKey = normalizePlaces(places);
         if (hasVariantType) {
-            return variants.find(v => String(v.variant_type || '') === String(a || '') && String(v.places) === String(places));
+            return variants.find(v => String(v.variant_type || '') === String(a || '') && normalizePlaces(v.places) === placesKey);
         }
-        return variants.find(v => String(v.thickness_cm) === String(a) && String(v.places) === String(places));
+        return variants.find(v => String(v.thickness_cm) === String(a) && normalizePlaces(v.places) === placesKey);
     };
 
     const initVariantUI = () => {
