@@ -36,6 +36,15 @@
         <meta name="twitter:description" content="{{ $seoDescription }}">
         <meta name="twitter:image" content="{{ $seoImage }}">
 
+        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="dns-prefetch" href="//images.unsplash.com">
+        <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+        <link rel="dns-prefetch" href="//connect.facebook.net">
+        <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+        <link rel="dns-prefetch" href="//www.facebook.com">
+        <link rel="preconnect" href="https://www.facebook.com" crossorigin>
+
         <link rel="icon" href="{{ asset('assets/logo/favicon.png') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />

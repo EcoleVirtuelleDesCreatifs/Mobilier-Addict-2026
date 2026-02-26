@@ -1,9 +1,9 @@
         <section class="hero" aria-label="Accueil">
             <div class="hero__bg">
-                <video class="hero__bg-video" autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop">
+                <video class="hero__bg-video" autoplay muted loop playsinline preload="none" poster="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop">
                     <source src="{{ asset('assets/video/hero.mp4') }}" type="video/mp4">
                 </video>
-                <img class="hero__bg-fallback" src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="eager" />
+                <img class="hero__bg-fallback" src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="eager" decoding="async" fetchpriority="high" />
             </div>
             <div class="hero__overlay"></div>
             <div class="container hero__inner">
@@ -49,18 +49,18 @@
                             @if(($heroSlides ?? collect())->count())
                                 @foreach($heroSlides as $slide)
                                     <div class="hero__card-slide" data-slide>
-                                        <img src="@image_url($slide->image)" alt="{{ $slide->image_alt ?: $slide->title }}" loading="eager" />
+                                        <img src="@image_url($slide->image)" alt="{{ $slide->image_alt ?: $slide->title }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}" decoding="async" {{ $loop->first ? 'fetchpriority=high' : '' }} />
                                     </div>
                                 @endforeach
                             @else
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" />
+                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" decoding="async" fetchpriority="high" />
                                 </div>
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre moderne" loading="eager" />
+                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre moderne" loading="lazy" decoding="async" />
                                 </div>
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre premium" loading="eager" />
+                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre premium" loading="lazy" decoding="async" />
                                 </div>
                             @endif
                         </div>
