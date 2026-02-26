@@ -57,11 +57,25 @@ button{-webkit-tap-highlight-color:transparent}
 .animate-delay-4{animation-delay:.4s}
 .animate-delay-5{animation-delay:.5s}
 
-.reveal{opacity:1;transform:none;transition:none}
-.reveal.is-visible{opacity:1;transform:none}
+.reveal{
+  opacity:0;
+  transform:translate3d(0,18px,0);
+  transition:opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1);
+  will-change:transform, opacity;
+}
+.reveal.is-visible{opacity:1;transform:translate3d(0,0,0)}
 
-.stagger-child{opacity:1;transform:none;transition:none}
-.stagger-child.is-visible{opacity:1;transform:none}
+.stagger-child{
+  opacity:0;
+  transform:translate3d(0,14px,0);
+  transition:opacity .6s cubic-bezier(.2,.9,.2,1), transform .6s cubic-bezier(.2,.9,.2,1);
+  will-change:transform, opacity;
+}
+.stagger-child.is-visible{opacity:1;transform:translate3d(0,0,0)}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal,.stagger-child{opacity:1;transform:none;transition:none}
+}
 
 .ripple{
   position:absolute;

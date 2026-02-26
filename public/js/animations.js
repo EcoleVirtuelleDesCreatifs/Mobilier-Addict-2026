@@ -1,6 +1,8 @@
 // Smooth scroll animations on page load and scroll
 document.addEventListener('DOMContentLoaded', function() {
 
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // Hamburger menu toggle
   const hamburger = document.getElementById('hamburger');
   const nav = document.querySelector('.header-new__nav');
@@ -48,40 +50,51 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Elements to animate on scroll
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-  };
+  if (!reduceMotion) {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -5% 0px',
+      threshold: 0.12
+    };
 
-  const animateOnScroll = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
+    const animateOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
 
-        // Stagger children animations
-        const children = entry.target.querySelectorAll('.stagger-child');
-        children.forEach((child, index) => {
-          child.style.animationDelay = `${index * 0.1}s`;
-          child.classList.add('is-visible');
-        });
-      }
+          const children = entry.target.querySelectorAll('.stagger-child');
+          children.forEach((child, index) => {
+            child.style.transitionDelay = `${index * 80}ms`;
+            child.classList.add('is-visible');
+          });
+
+          animateOnScroll.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section, .product-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
+      el.classList.add('reveal');
+      animateOnScroll.observe(el);
     });
-  }, observerOptions);
-
-  // Observe all sections and cards
-  document.querySelectorAll('section, .product-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
-    el.classList.add('reveal');
-    animateOnScroll.observe(el);
-  });
+  }
 
   // Parallax effect on hero
   const hero = document.querySelector('.hero__bg img');
-  if (hero) {
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      hero.style.transform = `translateY(${scrolled * 0.3}px) scale(1.1)`;
-    });
+  if (hero && !reduceMotion) {
+    let ticking = false;
+    const onHeroScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const scrolled = window.pageYOffset || 0;
+        hero.style.transform = `translate3d(0,${scrolled * 0.18}px,0) scale(1.08)`;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onHeroScroll, { passive: true });
+    onHeroScroll();
   }
 
   // Smooth counter animation for stats
