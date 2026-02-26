@@ -4953,7 +4953,7 @@ a.product-card,a.evc-product-card{display:block;text-decoration:none;color:inher
   .space-card__overlay{padding:20px}
   .brands{padding:50px 0}
   .brands__title{font-size:26px}
-  .brands__marquee-group{grid-auto-columns:minmax(140px, 1fr);gap:12px}
+  .brands__grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .brand-logo{padding:20px 14px}
   .brand-logo span{font-size:14px}
   .articles{padding:50px 0}

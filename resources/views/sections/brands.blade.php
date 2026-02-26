@@ -6,25 +6,13 @@
                         <h2 class="brands__title">Les Plus Grandes Marques<br>À Vos Côtés</h2>
                         <p class="brands__text">Nous sélectionnons rigoureusement nos partenaires pour leur excellence, leur innovation et leur engagement qualité. Chaque marque partage notre vision d'un sommeil parfait.</p>
                     </div>
-                    <div class="brands__marquee" aria-label="Marques partenaires">
-                        <div class="brands__marquee-track" aria-hidden="true">
-                            <div class="brands__marquee-group">
-                                <div class="brand-logo stagger-child"><span>FIESTA</span><small>COMFORT</small></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Dodo</span></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Richbond</span></div>
-                                <div class="brand-logo stagger-child"><span>AFRI</span><small>MOUSSES</small></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Dolidol</span></div>
-                                <div class="brand-logo stagger-child"><span>CIL</span></div>
-                            </div>
-                            <div class="brands__marquee-group">
-                                <div class="brand-logo stagger-child"><span>FIESTA</span><small>COMFORT</small></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Dodo</span></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Richbond</span></div>
-                                <div class="brand-logo stagger-child"><span>AFRI</span><small>MOUSSES</small></div>
-                                <div class="brand-logo brand-logo--highlight stagger-child"><span>Dolidol</span></div>
-                                <div class="brand-logo stagger-child"><span>CIL</span></div>
-                            </div>
-                        </div>
+                    <div class="brands__grid">
+                        <div class="brand-logo stagger-child"><span>FIESTA</span><small>COMFORT</small></div>
+                        <div class="brand-logo brand-logo--highlight stagger-child"><span>Dodo</span></div>
+                        <div class="brand-logo brand-logo--highlight stagger-child"><span>Richbond</span></div>
+                        <div class="brand-logo stagger-child"><span>AFRI</span><small>MOUSSES</small></div>
+                        <div class="brand-logo brand-logo--highlight stagger-child"><span>Dolidol</span></div>
+                        <div class="brand-logo stagger-child"><span>CIL</span></div>
                     </div>
                 </div>
             </div>

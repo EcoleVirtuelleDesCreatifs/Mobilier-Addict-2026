@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
       '.electro__grid',
       '.inspire__grid',
       '.spaces__grid',
-      '.brands__marquee-group',
+      '.brands__grid',
       '.blog-new__grid',
       '.articles__grid',
     ];
