@@ -57,6 +57,49 @@ document.addEventListener('DOMContentLoaded', function() {
       threshold: 0.12
     };
 
+    const STAGGER_CONTAINER_SELECTORS = [
+      '.categories__grid',
+      '.best-modern__grid',
+      '.favorites__grid',
+      '.collection__grid',
+      '.electro__grid',
+      '.inspire__grid',
+      '.spaces__grid',
+      '.brands__marquee-group',
+      '.blog-new__grid',
+      '.articles__grid',
+    ];
+
+    const STAGGER_ITEM_SELECTORS = [
+      '.product-card',
+      '.cat-card',
+      '.fav-card',
+      '.acc-card',
+      '.space-card',
+      '.brand-logo',
+      '.article-card',
+      '.collection-card',
+      '.electro-card',
+      '.inspire__card',
+    ];
+
+    const isStaggerContainer = (el) => {
+      return STAGGER_CONTAINER_SELECTORS.some((sel) => el.matches(sel));
+    };
+
+    const assignStaggerDelays = (container) => {
+      const items = Array.from(container.querySelectorAll(STAGGER_ITEM_SELECTORS.join(',')));
+      if (!items.length) return;
+      const base = 40;
+      const step = 70;
+      items.forEach((item, i) => {
+        item.style.setProperty('--reveal-delay', `${base + i * step}ms`);
+      });
+    };
+
+    document.querySelectorAll(STAGGER_CONTAINER_SELECTORS.join(','))
+      .forEach(assignStaggerDelays);
+
     const animateOnScroll = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -64,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
           const children = entry.target.querySelectorAll('.stagger-child');
           children.forEach((child, index) => {
-            child.style.transitionDelay = `${index * 80}ms`;
+            child.style.setProperty('--reveal-delay', `${index * 80}ms`);
             child.classList.add('is-visible');
           });
 
