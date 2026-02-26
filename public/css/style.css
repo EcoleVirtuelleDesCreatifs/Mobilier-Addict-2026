@@ -28,6 +28,13 @@ img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none;transition:color .3s ease;-webkit-tap-highlight-color:transparent}
 button{-webkit-tap-highlight-color:transparent}
 
+.no-js .reveal,
+.no-js .stagger-child{
+  opacity:1;
+  transform:none;
+  transition:none;
+}
+
 @keyframes fadeInUp{
   from{opacity:0;transform:translateY(40px)}
   to{opacity:1;transform:translateY(0)}

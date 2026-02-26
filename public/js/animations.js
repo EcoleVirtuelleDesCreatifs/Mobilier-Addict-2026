@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  if (reduceMotion) {
+    document.querySelectorAll('section, .product-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
+      el.classList.add('reveal');
+      el.classList.add('is-visible');
+    });
+  }
+
   // Hamburger menu toggle
   const hamburger = document.getElementById('hamburger');
   const nav = document.querySelector('.header-new__nav');
