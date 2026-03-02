@@ -67,6 +67,16 @@
                     $resolvedUrl = preg_match('#^https?://#', $menuUrl) ? $menuUrl : url($menuUrl);
                     $isActive = $menuUrl !== '#' && rtrim($resolvedUrl, '/') === rtrim(url()->current(), '/');
                     $targetAttr = $menu->open_new_tab ? ' target="_blank" rel="noopener"' : '';
+
+                    $matelasSubmenu = [
+                        ['label' => 'Matelas Addict PH10 ultra', 'model' => 'matelas-addict-ph10-ultra'],
+                        ['label' => 'LUXURY LITERIE', 'model' => 'luxury-literie'],
+                        ['label' => 'MEDICOSOINS PH8', 'model' => 'medicosoins-ph8'],
+                        ['label' => 'MEDICOSOINS PH10', 'model' => 'medicosoins-ph10'],
+                        ['label' => 'CONFORT SOFT', 'model' => 'confort-soft'],
+                        ['label' => 'BEN- PH6', 'model' => 'ben-ph6'],
+                        ['label' => 'SUR MESURE', 'model' => 'sur-mesure'],
+                    ];
                 @endphp
                 <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
                     <span class="nav-link__icon">
@@ -97,6 +107,19 @@
                                 @endif
                             </span>
                             {{ $child->name }}
+                        </a>
+                    @endforeach
+                @endif
+
+                @if($menuSlug === 'matelas')
+                    @foreach($matelasSubmenu as $item)
+                        @php
+                            $itemUrl = route('univers.show', 'matelas') . '?model=' . urlencode($item['model']);
+                            $itemIsActive = rtrim(url()->current(), '/') === rtrim(route('univers.show', 'matelas'), '/') && request('model') === $item['model'];
+                        @endphp
+                        <a class="nav-link {{ $itemIsActive ? 'nav-link--active' : '' }}" style="padding-left: 56px" href="{{ $itemUrl }}">
+                            <span class="nav-link__icon"><i class="fa-solid fa-angle-right"></i></span>
+                            {{ $item['label'] }}
                         </a>
                     @endforeach
                 @endif

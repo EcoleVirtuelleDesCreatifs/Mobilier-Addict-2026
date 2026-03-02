@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class UniversController extends Controller
 {
-    public function show(string $slug)
+    public function show(Request $request, string $slug)
     {
         $fallbackPages = [
             'couettes-douces' => [
@@ -95,6 +96,38 @@ class UniversController extends Controller
 
         $pageDescription = $category?->description ?? ($fallbackPages[$slug]['description'] ?? null);
 
+        $matelasModel = (string) $request->query('model', '');
+        $matelasModelMeta = [
+            'matelas-addict-ph10-ultra' => [
+                'title' => 'Matelas Addict PH10 ultra',
+                'tokens' => ['addict', 'ph10'],
+            ],
+            'luxury-literie' => [
+                'title' => 'Luxury Literie',
+                'tokens' => ['luxury'],
+            ],
+            'medicosoins-ph8' => [
+                'title' => 'Medicosoins PH8',
+                'tokens' => ['medicosoins', 'ph8'],
+            ],
+            'medicosoins-ph10' => [
+                'title' => 'Medicosoins PH10',
+                'tokens' => ['medicosoins', 'ph10'],
+            ],
+            'confort-soft' => [
+                'title' => 'Confort Soft',
+                'tokens' => ['confort', 'soft'],
+            ],
+            'ben-ph6' => [
+                'title' => 'BEN- PH6',
+                'tokens' => ['ben', 'ph6'],
+            ],
+            'sur-mesure' => [
+                'title' => 'Sur mesure',
+                'tokens' => ['sur mesure'],
+            ],
+        ];
+
         $productsQuery = Product::query()->active();
 
         if ($filterCategory) {
@@ -106,6 +139,24 @@ class UniversController extends Controller
             });
         } else {
             $productsQuery->whereRaw('1=0');
+        }
+
+        if ($slug === 'matelas' && $matelasModel !== '' && isset($matelasModelMeta[$matelasModel])) {
+            $meta = $matelasModelMeta[$matelasModel];
+            $tokens = (array) ($meta['tokens'] ?? []);
+
+            if (!empty($tokens)) {
+                $productsQuery->where(function ($q) use ($tokens) {
+                    foreach ($tokens as $t) {
+                        $t = trim((string) $t);
+                        if ($t === '') continue;
+                        $q->where('name', 'like', '%' . $t . '%');
+                    }
+                });
+            }
+
+            $pageTitle = 'Matelas - ' . (string) ($meta['title'] ?? '');
+            $pageDescription = 'Découvrez notre sélection : ' . (string) ($meta['title'] ?? 'Matelas') . '.';
         }
 
         $products = $productsQuery
