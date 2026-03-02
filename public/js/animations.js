@@ -64,7 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close menu when clicking a link
     nav.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', closeMenu);
+      link.addEventListener('click', (e) => {
+        if (link.hasAttribute('data-submenu-trigger')) {
+          return;
+        }
+        closeMenu();
+      });
     });
 
     // Close on escape key
