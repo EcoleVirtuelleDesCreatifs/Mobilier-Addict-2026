@@ -78,16 +78,41 @@
                         ['label' => 'SUR MESURE', 'model' => 'sur-mesure'],
                     ];
                 @endphp
-                <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
-                    <span class="nav-link__icon">
-                        @if($menu->icon)
-                            <i class="{{ $menu->icon }}"></i>
-                        @else
-                            <i class="fa-solid fa-circle"></i>
-                        @endif
-                    </span>
-                    {{ $menu->name }}
-                </a>
+                @if($menuSlug === 'matelas')
+                    <div class="nav-item has-submenu" data-submenu>
+                        <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!} data-submenu-trigger aria-haspopup="true" aria-expanded="false">
+                            <span class="nav-link__icon">
+                                @if($menu->icon)
+                                    <i class="{{ $menu->icon }}"></i>
+                                @else
+                                    <i class="fa-solid fa-circle"></i>
+                                @endif
+                            </span>
+                            {{ $menu->name }}
+                            <span class="nav-link__caret" aria-hidden="true"><i class="fa-solid fa-angle-down"></i></span>
+                        </a>
+                        <div class="nav-submenu" data-submenu-panel>
+                            @foreach($matelasSubmenu as $item)
+                                @php
+                                    $itemUrl = route('univers.show', 'matelas') . '?model=' . urlencode($item['model']);
+                                    $itemIsActive = rtrim(url()->current(), '/') === rtrim(route('univers.show', 'matelas'), '/') && request('model') === $item['model'];
+                                @endphp
+                                <a class="nav-submenu__link {{ $itemIsActive ? 'is-active' : '' }}" href="{{ $itemUrl }}">{{ $item['label'] }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
+                        <span class="nav-link__icon">
+                            @if($menu->icon)
+                                <i class="{{ $menu->icon }}"></i>
+                            @else
+                                <i class="fa-solid fa-circle"></i>
+                            @endif
+                        </span>
+                        {{ $menu->name }}
+                    </a>
+                @endif
 
                 @if($menu->children && $menu->children->count() > 0)
                     @foreach($menu->children as $child)
@@ -107,19 +132,6 @@
                                 @endif
                             </span>
                             {{ $child->name }}
-                        </a>
-                    @endforeach
-                @endif
-
-                @if($menuSlug === 'matelas')
-                    @foreach($matelasSubmenu as $item)
-                        @php
-                            $itemUrl = route('univers.show', 'matelas') . '?model=' . urlencode($item['model']);
-                            $itemIsActive = rtrim(url()->current(), '/') === rtrim(route('univers.show', 'matelas'), '/') && request('model') === $item['model'];
-                        @endphp
-                        <a class="nav-link {{ $itemIsActive ? 'nav-link--active' : '' }}" style="padding-left: 56px" href="{{ $itemUrl }}">
-                            <span class="nav-link__icon"><i class="fa-solid fa-angle-right"></i></span>
-                            {{ $item['label'] }}
                         </a>
                     @endforeach
                 @endif
