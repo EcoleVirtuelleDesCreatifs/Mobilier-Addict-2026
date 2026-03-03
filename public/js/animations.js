@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
       el.classList.remove('is-open');
       const trigger = el.querySelector('[data-submenu-trigger]');
       if (trigger) trigger.setAttribute('aria-expanded', 'false');
+
+      const link = el.querySelector('.nav-link');
+      if (link) link.setAttribute('aria-expanded', 'false');
     });
   };
 
@@ -54,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const isOpen = item.classList.toggle('is-open');
         trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+        const link = item.querySelector('.nav-link');
+        if (link) link.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
     });
 
@@ -65,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close menu when clicking a link
     nav.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => {
-        if (link.hasAttribute('data-submenu-trigger')) {
+        if (isMobileNav() && link.closest('[data-submenu]') && link.closest('[data-submenu]').querySelector('[data-submenu-trigger]')) {
           return;
         }
         closeMenu();

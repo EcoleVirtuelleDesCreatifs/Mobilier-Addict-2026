@@ -48,7 +48,7 @@
         <link rel="preconnect" href="https://www.facebook.com" crossorigin>
 
         <link rel="icon" href="{{ asset('assets/logo/favicon.png') }}">
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ @filemtime(public_path('css/style.css')) }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ (int) (filemtime(public_path('css/style.css')) ?: time()) }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
 
         @stack('styles')
@@ -111,8 +111,8 @@
 
         @include('partials.footer')
 
-        <script src="{{ asset('js/slider.js') }}?v={{ @filemtime(public_path('js/slider.js')) }}" defer></script>
-        <script src="{{ asset('js/animations.js') }}?v={{ @filemtime(public_path('js/animations.js')) }}" defer></script>
+        <script src="{{ asset('js/slider.js') }}?v={{ (int) (filemtime(public_path('js/slider.js')) ?: time()) }}" defer></script>
+        <script src="{{ asset('js/animations.js') }}?v={{ (int) (filemtime(public_path('js/animations.js')) ?: time()) }}" defer></script>
         @stack('scripts')
     </body>
 </html>
