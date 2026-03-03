@@ -48,7 +48,11 @@
         <link rel="preconnect" href="https://www.facebook.com" crossorigin>
 
         <link rel="icon" href="{{ asset('assets/logo/favicon.png') }}">
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ (int) (filemtime(public_path('css/style.css')) ?: time()) }}">
+        @php
+            $cssPath = public_path('css/style.css');
+            $cssVersion = is_file($cssPath) ? (int) filemtime($cssPath) : time();
+        @endphp
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ $cssVersion }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
 
         @stack('styles')
@@ -111,8 +115,14 @@
 
         @include('partials.footer')
 
-        <script src="{{ asset('js/slider.js') }}?v={{ (int) (filemtime(public_path('js/slider.js')) ?: time()) }}" defer></script>
-        <script src="{{ asset('js/animations.js') }}?v={{ (int) (filemtime(public_path('js/animations.js')) ?: time()) }}" defer></script>
+        @php
+            $sliderPath = public_path('js/slider.js');
+            $animationsPath = public_path('js/animations.js');
+            $sliderVersion = is_file($sliderPath) ? (int) filemtime($sliderPath) : time();
+            $animationsVersion = is_file($animationsPath) ? (int) filemtime($animationsPath) : time();
+        @endphp
+        <script src="{{ asset('js/slider.js') }}?v={{ $sliderVersion }}" defer></script>
+        <script src="{{ asset('js/animations.js') }}?v={{ $animationsVersion }}" defer></script>
         @stack('scripts')
     </body>
 </html>

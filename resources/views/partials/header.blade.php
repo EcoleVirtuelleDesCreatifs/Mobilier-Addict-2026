@@ -78,48 +78,16 @@
                         ['label' => 'SUR MESURE', 'model' => 'sur-mesure'],
                     ];
                 @endphp
-                @if($menuSlug === 'matelas')
-                    @php
-                        $submenuId = 'submenu-' . ($menu->id ?? 'matelas');
-                    @endphp
-                    <div class="nav-item has-submenu" data-submenu>
-                        <div class="nav-link-row">
-                            <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!} aria-haspopup="true" aria-expanded="false">
-                                <span class="nav-link__icon">
-                                    @if($menu->icon)
-                                        <i class="{{ $menu->icon }}"></i>
-                                    @else
-                                        <i class="fa-solid fa-circle"></i>
-                                    @endif
-                                </span>
-                                {{ $menu->name }}
-                            </a>
-                            <button class="nav-submenu-toggle" type="button" data-submenu-trigger aria-controls="{{ $submenuId }}" aria-expanded="false" aria-label="Ouvrir le sous-menu {{ $menu->name }}">
-                                <span class="nav-link__caret" aria-hidden="true"><i class="fa-solid fa-angle-down"></i></span>
-                            </button>
-                        </div>
-                        <div class="nav-submenu" id="{{ $submenuId }}" data-submenu-panel>
-                            @foreach($matelasSubmenu as $item)
-                                @php
-                                    $itemUrl = route('univers.show', 'matelas') . '?model=' . urlencode($item['model']);
-                                    $itemIsActive = rtrim(url()->current(), '/') === rtrim(route('univers.show', 'matelas'), '/') && request('model') === $item['model'];
-                                @endphp
-                                <a class="nav-submenu__link {{ $itemIsActive ? 'is-active' : '' }}" href="{{ $itemUrl }}">{{ $item['label'] }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-                @else
-                    <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
-                        <span class="nav-link__icon">
-                            @if($menu->icon)
-                                <i class="{{ $menu->icon }}"></i>
-                            @else
-                                <i class="fa-solid fa-circle"></i>
-                            @endif
-                        </span>
-                        {{ $menu->name }}
-                    </a>
-                @endif
+                <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
+                    <span class="nav-link__icon">
+                        @if($menu->icon)
+                            <i class="{{ $menu->icon }}"></i>
+                        @else
+                            <i class="fa-solid fa-circle"></i>
+                        @endif
+                    </span>
+                    {{ $menu->name }}
+                </a>
 
                 @if($menu->children && $menu->children->count() > 0)
                     @foreach($menu->children as $child)
