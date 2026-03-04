@@ -82,7 +82,7 @@ class UniversController extends Controller
         $sleepSpaceSlugs = ['hotellerie', 'entrez-dans-lunivers-de-vos-nuits', 'appartement-meuble', 'studio', 'famille'];
         $filterCategory = $category;
         if (!$filterCategory && in_array($slug, $sleepSpaceSlugs, true)) {
-            $filterCategory = Category::query()->where('slug', 'matelas')->first();
+            $filterCategory = null;
         }
 
         if (!$filterCategory && $slug === 'couettes-douces') {
@@ -138,7 +138,9 @@ class UniversController extends Controller
                     ->orWhereIn('category_id', $categoryIds);
             });
         } else {
-            $productsQuery->whereRaw('1=0');
+            if (!in_array($slug, $sleepSpaceSlugs, true)) {
+                $productsQuery->whereRaw('1=0');
+            }
         }
 
         if ($slug === 'matelas' && $matelasModel !== '' && isset($matelasModelMeta[$matelasModel])) {
@@ -173,7 +175,11 @@ class UniversController extends Controller
                         ->orWhereIn('category_id', $categoryIds);
                 });
             })
-            ->when(!$filterCategory, fn ($q) => $q->whereRaw('1=0'))
+            ->when(!$filterCategory, function ($q) use ($slug, $sleepSpaceSlugs) {
+                if (!in_array($slug, $sleepSpaceSlugs, true)) {
+                    $q->whereRaw('1=0');
+                }
+            })
             ->whereNotNull('discount_percent')
             ->orderByDesc('discount_percent')
             ->limit(4)
