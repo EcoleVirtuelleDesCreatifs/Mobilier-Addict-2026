@@ -178,32 +178,6 @@
             </div>
         @endif
 
-        @if(($drapsCategories ?? collect())->count())
-            <div class="best-modern__header" style="margin-top: 40px;">
-                <h2 class="best-modern__title">Nos Draps</h2>
-                <p class="best-modern__subtitle">Tous les types de draps — découvre la sélection complète en images</p>
-            </div>
-
-            <div class="categories__grid">
-                @foreach($drapsCategories as $i => $category)
-                    @php($cardClass = $i === 0 ? 'cat-card cat-card--large' : ($i === 3 ? 'cat-card cat-card--wide' : 'cat-card'))
-                    <a class="{{ $cardClass }}" href="{{ route('univers.show', $category->slug) }}">
-                        <img src="@image_url($category->image)" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
-                        <div class="cat-card__overlay">
-                            <span class="cat-card__count">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
-                            <h3 class="cat-card__title">{{ $category->name }}</h3>
-                            @if($i === 0 || $i === 3)
-                                <p class="cat-card__desc">{{ $category->description }}</p>
-                                <span class="cat-card__cta">Explorer <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
-                            @else
-                                <span class="cat-card__cta">Voir →</span>
-                            @endif
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        @endif
-
         @endif
     </div>
 </section>
