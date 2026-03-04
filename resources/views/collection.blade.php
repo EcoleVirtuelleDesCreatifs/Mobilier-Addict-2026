@@ -33,7 +33,7 @@
 
                     <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
                         <div class="collection-card__media">
-                            <img src="{{ $product->image ? asset($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=500&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
+                            <img src="{{ !empty($product->image) ? image_url($product->image) : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=500&fit=crop' }}" alt="{{ $product->name }}" loading="lazy" />
                             @if($tag)
                                 <span class="collection-card__tag">{{ $tag }}</span>
                             @endif
