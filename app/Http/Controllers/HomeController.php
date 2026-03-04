@@ -472,6 +472,23 @@ class HomeController extends Controller
         if ($drapsCategory) {
             $categoryIds = $this->collectCategoryAndDescendantIds($drapsCategory);
 
+            $extraDrapsCategoryIds = Category::query()
+                ->active()
+                ->where(function ($q) {
+                    $q->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                        ->orWhere('slug', 'like', 'drap%')
+                        ->orWhere('name', 'like', '%drap%')
+                        ->orWhere('name', 'like', '%couette%');
+                })
+                ->pluck('id')
+                ->map(fn($v) => (int) $v)
+                ->values();
+
+            $categoryIds = collect($categoryIds)
+                ->concat($extraDrapsCategoryIds)
+                ->unique()
+                ->values();
+
             $drapsCategories = Category::query()
                 ->active()
                 ->whereIn('id', $categoryIds)
