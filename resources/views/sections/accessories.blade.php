@@ -1,4 +1,4 @@
-        <section class="video-hero" aria-label="Découvrez notre univers" data-video-url="https://www.youtube.com/embed/dQw4w9WgXcQ">
+        <section class="video-hero" aria-label="Découvrez notre univers" data-video-url="{{ asset('assets/video/video.mp4') }}">
             <div class="video-hero__bg">
                 <img src="https://images.unsplash.com/photo-1616627561839-074385245ff6?w=1920&h=900&fit=crop" alt="" loading="lazy" />
             </div>
@@ -54,17 +54,12 @@
             const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const baseUrl = section.getAttribute('data-video-url');
 
-            const buildUrl = () => {
-                if (!baseUrl) return null;
-                const hasQuery = baseUrl.includes('?');
-                const sep = hasQuery ? '&' : '?';
-                return reducedMotion ? baseUrl : `${baseUrl}${sep}autoplay=1`;
-            };
-
             const open = () => {
-                const url = buildUrl();
-                if (!url) return;
-                frame.innerHTML = `<iframe src="${url}" title="Vidéo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                if (!baseUrl) return;
+                const autoplayAttr = reducedMotion ? '' : ' autoplay';
+                frame.innerHTML = `
+                    <video src="${baseUrl}" controls playsinline${autoplayAttr} style="width:100%;height:100%;display:block;background:#000" preload="metadata"></video>
+                `;
                 modal.classList.add('is-open');
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';

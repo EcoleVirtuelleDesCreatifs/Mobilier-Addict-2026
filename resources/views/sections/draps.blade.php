@@ -67,7 +67,8 @@
             }
 
             $hasProductGrid = (($drapsProducts ?? collect())->count() > 0);
-            $shouldRender = $items->isNotEmpty() || $hasProductGrid;
+            $hasCategoryGrid = (($drapsCategories ?? collect())->count() > 0);
+            $shouldRender = $items->isNotEmpty() || $hasProductGrid || $hasCategoryGrid;
         @endphp
 
         @if($shouldRender)
@@ -134,53 +135,28 @@
             </div>
         @endif
 
-        @if(($drapsProducts ?? collect())->count())
+        @if(($drapsCategories ?? collect())->count())
             <div class="best-modern__header" style="margin-top: 40px;">
                 <h2 class="best-modern__title">Nos Draps</h2>
                 <p class="best-modern__subtitle">Tous les types de draps — découvre la sélection complète en images</p>
             </div>
 
-            <div class="best-modern__grid">
-                @foreach($drapsProducts as $product)
-                    <article class="product-card" aria-label="{{ $product->name }}">
-                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
-                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
-                            <div class="product-card__badge product-card__badge--new">NEW</div>
-                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
-                            <div class="product-card__badge product-card__badge--hot">HOT</div>
-                        @endif
-
-                        <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
-                            <div class="product-card__media">
-                                @if($product->image)
-                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                @else
-                                    <img src="https://via.placeholder.com/400x400?text=Produit" alt="{{ $product->name }}" loading="lazy" />
-                                @endif
-                            </div>
-                        </a>
-                        <div class="product-card__body">
-                            <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
-                                <h3 class="product-card__name">{{ $product->name }}</h3>
-                            </a>
-                            <div class="product-card__footer">
-                                <div class="product-card__prices">
-                                    <span class="product-card__price">{{ $product->formatted_price }}</span>
-                                    @if(!empty($product->formatted_old_price))
-                                        <span class="product-card__old">{{ $product->formatted_old_price }}</span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button class="product-card__buy" type="submit">Ajouter au panier</button>
-                            </form>
+            <div class="categories__grid">
+                @foreach($drapsCategories as $i => $category)
+                    @php($cardClass = $i === 0 ? 'cat-card cat-card--large' : ($i === 3 ? 'cat-card cat-card--wide' : 'cat-card'))
+                    <a class="{{ $cardClass }}" href="{{ route('univers.show', $category->slug) }}">
+                        <img src="@image_url($category->image)" alt="{{ $category->image_alt ?: $category->name }}" loading="lazy" />
+                        <div class="cat-card__overlay">
+                            <span class="cat-card__count">{{ $category->products_rel_count ?? $category->products_count ?? 0 }} produits</span>
+                            <h3 class="cat-card__title">{{ $category->name }}</h3>
+                            @if($i === 0 || $i === 3)
+                                <p class="cat-card__desc">{{ $category->description }}</p>
+                                <span class="cat-card__cta">Explorer <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+                            @else
+                                <span class="cat-card__cta">Voir →</span>
+                            @endif
                         </div>
-                    </article>
+                    </a>
                 @endforeach
             </div>
         @endif

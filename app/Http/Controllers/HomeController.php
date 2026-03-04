@@ -250,7 +250,7 @@ class HomeController extends Controller
 
         $blogPosts = BlogPost::query()
             ->active()
-            ->when($blogFeaturedPost, fn ($q) => $q->where('id', '!=', $blogFeaturedPost->id))
+            ->when($blogFeaturedPost, fn($q) => $q->where('id', '!=', $blogFeaturedPost->id))
             ->ordered()
             ->with(['category'])
             ->take(3)
@@ -285,7 +285,7 @@ class HomeController extends Controller
             $mattressProducts = Product::query()
                 ->active()
                 ->where(function ($q) use ($categoryIds) {
-                    $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                    $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                         ->orWhereIn('category_id', $categoryIds);
                 })
                 ->orderByDesc('created_at')
@@ -295,7 +295,7 @@ class HomeController extends Controller
             if ($mattressProducts->isEmpty()) {
                 $mattressProducts = Product::query()
                     ->where(function ($q) use ($categoryIds) {
-                        $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                        $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                             ->orWhereIn('category_id', $categoryIds);
                     })
                     ->orderByDesc('created_at')
@@ -312,9 +312,9 @@ class HomeController extends Controller
                                 ->orWhere('slug', 'like', 'matelas%')
                                 ->orWhere('name', 'like', '%matelas%');
                         })->orWhereHas('category', function ($query) {
-                        $query->where('slug', 'matelas')
-                            ->orWhere('slug', 'like', 'matelas%')
-                            ->orWhere('name', 'like', '%matelas%');
+                            $query->where('slug', 'matelas')
+                                ->orWhere('slug', 'like', 'matelas%')
+                                ->orWhere('name', 'like', '%matelas%');
                         });
                     })
                     ->orderByDesc('created_at')
@@ -330,9 +330,9 @@ class HomeController extends Controller
                             ->orWhere('slug', 'like', 'matelas%')
                             ->orWhere('name', 'like', '%matelas%');
                     })->orWhereHas('category', function ($query) {
-                    $query->where('slug', 'matelas')
-                        ->orWhere('slug', 'like', 'matelas%')
-                        ->orWhere('name', 'like', '%matelas%');
+                        $query->where('slug', 'matelas')
+                            ->orWhere('slug', 'like', 'matelas%')
+                            ->orWhere('name', 'like', '%matelas%');
                     });
                 })
                 ->orderByDesc('created_at')
@@ -347,9 +347,9 @@ class HomeController extends Controller
                                 ->orWhere('slug', 'like', 'matelas%')
                                 ->orWhere('name', 'like', '%matelas%');
                         })->orWhereHas('category', function ($query) {
-                        $query->where('slug', 'matelas')
-                            ->orWhere('slug', 'like', 'matelas%')
-                            ->orWhere('name', 'like', '%matelas%');
+                            $query->where('slug', 'matelas')
+                                ->orWhere('slug', 'like', 'matelas%')
+                                ->orWhere('name', 'like', '%matelas%');
                         });
                     })
                     ->orderByDesc('created_at')
@@ -376,7 +376,7 @@ class HomeController extends Controller
             $pillowProducts = Product::query()
                 ->active()
                 ->where(function ($q) use ($categoryIds) {
-                    $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                    $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                         ->orWhereIn('category_id', $categoryIds);
                 })
                 ->orderByDesc('created_at')
@@ -386,7 +386,7 @@ class HomeController extends Controller
             if ($pillowProducts->isEmpty()) {
                 $pillowProducts = Product::query()
                     ->where(function ($q) use ($categoryIds) {
-                        $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                        $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                             ->orWhereIn('category_id', $categoryIds);
                     })
                     ->orderByDesc('created_at')
@@ -403,9 +403,9 @@ class HomeController extends Controller
                                 ->orWhere('slug', 'like', 'oreiller%')
                                 ->orWhere('name', 'like', '%oreiller%');
                         })->orWhereHas('category', function ($query) {
-                        $query->where('slug', 'oreillers')
-                            ->orWhere('slug', 'like', 'oreiller%')
-                            ->orWhere('name', 'like', '%oreiller%');
+                            $query->where('slug', 'oreillers')
+                                ->orWhere('slug', 'like', 'oreiller%')
+                                ->orWhere('name', 'like', '%oreiller%');
                         });
                     })
                     ->orderByDesc('created_at')
@@ -421,9 +421,9 @@ class HomeController extends Controller
                             ->orWhere('slug', 'like', 'oreiller%')
                             ->orWhere('name', 'like', '%oreiller%');
                     })->orWhereHas('category', function ($query) {
-                    $query->where('slug', 'oreillers')
-                        ->orWhere('slug', 'like', 'oreiller%')
-                        ->orWhere('name', 'like', '%oreiller%');
+                        $query->where('slug', 'oreillers')
+                            ->orWhere('slug', 'like', 'oreiller%')
+                            ->orWhere('name', 'like', '%oreiller%');
                     });
                 })
                 ->orderByDesc('created_at')
@@ -438,9 +438,9 @@ class HomeController extends Controller
                                 ->orWhere('slug', 'like', 'oreiller%')
                                 ->orWhere('name', 'like', '%oreiller%');
                         })->orWhereHas('category', function ($query) {
-                        $query->where('slug', 'oreillers')
-                            ->orWhere('slug', 'like', 'oreiller%')
-                            ->orWhere('name', 'like', '%oreiller%');
+                            $query->where('slug', 'oreillers')
+                                ->orWhere('slug', 'like', 'oreiller%')
+                                ->orWhere('name', 'like', '%oreiller%');
                         });
                     })
                     ->orderByDesc('created_at')
@@ -450,6 +450,7 @@ class HomeController extends Controller
         }
 
         $drapsProducts = collect();
+        $drapsCategories = collect();
         $drapsCategory = Category::query()
             ->where('slug', 'draps')
             ->first();
@@ -470,10 +471,19 @@ class HomeController extends Controller
 
         if ($drapsCategory) {
             $categoryIds = $this->collectCategoryAndDescendantIds($drapsCategory);
+
+            $drapsCategories = Category::query()
+                ->active()
+                ->whereIn('id', $categoryIds)
+                ->where('id', '!=', (int) $drapsCategory->id)
+                ->ordered()
+                ->withCount(['productsMany as products_rel_count'])
+                ->get();
+
             $drapsProducts = Product::query()
                 ->active()
                 ->where(function ($q) use ($categoryIds) {
-                    $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                    $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                         ->orWhereIn('category_id', $categoryIds);
                 })
                 ->orderByDesc('created_at')
@@ -483,35 +493,26 @@ class HomeController extends Controller
             if ($drapsProducts->isEmpty()) {
                 $drapsProducts = Product::query()
                     ->where(function ($q) use ($categoryIds) {
-                        $q->whereHas('categories', fn ($qq) => $qq->whereIn('categories.id', $categoryIds))
+                        $q->whereHas('categories', fn($qq) => $qq->whereIn('categories.id', $categoryIds))
                             ->orWhereIn('category_id', $categoryIds);
                     })
                     ->orderByDesc('created_at')
                     ->take(12)
                     ->get();
             }
-
-            if ($drapsProducts->isEmpty()) {
-                $drapsProducts = Product::query()
-                    ->active()
-                    ->where(function ($q) {
-                        $q->whereHas('categories', function ($query) {
-                            $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
-                                ->orWhere('slug', 'like', 'drap%')
-                                ->orWhere('name', 'like', '%drap%')
-                                ->orWhere('name', 'like', '%couette%');
-                        })->orWhereHas('category', function ($query) {
-                        $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
-                            ->orWhere('slug', 'like', 'drap%')
-                            ->orWhere('name', 'like', '%drap%')
-                            ->orWhere('name', 'like', '%couette%');
-                        });
-                    })
-                    ->orderByDesc('created_at')
-                    ->take(12)
-                    ->get();
-            }
         } else {
+            $drapsCategories = Category::query()
+                ->active()
+                ->where(function ($q) {
+                    $q->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                        ->orWhere('slug', 'like', 'drap%')
+                        ->orWhere('name', 'like', '%drap%')
+                        ->orWhere('name', 'like', '%couette%');
+                })
+                ->ordered()
+                ->withCount(['productsMany as products_rel_count'])
+                ->get();
+
             $drapsProducts = Product::query()
                 ->active()
                 ->where(function ($q) {
@@ -521,10 +522,10 @@ class HomeController extends Controller
                             ->orWhere('name', 'like', '%drap%')
                             ->orWhere('name', 'like', '%couette%');
                     })->orWhereHas('category', function ($query) {
-                    $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
-                        ->orWhere('slug', 'like', 'drap%')
-                        ->orWhere('name', 'like', '%drap%')
-                        ->orWhere('name', 'like', '%couette%');
+                        $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                            ->orWhere('slug', 'like', 'drap%')
+                            ->orWhere('name', 'like', '%drap%')
+                            ->orWhere('name', 'like', '%couette%');
                     });
                 })
                 ->orderByDesc('created_at')
@@ -540,10 +541,10 @@ class HomeController extends Controller
                                 ->orWhere('name', 'like', '%drap%')
                                 ->orWhere('name', 'like', '%couette%');
                         })->orWhereHas('category', function ($query) {
-                        $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
-                            ->orWhere('slug', 'like', 'drap%')
-                            ->orWhere('name', 'like', '%drap%')
-                            ->orWhere('name', 'like', '%couette%');
+                            $query->whereIn('slug', ['draps', 'draps-couettes', 'couettes'])
+                                ->orWhere('slug', 'like', 'drap%')
+                                ->orWhere('name', 'like', '%drap%')
+                                ->orWhere('name', 'like', '%couette%');
                         });
                     })
                     ->orderByDesc('created_at')
@@ -552,7 +553,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('home', compact('homeSections', 'heroSlides', 'spaceSection', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts', 'pillowProducts', 'drapsProducts'));
+        return view('home', compact('homeSections', 'heroSlides', 'spaceSection', 'collectionProducts', 'accessoryProducts', 'favoriteProducts', 'blogFeaturedPost', 'blogPosts', 'mattressProducts', 'pillowProducts', 'drapsProducts', 'drapsCategories'));
     }
 
     private function collectCategoryAndDescendantIds(Category $category)
