@@ -21,7 +21,7 @@
 
                 <div class="video-hero__preview">
                     <div class="video-hero__frame" role="button" tabindex="0" aria-label="Lire la vidéo" data-video-trigger>
-                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=500&fit=crop" alt="Aperçu vidéo" loading="lazy" />
+                        <video src="{{ asset('assets/video/video.mp4') }}" muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block" aria-hidden="true"></video>
                         <div class="video-hero__frame-play">
                             <svg viewBox="0 0 80 80" width="80" height="80">
                                 <circle cx="40" cy="40" r="38" fill="rgba(255,255,255,.9)" stroke="none"/>
@@ -58,7 +58,7 @@
                 if (!baseUrl) return;
                 const autoplayAttr = reducedMotion ? '' : ' autoplay';
                 frame.innerHTML = `
-                    <video src="${baseUrl}" controls playsinline${autoplayAttr} style="width:100%;height:100%;display:block;background:#000" preload="metadata"></video>
+                    <video src="${baseUrl}" controls playsinline muted${autoplayAttr} style="width:100%;height:100%;display:block;background:#000" preload="metadata"></video>
                 `;
                 modal.classList.add('is-open');
                 modal.setAttribute('aria-hidden', 'false');
