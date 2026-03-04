@@ -135,6 +135,49 @@
             </div>
         @endif
 
+        @if(($drapsProducts ?? collect())->count())
+            <div class="best-modern__header" style="margin-top: 40px;">
+                <h2 class="best-modern__title">Nos Draps & Couettes</h2>
+                <p class="best-modern__subtitle">Les 12 premiers produits disponibles à la commande</p>
+            </div>
+
+            <div class="best-modern__grid">
+                @foreach(($drapsProducts ?? collect())->take(12) as $product)
+                    <article class="product-card" aria-label="{{ $product->name }}">
+                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
+                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
+                            <div class="product-card__badge product-card__badge--new">NEW</div>
+                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
+                            <div class="product-card__badge product-card__badge--hot">HOT</div>
+                        @endif
+
+                        <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                            <div class="product-card__media">
+                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                            </div>
+                        </a>
+                        <div class="product-card__body">
+                            <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none;color:inherit">
+                                <h3 class="product-card__name">{{ $product->name }}</h3>
+                            </a>
+                            <div class="product-card__footer">
+                                <div class="product-card__prices">
+                                    <span class="product-card__price">{{ $product->formatted_price }}</span>
+                                </div>
+                                <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @endif
+
         @if(($drapsCategories ?? collect())->count())
             <div class="best-modern__header" style="margin-top: 40px;">
                 <h2 class="best-modern__title">Nos Draps</h2>
@@ -164,4 +207,4 @@
         @endif
     </div>
 </section>
- @endif
+<?php endif; ?>
