@@ -5706,6 +5706,13 @@ a.product-card,a.evc-product-card{display:block;text-decoration:none;color:inher
 
 .univers-products{padding:44px 0}
 .univers-pagination{margin-top:18px}
+.univers-pagination ul{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:0;padding:0;list-style:none}
+.univers-pagination ul li{display:flex}
+.univers-pagination ul li a,
+.univers-pagination ul li span{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;padding:0 14px;border-radius:999px;text-decoration:none;font-weight:900;border:1px solid rgba(15,23,42,.14);background:#fff;color:#0f172a;box-shadow:0 12px 30px rgba(2,6,23,.08)}
+.univers-pagination ul li a:hover{border-color:rgba(236,72,153,.35);color:#ec4899}
+.univers-pagination ul li.active span{background:linear-gradient(135deg,#ec4899,#8b5cf6);border-color:transparent;color:#fff}
+.univers-pagination ul li.disabled span{opacity:.45}
 .univers-pagination .pagination{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:0;padding:0;list-style:none}
 .univers-pagination .page-item{display:flex}
 .univers-pagination .page-link{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;padding:0 14px;border-radius:999px;text-decoration:none;font-weight:900;border:1px solid rgba(15,23,42,.14);background:#fff;color:#0f172a;box-shadow:0 12px 30px rgba(2,6,23,.08)}
