@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        Paginator::defaultView('pagination::bootstrap-5');
+        Paginator::defaultSimpleView('pagination::simple-bootstrap-5');
 
         Blade::directive('image_url', function ($expression) {
             return "<?php echo \\" . ImageUrl::class . "::url({$expression}); ?>";
