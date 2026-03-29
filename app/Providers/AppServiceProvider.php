@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Menu;
 use App\Support\ImageUrl;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive();
+
         Blade::directive('image_url', function ($expression) {
             return "<?php echo \\" . ImageUrl::class . "::url({$expression}); ?>";
         });

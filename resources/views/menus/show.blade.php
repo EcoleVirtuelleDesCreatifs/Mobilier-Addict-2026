@@ -664,7 +664,7 @@
 
                 @if(method_exists($products, 'links'))
                     <div class="univers-pagination" style="margin-top: 22px">
-                        {{ $products->links('pagination.bootstrap-5') }}
+                        {{ $products->links('pagination::bootstrap-5') }}
                     </div>
                 @endif
             </div>
@@ -958,7 +958,7 @@
 
             @if(method_exists($products, 'links'))
                 <div class="univers-pagination" style="margin-top: 24px">
-                    {{ $products->links() }}
+                    {{ $products->links('pagination::bootstrap-5') }}
                 </div>
             @endif
         </div>
