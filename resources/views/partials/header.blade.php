@@ -133,7 +133,7 @@
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
             <span>Accueil</span>
         </a>
-        <a class="mobile-bottom-bar__item {{ request()->routeIs('menus.show') && request()->route('slug') === 'matelas' ? 'is-active' : '' }}" href="{{ route('menus.show', 'matelas') }}">
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('menu.show') && request()->route('slug') === 'matelas' ? 'is-active' : '' }}" href="{{ route('menu.show', 'matelas') }}">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 7V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Matelas</span>
         </a>
