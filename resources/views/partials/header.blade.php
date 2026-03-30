@@ -137,11 +137,11 @@
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 7V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Matelas</span>
         </a>
-        <a class="mobile-bottom-bar__item {{ request()->routeIs('univers.show') && request()->route('slug') === 'oreillers' ? 'is-active' : '' }}" href="{{ route('univers.show', 'oreillers') }}">
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('menu.show') && request()->route('slug') === 'oreillers-et-taies' ? 'is-active' : '' }}" href="{{ route('menu.show', 'oreillers-et-taies') }}">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V9z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 10H5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 10h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Oreillers</span>
         </a>
-        <a class="mobile-bottom-bar__item {{ request()->routeIs('univers.show') && request()->route('slug') === 'draps-couettes' ? 'is-active' : '' }}" href="{{ route('univers.show', 'draps-couettes') }}">
+        <a class="mobile-bottom-bar__item {{ request()->routeIs('menu.show') && request()->route('slug') === 'drap-et-couettes' ? 'is-active' : '' }}" href="{{ route('menu.show', 'drap-et-couettes') }}">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 5h12a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 13h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Draps</span>
         </a>
