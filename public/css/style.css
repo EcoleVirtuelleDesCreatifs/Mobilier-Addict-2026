@@ -5051,6 +5051,7 @@ a.product-card,a.evc-product-card{display:block;text-decoration:none;color:inher
 .footer__link:hover{color:#fff}
 
 @media (max-width: 980px){
+  .hero{min-height:auto;overflow:visible}
   .hero-slide{height:360px}
   .tiles__grid{gap:14px}
   .tile__label{font-size:22px;padding:12px 14px}
