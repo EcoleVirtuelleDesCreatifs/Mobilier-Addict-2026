@@ -1,16 +1,16 @@
 @extends('layouts.front')
 
-@section('title', "Collection")
-@section('meta_description', "Découvrez toute notre collection de matelas et trouvez celui qui vous correspond.")
+@section('title', $pageTitle ?? "Collection")
+@section('meta_description', $pageMetaDescription ?? "Découvrez toute notre collection de matelas et trouvez celui qui vous correspond.")
 
 @section('content')
 <section class="collection" aria-label="Toute la collection" data-collection-page>
     <div class="container">
         <div class="collection__header">
             <div class="collection__intro">
-                <span class="collection__badge">🛏️ Collection exclusive</span>
-                <h1 class="collection__title">Toute la collection</h1>
-                <p class="collection__subtitle">Découvrez tous nos matelas disponibles et choisissez votre confort idéal.</p>
+                <span class="collection__badge">{{ $pageBadge ?? '🛏️ Collection exclusive' }}</span>
+                <h1 class="collection__title">{{ $pageHeading ?? 'Toute la collection' }}</h1>
+                <p class="collection__subtitle">{{ $pageSubtitle ?? 'Découvrez tous nos matelas disponibles et choisissez votre confort idéal.' }}</p>
             </div>
         </div>
 

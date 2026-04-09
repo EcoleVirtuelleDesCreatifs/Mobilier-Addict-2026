@@ -65,7 +65,11 @@
                     $menuSlug = strtolower((string) ($menu->slug ?? ''));
                     $menuUrl = $menu->url ?: (in_array($menuSlug, ['accueil', 'home'], true) ? route('home') : route('menu.show', $menu->slug));
                     $resolvedUrl = preg_match('#^https?://#', $menuUrl) ? $menuUrl : url($menuUrl);
+                    $bedroomSlugs = ['matelas', 'oreillers-et-taies', 'drap-et-couettes'];
                     $isActive = $menuUrl !== '#' && rtrim($resolvedUrl, '/') === rtrim(url()->current(), '/');
+                    if ($menuSlug === 'chambre' && request()->routeIs('menu.show') && in_array((string) request()->route('slug'), $bedroomSlugs, true)) {
+                        $isActive = true;
+                    }
                     $targetAttr = $menu->open_new_tab ? ' target="_blank" rel="noopener"' : '';
 
                     $matelasSubmenu = [
@@ -78,38 +82,54 @@
                         ['label' => 'SUR MESURE', 'model' => 'sur-mesure'],
                     ];
                 @endphp
-                <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
-                    <span class="nav-link__icon">
-                        @if($menu->icon)
-                            <i class="{{ $menu->icon }}"></i>
-                        @else
-                            <i class="fa-solid fa-circle"></i>
-                        @endif
-                    </span>
-                    {{ $menu->name }}
-                </a>
+                @php
+                    $hasChildren = $menu->children && $menu->children->count() > 0;
+                @endphp
 
-                @if($menu->children && $menu->children->count() > 0)
-                    @foreach($menu->children as $child)
-                        @php
-                            $childSlug = strtolower((string) ($child->slug ?? ''));
-                            $childUrl = $child->url ?: (in_array($childSlug, ['accueil', 'home'], true) ? route('home') : route('menu.show', $child->slug));
-                            $childResolvedUrl = preg_match('#^https?://#', $childUrl) ? $childUrl : url($childUrl);
-                            $childIsActive = $childUrl !== '#' && rtrim($childResolvedUrl, '/') === rtrim(url()->current(), '/');
-                            $childTargetAttr = $child->open_new_tab ? ' target="_blank" rel="noopener"' : '';
-                        @endphp
-                        <a class="nav-link {{ $childIsActive ? 'nav-link--active' : '' }}" style="padding-left: 56px" href="{{ $childUrl === '#' ? '#' : $childResolvedUrl }}"{!! $childTargetAttr !!}>
+                <div class="nav-item {{ $hasChildren ? 'nav-item--has-children' : '' }}" {{ $hasChildren ? 'data-submenu' : '' }}>
+                    @if($hasChildren)
+                        <div class="nav-link-row">
+                            <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
+                                <span class="nav-link__icon">
+                                    @if($menu->icon)
+                                        <i class="{{ $menu->icon }}"></i>
+                                    @else
+                                        <i class="fa-solid fa-circle"></i>
+                                    @endif
+                                </span>
+                                {{ $menu->name }}
+                            </a>
+                            <button class="nav-submenu-toggle" type="button" aria-label="Sous-menu {{ $menu->name }}" aria-expanded="false" data-submenu-trigger>
+                                <span class="nav-link__caret"><i class="fa-solid fa-chevron-down"></i></span>
+                            </button>
+                        </div>
+                        <div class="nav-submenu" data-submenu-panel>
+                            @foreach($menu->children as $child)
+                                @php
+                                    $childSlug = strtolower((string) ($child->slug ?? ''));
+                                    $childUrl = $child->url ?: (in_array($childSlug, ['accueil', 'home'], true) ? route('home') : route('menu.show', $child->slug));
+                                    $childResolvedUrl = preg_match('#^https?://#', $childUrl) ? $childUrl : url($childUrl);
+                                    $childIsActive = $childUrl !== '#' && rtrim($childResolvedUrl, '/') === rtrim(url()->current(), '/');
+                                    $childTargetAttr = $child->open_new_tab ? ' target="_blank" rel="noopener"' : '';
+                                @endphp
+                                <a class="nav-submenu__link {{ $childIsActive ? 'is-active' : '' }}" href="{{ $childUrl === '#' ? '#' : $childResolvedUrl }}"{!! $childTargetAttr !!}>
+                                    {{ $child->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <a class="nav-link {{ $isActive ? 'nav-link--active' : '' }}" href="{{ $menuUrl === '#' ? '#' : $resolvedUrl }}"{!! $targetAttr !!}>
                             <span class="nav-link__icon">
-                                @if($child->icon)
-                                    <i class="{{ $child->icon }}"></i>
+                                @if($menu->icon)
+                                    <i class="{{ $menu->icon }}"></i>
                                 @else
-                                    <i class="fa-solid fa-angle-right"></i>
+                                    <i class="fa-solid fa-circle"></i>
                                 @endif
                             </span>
-                            {{ $child->name }}
+                            {{ $menu->name }}
                         </a>
-                    @endforeach
-                @endif
+                    @endif
+                </div>
             @empty
                 <a class="nav-link nav-link--active" href="{{ route('home') }}">
                     <span class="nav-link__icon"><i class="fa-solid fa-house"></i></span>

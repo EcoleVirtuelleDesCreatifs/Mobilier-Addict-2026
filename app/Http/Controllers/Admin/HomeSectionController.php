@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Section;
 use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class HomeSectionController extends Controller
@@ -242,7 +241,7 @@ class HomeSectionController extends Controller
             [
                 'badge' => 'Solutions adaptées',
                 'badge_icon' => '🧩',
-                'title' => 'Un Sommeil Sur-Mesure Pour Chaque Univers',
+                'title' => 'Sur-mesure',
                 'description' => 'Que vous équipiez un hôtel, un appartement ou votre maison familiale, nous avons la solution parfaite.',
                 'background_color' => 'linear-gradient(135deg, #4f46e5 0%, #ec4899 100%)',
                 'type' => 'custom',

@@ -8,16 +8,13 @@
 
 @section('content')
 @include('sections.hero')
-@include('sections.categories')
-@include('sections.draps')
+@include('sections.explore-categories')
 @include('sections.guarantees')
+@include('sections.new-products')
 @include('sections.spaces')
-@include('sections.electro')
 @include('sections.best-sellers')
-@include('sections.refuge')
 @include('sections.collection')
 @include('sections.accessories')
-@include('sections.favorites')
 @include('sections.brands')
 @include('sections.blog')
 @endsection

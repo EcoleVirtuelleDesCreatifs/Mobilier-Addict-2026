@@ -6,7 +6,7 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
                 <div>
                     <h1 class="h3 fw-bold mb-1">Sections Espaces</h1>
-                    <div class="small" style="color: var(--admin-muted);">Gère la section “Un Sommeil Sur-Mesure Pour Chaque Univers”.</div>
+                    <div class="small" style="color: var(--admin-muted);">Gère la section “SUR MESURE”.</div>
                 </div>
             </div>
 

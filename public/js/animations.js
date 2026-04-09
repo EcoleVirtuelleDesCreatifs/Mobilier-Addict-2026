@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (reduceMotion) {
-    document.querySelectorAll('section, .product-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
+    document.querySelectorAll('section, .product-card, .new-modern-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
       el.classList.add('reveal');
       el.classList.add('is-visible');
     });
@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
       '.best-modern__grid',
       '.favorites__grid',
       '.collection__grid',
+      '.new-modern__grid',
       '.electro__grid',
       '.inspire__grid',
       '.spaces__grid',
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const STAGGER_ITEM_SELECTORS = [
       '.product-card',
+      '.new-modern-card',
       '.cat-card',
       '.fav-card',
       '.acc-card',
@@ -127,9 +129,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const assignStaggerDelays = (container) => {
       const items = Array.from(container.querySelectorAll(STAGGER_ITEM_SELECTORS.join(',')));
       if (!items.length) return;
-      const base = 40;
-      const step = 70;
+      const base = 20;
+      const step = 80;
       items.forEach((item, i) => {
+        item.classList.add('stagger-child');
         item.style.setProperty('--reveal-delay', `${base + i * step}ms`);
       });
     };
@@ -153,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }, observerOptions);
 
-    document.querySelectorAll('section, .product-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
+    document.querySelectorAll('section, .product-card, .new-modern-card, .cat-card, .guarantee, .article-card, .acc-card, .fav-card, .space-card, .brand-logo').forEach(el => {
       el.classList.add('reveal');
       animateOnScroll.observe(el);
     });

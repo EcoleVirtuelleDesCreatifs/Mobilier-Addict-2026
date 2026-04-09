@@ -159,6 +159,29 @@ Route::get('/collection', function () {
     return view('collection', compact('products'));
 })->name('collection.index');
 
+Route::get('/nouveautes', function () {
+    $products = Product::query()
+        ->active()
+        ->orderByDesc('created_at')
+        ->take(48)
+        ->get();
+
+    if ($products->isEmpty()) {
+        $products = Product::query()
+            ->orderByDesc('created_at')
+            ->take(48)
+            ->get();
+    }
+
+    $pageTitle = 'Nouveautés';
+    $pageMetaDescription = 'Découvrez les derniers produits ajoutés à notre catalogue.';
+    $pageBadge = '✨ Nouveautés';
+    $pageHeading = 'Nouveautés';
+    $pageSubtitle = 'Découvrez les dernières nouveautés ajoutées à notre catalogue.';
+
+    return view('collection', compact('products', 'pageTitle', 'pageMetaDescription', 'pageBadge', 'pageHeading', 'pageSubtitle'));
+})->name('nouveautes.index');
+
 // Cart routes
 Route::get('/panier', [CartController::class, 'index'])->name('cart.index');
 Route::post('/panier/ajouter', [CartController::class, 'add'])->name('cart.add');
