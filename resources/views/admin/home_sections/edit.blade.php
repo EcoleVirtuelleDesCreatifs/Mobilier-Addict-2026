@@ -87,29 +87,104 @@
 
         <div class="col-12 col-lg-7">
             <div class="admin-card p-4">
-                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-                    <div>
-                        <div class="fw-bold">Catégories affichées</div>
-                        <div class="small" style="color: var(--admin-muted);">Coche les catégories à afficher dans cette section de la home.</div>
-                    </div>
-                </div>
+                @if(($section->slug ?? '') === 'explore-categories')
+                    @php
+                        $cards = old('explore_cards');
+                        if ($cards === null) {
+                            $cards = is_array($section->content) && !empty($section->content['cards']) && is_array($section->content['cards'])
+                                ? $section->content['cards']
+                                : [];
+                        }
+                    @endphp
 
-                <div class="row g-2">
-                    @foreach($categories as $category)
-                        <div class="col-12 col-md-6">
-                            <label class="admin-card p-3 d-flex align-items-center gap-3" style="cursor:pointer; box-shadow:none;">
-                                <input class="form-check-input m-0" type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(old('category_ids') ? in_array($category->id, old('category_ids', [])) : ($category->section_id === $section->id))>
-                                <div class="rounded-3 overflow-hidden" style="width:52px;height:52px;border:1px solid var(--admin-border); flex:0 0 auto;">
-                                    <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
-                                </div>
-                                <div class="min-w-0">
-                                    <div class="fw-semibold text-truncate">{{ $category->name }}</div>
-                                    <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
-                                </div>
-                            </label>
+                    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                        <div>
+                            <div class="fw-bold">Cartes affichées</div>
+                            <div class="small" style="color: var(--admin-muted);">Configure jusqu’à 6 cartes (menu + titre + CTA + image).</div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+
+                    <div class="row g-3">
+                        @for($i = 0; $i < 6; $i++)
+                            @php
+                                $card = is_array($cards) ? (array) ($cards[$i] ?? []) : [];
+                                $cardMenuSlug = old("explore_cards.$i.menu_slug", $card['menu_slug'] ?? '');
+                                $cardTitle = old("explore_cards.$i.title", $card['title'] ?? '');
+                                $cardCta = old("explore_cards.$i.cta", $card['cta'] ?? 'Découvrir');
+                                $cardImg = $card['image'] ?? null;
+                            @endphp
+
+                            <div class="col-12">
+                                <div class="admin-card p-3" style="box-shadow:none;">
+                                    <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+                                        <div class="fw-semibold">Carte #{{ $i + 1 }}</div>
+                                        @if($cardImg)
+                                            <div class="small" style="color: var(--admin-muted);">Image enregistrée</div>
+                                        @endif
+                                    </div>
+
+                                    <div class="row g-2">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">Menu</label>
+                                            <select name="explore_cards[{{ $i }}][menu_slug]" class="form-select">
+                                                <option value="">—</option>
+                                                @foreach(($menus ?? collect()) as $menu)
+                                                    <option value="{{ $menu->slug }}" @selected($cardMenuSlug === $menu->slug)>
+                                                        {{ $menu->name }} ({{ $menu->slug }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">Titre</label>
+                                            <input type="text" name="explore_cards[{{ $i }}][title]" value="{{ $cardTitle }}" class="form-control" placeholder="Ex: Matelas">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">CTA</label>
+                                            <input type="text" name="explore_cards[{{ $i }}][cta]" value="{{ $cardCta }}" class="form-control" placeholder="Ex: Découvrir">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">Image</label>
+                                            <input type="file" name="explore_cards[{{ $i }}][image]" class="form-control" accept="image/*">
+                                        </div>
+
+                                        @if($cardImg)
+                                            <div class="col-12">
+                                                <div class="rounded-3 overflow-hidden" style="width:100%;max-width:360px;height:120px;border:1px solid var(--admin-border);">
+                                                    <img src="@image_url($cardImg)" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                @else
+                    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                        <div>
+                            <div class="fw-bold">Catégories affichées</div>
+                            <div class="small" style="color: var(--admin-muted);">Coche les catégories à afficher dans cette section de la home.</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        @foreach($categories as $category)
+                            <div class="col-12 col-md-6">
+                                <label class="admin-card p-3 d-flex align-items-center gap-3" style="cursor:pointer; box-shadow:none;">
+                                    <input class="form-check-input m-0" type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(old('category_ids') ? in_array($category->id, old('category_ids', [])) : ($category->section_id === $section->id))>
+                                    <div class="rounded-3 overflow-hidden" style="width:52px;height:52px;border:1px solid var(--admin-border); flex:0 0 auto;">
+                                        <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="fw-semibold text-truncate">{{ $category->name }}</div>
+                                        <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
+                                    </div>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use App\Models\Product;
+use App\Models\Section;
 use App\Models\Slide;
 use App\Models\SpaceSection;
 use App\Models\SpaceCard;
@@ -202,9 +203,14 @@ class HomeController extends Controller
             $blogPosts = $items->slice(1, 3)->values();
         }
 
+        $exploreCategoriesSection = Section::query()
+            ->where('slug', 'explore-categories')
+            ->first();
+
         return view('home', compact(
             'heroSlides',
             'spaceSection',
+            'exploreCategoriesSection',
             'collectionProducts',
             'accessoryProducts',
             'favoriteProducts',

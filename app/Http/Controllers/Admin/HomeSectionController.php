@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Section;
 use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
@@ -92,9 +93,15 @@ class HomeSectionController extends Controller
         $this->ensureDefaultHomeSections();
         $categories = Category::query()->ordered()->get();
 
+        $menus = null;
+        if ($home_section->slug === 'explore-categories') {
+            $menus = Menu::query()->active()->ordered()->get();
+        }
+
         return view('admin.home_sections.edit', [
             'section' => $home_section,
             'categories' => $categories,
+            'menus' => $menus,
         ]);
     }
 
@@ -136,6 +143,11 @@ class HomeSectionController extends Controller
             $data['cover_image'] = ImageOptimizer::storePublicUpload($file, 'uploads/sections', 1600, 80);
         }
 
+        if ($home_section->slug === 'explore-categories') {
+            $payload = $this->buildExploreCategoriesContentFromRequest($request, $home_section->content ?? []);
+            $data['content'] = $payload;
+        }
+
         $home_section->update($data);
 
         Category::query()
@@ -148,6 +160,44 @@ class HomeSectionController extends Controller
         }
 
         return redirect()->route('admin.home_sections.index')->with('status', 'Section mise à jour.');
+    }
+
+    private function buildExploreCategoriesContentFromRequest(Request $request, array $existing): array
+    {
+        $cards = [];
+
+        for ($i = 0; $i < 6; $i++) {
+            $menuSlug = trim((string) $request->input("explore_cards.$i.menu_slug", ''));
+            $title = trim((string) $request->input("explore_cards.$i.title", ''));
+            $cta = trim((string) $request->input("explore_cards.$i.cta", ''));
+
+            if ($menuSlug === '' && $title === '' && !$request->hasFile("explore_cards.$i.image")) {
+                continue;
+            }
+
+            $current = [];
+            if (!empty($existing['cards']) && is_array($existing['cards'])) {
+                $current = (array) ($existing['cards'][$i] ?? []);
+            }
+
+            $image = $current['image'] ?? null;
+            if ($request->hasFile("explore_cards.$i.image")) {
+                $file = $request->file("explore_cards.$i.image");
+                $image = ImageOptimizer::storePublicUpload($file, 'uploads/categories', 1200, 82);
+            }
+
+            $cards[] = [
+                'menu_slug' => $menuSlug !== '' ? $menuSlug : ($current['menu_slug'] ?? null),
+                'title' => $title !== '' ? $title : ($current['title'] ?? ''),
+                'cta' => $cta !== '' ? $cta : ($current['cta'] ?? 'Découvrir'),
+                'image' => $image,
+                'image_alt' => $title !== '' ? $title : (($current['image_alt'] ?? '') ?: ($current['title'] ?? '')),
+            ];
+        }
+
+        return [
+            'cards' => $cards,
+        ];
     }
 
     private function ensureDefaultHomeSections(): void
@@ -247,6 +297,52 @@ class HomeSectionController extends Controller
                 'type' => 'custom',
                 'order' => 5,
                 'is_active' => true,
+            ]
+        );
+
+        Section::query()->firstOrCreate(
+            ['slug' => 'explore-categories'],
+            [
+                'badge' => null,
+                'badge_icon' => null,
+                'title' => 'Meilleures Catégories',
+                'description' => 'Matelas, Oreillers, Couettes, Électroménagers, Lit et Canapé',
+                'background_color' => null,
+                'type' => 'custom',
+                'order' => 6,
+                'is_active' => true,
+                'content' => [
+                    'cards' => [
+                        [
+                            'menu_slug' => 'matelas',
+                            'title' => 'Matelas',
+                            'cta' => 'Découvrir',
+                            'image' => null,
+                            'image_alt' => 'Matelas',
+                        ],
+                        [
+                            'menu_slug' => 'lit-canape',
+                            'title' => 'Lits & Canapés',
+                            'cta' => 'Découvrir',
+                            'image' => null,
+                            'image_alt' => 'Lits & Canapés',
+                        ],
+                        [
+                            'menu_slug' => 'electromenager',
+                            'title' => 'Electroménagers',
+                            'cta' => 'Découvrir',
+                            'image' => null,
+                            'image_alt' => 'Electroménagers',
+                        ],
+                        [
+                            'menu_slug' => 'drap-et-couettes',
+                            'title' => 'Couettes',
+                            'cta' => 'Découvrir',
+                            'image' => null,
+                            'image_alt' => 'Couettes',
+                        ],
+                    ],
+                ],
             ]
         );
     }
