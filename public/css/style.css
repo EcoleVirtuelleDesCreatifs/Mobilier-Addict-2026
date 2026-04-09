@@ -1406,9 +1406,11 @@ button{-webkit-tap-highlight-color:transparent}
 }
 .hero__card{
   position:relative;
+  width:100%;
   border-radius:22px;
   overflow:hidden;
   aspect-ratio: 4 / 5;
+  background:rgba(2,6,23,.25);
   box-shadow:0 26px 70px rgba(0,0,0,.32);
   transform:none;
   transition:transform .35s ease, box-shadow .35s ease;
@@ -5113,6 +5115,7 @@ a.product-card,a.evc-product-card{display:block;text-decoration:none;color:inher
   .hero__actions{justify-content:center}
   .hero__stats{justify-content:center}
   .hero__visual{display:block;max-width:420px;margin-left:auto;margin-right:auto}
+  .hero__card{min-height:360px}
   .brands__inner{grid-template-columns:1fr}
   .brands__title{font-size:32px}
   .articles__title{font-size:32px}
