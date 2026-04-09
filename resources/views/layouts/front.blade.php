@@ -50,7 +50,7 @@
         <link rel="icon" href="{{ asset('assets/logo/favicon.png') }}">
         @php
             $cssPath = public_path('css/style.css');
-            $cssVersion = is_file($cssPath) ? (int) filemtime($cssPath) : time();
+            $cssVersion = is_file($cssPath) ? substr(md5_file($cssPath), 0, 12) : time();
         @endphp
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ $cssVersion }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
@@ -118,8 +118,8 @@
         @php
             $sliderPath = public_path('js/slider.js');
             $animationsPath = public_path('js/animations.js');
-            $sliderVersion = is_file($sliderPath) ? (int) filemtime($sliderPath) : time();
-            $animationsVersion = is_file($animationsPath) ? (int) filemtime($animationsPath) : time();
+            $sliderVersion = is_file($sliderPath) ? substr(md5_file($sliderPath), 0, 12) : time();
+            $animationsVersion = is_file($animationsPath) ? substr(md5_file($animationsPath), 0, 12) : time();
         @endphp
         <script src="{{ asset('js/slider.js') }}?v={{ $sliderVersion }}" defer></script>
         <script src="{{ asset('js/animations.js') }}?v={{ $animationsVersion }}" defer></script>
