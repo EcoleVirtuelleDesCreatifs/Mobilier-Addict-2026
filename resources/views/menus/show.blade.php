@@ -633,16 +633,17 @@
         <section class="matelas-all" id="tous" aria-label="Trouve le bon matelas">
             <div class="container">
                 @php
+                    $matelasCollection = $allMatelas ?? collect();
                     $categories = [
                         [
                             'key' => 'medicosoins',
                             'label' => 'MedicoSoins',
                             'description' => 'Soutien orthopédique optimal',
                             'tokens' => ['medicosoins'],
-                            'count' => $allMatelas->filter(function ($p) {
+                            'count' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
                             })->count(),
-                            'image' => $allMatelas->filter(function ($p) {
+                            'image' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
                             })->first()?->image ?? null,
                         ],
@@ -651,11 +652,11 @@
                             'label' => 'Confort Soft',
                             'description' => 'Douceur et confort absolu',
                             'tokens' => ['confort', 'soft'],
-                            'count' => $allMatelas->filter(function ($p) {
+                            'count' => $matelasCollection->filter(function ($p) {
                                 $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
                                 return str_contains($name, 'confort') || str_contains($name, 'soft');
                             })->count(),
-                            'image' => $allMatelas->filter(function ($p) {
+                            'image' => $matelasCollection->filter(function ($p) {
                                 $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
                                 return str_contains($name, 'confort') || str_contains($name, 'soft');
                             })->first()?->image ?? null,
@@ -665,10 +666,10 @@
                             'label' => 'Addict',
                             'description' => 'Le choix des passionnés',
                             'tokens' => ['addict'],
-                            'count' => $allMatelas->filter(function ($p) {
+                            'count' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
                             })->count(),
-                            'image' => $allMatelas->filter(function ($p) {
+                            'image' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
                             })->first()?->image ?? null,
                         ],
@@ -677,10 +678,10 @@
                             'label' => 'Luxury',
                             'description' => 'L\'excellence haut de gamme',
                             'tokens' => ['luxury'],
-                            'count' => $allMatelas->filter(function ($p) {
+                            'count' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
                             })->count(),
-                            'image' => $allMatelas->filter(function ($p) {
+                            'image' => $matelasCollection->filter(function ($p) {
                                 return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
                             })->first()?->image ?? null,
                         ],
