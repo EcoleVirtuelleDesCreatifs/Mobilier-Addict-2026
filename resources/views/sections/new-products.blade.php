@@ -53,8 +53,17 @@
             @endforelse
         </div>
 
-        <div class="new-modern__more">
-            <a class="new-modern__more-btn" href="{{ route('nouveautes.index') }}">Voir plus de nouveau produit</a>
-        </div>
+        @php
+    $newProductsButtonText = \App\Models\SiteSetting::getValue('new_products_button_text', 'Voir plus de nouveaux produits');
+    $newProductsButtonUrl = \App\Models\SiteSetting::getValue('new_products_button_url', route('nouveautes.index'));
+    $newProductsButtonEnabledRaw = \App\Models\SiteSetting::getValue('new_products_button_enabled', '1');
+    $newProductsButtonEnabled = in_array((string) $newProductsButtonEnabledRaw, ['1', 'true', 'on', 'yes'], true);
+@endphp
+
+        @if($newProductsButtonEnabled)
+            <div class="new-modern__more">
+                <a class="new-modern__more-btn" href="{{ $newProductsButtonUrl }}">{{ $newProductsButtonText }}</a>
+            </div>
+        @endif
     </div>
 </section>

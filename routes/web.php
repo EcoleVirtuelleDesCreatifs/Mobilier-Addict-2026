@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\FacebookPixelController;
+use App\Http\Controllers\Admin\NewProductsButtonController;
 use App\Http\Controllers\Admin\SpaceSectionController;
 use App\Http\Controllers\Admin\SpaceCardController;
 use App\Http\Controllers\HomeController;
@@ -255,6 +256,9 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->name('admin.settings.facebook-pixel.edit');
     Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->name('admin.settings.facebook-pixel.update');
+
+    Route::get('/settings/new-products-button', [NewProductsButtonController::class, 'edit'])->name('admin.settings.new-products-button.edit');
+    Route::post('/settings/new-products-button', [NewProductsButtonController::class, 'update'])->name('admin.settings.new-products-button.update');
 
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
