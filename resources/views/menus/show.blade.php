@@ -194,6 +194,24 @@
         .matelas-all__stat strong{font-weight:1000;}
 
         .matelas-all__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px;}
+
+        .matelas-categories__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:24px}
+.matelas-category-card{display:block;background:#fff;border-radius:22px;overflow:hidden;border:1px solid var(--ma-border);box-shadow:0 12px 32px rgba(2,6,23,.08);transition:all .3s cubic-bezier(.4,0,.2,1);text-decoration:none;color:inherit}
+.matelas-category-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(2,6,23,.14);border-color:rgba(255,58,127,.3)}
+.matelas-category-card__media{position:relative;aspect-ratio:1;background:linear-gradient(135deg,#f8fafc,#fff);overflow:hidden}
+.matelas-category-card__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.matelas-category-card:hover .matelas-category-card__media img{transform:scale(1.08)}
+.matelas-category-card__placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,58,127,.1),rgba(110,231,255,.1))}
+.matelas-category-card__placeholder span{font-size:48px;font-weight:1000;color:var(--ma-navy);opacity:.3}
+.matelas-category-card__badge{position:absolute;bottom:12px;right:12px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,var(--ma-rose),#be185d);color:#fff;font-weight:1000;font-size:11px;letter-spacing:.02em;text-transform:uppercase;box-shadow:0 8px 20px rgba(255,58,127,.3)}
+.matelas-category-card__content{padding:16px}
+.matelas-category-card__name{margin:0 0 6px;font-size:18px;font-weight:1000;color:var(--ma-ink);letter-spacing:-.02em;line-height:1.2}
+.matelas-category-card__desc{margin:0;font-size:13px;font-weight:700;color:#64748b;line-height:1.4}
+
+.matelas-all__products{margin-top:48px}
+.matelas-all__products-head{margin-bottom:20px;padding:20px;border-radius:20px;background:linear-gradient(180deg,rgba(11,27,58,.04),rgba(11,27,58,0));border:1px solid rgba(226,232,240,.85)}
+.matelas-all__products-title{margin:0 0 4px;font-size:24px;font-weight:1000;color:var(--ma-ink);letter-spacing:-.03em}
+.matelas-all__products-desc{margin:0;font-size:14px;font-weight:700;color:#64748b}
         .matelas-mini{background:#fff;border:1px solid #e2e8f0;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;min-height:310px;transition:transform .18s ease, box-shadow .18s ease;}
         .matelas-mini:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(2,6,23,.08);}
         .matelas-mini__media{aspect-ratio: 1.1 / 1;background:linear-gradient(135deg,#f8fafc,#fff);}
@@ -224,6 +242,7 @@
             .matelas-cloud--a{top:70px;}
             .matelas-cloud--b{top:44px;}
             .matelas-page .best-modern__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+            .matelas-categories__grid{grid-template-columns:repeat(2,1fr);gap:16px}
         }
         @media (max-width: 520px){
             .matelas-hero{padding:96px 0 66px;min-height:420px;}
@@ -245,6 +264,9 @@
             .matelas-tabs__headgrid{grid-template-columns:1fr;}
             .matelas-tabs__hero{font-size:30px;}
             .matelas-tabs__stats{grid-template-columns:1fr;}
+            .matelas-categories__grid{grid-template-columns:1fr;gap:14px}
+            .matelas-category-card__name{font-size:16px}
+            .matelas-category-card__desc{font-size:12px}
         }
         @media (prefers-reduced-motion: reduce){
             .matelas-orb--a,.matelas-orb--b,.matelas-block__title::after,.matelas-marquee__track,.matelas-cloud{animation:none !important;}
@@ -272,8 +294,8 @@
                     <p class="matelas-hero__subtitle">Choisis le niveau de fermeté qui te correspond. Puis sélectionne l’épaisseur et le nombre de places pour commander.</p>
 
                     <div class="matelas-hero__cta">
-                        <a class="matelas-btn matelas-btn--primary" href="#petit-prix">Nos matelas à petit prix</a>
-                        <a class="matelas-btn matelas-btn--navy" href="#differents">Nos différents matelas</a>
+                        <a class="matelas-btn matelas-btn--primary" href="#differents">Parcourir les gammes</a>
+                        <a class="matelas-btn matelas-btn--navy" href="#petit-prix">Nos matelas à petit prix</a>
                     </div>
                 </div>
             </div>
@@ -292,7 +314,128 @@
             $cheapMatelas = $allMatelas->sortBy(function ($p) use ($priceFor) {
                 return (float) ($priceFor($p) ?? 0);
             })->take(6)->values();
+
+            $tabDefs = [
+                ['key' => 'medicosoins', 'label' => 'MEDICOSOINS', 'tokens' => ['medicosoins']],
+                ['key' => 'confort_soft', 'label' => 'CONFORT SOFT', 'tokens' => ['confort', 'soft']],
+                ['key' => 'addict', 'label' => 'ADDICT', 'tokens' => ['addict']],
+                ['key' => 'luxury', 'label' => 'LUXURY', 'tokens' => ['luxury']],
+            ];
         @endphp
+
+        <section class="matelas-tabs" id="differents" aria-label="Nos différents matelas">
+            <div class="container">
+                <div class="matelas-tabs__wrap">
+                    @php
+                        $tabsCount = (int) (collect($tabDefs)->count());
+                        $modelsCount = (int) ($allMatelas?->count() ?? 0);
+                    @endphp
+                    <header class="matelas-tabs__head" data-reveal>
+                        <div class="matelas-tabs__headgrid">
+                            <div>
+                                <div class="matelas-tabs__kicker"><i aria-hidden="true"></i>Nos différents matelas</div>
+                                <h2 class="matelas-tabs__hero">Un <span>confort</span> pour chaque nuit</h2>
+                                <p class="matelas-tabs__sub">Sélectionne une gamme, compare les modèles, puis ajoute au panier. Tu choisis ensuite l'épaisseur et le nombre de places.</p>
+                            </div>
+                            <div class="matelas-tabs__stats" role="list" aria-label="Indicateurs">
+                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $tabsCount }} gammes</strong><span>un ressenti, une solution</span></div>
+                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $modelsCount }} modèles</strong><span>disponibles dans le catalogue</span></div>
+                                <div class="matelas-tabs__stat" role="listitem"><strong>Ajout rapide</strong><span>en 2 clics, sans friction</span></div>
+                                <div class="matelas-tabs__stat" role="listitem"><strong>Choix précis</strong><span>épaisseur & places</span></div>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="matelas-tabs__title">Parcourir les gammes</div>
+                    <div class="matelas-tabs__bar" role="tablist">
+                        @foreach($tabDefs as $idx => $tab)
+                            <button class="matelas-tab{{ $idx === 0 ? ' is-active' : '' }}" type="button" data-tab="{{ $tab['key'] }}" role="tab" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" tabindex="{{ $idx === 0 ? '0' : '-1' }}">{{ $tab['label'] }}</button>
+                        @endforeach
+                    </div>
+
+                    @foreach($tabDefs as $idx => $tab)
+                        @php
+                            $items = $allMatelas->filter(function ($p) use ($tab) {
+                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
+                                foreach (($tab['tokens'] ?? []) as $t) {
+                                    if (!str_contains($name, \Illuminate\Support\Str::lower($t))) return false;
+                                }
+                                return true;
+                            })->take(6)->values();
+                        @endphp
+
+                        <div class="matelas-tabs__panel{{ $idx === 0 ? ' is-active' : '' }}" data-tab-panel="{{ $tab['key'] }}" role="tabpanel">
+                            <section class="best-modern" aria-label="{{ $tab['label'] }}">
+                                <div class="best-modern__grid">
+                                @foreach($items as $product)
+                                    @php
+                                        $defaultVariant = $product?->variants?->sortBy('price')->first();
+                                        $price = $product?->price;
+                                        $titleVariant = ($product?->variants ?? collect())
+                                            ->filter(fn ($v) => $v && $v->price !== null)
+                                            ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
+                                            ->first();
+                                        $displayName = $product->name;
+                                        if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
+                                            $displayName = $product->name
+                                                . ' - '
+                                                . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
+                                                . ' places épasseurs '
+                                                . (int) $titleVariant->thickness_cm
+                                                . ' CM';
+                                        }
+                                        $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
+                                            'id' => (int) $v->id,
+                                            'thickness_cm' => $v->thickness_cm,
+                                            'places' => $v->places,
+                                            'price' => (float) $v->price,
+                                            'stock' => $v->stock,
+                                        ])->values();
+                                    @endphp
+
+                                    <article class="product-card" aria-label="{{ $product->name }}">
+                                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
+                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
+                                            <div class="product-card__badge product-card__badge--new">NEW</div>
+                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
+                                            <div class="product-card__badge product-card__badge--hot">HOT</div>
+                                        @endif
+
+                                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                            <div class="product-card__media">
+                                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                                            </div>
+                                        </a>
+
+                                        <div class="product-card__body">
+                                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                                <h3 class="product-card__name">{{ $displayName }}</h3>
+                                            </a>
+                                            <div class="product-card__footer">
+                                                <div class="product-card__prices">
+                                                    <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
+                                                    @if(!empty($product->formatted_old_price))
+                                                        <span class="product-card__old">{{ $product->formatted_old_price }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button class="product-card__buy" type="submit">Ajouter au panier</button>
+                                            </form>
+                                        </div>
+                                    </article>
+                                @endforeach
+                                </div>
+                            </section>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
 
         <section class="matelas-block" id="petit-prix" aria-label="Nos matelas à petit prix">
             <div class="container">
@@ -487,186 +630,139 @@
             </section>
         @endif
 
-        @php
-            $tabDefs = [
-                ['key' => 'medicosoins', 'label' => 'MEDICOSOINS', 'tokens' => ['medicosoins']],
-                ['key' => 'confort_soft', 'label' => 'CONFORT SOFT', 'tokens' => ['confort', 'soft']],
-                ['key' => 'addict', 'label' => 'ADDICT', 'tokens' => ['addict']],
-                ['key' => 'luxury', 'label' => 'LUXURY', 'tokens' => ['luxury']],
-            ];
-        @endphp
-
-        <section class="matelas-tabs" id="differents" aria-label="Nos différents matelas">
+        <section class="matelas-all" id="tous" aria-label="Trouve le bon matelas">
             <div class="container">
-                <div class="matelas-tabs__wrap">
-                    @php
-                        $tabsCount = (int) (collect($tabDefs)->count());
-                        $modelsCount = (int) ($allMatelas?->count() ?? 0);
-                    @endphp
-                    <header class="matelas-tabs__head" data-reveal>
-                        <div class="matelas-tabs__headgrid">
-                            <div>
-                                <div class="matelas-tabs__kicker"><i aria-hidden="true"></i>Nos différents matelas</div>
-                                <h2 class="matelas-tabs__hero">Un <span>confort</span> pour chaque nuit</h2>
-                                <p class="matelas-tabs__sub">Sélectionne une gamme, compare les modèles, puis ajoute au panier. Tu choisis ensuite l’épaisseur et le nombre de places.</p>
+                @php
+                    $categories = [
+                        [
+                            'key' => 'medicosoins',
+                            'label' => 'MedicoSoins',
+                            'description' => 'Soutien orthopédique optimal',
+                            'tokens' => ['medicosoins'],
+                            'count' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
+                            })->count(),
+                            'image' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
+                            })->first()?->image ?? null,
+                        ],
+                        [
+                            'key' => 'confort_soft',
+                            'label' => 'Confort Soft',
+                            'description' => 'Douceur et confort absolu',
+                            'tokens' => ['confort', 'soft'],
+                            'count' => $allMatelas->filter(function ($p) {
+                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
+                                return str_contains($name, 'confort') || str_contains($name, 'soft');
+                            })->count(),
+                            'image' => $allMatelas->filter(function ($p) {
+                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
+                                return str_contains($name, 'confort') || str_contains($name, 'soft');
+                            })->first()?->image ?? null,
+                        ],
+                        [
+                            'key' => 'addict',
+                            'label' => 'Addict',
+                            'description' => 'Le choix des passionnés',
+                            'tokens' => ['addict'],
+                            'count' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
+                            })->count(),
+                            'image' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
+                            })->first()?->image ?? null,
+                        ],
+                        [
+                            'key' => 'luxury',
+                            'label' => 'Luxury',
+                            'description' => 'L\'excellence haut de gamme',
+                            'tokens' => ['luxury'],
+                            'count' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
+                            })->count(),
+                            'image' => $allMatelas->filter(function ($p) {
+                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
+                            })->first()?->image ?? null,
+                        ],
+                    ];
+                @endphp
+                <div class="matelas-all__head" data-reveal>
+                    <div class="matelas-all__kicker"><i aria-hidden="true"></i>Catalogue complet</div>
+                    <h2 class="matelas-all__title">Trouve <span>le bon</span> matelas</h2>
+                    <p class="matelas-all__desc">Parcours nos gammes et découvre le matelas qui correspond à tes besoins.</p>
+                </div>
+
+                <div class="matelas-categories__grid">
+                    @foreach($categories as $category)
+                        <a href="#differents" class="matelas-category-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit">
+                            <div class="matelas-category-card__media">
+                                @if($category['image'])
+                                    <img src="@image_url($category['image'])" alt="{{ $category['label'] }}" loading="lazy" />
+                                @else
+                                    <div class="matelas-category-card__placeholder">
+                                        <span>{{ $category['label'][0] }}</span>
+                                    </div>
+                                @endif
+                                <div class="matelas-category-card__badge">{{ $category['count'] }} modèles</div>
                             </div>
-                            <div class="matelas-tabs__stats" role="list" aria-label="Indicateurs">
-                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $tabsCount }} gammes</strong><span>un ressenti, une solution</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $modelsCount }} modèles</strong><span>disponibles dans le catalogue</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>Ajout rapide</strong><span>en 2 clics, sans friction</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>Choix précis</strong><span>épaisseur & places</span></div>
+                            <div class="matelas-category-card__content">
+                                <h3 class="matelas-category-card__name">{{ $category['label'] }}</h3>
+                                <p class="matelas-category-card__desc">{{ $category['description'] }}</p>
                             </div>
-                        </div>
-                    </header>
-                    <div class="matelas-tabs__title">Parcourir les gammes</div>
-                    <div class="matelas-tabs__bar" role="tablist">
-                        @foreach($tabDefs as $idx => $tab)
-                            <button class="matelas-tab{{ $idx === 0 ? ' is-active' : '' }}" type="button" data-tab="{{ $tab['key'] }}" role="tab" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" tabindex="{{ $idx === 0 ? '0' : '-1' }}">{{ $tab['label'] }}</button>
+                        </a>
+                    @endforeach
+                </div>
+
+                <div class="matelas-all__products">
+                    <div class="matelas-all__products-head">
+                        <h3 class="matelas-all__products-title">Tous les matelas</h3>
+                        <p class="matelas-all__products-desc">{{ $allCount }} modèles disponibles</p>
+                    </div>
+                    <div class="matelas-all__grid">
+                        @foreach(($products ?? collect()) as $product)
+                            @php
+                                $specsParts = [];
+                                if (!empty($product->size)) $specsParts[] = $product->size;
+                                if (!empty($product->thickness)) $specsParts[] = 'Ép. ' . $product->thickness;
+                                if (!empty($product->material)) $specsParts[] = $product->material;
+                                $specs = implode(' • ', $specsParts);
+                                $gridDefaultVariant = $product?->variants?->sortBy('price')->first();
+                                $gridPrice = $gridDefaultVariant?->price ?? $product->price;
+                            @endphp
+                            <article class="matelas-mini" data-reveal>
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <div class="matelas-mini__media">
+                                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                                    </div>
+                                </a>
+                                <div class="matelas-mini__body">
+                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                        <h3 class="matelas-mini__name">{{ $product->name }}</h3>
+                                    </a>
+                                    @if($specs)
+                                        <p class="matelas-mini__meta">{{ $specs }}</p>
+                                    @endif
+                                    <div class="matelas-mini__footer">
+                                        <div class="matelas-mini__price">{{ number_format((float) $gridPrice, 0, ',', '.') }}F</div>
+                                        <form action="{{ route('cart.add') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="product_variant_id" value="{{ $gridDefaultVariant?->id }}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button class="matelas-mini__add" type="submit">Ajouter</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </article>
                         @endforeach
                     </div>
 
-                    @foreach($tabDefs as $idx => $tab)
-                        @php
-                            $items = $allMatelas->filter(function ($p) use ($tab) {
-                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
-                                foreach (($tab['tokens'] ?? []) as $t) {
-                                    if (!str_contains($name, \Illuminate\Support\Str::lower($t))) return false;
-                                }
-                                return true;
-                            })->take(6)->values();
-                        @endphp
-
-                        <div class="matelas-tabs__panel{{ $idx === 0 ? ' is-active' : '' }}" data-tab-panel="{{ $tab['key'] }}" role="tabpanel">
-                            <section class="best-modern" aria-label="{{ $tab['label'] }}">
-                                <div class="best-modern__grid">
-                                @foreach($items as $product)
-                                    @php
-                                        $defaultVariant = $product?->variants?->sortBy('price')->first();
-                                        $price = $product?->price;
-                                        $titleVariant = ($product?->variants ?? collect())
-                                            ->filter(fn ($v) => $v && $v->price !== null)
-                                            ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
-                                            ->first();
-                                        $displayName = $product->name;
-                                        if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
-                                            $displayName = $product->name
-                                                . ' - '
-                                                . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
-                                                . ' places épasseurs '
-                                                . (int) $titleVariant->thickness_cm
-                                                . ' CM';
-                                        }
-                                        $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
-                                            'id' => (int) $v->id,
-                                            'thickness_cm' => $v->thickness_cm,
-                                            'places' => $v->places,
-                                            'price' => (float) $v->price,
-                                            'stock' => $v->stock,
-                                        ])->values();
-                                    @endphp
-
-                                    <article class="product-card" aria-label="{{ $product->name }}">
-                                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
-                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
-                                            <div class="product-card__badge product-card__badge--new">NEW</div>
-                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
-                                            <div class="product-card__badge product-card__badge--hot">HOT</div>
-                                        @endif
-
-                                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                            <div class="product-card__media">
-                                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                            </div>
-                                        </a>
-
-                                        <div class="product-card__body">
-                                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                                <h3 class="product-card__name">{{ $displayName }}</h3>
-                                            </a>
-                                            <div class="product-card__footer">
-                                                <div class="product-card__prices">
-                                                    <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
-                                                    @if(!empty($product->formatted_old_price))
-                                                        <span class="product-card__old">{{ $product->formatted_old_price }}</span>
-                                                    @endif
-                                                </div>
-                                                <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                                                    <input type="hidden" name="quantity" value="1">
-                                                    <button class="product-card__buy" type="submit">Ajouter au panier</button>
-                                                </form>
-                                            </div>
-                                        </article>
-                                    @endforeach
-                                </div>
-                            </section>
+                    @if(method_exists($products, 'links'))
+                        <div class="univers-pagination" style="margin-top: 22px">
+                            {{ $products->links('pagination::bootstrap-5') }}
                         </div>
-                    @endforeach
+                    @endif
                 </div>
-            </div>
-        </section>
-
-        <section class="matelas-all" id="tous" aria-label="Tous les matelas">
-            <div class="container">
-                @php $allCount = (int) (($products ?? collect())->count()); @endphp
-                <div class="matelas-all__head" data-reveal>
-                    <div class="matelas-all__kicker"><i aria-hidden="true"></i>Catalogue matelas</div>
-                    <h2 class="matelas-all__title">Trouve <span>le bon</span> matelas</h2>
-                    <p class="matelas-all__desc">Explore l’ensemble des modèles et trouve celui qui correspond à ton confort.</p>
-                    <div class="matelas-all__stats" role="list" aria-label="Indicateurs">
-                        <span class="matelas-all__stat" role="listitem"><strong>{{ $allCount }}</strong> modèles</span>
-                        <span class="matelas-all__stat" role="listitem"><strong>Choix</strong> épaisseur & places</span>
-                        <span class="matelas-all__stat" role="listitem"><strong>Ajout</strong> rapide au panier</span>
-                    </div>
-                </div>
-
-                <div class="matelas-all__grid">
-                    @foreach(($products ?? collect()) as $product)
-                        @php
-                            $specsParts = [];
-                            if (!empty($product->size)) $specsParts[] = $product->size;
-                            if (!empty($product->thickness)) $specsParts[] = 'Ép. ' . $product->thickness;
-                            if (!empty($product->material)) $specsParts[] = $product->material;
-                            $specs = implode(' • ', $specsParts);
-                            $gridDefaultVariant = $product?->variants?->sortBy('price')->first();
-                            $gridPrice = $gridDefaultVariant?->price ?? $product->price;
-                        @endphp
-                        <article class="matelas-mini" data-reveal>
-                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                <div class="matelas-mini__media">
-                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                </div>
-                            </a>
-                            <div class="matelas-mini__body">
-                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                    <h3 class="matelas-mini__name">{{ $product->name }}</h3>
-                                </a>
-                                @if($specs)
-                                    <p class="matelas-mini__meta">{{ $specs }}</p>
-                                @endif
-                                <div class="matelas-mini__footer">
-                                    <div class="matelas-mini__price">{{ number_format((float) $gridPrice, 0, ',', '.') }}F</div>
-                                    <form action="{{ route('cart.add') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="product_variant_id" value="{{ $gridDefaultVariant?->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button class="matelas-mini__add" type="submit">Ajouter</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-
-                @if(method_exists($products, 'links'))
-                    <div class="univers-pagination" style="margin-top: 22px">
-                        {{ $products->links('pagination::bootstrap-5') }}
-                    </div>
-                @endif
             </div>
         </section>
 
