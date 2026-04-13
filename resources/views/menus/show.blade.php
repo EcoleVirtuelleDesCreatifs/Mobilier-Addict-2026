@@ -1835,6 +1835,51 @@
                 </div>
             </div>
         </section>
+        @elseif(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
+        @php
+            $meubleFauteuilCategories = [
+                ['key' => 'meubles', 'label' => 'Meubles', 'desc' => 'Design et fonctionnalité', 'tokens' => ['meuble', 'table', 'bureau', 'commode', 'armoire', 'etagere']],
+                ['key' => 'fauteuils', 'label' => 'Fauteuils', 'desc' => 'Confort et style', 'tokens' => ['fauteuil', 'chaise', 'siege']],
+            ];
+        @endphp
+
+        <section class="matelas-categories-simple" id="categories" aria-label="Nos catégories">
+            <div class="container">
+                <div class="matelas-categories-simple__head" data-reveal>
+                    <h2 class="matelas-categories-simple__title">Parcourir les catégories</h2>
+                    <p class="matelas-categories-simple__desc">Choisissez la catégorie qui correspond à vos besoins</p>
+                </div>
+                <div class="matelas-categories-simple__grid">
+                    @foreach($meubleFauteuilCategories as $category)
+                        @php
+                            $items = $products->filter(function ($p) use ($category) {
+                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
+                                foreach (($category['tokens'] ?? []) as $t) {
+                                    if (!str_contains($name, \Illuminate\Support\Str::lower($t))) return false;
+                                }
+                                return true;
+                            })->values();
+                            $count = $items->count();
+                            $firstImage = $items->first()?->image ?? null;
+                        @endphp
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit">
+                            <div class="matelas-category-simple-card__media">
+                                @if($firstImage)
+                                    <img src="@image_url($firstImage)" alt="{{ $category['label'] }}" loading="lazy" />
+                                @else
+                                    <div class="matelas-category-simple-card__placeholder">{{ $category['label'][0] }}</div>
+                                @endif
+                                <div class="matelas-category-simple-card__badge">{{ $count }} produits</div>
+                            </div>
+                            <div class="matelas-category-simple-card__content">
+                                <h3 class="matelas-category-simple-card__name">{{ $category['label'] }}</h3>
+                                <p class="matelas-category-simple-card__desc">{{ $category['desc'] }}</p>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
         @endif
 
         <section class="matelas-products-simple" id="products" aria-label="Tous les produits">
