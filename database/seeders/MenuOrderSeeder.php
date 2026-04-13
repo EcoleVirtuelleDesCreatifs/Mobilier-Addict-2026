@@ -10,18 +10,23 @@ class MenuOrderSeeder extends Seeder
     public function run(): void
     {
         $menuOrder = [
-            'accueil' => ['position' => 1, 'order' => 1],
-            'chambre' => ['position' => 1, 'order' => 2],
-            'protege-matelas' => ['position' => 1, 'order' => 3],
-            'meuble-et-fauteuil' => ['position' => 1, 'order' => 4],
-            'lit-et-canape' => ['position' => 1, 'order' => 5],
-            'electromenager' => ['position' => 1, 'order' => 6],
+            '/' => ['order' => 1],
+            'protege-matelas-impermeable' => ['order' => 2],
+            'meuble-et-fauteuil' => ['order' => 3],
+            'lit-canape' => ['order' => 4],
+            'electromenager' => ['order' => 5],
+            'matelas' => ['order' => 6],
+            'oreillers-et-taies' => ['order' => 7],
+            'drap-et-couettes' => ['order' => 8],
         ];
 
         foreach ($menuOrder as $slug => $orderData) {
             $menu = Menu::query()->where('slug', $slug)->first();
             if ($menu) {
                 $menu->update($orderData);
+                echo "Updated menu: {$menu->name} (slug: {$menu->slug}) to order {$orderData['order']}\n";
+            } else {
+                echo "Menu not found with slug: {$slug}\n";
             }
         }
     }
