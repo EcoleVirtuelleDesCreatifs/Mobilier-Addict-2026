@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class MenuController extends Controller
@@ -20,6 +19,8 @@ class MenuController extends Controller
         $matelasModels = null;
         $matelasCategories = null;
         $matelasCategoryGroups = null;
+        $isProtegeMatelas = strtolower(trim((string) $menu->slug)) === 'protege-matelas';
+
         if (strtolower(trim((string) $menu->slug)) === 'matelas') {
             $inferCategory = function ($product): array {
                 $firmness = Str::lower(trim((string) ($product->firmness ?? '')));
@@ -159,6 +160,6 @@ class MenuController extends Controller
 
         $pageTitle = $menu->name;
 
-        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups'));
+        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas'));
     }
 }

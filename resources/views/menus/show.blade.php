@@ -811,6 +811,145 @@
         </div>
     </div>
 
+    @if($isProtegeMatelas ?? false)
+    <style>
+        .protege-page{--pm-rose:#ff3a7f;--pm-navy:#0b1b3a;--pm-ink:#071126;--pm-sky:#6ee7ff;--pm-border:#e2e8f0;--pm-muted:#64748b;--pm-bg:#f8fafc;background:linear-gradient(180deg,#fff,var(--pm-bg));min-height:100vh}
+        .protege-hero{padding:120px 0 80px;background:linear-gradient(135deg,var(--pm-navy),#1e293b);color:#fff;position:relative;overflow:hidden}
+        .protege-hero::before{content:"";position:absolute;inset:-2px;background:radial-gradient(800px 400px at 25% 30%, rgba(255,58,127,.15), rgba(255,58,127,0) 55%), radial-gradient(800px 500px at 75% 20%, rgba(110,231,255,.12), rgba(110,231,255,0) 60%);pointer-events:none}
+        .protege-hero__inner{max-width:900px;margin:0 auto;text-align:center;position:relative}
+        .protege-hero__title{font-size:42px;font-weight:1000;letter-spacing:-.04em;margin:0 0 12px;line-height:1.08;color:#fff}
+        .protege-hero__subtitle{font-size:14px;color:rgba(241,245,249,.88);max-width:60ch;margin:0 auto;font-weight:700;line-height:1.6}
+        .protege-hero__badge{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:rgba(255,58,127,.15);border:1px solid rgba(255,58,127,.3);font-weight:900;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
+        .protege-hero__badge i{width:8px;height:8px;border-radius:999px;background:var(--pm-rose);box-shadow:0 0 12px rgba(255,58,127,.5)}
+
+        .protege-categories{padding:60px 0}
+        .protege-categories__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
+        .protege-category-card{display:block;background:#fff;border-radius:24px;overflow:hidden;border:1px solid var(--pm-border);box-shadow:0 12px 32px rgba(2,6,23,.06);transition:all .3s cubic-bezier(.4,0,.2,1);text-decoration:none;color:inherit}
+        .protege-category-card:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(2,6,23,.12);border-color:rgba(255,58,127,.25)}
+        .protege-category-card__media{position:relative;aspect-ratio:1;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);overflow:hidden}
+        .protege-category-card__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+        .protege-category-card:hover .protege-category-card__media img{transform:scale(1.1)}
+        .protege-category-card__badge{position:absolute;bottom:14px;right:14px;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,var(--pm-rose),#be185d);color:#fff;font-weight:1000;font-size:11px;letter-spacing:.02em;text-transform:uppercase;box-shadow:0 8px 20px rgba(255,58,127,.35)}
+        .protege-category-card__content{padding:18px}
+        .protege-category-card__name{margin:0 0 6px;font-size:17px;font-weight:1000;color:var(--pm-ink);letter-spacing:-.02em;line-height:1.3}
+        .protege-category-card__desc{margin:0;font-size:13px;font-weight:700;color:#64748b;line-height:1.5}
+
+        .protege-products{padding:60px 0 80px}
+        .protege-products__head{max-width:1200px;margin:0 auto 30px;padding:24px;border-radius:24px;background:linear-gradient(180deg,rgba(11,27,58,.04),rgba(11,27,58,0));border:1px solid rgba(226,232,240,.85)}
+        .protege-products__title{margin:0 0 6px;font-size:26px;font-weight:1000;color:var(--pm-ink);letter-spacing:-.03em}
+        .protege-products__desc{margin:0;font-size:14px;font-weight:700;color:#64748b}
+        .protege-products__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1200px;margin:0 auto}
+        .protege-product-card{background:#fff;border-radius:22px;overflow:hidden;border:1px solid var(--pm-border);box-shadow:0 12px 32px rgba(2,6,23,.06);transition:all .3s cubic-bezier(.4,0,.2,1)}
+        .protege-product-card:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(2,6,23,.1)}
+        .protege-product-card__media{aspect-ratio:1;background:linear-gradient(135deg,#f8fafc,#f1f5f9)}
+        .protege-product-card__media img{width:100%;height:100%;object-fit:cover;display:block}
+        .protege-product-card__body{padding:16px}
+        .protege-product-card__name{font-weight:1000;color:var(--pm-ink);margin:0 0 8px;font-size:15px;line-height:1.3}
+        .protege-product-card__price{font-weight:1000;color:var(--pm-rose);font-size:18px;margin-bottom:12px}
+        .protege-product-card__btn{width:100%;padding:12px;border-radius:999px;background:linear-gradient(135deg,var(--pm-rose),#ff2e72);color:#fff;font-weight:1000;border:0;cursor:pointer;transition:all .2s}
+        .protege-product-card__btn:hover{filter:brightness(1.08);transform:scale(1.02)}
+
+        @media (max-width: 991px){
+            .protege-hero{padding:100px 0 60px}
+            .protege-hero__title{font-size:36px}
+            .protege-categories__grid{grid-template-columns:repeat(2,1fr);gap:16px}
+            .protege-products__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+        }
+        @media (max-width: 560px){
+            .protege-hero{padding:80px 0 50px}
+            .protege-hero__title{font-size:30px}
+            .protege-categories__grid{grid-template-columns:1fr;gap:14px}
+            .protege-products__grid{grid-template-columns:1fr}
+            .protege-category-card__name{font-size:16px}
+        }
+    </style>
+
+    <section class="protege-hero">
+        <div class="container">
+            <div class="protege-hero__inner" data-reveal>
+                <div class="protege-hero__badge"><i></i>Protection & Confort</div>
+                <h1 class="protege-hero__title">Protégez votre matelas avec style</h1>
+                <p class="protege-hero__subtitle">Découvrez notre gamme de protections de matelas alliant qualité, confort et design pour prolonger la durée de vie de votre literie.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="protege-categories">
+        <div class="container">
+            <div class="protege-categories__grid">
+                @php
+                    $protegeCategories = [
+                        ['name' => 'Alèses', 'desc' => 'Protection imperméable', 'count' => $products->total()],
+                        ['name' => 'Housses', 'desc' => 'Design élégant', 'count' => $products->total()],
+                        ['name' => 'Surmatelas', 'desc' => 'Confort additionnel', 'count' => $products->total()],
+                        ['name' => 'Taies', 'desc' => 'Finition parfaite', 'count' => $products->total()],
+                    ];
+                @endphp
+                @foreach($protegeCategories as $category)
+                    <a href="#" class="protege-category-card" style="text-decoration:none;color:inherit">
+                        <div class="protege-category-card__media">
+                            @if($products->first()?->image)
+                                <img src="@image_url($products->first()->image)" alt="{{ $category['name'] }}" loading="lazy" />
+                            @else
+                                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,58,127,.1),rgba(110,231,255,.1))">
+                                    <span style="font-size:40px;font-weight:1000;color:var(--pm-navy);opacity:.3">{{ $category['name'][0] }}</span>
+                                </div>
+                            @endif
+                            <div class="protege-category-card__badge">{{ $category['count'] }} produits</div>
+                        </div>
+                        <div class="protege-category-card__content">
+                            <h3 class="protege-category-card__name">{{ $category['name'] }}</h3>
+                            <p class="protege-category-card__desc">{{ $category['desc'] }}</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="protege-products">
+        <div class="container">
+            <div class="protege-products__head">
+                <h2 class="protege-products__title">Tous nos produits</h2>
+                <p class="protege-products__desc">{{ $products->total() }} protections disponibles</p>
+            </div>
+            <div class="protege-products__grid">
+                @foreach($products as $product)
+                    @php
+                        $defaultVariant = $product?->variants?->sortBy('price')->first();
+                        $price = $defaultVariant?->price ?? $product->price;
+                    @endphp
+                    <article class="protege-product-card">
+                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                            <div class="protege-product-card__media">
+                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                            </div>
+                        </a>
+                        <div class="protege-product-card__body">
+                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                <h3 class="protege-product-card__name">{{ $product->name }}</h3>
+                            </a>
+                            <div class="protege-product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
+                            <form action="{{ route('cart.add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="product_variant_id" value="{{ $defaultVariant?->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="protege-product-card__btn" type="submit">Ajouter au panier</button>
+                            </form>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+            @if(method_exists($products, 'links'))
+                <div style="margin-top:30px;text-align:center">
+                    {{ $products->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <script>
         (function(){
             const tabButtons = Array.from(document.querySelectorAll('[data-tab]'));

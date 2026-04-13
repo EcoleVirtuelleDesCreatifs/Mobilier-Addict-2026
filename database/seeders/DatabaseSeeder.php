@@ -5,8 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\AdminUserSeeder;
-use Database\Seeders\MatelasDemoSeeder;
 use Database\Seeders\MatelasMenuSeeder;
+use Database\Seeders\ProtegeMatelasMenuSeeder;
+use Database\Seeders\MatelasDemoSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             MatelasMenuSeeder::class,
+            ProtegeMatelasMenuSeeder::class,
             MatelasDemoSeeder::class,
         ]);
     }
