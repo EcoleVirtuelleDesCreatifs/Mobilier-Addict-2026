@@ -8,6 +8,7 @@ use Database\Seeders\AdminUserSeeder;
 use Database\Seeders\MatelasMenuSeeder;
 use Database\Seeders\ProtegeMatelasMenuSeeder;
 use Database\Seeders\MatelasDemoSeeder;
+use Database\Seeders\MenuOrderSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             MatelasMenuSeeder::class,
             ProtegeMatelasMenuSeeder::class,
             MatelasDemoSeeder::class,
+            MenuOrderSeeder::class,
         ]);
     }
 }
