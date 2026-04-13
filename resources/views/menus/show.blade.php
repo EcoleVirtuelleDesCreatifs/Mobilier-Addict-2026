@@ -1764,6 +1764,31 @@
 
     @if(!($isProtegeMatelas ?? false))
     <div class="matelas-page">
+        @if(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
+        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#1a2942,#0f172a)">
+            <div class="container">
+                <div class="matelas-hero-simple__inner" data-reveal>
+                    <div class="matelas-hero-simple__badge" style="background:rgba(59,130,246,.18);border-color:rgba(59,130,246,.35)">Design & Confort</div>
+                    <h1 class="matelas-hero-simple__title">Meubles & Fauteuils</h1>
+                    <p class="matelas-hero-simple__subtitle">Transformez votre intérieur avec notre collection de meubles et fauteuils alliant esthétique moderne et confort exceptionnel.</p>
+                    <div class="matelas-hero-simple__stats">
+                        <div class="matelas-hero-simple__stat">
+                            <strong>{{ $products->total() }}</strong>
+                            <span>Créations</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>Design</strong>
+                            <span>Unique</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>Livraison</strong>
+                            <span>Gratuite</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @else
         <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}">
             <div class="container">
                 <div class="matelas-hero-simple__inner" data-reveal>
@@ -1783,6 +1808,7 @@
                 </div>
             </div>
         </section>
+        @endif
 
         @if(strtolower(trim((string) $menu->slug)) === 'matelas')
         @php
