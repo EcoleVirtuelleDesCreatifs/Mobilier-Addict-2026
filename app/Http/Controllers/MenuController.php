@@ -20,6 +20,7 @@ class MenuController extends Controller
         $matelasCategories = null;
         $matelasCategoryGroups = null;
         $isProtegeMatelas = strtolower(trim((string) $menu->slug)) === 'protege-matelas';
+        $isOreillersEtTaies = strtolower(trim((string) $menu->slug)) === 'oreillers-et-taies';
 
         if (strtolower(trim((string) $menu->slug)) === 'matelas') {
             $inferCategory = function ($product): array {
@@ -160,6 +161,6 @@ class MenuController extends Controller
 
         $pageTitle = $menu->name;
 
-        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas'));
+        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas', 'isOreillersEtTaies'));
     }
 }
