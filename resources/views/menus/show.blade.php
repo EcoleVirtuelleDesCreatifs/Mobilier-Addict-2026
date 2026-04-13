@@ -717,7 +717,7 @@
                 <div class="matelas-all__products">
                     <div class="matelas-all__products-head">
                         <h3 class="matelas-all__products-title">Tous les matelas</h3>
-                        <p class="matelas-all__products-desc">{{ $allCount }} modèles disponibles</p>
+                        <p class="matelas-all__products-desc">{{ $products->total() }} modèles disponibles</p>
                     </div>
                     <div class="matelas-all__grid">
                         @foreach(($products ?? collect()) as $product)
