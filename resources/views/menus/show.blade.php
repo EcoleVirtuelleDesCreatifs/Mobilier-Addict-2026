@@ -281,21 +281,25 @@
     </style>
 
     <div class="matelas-page">
-        <section class="matelas-hero" aria-label="{{ $pageTitle }}">
-            <div class="matelas-clouds" aria-hidden="true">
-                <span class="matelas-cloud matelas-cloud--a"></span>
-                <span class="matelas-cloud matelas-cloud--b"></span>
-                <span class="matelas-cloud matelas-cloud--c"></span>
-                <span class="matelas-cloud matelas-cloud--d"></span>
-            </div>
+        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}">
             <div class="container">
-                <div class="matelas-hero__inner" data-reveal>
-                    <h1 class="matelas-hero__title">Quatre Modèles,<br>Un sommeil meilleur</h1>
-                    <p class="matelas-hero__subtitle">Choisis le niveau de fermeté qui te correspond. Puis sélectionne l’épaisseur et le nombre de places pour commander.</p>
-
-                    <div class="matelas-hero__cta">
-                        <a class="matelas-btn matelas-btn--primary" href="#differents">Parcourir les gammes</a>
-                        <a class="matelas-btn matelas-btn--navy" href="#petit-prix">Nos matelas à petit prix</a>
+                <div class="matelas-hero-simple__inner" data-reveal>
+                    <div class="matelas-hero-simple__badge">Qualité professionnelle</div>
+                    <h1 class="matelas-hero-simple__title">Nos Matelas</h1>
+                    <p class="matelas-hero-simple__subtitle">Choisissez le matelas parfait pour votre sommeil. Différents niveaux de fermeté pour tous les besoins.</p>
+                    <div class="matelas-hero-simple__stats">
+                        <div class="matelas-hero-simple__stat">
+                            <strong>{{ $products->total() }}</strong>
+                            <span>Modèles</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>4</strong>
+                            <span>Gammes</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>Livraison</strong>
+                            <span>Gratuite</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -306,53 +310,22 @@
                 return $g['products'] ?? [];
             })->filter()->unique('id')->values();
 
-            $priceFor = function ($p) {
-                $v = $p?->variants?->sortBy('price')->first();
-                return $v?->price ?? $p?->price;
-            };
-
-            $cheapMatelas = $allMatelas->sortBy(function ($p) use ($priceFor) {
-                return (float) ($priceFor($p) ?? 0);
-            })->take(6)->values();
-
             $tabDefs = [
-                ['key' => 'medicosoins', 'label' => 'MEDICOSOINS', 'tokens' => ['medicosoins']],
-                ['key' => 'confort_soft', 'label' => 'CONFORT SOFT', 'tokens' => ['confort', 'soft']],
-                ['key' => 'addict', 'label' => 'ADDICT', 'tokens' => ['addict']],
-                ['key' => 'luxury', 'label' => 'LUXURY', 'tokens' => ['luxury']],
+                ['key' => 'medicosoins', 'label' => 'MedicoSoins', 'desc' => 'Soutien orthopédique', 'tokens' => ['medicosoins']],
+                ['key' => 'confort_soft', 'label' => 'Confort Soft', 'desc' => 'Douceur absolue', 'tokens' => ['confort', 'soft']],
+                ['key' => 'addict', 'label' => 'Addict', 'desc' => 'Le choix passionné', 'tokens' => ['addict']],
+                ['key' => 'luxury', 'label' => 'Luxury', 'desc' => 'Haut de gamme', 'tokens' => ['luxury']],
             ];
         @endphp
 
-        <section class="matelas-tabs" id="differents" aria-label="Nos différents matelas">
+        <section class="matelas-categories-simple" id="differents" aria-label="Nos gammes">
             <div class="container">
-                <div class="matelas-tabs__wrap">
-                    @php
-                        $tabsCount = (int) (collect($tabDefs)->count());
-                        $modelsCount = (int) ($allMatelas?->count() ?? 0);
-                    @endphp
-                    <header class="matelas-tabs__head" data-reveal>
-                        <div class="matelas-tabs__headgrid">
-                            <div>
-                                <div class="matelas-tabs__kicker"><i aria-hidden="true"></i>Nos différents matelas</div>
-                                <h2 class="matelas-tabs__hero">Un <span>confort</span> pour chaque nuit</h2>
-                                <p class="matelas-tabs__sub">Sélectionne une gamme, compare les modèles, puis ajoute au panier. Tu choisis ensuite l'épaisseur et le nombre de places.</p>
-                            </div>
-                            <div class="matelas-tabs__stats" role="list" aria-label="Indicateurs">
-                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $tabsCount }} gammes</strong><span>un ressenti, une solution</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>{{ $modelsCount }} modèles</strong><span>disponibles dans le catalogue</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>Ajout rapide</strong><span>en 2 clics, sans friction</span></div>
-                                <div class="matelas-tabs__stat" role="listitem"><strong>Choix précis</strong><span>épaisseur & places</span></div>
-                            </div>
-                        </div>
-                    </header>
-                    <div class="matelas-tabs__title">Parcourir les gammes</div>
-                    <div class="matelas-tabs__bar" role="tablist">
-                        @foreach($tabDefs as $idx => $tab)
-                            <button class="matelas-tab{{ $idx === 0 ? ' is-active' : '' }}" type="button" data-tab="{{ $tab['key'] }}" role="tab" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" tabindex="{{ $idx === 0 ? '0' : '-1' }}">{{ $tab['label'] }}</button>
-                        @endforeach
-                    </div>
-
-                    @foreach($tabDefs as $idx => $tab)
+                <div class="matelas-categories-simple__head" data-reveal>
+                    <h2 class="matelas-categories-simple__title">Parcourir les gammes</h2>
+                    <p class="matelas-categories-simple__desc">Choisissez la gamme qui correspond à vos besoins</p>
+                </div>
+                <div class="matelas-categories-simple__grid">
+                    @foreach($tabDefs as $tab)
                         @php
                             $items = $allMatelas->filter(function ($p) use ($tab) {
                                 $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
@@ -361,455 +334,132 @@
                                 }
                                 return true;
                             })->take(6)->values();
+                            $count = $items->count();
+                            $firstImage = $items->first()?->image ?? null;
                         @endphp
-
-                        <div class="matelas-tabs__panel{{ $idx === 0 ? ' is-active' : '' }}" data-tab-panel="{{ $tab['key'] }}" role="tabpanel">
-                            <section class="best-modern" aria-label="{{ $tab['label'] }}">
-                                <div class="best-modern__grid">
-                                @foreach($items as $product)
-                                    @php
-                                        $defaultVariant = $product?->variants?->sortBy('price')->first();
-                                        $price = $product?->price;
-                                        $titleVariant = ($product?->variants ?? collect())
-                                            ->filter(fn ($v) => $v && $v->price !== null)
-                                            ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
-                                            ->first();
-                                        $displayName = $product->name;
-                                        if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
-                                            $displayName = $product->name
-                                                . ' - '
-                                                . str_pad((string) (int) $titleVariant->places, 2, '0', STR_PAD_LEFT)
-                                                . ' places épasseurs '
-                                                . (int) $titleVariant->thickness_cm
-                                                . ' CM';
-                                        }
-                                        $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
-                                            'id' => (int) $v->id,
-                                            'thickness_cm' => $v->thickness_cm,
-                                            'places' => $v->places,
-                                            'price' => (float) $v->price,
-                                            'stock' => $v->stock,
-                                        ])->values();
-                                    @endphp
-
-                                    <article class="product-card" aria-label="{{ $product->name }}">
-                                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                                            <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
-                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
-                                            <div class="product-card__badge product-card__badge--new">NEW</div>
-                                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
-                                            <div class="product-card__badge product-card__badge--hot">HOT</div>
-                                        @endif
-
-                                        <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                            <div class="product-card__media">
-                                                <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                            </div>
-                                        </a>
-
-                                        <div class="product-card__body">
-                                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                                <h3 class="product-card__name">{{ $displayName }}</h3>
-                                            </a>
-                                            <div class="product-card__footer">
-                                                <div class="product-card__prices">
-                                                    <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
-                                                    @if(!empty($product->formatted_old_price))
-                                                        <span class="product-card__old">{{ $product->formatted_old_price }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button class="product-card__buy" type="submit">Ajouter au panier</button>
-                                            </form>
-                                        </div>
-                                    </article>
-                                @endforeach
-                                </div>
-                            </section>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-
-        <section class="matelas-block" id="petit-prix" aria-label="Nos matelas à petit prix">
-            <div class="container">
-                <div class="matelas-block__head" data-reveal>
-                    <span class="matelas-orb matelas-orb--a" aria-hidden="true"></span>
-                    <span class="matelas-orb matelas-orb--b" aria-hidden="true"></span>
-                    <div class="matelas-marquee" aria-hidden="true">
-                        <div class="matelas-marquee__track">
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>CONFORT</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>SOUTIEN</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>PETIT PRIX</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>AJOUT RAPIDE</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>CONFORT</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>SOUTIEN</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>PETIT PRIX</span>
-                            <span class="matelas-marquee__item"><span class="matelas-marquee__dot"></span>AJOUT RAPIDE</span>
-                        </div>
-                    </div>
-                    <span class="matelas-block__pill">Nos matelas à petit prix</span>
-                    @php
-                        $cheapMinPrice = $cheapMatelas->min(function ($p) use ($priceFor) {
-                            return (float) ($priceFor($p) ?? 0);
-                        });
-                        $cheapCount = (int) ($cheapMatelas?->count() ?? 0);
-                    @endphp
-                    <h2 class="matelas-block__title"><span class="matelas-block__outline">Le confort</span> <span>au prix</span> qui fait plaisir</h2>
-                    <p class="matelas-block__subtitle">Des modèles sélectionnés pour t’offrir un excellent soutien, au meilleur prix. Ajoute au panier en 2 clics, puis choisis l’épaisseur et le nombre de places.</p>
-                    <div class="matelas-block__stats" role="list" aria-label="Points forts">
-                        <span class="matelas-stat" role="listitem"><i aria-hidden="true"></i><strong>Dès</strong> {{ $cheapMinPrice ? number_format((float) $cheapMinPrice, 0, ',', '.') . 'F' : '—' }}</span>
-                        <span class="matelas-stat" role="listitem"><i aria-hidden="true"></i><strong>Ajout</strong> en 2 clics</span>
-                        <span class="matelas-stat" role="listitem"><i aria-hidden="true"></i><strong>{{ $cheapCount }}</strong> best deals</span>
-                    </div>
-                    <div class="matelas-block__cta">
-                        <a class="matelas-btn matelas-btn--primary" href="#differents">Voir les 4 modèles</a>
-                        <a class="matelas-btn matelas-btn--navy" href="#tous">Tous les matelas</a>
-                    </div>
-                </div>
-
-                <section class="best-modern" aria-label="Nos matelas à petit prix">
-                    <div class="best-modern__grid">
-                        @foreach($cheapMatelas as $product)
-                            @php
-                                $img = $product->image;
-                                $defaultVariant = $product?->variants?->sortBy('price')->first();
-                                $price = $product?->price;
-                                $titleVariant = ($product?->variants ?? collect())
-                                    ->filter(fn ($v) => $v && $v->price !== null)
-                                    ->sortBy(fn ($v) => abs(((float) $v->price) - ((float) ($price ?? 0))))
-                                    ->first();
-                                $displayName = $product->name;
-                                if ($titleVariant && $titleVariant->places && $titleVariant->thickness_cm) {
-                                    $placesValue = (float) $titleVariant->places;
-                                    $placesLabel = fmod($placesValue, 1.0) === 0.0
-                                        ? (string) (int) $placesValue
-                                        : str_replace('.', ',', number_format($placesValue, 1, '.', ''));
-                                    $displayName = $product->name
-                                        . ' - '
-                                        . str_pad((string) $placesLabel, 2, '0', STR_PAD_LEFT)
-                                        . ' places épasseurs '
-                                        . (int) $titleVariant->thickness_cm
-                                        . ' CM';
-                                }
-                                $variantsData = ($product?->variants ?? collect())->map(fn($v) => [
-                                    'id' => (int) $v->id,
-                                    'thickness_cm' => $v->thickness_cm,
-                                    'places' => $v->places,
-                                    'price' => (float) $v->price,
-                                    'stock' => $v->stock,
-                                ])->values();
-                            @endphp
-
-                            <article class="product-card" aria-label="{{ $product->name }}">
-                                @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                                    <div class="product-card__badge">-{{ (int) $product->discount_percent }}%</div>
-                                @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
-                                    <div class="product-card__badge product-card__badge--new">NEW</div>
-                                @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
-                                    <div class="product-card__badge product-card__badge--hot">HOT</div>
-                                @endif
-
-                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                    <div class="product-card__media">
-                                        <img src="@image_url($img)" alt="{{ $product->name }}" loading="lazy" />
-                                    </div>
-                                </a>
-
-                                <div class="product-card__body">
-                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                        <h3 class="product-card__name">{{ $displayName }}</h3>
-                                    </a>
-                                    <div class="product-card__footer">
-                                        <div class="product-card__prices">
-                                            <span class="product-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</span>
-                                            @if(!empty($product->formatted_old_price))
-                                                <span class="product-card__old">{{ $product->formatted_old_price }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <form action="{{ route('cart.add') }}" method="POST" class="product-card__cta" style="margin:0">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button class="product-card__buy" type="submit">Ajouter au panier</button>
-                                    </form>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-                </section>
-            </div>
-        </section>
-
-        @php
-            $supportPick = $allMatelas->first(function ($p) {
-                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
-                $firm = \Illuminate\Support\Str::lower((string) ($p->firmness ?? ''));
-                return str_contains($name, 'medicosoins') || $firm === 'medicosoins';
-            }) ?: $allMatelas->first();
-
-            $supportDefaultVariant = $supportPick?->variants?->sortBy('price')->first();
-            $supportPrice = $supportDefaultVariant?->price ?? $supportPick?->price;
-            $supportVariantsData = ($supportPick?->variants ?? collect())->map(fn($v) => [
-                'id' => (int) $v->id,
-                'thickness_cm' => $v->thickness_cm,
-                'places' => $v->places,
-                'price' => (float) $v->price,
-                'stock' => $v->stock,
-            ])->values();
-
-            $supportTag = $supportPick?->firmness ? strtoupper(str_replace('_', '-', (string) $supportPick->firmness)) : null;
-        @endphp
-
-        @if($supportPick)
-            <section class="matelas-banner" aria-label="Le soutien qui prend soin de votre dos">
-                <div class="container">
-                    <div class="matelas-banner__grid">
-                        <div class="matelas-banner__card" data-reveal>
-                            <div class="matelas-banner__eyebrow"><i aria-hidden="true"></i>Le soutien qui change tes nuits</div>
-                            <h2 class="matelas-banner__title"><strong>Soutien</strong> & confort, pour ton dos</h2>
-                            <p class="matelas-banner__desc">{{ $supportPick->short_description ?: 'Un maintien optimal pour soulager les tensions, améliorer la posture et retrouver un sommeil réparateur.' }}</p>
-
-                            <div class="matelas-banner__meta">
-                                @php
-                                    $supportBadges = collect([
-                                        $supportTag ? (string) $supportTag : null,
-                                        !empty($supportPick->material) ? (string) $supportPick->material : null,
-                                        !empty($supportPick->reviews_count) ? ((int) $supportPick->reviews_count) . ' avis' : null,
-                                    ])->filter()->take(2)->values();
-                                @endphp
-                                @foreach($supportBadges as $b)
-                                    <span class="matelas-badge">{{ $b }}</span>
-                                @endforeach
-                            </div>
-
-                            <div class="matelas-banner__cta">
-                                <button
-                                    class="matelas-btn matelas-btn--primary"
-                                    type="button"
-                                    data-quick-add
-                                    data-product-id="{{ $supportPick->id }}"
-                                    data-product-name="{{ e($supportPick->name) }}"
-                                    data-product-image="@image_url($supportPick->image)"
-                                    data-product-slug="{{ $supportPick->slug }}"
-                                    data-default-variant-id="{{ $supportDefaultVariant?->id }}"
-                                    data-variants='@json($supportVariantsData)'
-                                >Commander</button>
-
-                                <button
-                                    class="matelas-btn matelas-btn--navy"
-                                    type="button"
-                                    data-quick-add
-                                    data-product-id="{{ $supportPick->id }}"
-                                    data-product-name="{{ e($supportPick->name) }}"
-                                    data-product-image="@image_url($supportPick->image)"
-                                    data-product-slug="{{ $supportPick->slug }}"
-                                    data-default-variant-id="{{ $supportDefaultVariant?->id }}"
-                                    data-variants='@json($supportVariantsData)'
-                                >Ajouter au panier</button>
-
-                                <div class="matelas-banner__price">
-                                    {{ $supportPrice !== null ? number_format((float) $supportPrice, 0, ',', '.') . 'F' : '' }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="matelas-banner__media" data-reveal href="{{ route('product.show', $supportPick->slug) }}" style="text-decoration:none;color:inherit">
-                            <img src="@image_url($supportPick->image)" alt="{{ $supportPick->name }}" loading="lazy">
-                        </a>
-                    </div>
-                </div>
-            </section>
-        @endif
-
-        <section class="matelas-all" id="tous" aria-label="Trouve le bon matelas">
-            <div class="container">
-                @php
-                    $matelasCollection = $allMatelas ?? collect();
-                    $categories = [
-                        [
-                            'key' => 'medicosoins',
-                            'label' => 'MedicoSoins',
-                            'description' => 'Soutien orthopédique optimal',
-                            'tokens' => ['medicosoins'],
-                            'count' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
-                            })->count(),
-                            'image' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'medicosoins');
-                            })->first()?->image ?? null,
-                        ],
-                        [
-                            'key' => 'confort_soft',
-                            'label' => 'Confort Soft',
-                            'description' => 'Douceur et confort absolu',
-                            'tokens' => ['confort', 'soft'],
-                            'count' => $matelasCollection->filter(function ($p) {
-                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
-                                return str_contains($name, 'confort') || str_contains($name, 'soft');
-                            })->count(),
-                            'image' => $matelasCollection->filter(function ($p) {
-                                $name = \Illuminate\Support\Str::lower((string) ($p->name ?? ''));
-                                return str_contains($name, 'confort') || str_contains($name, 'soft');
-                            })->first()?->image ?? null,
-                        ],
-                        [
-                            'key' => 'addict',
-                            'label' => 'Addict',
-                            'description' => 'Le choix des passionnés',
-                            'tokens' => ['addict'],
-                            'count' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
-                            })->count(),
-                            'image' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'addict');
-                            })->first()?->image ?? null,
-                        ],
-                        [
-                            'key' => 'luxury',
-                            'label' => 'Luxury',
-                            'description' => 'L\'excellence haut de gamme',
-                            'tokens' => ['luxury'],
-                            'count' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
-                            })->count(),
-                            'image' => $matelasCollection->filter(function ($p) {
-                                return str_contains(\Illuminate\Support\Str::lower((string) ($p->name ?? '')), 'luxury');
-                            })->first()?->image ?? null,
-                        ],
-                    ];
-                @endphp
-                <div class="matelas-all__head" data-reveal>
-                    <div class="matelas-all__kicker"><i aria-hidden="true"></i>Catalogue complet</div>
-                    <h2 class="matelas-all__title">Trouve <span>le bon</span> matelas</h2>
-                    <p class="matelas-all__desc">Parcours nos gammes et découvre le matelas qui correspond à tes besoins.</p>
-                </div>
-
-                <div class="matelas-categories__grid">
-                    @foreach($categories as $category)
-                        <a href="#differents" class="matelas-category-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit">
-                            <div class="matelas-category-card__media">
-                                @if($category['image'])
-                                    <img src="@image_url($category['image'])" alt="{{ $category['label'] }}" loading="lazy" />
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit">
+                            <div class="matelas-category-simple-card__media">
+                                @if($firstImage)
+                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" />
                                 @else
-                                    <div class="matelas-category-card__placeholder">
-                                        <span>{{ $category['label'][0] }}</span>
-                                    </div>
+                                    <div class="matelas-category-simple-card__placeholder">{{ $tab['label'][0] }}</div>
                                 @endif
-                                <div class="matelas-category-card__badge">{{ $category['count'] }} modèles</div>
+                                <div class="matelas-category-simple-card__badge">{{ $count }} modèles</div>
                             </div>
-                            <div class="matelas-category-card__content">
-                                <h3 class="matelas-category-card__name">{{ $category['label'] }}</h3>
-                                <p class="matelas-category-card__desc">{{ $category['description'] }}</p>
+                            <div class="matelas-category-simple-card__content">
+                                <h3 class="matelas-category-simple-card__name">{{ $tab['label'] }}</h3>
+                                <p class="matelas-category-simple-card__desc">{{ $tab['desc'] }}</p>
                             </div>
                         </a>
                     @endforeach
                 </div>
-
-                <div class="matelas-all__products">
-                    <div class="matelas-all__products-head">
-                        <h3 class="matelas-all__products-title">Tous les matelas</h3>
-                        <p class="matelas-all__products-desc">{{ $products->total() }} modèles disponibles</p>
-                    </div>
-                    <div class="matelas-all__grid">
-                        @foreach(($products ?? collect()) as $product)
-                            @php
-                                $specsParts = [];
-                                if (!empty($product->size)) $specsParts[] = $product->size;
-                                if (!empty($product->thickness)) $specsParts[] = 'Ép. ' . $product->thickness;
-                                if (!empty($product->material)) $specsParts[] = $product->material;
-                                $specs = implode(' • ', $specsParts);
-                                $gridDefaultVariant = $product?->variants?->sortBy('price')->first();
-                                $gridPrice = $gridDefaultVariant?->price ?? $product->price;
-                            @endphp
-                            <article class="matelas-mini" data-reveal>
-                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                    <div class="matelas-mini__media">
-                                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                                    </div>
-                                </a>
-                                <div class="matelas-mini__body">
-                                    <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                        <h3 class="matelas-mini__name">{{ $product->name }}</h3>
-                                    </a>
-                                    @if($specs)
-                                        <p class="matelas-mini__meta">{{ $specs }}</p>
-                                    @endif
-                                    <div class="matelas-mini__footer">
-                                        <div class="matelas-mini__price">{{ number_format((float) $gridPrice, 0, ',', '.') }}F</div>
-                                        <form action="{{ route('cart.add') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="product_variant_id" value="{{ $gridDefaultVariant?->id }}">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button class="matelas-mini__add" type="submit">Ajouter</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-
-                    @if(method_exists($products, 'links'))
-                        <div class="univers-pagination" style="margin-top: 22px">
-                            {{ $products->links('pagination::bootstrap-5') }}
-                        </div>
-                    @endif
-                </div>
             </div>
         </section>
 
-        <div class="matelas-modal" id="matelasQuickAdd" aria-hidden="true">
-            <div class="matelas-modal__backdrop" data-quick-close></div>
-            <div class="matelas-modal__panel" role="dialog" aria-modal="true" aria-label="Ajouter au panier">
-                <div class="matelas-modal__bar">
-                    <p class="matelas-modal__title" id="quickTitle">Ajouter au panier</p>
-                    <button class="matelas-modal__close" type="button" data-quick-close>Fermer</button>
+        <section class="matelas-products-simple" id="products" aria-label="Tous les produits">
+            <div class="container">
+                <div class="matelas-products-simple__head">
+                    <h2 class="matelas-products-simple__title">Tous nos matelas</h2>
+                    <p class="matelas-products-simple__desc">{{ $products->total() }} modèles disponibles</p>
                 </div>
-                <div class="matelas-modal__content">
-                    <div class="matelas-modal__media"><img id="quickImage" alt="" src=""></div>
-                    <div>
-                        <form class="matelas-modal__form" action="{{ route('cart.add') }}" method="POST" id="quickForm">
-                            @csrf
-                            <input type="hidden" name="product_id" id="quickProductId" value="">
-                            <input type="hidden" name="product_variant_id" id="quickVariantId" value="">
-                            <input type="hidden" name="quantity" value="1">
-
-                            <p class="matelas-modal__hint">Sélectionne une épaisseur et le nombre de places. Le prix se met à jour instantanément.</p>
-
-                            <div class="matelas-field">
-                                <label for="quickThickness">Épaisseur</label>
-                                <select class="matelas-select" id="quickThickness"></select>
+                <div class="matelas-products-simple__grid">
+                    @foreach($products as $product)
+                        @php
+                            $defaultVariant = $product?->variants?->sortBy('price')->first();
+                            $price = $defaultVariant?->price ?? $product->price;
+                        @endphp
+                        <article class="matelas-product-simple-card">
+                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                <div class="matelas-product-simple-card__media">
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                                </div>
+                            </a>
+                            <div class="matelas-product-simple-card__body">
+                                <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
+                                    <h3 class="matelas-product-simple-card__name">{{ $product->name }}</h3>
+                                </a>
+                                <div class="matelas-product-simple-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
+                                <form action="{{ route('cart.add') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="product_variant_id" value="{{ $defaultVariant?->id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button class="matelas-product-simple-card__btn" type="submit">Ajouter au panier</button>
+                                </form>
                             </div>
-
-                            <div class="matelas-field">
-                                <label for="quickPlaces">Places</label>
-                                <select class="matelas-select" id="quickPlaces"></select>
-                            </div>
-
-                            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                                <div class="matelas-modal__price" id="quickPrice"></div>
-                                <a class="matelas-link" id="quickLink" href="#">Voir le produit <span aria-hidden="true">→</span></a>
-                            </div>
-
-                            <div class="matelas-modal__cta">
-                                <button class="matelas-btn matelas-btn--primary matelas-cartbtn" type="submit">Ajouter au panier</button>
-                                <a class="matelas-btn matelas-btn--ghost" id="quickWhats" href="#" target="_blank" rel="noopener">Commander via WhatsApp</a>
-                            </div>
-                        </form>
+                        </article>
+                    @endforeach
+                </div>
+                @if(method_exists($products, 'links'))
+                    <div class="matelas-products-simple__pagination">
+                        {{ $products->links('pagination::bootstrap-5') }}
                     </div>
-                </div>
+                @endif
             </div>
-        </div>
+        </section>
     </div>
+
+    <style>
+        .matelas-hero-simple{padding:100px 0 70px;background:linear-gradient(135deg,#0b1b3a,#1e293b);color:#fff;position:relative;overflow:hidden}
+        .matelas-hero-simple::before{content:"";position:absolute;inset:-2px;background:radial-gradient(700px 350px at 25% 30%, rgba(255,58,127,.12), rgba(255,58,127,0) 50%), radial-gradient(700px 450px at 75% 20%, rgba(110,231,255,.10), rgba(110,231,255,0) 55%);pointer-events:none}
+        .matelas-hero-simple__inner{max-width:900px;margin:0 auto;text-align:center;position:relative}
+        .matelas-hero-simple__badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;background:rgba(255,58,127,.18);border:1px solid rgba(255,58,127,.35);font-weight:900;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+        .matelas-hero-simple__title{font-size:44px;font-weight:1000;letter-spacing:-.04em;margin:0 0 14px;line-height:1.08;color:#fff}
+        .matelas-hero-simple__subtitle{font-size:14px;color:rgba(241,245,249,.88);max-width:60ch;margin:0 auto 30px;font-weight:700;line-height:1.6}
+        .matelas-hero-simple__stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+        .matelas-hero-simple__stat{text-align:center}
+        .matelas-hero-simple__stat strong{display:block;font-size:28px;font-weight:1000;color:#fff;margin-bottom:4px}
+        .matelas-hero-simple__stat span{font-size:12px;font-weight:700;color:rgba(241,245,249,.7);text-transform:uppercase;letter-spacing:.05em}
+
+        .matelas-categories-simple{padding:60px 0}
+        .matelas-categories-simple__head{text-align:center;max-width:600px;margin:0 auto 40px}
+        .matelas-categories-simple__title{font-size:28px;font-weight:1000;color:#0b1b3a;margin:0 0 10px;letter-spacing:-.03em}
+        .matelas-categories-simple__desc{font-size:14px;color:#64748b;margin:0;font-weight:700}
+        .matelas-categories-simple__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
+        .matelas-category-simple-card{display:block;background:#fff;border-radius:24px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 12px 32px rgba(2,6,23,.06);transition:all .3s cubic-bezier(.4,0,.2,1);text-decoration:none;color:inherit}
+        .matelas-category-simple-card:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(2,6,23,.12);border-color:rgba(255,58,127,.25)}
+        .matelas-category-simple-card__media{position:relative;aspect-ratio:1;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);overflow:hidden}
+        .matelas-category-simple-card__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+        .matelas-category-simple-card:hover .matelas-category-simple-card__media img{transform:scale(1.08)}
+        .matelas-category-simple-card__placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:1000;color:#0b1b3a;opacity:.2}
+        .matelas-category-simple-card__badge{position:absolute;bottom:14px;right:14px;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,#ff3a7f,#be185d);color:#fff;font-weight:1000;font-size:11px;letter-spacing:.02em;text-transform:uppercase;box-shadow:0 8px 20px rgba(255,58,127,.35)}
+        .matelas-category-simple-card__content{padding:18px}
+        .matelas-category-simple-card__name{margin:0 0 6px;font-size:17px;font-weight:1000;color:#0b1b3a;letter-spacing:-.02em;line-height:1.3}
+        .matelas-category-simple-card__desc{margin:0;font-size:13px;font-weight:700;color:#64748b;line-height:1.5}
+
+        .matelas-products-simple{padding:60px 0 80px;background:linear-gradient(180deg,rgba(248,250,252,0),#f8fafc)}
+        .matelas-products-simple__head{max-width:1200px;margin:0 auto 30px;padding:24px;border-radius:24px;background:linear-gradient(180deg,rgba(11,27,58,.04),rgba(11,27,58,0));border:1px solid rgba(226,232,240,.85)}
+        .matelas-products-simple__title{margin:0 0 6px;font-size:26px;font-weight:1000;color:#0b1b3a;letter-spacing:-.03em}
+        .matelas-products-simple__desc{margin:0;font-size:14px;font-weight:700;color:#64748b}
+        .matelas-products-simple__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1200px;margin:0 auto}
+        .matelas-product-simple-card{background:#fff;border-radius:22px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 12px 32px rgba(2,6,23,.06);transition:all .3s cubic-bezier(.4,0,.2,1)}
+        .matelas-product-simple-card:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(2,6,23,.1)}
+        .matelas-product-simple-card__media{aspect-ratio:1;background:linear-gradient(135deg,#f8fafc,#f1f5f9)}
+        .matelas-product-simple-card__media img{width:100%;height:100%;object-fit:cover;display:block}
+        .matelas-product-simple-card__body{padding:16px}
+        .matelas-product-simple-card__name{font-weight:1000;color:#0b1b3a;margin:0 0 8px;font-size:15px;line-height:1.3}
+        .matelas-product-simple-card__price{font-weight:1000;color:#ff3a7f;font-size:18px;margin-bottom:12px}
+        .matelas-product-simple-card__btn{width:100%;padding:12px;border-radius:999px;background:linear-gradient(135deg,#ff3a7f,#ff2e72);color:#fff;font-weight:1000;border:0;cursor:pointer;transition:all .2s}
+        .matelas-product-simple-card__btn:hover{filter:brightness(1.08);transform:scale(1.02)}
+        .matelas-products-simple__pagination{text-align:center;margin-top:30px}
+
+        @media (max-width: 991px){
+            .matelas-hero-simple{padding:80px 0 60px}
+            .matelas-hero-simple__title{font-size:36px}
+            .matelas-hero-simple__stat strong{font-size:24px}
+            .matelas-categories-simple__grid{grid-template-columns:repeat(2,1fr);gap:16px}
+            .matelas-products-simple__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+        }
+        @media (max-width: 560px){
+            .matelas-hero-simple{padding:60px 0 50px}
+            .matelas-hero-simple__title{font-size:30px}
+            .matelas-hero-simple__stats{gap:16px}
+            .matelas-hero-simple__stat strong{font-size:22px}
+            .matelas-categories-simple__grid{grid-template-columns:1fr;gap:14px}
+            .matelas-products-simple__grid{grid-template-columns:1fr}
+            .matelas-category-simple-card__name{font-size:16px}
+        }
+    </style>
 
     @if($isProtegeMatelas ?? false)
     <style>
