@@ -247,61 +247,6 @@
                 filter: none;
             }
 
-            .matelas-subnav {
-                position: sticky;
-                top: 0;
-                z-index: 20;
-                background: rgba(255, 255, 255, .75);
-                backdrop-filter: blur(10px);
-                border-top: 1px solid #f1f5f9;
-                border-bottom: 1px solid #e2e8f0;
-            }
-
-            .matelas-subnav__inner {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px;
-                padding: 12px 0;
-            }
-
-            .matelas-subnav__title {
-                font-weight: 950;
-                color: var(--ma-navy);
-                font-size: 13px;
-                letter-spacing: -.01em;
-            }
-
-            .matelas-subnav__links {
-                display: flex;
-                gap: 8px;
-                overflow: auto;
-                scrollbar-width: none;
-            }
-
-            .matelas-subnav__links::-webkit-scrollbar {
-                display: none;
-            }
-
-            .matelas-chip {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 10px 12px;
-                border-radius: 999px;
-                border: 1px solid var(--ma-border);
-                background: #fff;
-                color: var(--ma-navy);
-                font-weight: 900;
-                font-size: 12px;
-                text-decoration: none;
-                white-space: nowrap;
-            }
-
-            .matelas-chip:hover {
-                border-color: #cbd5e1;
-            }
-
             .matelas-section {
                 padding: 54px 0;
             }
