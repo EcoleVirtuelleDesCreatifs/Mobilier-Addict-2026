@@ -5,13 +5,13 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" style="max-height: none; overflow: visible;">
                     <h4 class="card-title mb-4">MODIFIER LA CATÉGORIE B2B</h4>
-                    
+
                     <form action="{{ route('admin.b2b.update', $b2bCategory) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -20,7 +20,7 @@
                                     <small class="text-muted">Identifiant unique (ex: medicosoins)</small>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nom *</label>
@@ -41,7 +41,7 @@
                                     <input type="color" id="color" name="color" class="form-control form-control-color" value="{{ old('color', $b2bCategory->color) }}" required />
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="min_products" class="form-label">Minimum de produits *</label>
@@ -49,7 +49,7 @@
                                     <small class="text-muted">Nombre minimum de produits à commander</small>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="is_active" class="form-label">Statut</label>
@@ -65,7 +65,7 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
-                        <div class="d-flex justify-content-end gap-2">
+                        <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ route('admin.b2b.index') }}" class="btn btn-secondary">Annuler</a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>Mettre à jour
