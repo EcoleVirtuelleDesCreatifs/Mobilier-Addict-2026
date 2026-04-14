@@ -12,6 +12,7 @@
                 <a href="#">Aide</a>
                 <a href="#">Suivre commande</a>
                 <a href="#">Blog</a>
+                <a href="{{ route('b2b.index') }}" style="font-weight: 600; color: #3b82f6;">B2B</a>
             </div>
         </div>
     </div>
@@ -138,6 +139,7 @@
             @endforelse
             <div class="mobile-nav__footer">
                 <a class="mobile-nav__cta" href="#">Explorer la collection <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="mobile-nav__cta" href="{{ route('b2b.index') }}" style="margin-top: 8px; background: #3b82f6;">Espace B2B <i class="fa-solid fa-briefcase"></i></a>
                 <p style="color:rgba(255,255,255,.6);font-size:13px;margin:12px 0">Besoin d'aide ? Contactez-nous</p>
                 <div class="mobile-nav__contact">
                     <a href="tel:+{{ whatsapp_number() }}" aria-label="Téléphone"><i class="fa-solid fa-phone"></i></a>
