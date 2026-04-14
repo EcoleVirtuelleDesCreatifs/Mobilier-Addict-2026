@@ -65,6 +65,18 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="products" class="form-label">Produits associés</label>
+                            <select id="products" name="products[]" class="form-select" multiple style="height: 200px;">
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" {{ $b2bCategory->products->contains($product->id) ? 'selected' : '' }}>
+                                        {{ $product->name }} - {{ $product->price }} F
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs produits</small>
+                        </div>
+
                         @error('key')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

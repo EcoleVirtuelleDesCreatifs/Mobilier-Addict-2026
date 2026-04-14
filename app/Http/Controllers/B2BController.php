@@ -17,31 +17,9 @@ class B2BController extends Controller
     public function category($key)
     {
         $category = B2BCategory::query()->where('key', $key)->active()->firstOrFail();
-        
-        // Get products filtered by category tokens
-        $products = Product::query()
-            ->active()
-            ->whereHas('menus', function ($q) {
-                $q->where('slug', 'matelas');
-            })
-            ->get()
-            ->filter(function ($product) use ($category) {
-                $name = \Illuminate\Support\Str::lower((string) $product->name);
-                $tokens = match($category->key) {
-                    'medicosoins' => ['medicosoins'],
-                    'confort_soft' => ['confort', 'soft'],
-                    'addict' => ['addict'],
-                    'luxury' => ['luxury'],
-                    default => [],
-                };
-                
-                foreach ($tokens as $token) {
-                    if (!str_contains($name, \Illuminate\Support\Str::lower($token))) {
-                        return false;
-                    }
-                }
-                return true;
-            })->values();
+
+        // Get products associated with this B2B category
+        $products = $category->products()->active()->get();
 
         return view('b2b.category', compact('category', 'products'));
     }
@@ -49,7 +27,7 @@ class B2BController extends Controller
     public function submitOrder(Request $request, $key)
     {
         $category = B2BCategory::query()->where('key', $key)->active()->firstOrFail();
-        
+
         $validated = $request->validate([
             'products' => 'required|array|min:' . $category->min_products,
             'products.*' => 'required|integer|exists:products,id',

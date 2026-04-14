@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\B2BCategory;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class B2BCategoryController extends Controller
@@ -16,7 +17,8 @@ class B2BCategoryController extends Controller
 
     public function create()
     {
-        return view('admin.b2b.create');
+        $products = Product::query()->active()->orderBy('name')->get();
+        return view('admin.b2b.create', compact('products'));
     }
 
     public function store(Request $request)
@@ -28,9 +30,17 @@ class B2BCategoryController extends Controller
             'color' => 'required|string|max:7',
             'is_active' => 'boolean',
             'min_products' => 'required|integer|min:1',
+            'products' => 'nullable|array',
+            'products.*' => 'exists:products,id',
         ]);
 
-        B2BCategory::query()->create($validated);
+        $validated['is_active'] = $request->has('is_active');
+
+        $category = B2BCategory::query()->create($validated);
+
+        if ($request->has('products')) {
+            $category->products()->attach($request->input('products'));
+        }
 
         return redirect()->route('admin.b2b.index')
             ->with('success', 'Catégorie B2B créée avec succès.');
@@ -38,7 +48,8 @@ class B2BCategoryController extends Controller
 
     public function edit(B2BCategory $b2bCategory)
     {
-        return view('admin.b2b.edit', compact('b2bCategory'));
+        $products = Product::query()->active()->orderBy('name')->get();
+        return view('admin.b2b.edit', compact('b2bCategory', 'products'));
     }
 
     public function update(Request $request, B2BCategory $b2bCategory)
@@ -50,9 +61,19 @@ class B2BCategoryController extends Controller
             'color' => 'required|string|max:7',
             'is_active' => 'boolean',
             'min_products' => 'required|integer|min:1',
+            'products' => 'nullable|array',
+            'products.*' => 'exists:products,id',
         ]);
 
+        $validated['is_active'] = $request->has('is_active');
+
         $b2bCategory->update($validated);
+
+        if ($request->has('products')) {
+            $b2bCategory->products()->sync($request->input('products'));
+        } else {
+            $b2bCategory->products()->detach();
+        }
 
         return redirect()->route('admin.b2b.index')
             ->with('success', 'Catégorie B2B mise à jour avec succès.');
