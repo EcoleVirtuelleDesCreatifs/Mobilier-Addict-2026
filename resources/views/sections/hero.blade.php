@@ -33,13 +33,10 @@
                                 @endforeach
                             @else
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=700&fit=crop" alt="Chambre luxueuse" loading="eager" decoding="async" fetchpriority="high" />
+                                    <img src="{{ asset('assets/slider/slide-1.jpg') }}" alt="Slide 1" loading="eager" decoding="async" fetchpriority="high" />
                                 </div>
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=700&fit=crop" alt="Chambre moderne" loading="lazy" decoding="async" />
-                                </div>
-                                <div class="hero__card-slide" data-slide>
-                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=700&fit=crop" alt="Chambre premium" loading="lazy" decoding="async" />
+                                    <img src="{{ asset('assets/slider/slide-2.jpg') }}" alt="Slide 2" loading="lazy" decoding="async" />
                                 </div>
                             @endif
                         </div>
@@ -50,7 +47,7 @@
                             <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                         </button>
                         <div class="hero__card-dots" aria-label="Changer d'image">
-                            @php($dotsCount = ($heroSlides ?? collect())->count() ?: 3)
+                            @php($dotsCount = ($heroSlides ?? collect())->count() ?: 2)
                             @for($i = 0; $i < $dotsCount; $i++)
                                 <button class="hero__card-dot" type="button" data-dot="{{ $i }}" aria-label="Image {{ $i + 1 }}"></button>
                             @endfor
