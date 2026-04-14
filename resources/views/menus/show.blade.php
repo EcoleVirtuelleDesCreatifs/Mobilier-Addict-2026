@@ -1762,20 +1762,20 @@
             })->filter()->unique('id')->values();
 
             $tabDefs = [
-                ['key' => 'medicosoins', 'label' => 'MedicoSoins', 'desc' => 'Soutien orthopédique', 'tokens' => ['medicosoins']],
-                ['key' => 'confort_soft', 'label' => 'Confort Soft', 'desc' => 'Douceur absolue', 'tokens' => ['confort', 'soft']],
-                ['key' => 'addict', 'label' => 'Addict', 'desc' => 'Le choix passionné', 'tokens' => ['addict']],
-                ['key' => 'luxury', 'label' => 'Luxury', 'desc' => 'Haut de gamme', 'tokens' => ['luxury']],
+                ['key' => 'medicosoins', 'label' => 'MedicoSoins', 'desc' => 'Soutien orthopédique', 'tokens' => ['medicosoins'], 'color' => '#3b82f6'],
+                ['key' => 'confort_soft', 'label' => 'Confort Soft', 'desc' => 'Douceur absolue', 'tokens' => ['confort', 'soft'], 'color' => '#8b5cf6'],
+                ['key' => 'addict', 'label' => 'Addict', 'desc' => 'Le choix passionné', 'tokens' => ['addict'], 'color' => '#ec4899'],
+                ['key' => 'luxury', 'label' => 'Luxury', 'desc' => 'Haut de gamme', 'tokens' => ['luxury'], 'color' => '#f59e0b'],
             ];
         @endphp
 
-        <section class="matelas-categories-simple" id="differents" aria-label="Nos gammes">
+        <section class="matelas-categories-simple" id="differents" aria-label="Nos gammes" style="background:linear-gradient(180deg,#f8fafc 0%,#e2e8f0 100%)">
             <div class="container">
                 <div class="matelas-categories-simple__head" data-reveal>
-                    <h2 class="matelas-categories-simple__title">Parcourir les gammes</h2>
-                    <p class="matelas-categories-simple__desc">Choisissez la gamme qui correspond à vos besoins</p>
+                    <h2 class="matelas-categories-simple__title" style="font-size:2.5rem;font-weight:950;color:#1e293b">Nos gammes</h2>
+                    <p class="matelas-categories-simple__desc" style="font-size:1.125rem;color:#64748b">Découvrez notre sélection de matelas pour chaque besoin</p>
                 </div>
-                <div class="matelas-categories-simple__grid">
+                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
                     @foreach($tabDefs as $tab)
                         @php
                             $items = $allMatelas->filter(function ($p) use ($tab) {
@@ -1788,24 +1788,33 @@
                             $count = $items->count();
                             $firstImage = $items->first()?->image ?? null;
                         @endphp
-                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit">
-                            <div class="matelas-category-simple-card__media">
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);transition:transform .3s ease,box-shadow .3s ease;display:block">
+                            <div class="matelas-category-simple-card__media" style="position:relative;height:220px;overflow:hidden">
                                 @if($firstImage)
-                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" />
+                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s ease" />
                                 @else
-                                    <div class="matelas-category-simple-card__placeholder">{{ $tab['label'][0] }}</div>
+                                    <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:4rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
                                 @endif
-                                <div class="matelas-category-simple-card__badge">{{ $count }} modèles</div>
+                                <div class="matelas-category-simple-card__badge" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:8px 16px;border-radius:50px;font-weight:900;font-size:0.875rem;color:#1e293b;box-shadow:0 2px 10px rgba(0,0,0,.1)">{{ $count }} modèles</div>
                             </div>
-                            <div class="matelas-category-simple-card__content">
-                                <h3 class="matelas-category-simple-card__name">{{ $tab['label'] }}</h3>
-                                <p class="matelas-category-simple-card__desc">{{ $tab['desc'] }}</p>
+                            <div class="matelas-category-simple-card__content" style="padding:24px">
+                                <h3 class="matelas-category-simple-card__name" style="font-size:1.5rem;font-weight:950;color:#1e293b;margin:0 0 8px">{{ $tab['label'] }}</h3>
+                                <p class="matelas-category-simple-card__desc" style="font-size:0.9375rem;color:#64748b;margin:0">{{ $tab['desc'] }}</p>
                             </div>
                         </a>
                     @endforeach
                 </div>
             </div>
         </section>
+        <style>
+            .matelas-category-simple-card:hover {
+                transform:translateY(-8px);
+                box-shadow:0 12px 40px rgba(0,0,0,.15)
+            }
+            .matelas-category-simple-card:hover img {
+                transform:scale(1.05)
+            }
+        </style>
         @elseif(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
         @php
             $meubleFauteuilCategories = [
