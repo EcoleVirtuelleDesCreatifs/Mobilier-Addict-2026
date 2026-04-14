@@ -314,6 +314,9 @@
 						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
 							<li><a href="{{ route('admin.slider.index') }}">Sliders</a></li>
 						@endif
+						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
+							<li><a href="{{ route('admin.b2b.index') }}">B2B</a></li>
+						@endif
                     </ul>
                     </li>
 
