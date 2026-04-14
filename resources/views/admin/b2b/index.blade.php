@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" style="max-height: none; overflow: visible;">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h4 class="card-title" style="font-size: 1.5rem; font-weight: 700;">Gestion B2B</h4>
@@ -17,7 +17,7 @@
                     </div>
 
                     @if($categories->count() > 0)
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="overflow-x: auto;">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
