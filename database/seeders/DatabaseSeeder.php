@@ -9,6 +9,7 @@ use Database\Seeders\MatelasMenuSeeder;
 use Database\Seeders\ProtegeMatelasMenuSeeder;
 use Database\Seeders\MatelasDemoSeeder;
 use Database\Seeders\MenuOrderSeeder;
+use Database\Seeders\B2BCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ProtegeMatelasMenuSeeder::class,
             MatelasDemoSeeder::class,
             MenuOrderSeeder::class,
+            B2BCategorySeeder::class,
         ]);
     }
 }

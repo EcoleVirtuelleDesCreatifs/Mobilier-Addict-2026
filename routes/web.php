@@ -9,7 +9,9 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\B2BCategoryController;
 use App\Http\Controllers\Admin\SaveTheDateController;
+use App\Http\Controllers\B2BController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
@@ -310,6 +312,13 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/slider/{slider}', [SliderController::class, 'update'])->name('admin.slider.update');
     Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
 
+    Route::get('/b2b', [B2BCategoryController::class, 'index'])->name('admin.b2b.index');
+    Route::get('/b2b/create', [B2BCategoryController::class, 'create'])->name('admin.b2b.create');
+    Route::post('/b2b', [B2BCategoryController::class, 'store'])->name('admin.b2b.store');
+    Route::get('/b2b/{b2bCategory}/edit', [B2BCategoryController::class, 'edit'])->name('admin.b2b.edit');
+    Route::put('/b2b/{b2bCategory}', [B2BCategoryController::class, 'update'])->name('admin.b2b.update');
+    Route::delete('/b2b/{b2bCategory}', [B2BCategoryController::class, 'destroy'])->name('admin.b2b.destroy');
+
     Route::get('/save-the-date', [SaveTheDateController::class, 'index'])->middleware('permission:articles.manage')->name('admin.save-the-date.index');
     Route::get('/save-the-date/create', [SaveTheDateController::class, 'create'])->middleware('permission:articles.manage')->name('admin.save-the-date.create');
     Route::post('/save-the-date', [SaveTheDateController::class, 'store'])->middleware('permission:articles.manage')->name('admin.save-the-date.store');
@@ -357,6 +366,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// B2B Routes
+Route::prefix('b2b')->name('b2b.')->group(function () {
+    Route::get('/', [B2BController::class, 'index'])->name('index');
+    Route::get('/{key}', [B2BController::class, 'category'])->name('category');
+    Route::post('/{key}/order', [B2BController::class, 'submitOrder'])->name('submit');
 });
 
 require __DIR__ . '/auth.php';
