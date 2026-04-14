@@ -1,9 +1,13 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
+
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body" style="max-height: none; overflow: visible;">
                     <div class="d-flex justify-content-between align-items-center mb-4">
