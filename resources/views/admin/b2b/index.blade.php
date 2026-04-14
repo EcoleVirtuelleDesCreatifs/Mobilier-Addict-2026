@@ -20,7 +20,7 @@
                     <div class="row">
                         @foreach($categories as $category)
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100" style="border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                            <div class="card" style="border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                                 <div class="card-body">
                                     <div class="d-flex align-items-start justify-content-between mb-3">
                                         <div style="width: 60px; height: 60px; background: {{ $category->color }}; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
