@@ -197,15 +197,10 @@
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                             <span style="font-size: 1.5rem; font-weight: 800; color: #ec4899;">{{ $product->formatted_price }}</span>
                         </div>
-                        <form method="POST" action="{{ route('cart.add') }}" style="width: 100%;">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; padding: 14px 24px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 0.9375rem; transition: all 0.3s ease; width: 100%;">
-                                <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                Ajouter au panier
-                            </button>
-                        </form>
+                        <a href="{{ $product->slug ? route('product.show', $product->slug) : '#' }}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; padding: 14px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: all 0.3s ease; width: 100%;">
+                            <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Voir le produit
+                        </a>
                     </div>
                 @endforeach
             </div>
