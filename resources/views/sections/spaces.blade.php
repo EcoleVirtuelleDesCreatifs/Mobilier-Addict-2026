@@ -1,5 +1,5 @@
         @if(!empty($spaceSection))
-            <section class="spaces" aria-label="Solutions par espace">
+            <section class="spaces" aria-label="Solutions B2B">
                 <div class="container">
                     <div class="spaces__header">
                         <span class="spaces__badge">{{ trim(($spaceSection->badge_icon ? $spaceSection->badge_icon . ' ' : '') . ($spaceSection->badge ?? '')) }}</span>
@@ -19,7 +19,7 @@
                                 }
                             @endphp
 
-                            <a class="space-card {{ $sizeClass }} {{ $extraClass }}" href="{{ $card->cta_url ?: '#' }}">
+                            <a class="space-card {{ $sizeClass }} {{ $extraClass }}" href="{{ route('b2b.index') }}">
                                 <img src="@image_url($card->image)" alt="{{ $card->image_alt ?: $card->title }}" loading="lazy" />
                                 <div class="space-card__overlay">
                                     <h3 class="space-card__title">{{ $card->title }}</h3>

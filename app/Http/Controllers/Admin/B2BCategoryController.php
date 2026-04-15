@@ -11,7 +11,7 @@ class B2BCategoryController extends Controller
 {
     public function index()
     {
-        $categories = B2BCategory::query()->orderBy('id')->get();
+        $categories = B2BCategory::query()->with('products')->orderBy('id')->get();
         return view('admin.b2b.index', compact('categories'));
     }
 

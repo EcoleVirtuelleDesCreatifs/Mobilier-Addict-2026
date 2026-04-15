@@ -11,7 +11,8 @@ class B2BController extends Controller
     public function index()
     {
         $categories = B2BCategory::query()->active()->orderBy('id')->get();
-        return view('b2b.index', compact('categories'));
+        $products = Product::query()->active()->orderBy('name')->take(12)->get();
+        return view('b2b.index', compact('categories', 'products'));
     }
 
     public function category($key)

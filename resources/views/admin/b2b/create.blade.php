@@ -66,15 +66,44 @@
 
                         <div class="mb-3">
                             <label for="products" class="form-label">Produits associés</label>
-                            <select id="products" name="products[]" class="form-select" multiple style="height: 200px;">
+                            <div class="row" style="max-height: 400px; overflow-y: auto;">
                                 @foreach($products as $product)
-                                    <option value="{{ $product->id }}" {{ old('products') && in_array($product->id, old('products')) ? 'selected' : '' }}>
-                                        {{ $product->name }} - {{ $product->price }} F
-                                    </option>
+                                    <div class="col-md-4 col-lg-3 mb-3">
+                                        <div class="card h-100" style="cursor: pointer; transition: all 0.2s ease;" onclick="toggleProduct({{ $product->id }})">
+                                            <div class="card-body p-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input product-checkbox" type="checkbox" name="products[]" value="{{ $product->id }}" id="product-{{ $product->id }}" {{ old('products') && in_array($product->id, old('products')) ? 'checked' : '' }} onclick="event.stopPropagation()">
+                                                    <label class="form-check-label" for="product-{{ $product->id }}"></label>
+                                                </div>
+                                                @if($product->image)
+                                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded mb-2" style="height: 100px; object-fit: cover; width: 100%;">
+                                                @else
+                                                    <div class="bg-light rounded mb-2 d-flex align-items-center justify-content-center" style="height: 100px;">
+                                                        <i class="fas fa-image text-muted" style="font-size: 2rem;"></i>
+                                                    </div>
+                                                @endif
+                                                <h6 class="card-title mb-1" style="font-size: 0.9rem;">{{ \Illuminate\Support\Str::limit($product->name, 30) }}</h6>
+                                                <p class="card-text mb-0" style="font-size: 0.85rem;">{{ $product->price }} F</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </select>
-                            <small class="text-muted">Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs produits</small>
+                            </div>
+                            <small class="text-muted">Cliquez sur les cartes pour sélectionner les produits</small>
                         </div>
+
+                        <script>
+                            function toggleProduct(productId) {
+                                const checkbox = document.getElementById('product-' + productId);
+                                checkbox.checked = !checkbox.checked;
+                                const card = checkbox.closest('.card');
+                                if (checkbox.checked) {
+                                    card.classList.add('border-primary');
+                                } else {
+                                    card.classList.remove('border-primary');
+                                }
+                            }
+                        </script>
 
                         @error('key')
                             <div class="alert alert-danger">{{ $message }}</div>

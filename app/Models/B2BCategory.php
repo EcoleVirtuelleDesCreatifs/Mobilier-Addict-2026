@@ -32,6 +32,6 @@ class B2BCategory extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'b2b_category_product');
+        return $this->belongsToMany(Product::class, 'b2b_category_product', 'b2b_category_id', 'product_id');
     }
 }

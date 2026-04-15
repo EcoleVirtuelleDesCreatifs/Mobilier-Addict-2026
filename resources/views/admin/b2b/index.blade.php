@@ -31,6 +31,7 @@
                                         <th>Description</th>
                                         <th>Couleur</th>
                                         <th>Min. Produits</th>
+                                        <th>Produits</th>
                                         <th>Statut</th>
                                         <th>Actions</th>
                                     </tr>
@@ -47,6 +48,9 @@
                                                 {{ $category->color }}
                                             </td>
                                             <td>{{ $category->min_products }}</td>
+                                            <td>
+                                                <span class="badge bg-info">{{ $category->products->count() }}</span>
+                                            </td>
                                             <td>
                                                 @if($category->is_active)
                                                     <span class="badge bg-success">Actif</span>
