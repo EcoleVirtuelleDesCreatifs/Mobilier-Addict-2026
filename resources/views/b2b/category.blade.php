@@ -163,25 +163,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.b2b-product-checkbox');
-    const minProducts = {{ $category->min_products }};
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const count = document.querySelectorAll('.b2b-product-checkbox:checked').length;
-
-            if (count < minProducts && !this.checked) {
-                // Allow unchecking
-                return;
-            }
-        });
-    });
-
     // Validate on form submit
     const form = document.getElementById('b2bOrderForm');
     if (form) {
         form.addEventListener('submit', function(e) {
             const count = document.querySelectorAll('.b2b-product-checkbox:checked').length;
+            const minProducts = {{ $category->min_products }};
             if (count < minProducts) {
                 e.preventDefault();
                 alert('Vous devez sélectionner au moins ' + minProducts + ' produits.');
