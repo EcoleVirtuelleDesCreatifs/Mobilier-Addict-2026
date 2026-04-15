@@ -22,6 +22,11 @@ class B2BController extends Controller
         // Get products associated with this B2B category
         $products = $category->products()->active()->get();
 
+        // If no products are associated, show all active products
+        if ($products->count() === 0) {
+            $products = Product::query()->active()->get();
+        }
+
         return view('b2b.category', compact('category', 'products'));
     }
 
