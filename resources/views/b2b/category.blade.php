@@ -61,7 +61,7 @@
             <div style="text-align: center; margin-bottom: 60px;">
                 <span style="color: #ec4899; font-size: 0.875rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">Nos produits</span>
                 <h2 style="font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; color: #fff; margin-top: 16px; margin-bottom: 24px;">
-                    Qualité Premium
+                    Qualité Premium ({{ $products->count() }} produits)
                 </h2>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;">
