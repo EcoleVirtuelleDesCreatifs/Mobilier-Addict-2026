@@ -170,12 +170,24 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', function() {
             const count = document.querySelectorAll('.b2b-product-checkbox:checked').length;
 
-            if (count < minProducts) {
-                alert('Vous devez sélectionner au moins ' + minProducts + ' produits.');
-                this.checked = false;
+            if (count < minProducts && !this.checked) {
+                // Allow unchecking
+                return;
             }
         });
     });
+
+    // Validate on form submit
+    const form = document.querySelector('form[action*="b2b.submit"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const count = document.querySelectorAll('.b2b-product-checkbox:checked').length;
+            if (count < minProducts) {
+                e.preventDefault();
+                alert('Vous devez sélectionner au moins ' + minProducts + ' produits.');
+            }
+        });
+    }
 });
 </script>
 @endsection
