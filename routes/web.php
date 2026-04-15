@@ -148,16 +148,8 @@ Route::get('/search/suggest', [SearchController::class, 'suggest'])->name('searc
 Route::get('/collection', function () {
     $products = Product::query()
         ->active()
-        ->collection()
         ->ordered()
         ->get();
-
-    if ($products->isEmpty()) {
-        $products = Product::query()
-            ->active()
-            ->ordered()
-            ->get();
-    }
 
     return view('collection', compact('products'));
 })->name('collection.index');
