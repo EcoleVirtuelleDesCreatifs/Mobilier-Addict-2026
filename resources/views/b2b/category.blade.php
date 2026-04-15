@@ -80,10 +80,10 @@
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                             <span style="font-size: 1.5rem; font-weight: 800; color: #ec4899;">{{ number_format($product->price, 0, ',', '.') }}F</span>
                         </div>
-                        <label class="d-flex align-items-center justify-content-center gap-2" style="cursor: pointer; background: rgba(255,255,255,0.1); padding: 14px 24px; border-radius: 12px; transition: all 0.3s ease;">
-                            <input type="checkbox" name="products[]" value="{{ $product->id }}" class="b2b-product-checkbox" style="width: 20px; height: 20px; cursor: pointer; accent-color: #ec4899;">
-                            <span style="font-weight: 600; color: #fff;">Sélectionner</span>
-                        </label>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 14px 24px; border-radius: 12px; transition: all 0.3s ease;">
+                            <input type="checkbox" name="products[]" value="{{ $product->id }}" class="b2b-product-checkbox" style="width: 20px; height: 20px; cursor: pointer; accent-color: #ec4899; z-index: 10; position: relative;">
+                            <span style="font-weight: 600; color: #fff; cursor: pointer;" onclick="this.previousElementSibling.click()">Sélectionner</span>
+                        </div>
                     </div>
                 @empty
                     <div style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.7);">
