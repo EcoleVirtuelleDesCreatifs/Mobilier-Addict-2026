@@ -53,62 +53,62 @@
     </div>
 </section>
 
-<section style="padding: 100px 0; background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%); position: relative; overflow: hidden;">
-    <div class="container" style="position: relative; z-index: 1;">
-        <div style="text-align: center; margin-bottom: 60px;">
-            <span style="color: #ec4899; font-size: 0.875rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">Nos produits</span>
-            <h2 style="font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; color: #fff; margin-top: 16px; margin-bottom: 24px;">
-                Qualité Premium
-            </h2>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;">
-            @forelse($products as $product)
-                <div class="product-card" style="background: rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1;">
-                    <a href="{{ $product->slug ? route('product.show', $product->slug) : '#' }}" style="text-decoration: none; color: inherit;">
-                        <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border-radius: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
-                            @if($product->image)
-                                <img src="{{ image_url($product->image) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <span style="font-size: 4rem; font-weight: 800; color: rgba(255,255,255,0.4);">{{ $product->name[0] }}</span>
-                            @endif
+<form action="{{ route('b2b.submit', $category->key) }}" method="POST" id="b2bOrderForm">
+    @csrf
+
+    <section style="padding: 100px 0; background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%); position: relative; overflow: hidden;">
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <span style="color: #ec4899; font-size: 0.875rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">Nos produits</span>
+                <h2 style="font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; color: #fff; margin-top: 16px; margin-bottom: 24px;">
+                    Qualité Premium
+                </h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;">
+                @forelse($products as $product)
+                    <div class="product-card" style="background: rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1;">
+                        <a href="{{ $product->slug ? route('product.show', $product->slug) : '#' }}" style="text-decoration: none; color: inherit;">
+                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border-radius: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                                @if($product->image)
+                                    <img src="{{ image_url($product->image) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                @else
+                                    <span style="font-size: 4rem; font-weight: 800; color: rgba(255,255,255,0.4);">{{ $product->name[0] }}</span>
+                                @endif
+                            </div>
+                            <h3 style="font-size: 1.125rem; font-weight: 700; color: #fff; margin-bottom: 8px;">{{ $product->name }}</h3>
+                        </a>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                            <span style="font-size: 1.5rem; font-weight: 800; color: #ec4899;">{{ number_format($product->price, 0, ',', '.') }}F</span>
                         </div>
-                        <h3 style="font-size: 1.125rem; font-weight: 700; color: #fff; margin-bottom: 8px;">{{ $product->name }}</h3>
-                    </a>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                        <span style="font-size: 1.5rem; font-weight: 800; color: #ec4899;">{{ number_format($product->price, 0, ',', '.') }}F</span>
+                        <label class="d-flex align-items-center justify-content-center gap-2" style="cursor: pointer; background: rgba(255,255,255,0.1); padding: 14px 24px; border-radius: 12px; transition: all 0.3s ease;">
+                            <input type="checkbox" name="products[]" value="{{ $product->id }}" class="b2b-product-checkbox" style="width: 20px; height: 20px; cursor: pointer; accent-color: #ec4899;">
+                            <span style="font-weight: 600; color: #fff;">Sélectionner</span>
+                        </label>
                     </div>
-                    <label class="d-flex align-items-center justify-content-center gap-2" style="cursor: pointer; background: rgba(255,255,255,0.1); padding: 14px 24px; border-radius: 12px; transition: all 0.3s ease;">
-                        <input type="checkbox" name="products[]" value="{{ $product->id }}" class="b2b-product-checkbox" style="width: 20px; height: 20px; cursor: pointer; accent-color: #ec4899;">
-                        <span style="font-weight: 600; color: #fff;">Sélectionner</span>
-                    </label>
-                </div>
-            @empty
-                <div style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.7);">
-                    <h3 style="font-size: 1.5rem; margin-bottom: 16px;">Aucun produit disponible</h3>
-                    <p>Veuillez sélectionner une autre catégorie.</p>
-                </div>
-            @endforelse
+                @empty
+                    <div style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.7);">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 16px;">Aucun produit disponible</h3>
+                        <p>Veuillez sélectionner une autre catégorie.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-@if($products->count() > 0)
-<section style="padding: 100px 0; background: #fff; position: relative; overflow: hidden;">
-    <div style="position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 60%); top: -200px; right: -100px;">
-    </div>
-    <div class="container" style="position: relative; z-index: 1;">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); border-radius: 32px; padding: 48px; position: relative; overflow: hidden;">
-                    <div style="position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%); top: -50px; right: -50px;">
-                    </div>
-                    <div style="position: relative; z-index: 1;">
-                        <h2 style="font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; margin-bottom: 32px; text-align: center;">
-                            Informations de l'entreprise
-                        </h2>
-
-                        <form action="{{ route('b2b.submit', $category->key) }}" method="POST">
-                            @csrf
+    @if($products->count() > 0)
+    <section style="padding: 100px 0; background: #fff; position: relative; overflow: hidden;">
+        <div style="position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 60%); top: -200px; right: -100px;">
+        </div>
+        <div class="container" style="position: relative; z-index: 1;">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); border-radius: 32px; padding: 48px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%); top: -50px; right: -50px;">
+                        </div>
+                        <div style="position: relative; z-index: 1;">
+                            <h2 style="font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; margin-bottom: 32px; text-align: center;">
+                                Informations de l'entreprise
+                            </h2>
 
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -146,14 +146,14 @@
                                     Envoyer la demande
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-@endif
+    </section>
+    @endif
+</form>
 
 <style>
 .b2b-product-checkbox:checked + span {
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Validate on form submit
-    const form = document.querySelector('form[action*="b2b.submit"]');
+    const form = document.getElementById('b2bOrderForm');
     if (form) {
         form.addEventListener('submit', function(e) {
             const count = document.querySelectorAll('.b2b-product-checkbox:checked').length;
