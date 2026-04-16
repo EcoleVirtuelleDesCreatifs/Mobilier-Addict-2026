@@ -15,7 +15,8 @@
         @php
             $openProducts = request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*');
             $openSales = request()->routeIs('admin.orders.*');
-            $openContent = request()->routeIs('admin.home_sections.*') || request()->routeIs('admin.space_sections.*') || request()->routeIs('admin.featured_categories.*');
+            $openHome = request()->routeIs('admin.featured_categories.*');
+            $openContent = request()->routeIs('admin.home_sections.*') || request()->routeIs('admin.space_sections.*');
         @endphp
         <div class="container-fluid px-0">
             <div class="d-flex min-vh-100">
@@ -31,6 +32,16 @@
                                 <span class="admin-dot"></span>
                                 Dashboard
                             </a>
+
+                            <a class="nav-link {{ $openHome ? 'active' : '' }}" data-bs-toggle="collapse" href="#adminMenuHome" role="button" aria-expanded="{{ $openHome ? 'true' : 'false' }}" aria-controls="adminMenuHome">
+                                <span class="admin-dot"></span>
+                                Home
+                            </a>
+                            <div class="collapse {{ $openHome ? 'show' : '' }}" id="adminMenuHome">
+                                <div class="ps-3 ms-2 mt-1 d-grid gap-1">
+                                    <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
+                                </div>
+                            </div>
 
                             <a class="nav-link {{ $openProducts ? 'active' : '' }}" data-bs-toggle="collapse" href="#adminMenuProducts" role="button" aria-expanded="{{ $openProducts ? 'true' : 'false' }}" aria-controls="adminMenuProducts">
                                 <span class="admin-dot"></span>
@@ -73,7 +84,6 @@
                                 <div class="ps-3 ms-2 mt-1 d-grid gap-1">
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Blogs <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                                     <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Gestion des sections</a>
-                                    <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                                     <a class="nav-link {{ request()->routeIs('admin.space_sections.*') ? 'active' : '' }}" href="{{ route('admin.space_sections.index') }}"><span class="admin-dot"></span> Section Espaces</a>
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Slider <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Gestion des menus <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
@@ -141,6 +151,16 @@
                         Dashboard
                     </a>
 
+                    <a class="nav-link {{ $openHome ? 'active' : '' }}" data-bs-toggle="collapse" href="#adminMenuHomeMobile" role="button" aria-expanded="{{ $openHome ? 'true' : 'false' }}" aria-controls="adminMenuHomeMobile">
+                        <span class="admin-dot"></span>
+                        Home
+                    </a>
+                    <div class="collapse {{ $openHome ? 'show' : '' }}" id="adminMenuHomeMobile">
+                        <div class="ps-3 ms-2 mt-1 d-grid gap-1">
+                            <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
+                        </div>
+                    </div>
+
                     <a class="nav-link {{ $openProducts ? 'active' : '' }}" data-bs-toggle="collapse" href="#adminMenuProductsMobile" role="button" aria-expanded="{{ $openProducts ? 'true' : 'false' }}" aria-controls="adminMenuProductsMobile">
                         <span class="admin-dot"></span>
                         Gestion des produits
@@ -182,7 +202,6 @@
                         <div class="ps-3 ms-2 mt-1 d-grid gap-1">
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Blogs <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                             <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Gestion des sections</a>
-                            <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                             <a class="nav-link {{ request()->routeIs('admin.space_sections.*') ? 'active' : '' }}" href="{{ route('admin.space_sections.index') }}"><span class="admin-dot"></span> Section Espaces</a>
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Slider <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Gestion des menus <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
