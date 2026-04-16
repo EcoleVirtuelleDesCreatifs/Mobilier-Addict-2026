@@ -15,7 +15,7 @@
         @php
             $openProducts = request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*');
             $openSales = request()->routeIs('admin.orders.*');
-            $openContent = request()->routeIs('admin.home_sections.*') || request()->routeIs('admin.space_sections.*');
+            $openContent = request()->routeIs('admin.home_sections.*') || request()->routeIs('admin.space_sections.*') || request()->routeIs('admin.featured_categories.*');
         @endphp
         <div class="container-fluid px-0">
             <div class="d-flex min-vh-100">
@@ -73,6 +73,7 @@
                                 <div class="ps-3 ms-2 mt-1 d-grid gap-1">
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Blogs <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                                     <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Gestion des sections</a>
+                                    <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                                     <a class="nav-link {{ request()->routeIs('admin.space_sections.*') ? 'active' : '' }}" href="{{ route('admin.space_sections.index') }}"><span class="admin-dot"></span> Section Espaces</a>
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Slider <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                                     <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Gestion des menus <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
@@ -181,6 +182,7 @@
                         <div class="ps-3 ms-2 mt-1 d-grid gap-1">
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Blogs <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                             <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Gestion des sections</a>
+                            <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                             <a class="nav-link {{ request()->routeIs('admin.space_sections.*') ? 'active' : '' }}" href="{{ route('admin.space_sections.index') }}"><span class="admin-dot"></span> Section Espaces</a>
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Slider <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>
                             <a class="nav-link disabled" href="#" aria-disabled="true" tabindex="-1"><span class="admin-dot"></span> Gestion des menus <span class="ms-2 badge rounded-pill" style="background: rgba(255,255,255,.08); color: var(--admin-muted);">Bientôt</span></a>

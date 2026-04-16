@@ -1,21 +1,41 @@
 @php
+    use App\Models\FeaturedCategory;
+
     $section = $exploreCategoriesSection ?? null;
     $isActive = $section ? (bool) ($section->is_active ?? true) : true;
     $title = $section && !empty($section->title) ? $section->title : 'Meilleures Catégories';
     $subtitle = $section && !empty($section->description) ? $section->description : 'Matelas, Oreillers, Couettes, Électroménagers, Lit et Canapé';
-    $cards = [];
 
-    if ($section && !empty($section->content['cards']) && is_array($section->content['cards'])) {
-        $cards = $section->content['cards'];
-    }
+    // Try to get featured categories from database
+    $featuredCategories = FeaturedCategory::query()->active()->ordered()->get();
 
-    if (!$cards) {
-        $cards = [
-            ['menu_slug' => 'matelas', 'title' => 'Matelas', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Matelas'],
-            ['menu_slug' => 'lit-canape', 'title' => 'Lits & Canapés', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Lits & Canapés'],
-            ['menu_slug' => 'electromenager', 'title' => 'Electroménagers', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Electroménagers'],
-            ['menu_slug' => 'drap-et-couettes', 'title' => 'Couettes', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Couettes'],
-        ];
+    // If no featured categories in database, use default cards
+    if ($featuredCategories->isEmpty()) {
+        $cards = [];
+
+        if ($section && !empty($section->content['cards']) && is_array($section->content['cards'])) {
+            $cards = $section->content['cards'];
+        }
+
+        if (!$cards) {
+            $cards = [
+                ['menu_slug' => 'matelas', 'title' => 'Matelas', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Matelas'],
+                ['menu_slug' => 'lit-canape', 'title' => 'Lits & Canapés', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Lits & Canapés'],
+                ['menu_slug' => 'electromenager', 'title' => 'Electroménagers', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Electroménagers'],
+                ['menu_slug' => 'drap-et-couettes', 'title' => 'Couettes', 'cta' => 'Découvrir', 'image' => null, 'image_alt' => 'Couettes'],
+            ];
+        }
+    } else {
+        // Use featured categories from database
+        $cards = $featuredCategories->map(function($fc) {
+            return [
+                'menu_slug' => $fc->menu_slug,
+                'title' => $fc->title,
+                'cta' => $fc->cta,
+                'image' => $fc->image,
+                'image_alt' => $fc->image_alt ?: $fc->title,
+            ];
+        })->toArray();
     }
 @endphp
 
