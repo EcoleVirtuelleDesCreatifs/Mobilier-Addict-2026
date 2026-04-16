@@ -263,9 +263,10 @@
 					$openUsers = request()->routeIs('admin.users.*');
 					$openRoles = request()->routeIs('admin.roles.*');
 					$openSlider = request()->routeIs('admin.slider.*');
+					$openB2B = request()->routeIs('admin.b2b.*');
 					$openSaveTheDate = request()->routeIs('admin.save-the-date.*');
 					$openUsersGroup = $openUsers || $openRoles;
-					$openHomeGroup = $openHome || $openSlider;
+					$openHomeGroup = $openHome || $openSlider || $openB2B;
 					$openCatalogueGroup = $openCategories || $openProducts || $openMenus;
 					$openOrdersGroup = $openOrders || $openInvoices || $openQuotes;
 				@endphp
@@ -316,6 +317,9 @@
 						@endif
 						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
 							<li><a href="{{ route('admin.b2b.index') }}">B2B</a></li>
+						@endif
+						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
+							<li><a href="{{ route('admin.featured_categories.index') }}">Catégories Phares</a></li>
 						@endif
                     </ul>
                     </li>
