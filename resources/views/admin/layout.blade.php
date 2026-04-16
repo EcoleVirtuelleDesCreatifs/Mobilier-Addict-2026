@@ -39,6 +39,9 @@
                             </a>
                             <div class="collapse {{ $openHome ? 'show' : '' }}" id="adminMenuHome">
                                 <div class="ps-3 ms-2 mt-1 d-grid gap-1">
+                                    <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Sections</a>
+                                    <a class="nav-link {{ request()->routeIs('admin.slider.*') ? 'active' : '' }}" href="{{ route('admin.slider.index') }}"><span class="admin-dot"></span> Sliders</a>
+                                    <a class="nav-link {{ request()->routeIs('admin.b2b.*') ? 'active' : '' }}" href="{{ route('admin.b2b.index') }}"><span class="admin-dot"></span> B2B</a>
                                     <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                                 </div>
                             </div>
@@ -157,6 +160,9 @@
                     </a>
                     <div class="collapse {{ $openHome ? 'show' : '' }}" id="adminMenuHomeMobile">
                         <div class="ps-3 ms-2 mt-1 d-grid gap-1">
+                            <a class="nav-link {{ request()->routeIs('admin.home_sections.*') ? 'active' : '' }}" href="{{ route('admin.home_sections.index') }}"><span class="admin-dot"></span> Sections</a>
+                            <a class="nav-link {{ request()->routeIs('admin.slider.*') ? 'active' : '' }}" href="{{ route('admin.slider.index') }}"><span class="admin-dot"></span> Sliders</a>
+                            <a class="nav-link {{ request()->routeIs('admin.b2b.*') ? 'active' : '' }}" href="{{ route('admin.b2b.index') }}"><span class="admin-dot"></span> B2B</a>
                             <a class="nav-link {{ request()->routeIs('admin.featured_categories.*') ? 'active' : '' }}" href="{{ route('admin.featured_categories.index') }}"><span class="admin-dot"></span> Catégories Phares</a>
                         </div>
                     </div>
