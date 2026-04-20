@@ -9,13 +9,14 @@
     @if ($isMatelasMenu)
         <style>
             .matelas-page {
-                --ma-rose: #ff3a7f;
-                --ma-navy: #0b1b3a;
+                --ma-rose: #ec4899;
+                --ma-navy: #0f172a;
                 --ma-ink: #071126;
                 --ma-sky: #6ee7ff;
                 --ma-border: #e2e8f0;
                 --ma-muted: #64748b;
                 background: linear-gradient(180deg, #fff, #f8fafc);
+                scroll-behavior: smooth;
             }
 
             .matelas-hero {
@@ -23,10 +24,22 @@
                 min-height: 520px;
                 display: flex;
                 align-items: center;
-                background: linear-gradient(180deg, #1f2a45 0%, #2b3650 100%);
+                background: linear-gradient(180deg, var(--ma-navy) 0%, #1e3a8a 100%);
                 color: #fff;
                 position: relative;
                 overflow: hidden;
+                animation: heroFadeIn 1s ease-out;
+            }
+
+            @keyframes heroFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .matelas-hero::before {
@@ -223,7 +236,30 @@
             .product-card,
             .matelas-mini,
             .matelas-banner__media {
-                transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+                transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .4s cubic-bezier(0.4, 0, 0.2, 1), filter .4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .product-card {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .product-card:hover {
+                transform: translateY(-12px) scale(1.02);
+                box-shadow: 0 25px 50px -12px rgba(236, 72, 153, 0.3);
+            }
+
+            .product-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+                opacity: 0;
+                transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .product-card:hover::before {
+                opacity: 1;
             }
 
             .matelas-btn:active,
@@ -654,10 +690,22 @@
 
             .matelas-banner {
                 padding: 54px 0;
-                background: linear-gradient(135deg, #0b1b3a 0%, #071126 100%);
+                background: linear-gradient(180deg, var(--ma-navy) 0%, #1e3a8a 100%);
                 color: #fff;
                 position: relative;
                 overflow: hidden;
+                animation: fadeUp 1s ease-out 0.3s both;
+            }
+
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .matelas-banner::before {
@@ -785,6 +833,7 @@
 
             .matelas-tabs {
                 padding: 30px 0 10px;
+                animation: fadeUp 1s ease-out 0.5s both;
             }
 
             .matelas-tabs__wrap {
