@@ -20,21 +20,21 @@
             }
 
             .matelas-hero {
-                padding: 140px 0 110px;
-                min-height: 520px;
+                padding: 160px 0 120px;
+                min-height: 600px;
                 display: flex;
                 align-items: center;
                 background: linear-gradient(180deg, var(--ma-navy) 0%, #1e3a8a 100%);
                 color: #fff;
                 position: relative;
                 overflow: hidden;
-                animation: heroFadeIn 1s ease-out;
+                animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             @keyframes heroFadeIn {
                 from {
                     opacity: 0;
-                    transform: translateY(20px);
+                    transform: translateY(30px);
                 }
                 to {
                     opacity: 1;
@@ -46,8 +46,18 @@
                 content: "";
                 position: absolute;
                 inset: -2px;
-                background: radial-gradient(900px 420px at 30% 20%, rgba(255, 58, 127, .20), rgba(255, 58, 127, 0) 60%), radial-gradient(900px 520px at 80% 10%, rgba(110, 231, 255, .14), rgba(110, 231, 255, 0) 62%);
+                background: radial-gradient(900px 420px at 30% 20%, rgba(236, 72, 153, .25), rgba(236, 72, 153, 0) 60%), radial-gradient(900px 520px at 80% 10%, rgba(110, 231, 255, .20), rgba(110, 231, 255, 0) 62%);
                 pointer-events: none;
+                animation: gradientShift 8s ease-in-out infinite;
+            }
+
+            @keyframes gradientShift {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.8;
+                }
             }
 
             .matelas-hero::after {
@@ -1818,13 +1828,16 @@
             ];
         @endphp
 
-        <section class="matelas-categories-simple" id="differents" aria-label="Nos gammes" style="background:linear-gradient(180deg,#f8fafc 0%,#e2e8f0 100%)">
+        <section class="matelas-categories-simple" id="differents" aria-label="Nos gammes" style="background:linear-gradient(180deg,#f8fafc 0%,#e2e8f0 100%);padding:80px 0">
             <div class="container">
-                <div class="matelas-categories-simple__head" data-reveal>
-                    <h2 class="matelas-categories-simple__title" style="font-size:2.5rem;font-weight:950;color:#1e293b">Nos gammes</h2>
-                    <p class="matelas-categories-simple__desc" style="font-size:1.125rem;color:#64748b">Découvrez notre sélection de matelas pour chaque besoin</p>
+                <div class="matelas-categories-simple__head" data-reveal style="text-align:center;margin-bottom:50px">
+                    <div class="matelas-categories-simple__badge" style="display:inline-block;padding:8px 20px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:20px;border:1px solid rgba(236,72,153,.3)">
+                        <span style="color:#ec4899;font-size:0.8125rem;letter-spacing:2px;text-transform:uppercase;font-weight:600">Notre sélection</span>
+                    </div>
+                    <h2 class="matelas-categories-simple__title" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:800;color:#1e293b;margin-bottom:16px">Nos gammes</h2>
+                    <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:#64748b;max-width:600px;margin:0 auto">Découvrez notre sélection de matelas pour chaque besoin</p>
                 </div>
-                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
+                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
                     @foreach($tabDefs as $tab)
                         @php
                             $items = $allMatelas->filter(function ($p) use ($tab) {
@@ -1837,18 +1850,22 @@
                             $count = $items->count();
                             $firstImage = $items->first()?->image ?? null;
                         @endphp
-                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);transition:transform .3s ease,box-shadow .3s ease;display:block">
-                            <div class="matelas-category-simple-card__media" style="position:relative;height:220px;overflow:hidden">
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.08);transition:all .4s cubic-bezier(0.4,0,0.2,1);display:block;position:relative">
+                            <div class="matelas-category-simple-card__overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.7) 100%);transition:all .4s ease;opacity:0"></div>
+                            <div class="matelas-category-simple-card__media" style="position:relative;height:240px;overflow:hidden">
                                 @if($firstImage)
-                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s ease" />
+                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
                                 @else
                                     <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:4rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
                                 @endif
-                                <div class="matelas-category-simple-card__badge" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:8px 16px;border-radius:50px;font-weight:900;font-size:0.875rem;color:#1e293b;box-shadow:0 2px 10px rgba(0,0,0,.1)">{{ $count }} modèles</div>
+                                <div class="matelas-category-simple-card__badge" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:8px 20px;border-radius:50px;font-weight:900;font-size:0.875rem;color:#1e293b;box-shadow:0 4px 15px rgba(0,0,0,.15);transition:all .3s ease">{{ $count }} modèles</div>
                             </div>
-                            <div class="matelas-category-simple-card__content" style="padding:24px">
-                                <h3 class="matelas-category-simple-card__name" style="font-size:1.5rem;font-weight:950;color:#1e293b;margin:0 0 8px">{{ $tab['label'] }}</h3>
+                            <div class="matelas-category-simple-card__content" style="padding:28px;position:relative;z-index:1">
+                                <h3 class="matelas-category-simple-card__name" style="font-size:1.5rem;font-weight:800;color:#1e293b;margin:0 0 8px;transition:color .3s ease">{{ $tab['label'] }}</h3>
                                 <p class="matelas-category-simple-card__desc" style="font-size:0.9375rem;color:#64748b;margin:0">{{ $tab['desc'] }}</p>
+                                <div class="matelas-category-simple-card__arrow" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;color:#ec4899;font-weight:700;font-size:0.875rem;opacity:0;transform:translateX(-10px);transition:all .3s ease">
+                                    Découvrir <span style="font-size:1rem">→</span>
+                                </div>
                             </div>
                         </a>
                     @endforeach
@@ -1857,11 +1874,25 @@
         </section>
         <style>
             .matelas-category-simple-card:hover {
-                transform:translateY(-8px);
-                box-shadow:0 12px 40px rgba(0,0,0,.15)
+                transform:translateY(-12px) scale(1.02);
+                box-shadow:0 25px 50px -12px rgba(236,72,153,.3);
+            }
+            .matelas-category-simple-card:hover .matelas-category-simple-card__overlay {
+                opacity:1;
             }
             .matelas-category-simple-card:hover img {
-                transform:scale(1.05)
+                transform:scale(1.08);
+            }
+            .matelas-category-simple-card:hover .matelas-category-simple-card__badge {
+                background:linear-gradient(135deg,#ec4899,#be185d);
+                color:#fff;
+            }
+            .matelas-category-simple-card:hover .matelas-category-simple-card__name {
+                color:#ec4899;
+            }
+            .matelas-category-simple-card:hover .matelas-category-simple-card__arrow {
+                opacity:1;
+                transform:translateX(0);
             }
         </style>
         @elseif(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
