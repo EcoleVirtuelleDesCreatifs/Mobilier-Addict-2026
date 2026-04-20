@@ -32,17 +32,12 @@
 
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Menu de navigation</label>
-                        <select name="menu_id" class="form-select">
-                            <option value="">— Aucun menu —</option>
-                            @foreach($menus as $menu)
-                                <option value="{{ $menu->id }}" @selected(old('menu_id', $featured_category->menu_id) == $menu->id)>{{ $menu->name }} ({{ $menu->slug }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-12 col-lg-6">
                         <label class="form-label">Titre</label>
                         <input type="text" name="title" value="{{ old('title', $featured_category->title) }}" class="form-control" required>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Menu Slug</label>
+                        <input type="text" name="menu_slug" value="{{ old('menu_slug', $featured_category->menu_slug) }}" class="form-control">
                     </div>
 
                     <div class="col-12 col-lg-6">

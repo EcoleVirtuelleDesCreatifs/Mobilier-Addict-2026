@@ -22,7 +22,7 @@
                             <tr>
                                 <th style="width:72px;">Image</th>
                                 <th>Titre</th>
-                                <th>Menu</th>
+                                <th>Menu Slug</th>
                                 <th>Ordre</th>
                                 <th class="text-center">Actif</th>
                                 <th style="width:160px;"></th>
@@ -47,8 +47,8 @@
                                         <div class="small" style="color: var(--admin-muted);">{{ $category->cta ?? 'Découvrir' }}</div>
                                     </td>
                                     <td class="small">
-                                        @if($category->menu)
-                                            {{ $category->menu->name }} <span class="text-muted">({{ $category->menu->slug }})</span>
+                                        @if($category->menu_slug)
+                                            <code>{{ $category->menu_slug }}</code>
                                         @else
                                             —
                                         @endif

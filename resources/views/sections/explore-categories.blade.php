@@ -29,7 +29,7 @@
         // Use featured categories from database
         $cards = $featuredCategories->map(function($fc) {
             return [
-                'menu_slug' => $fc->menu ? $fc->menu->slug : null,
+                'menu_slug' => $fc->menu_slug,
                 'title' => $fc->title,
                 'cta' => $fc->cta,
                 'image' => $fc->image,
