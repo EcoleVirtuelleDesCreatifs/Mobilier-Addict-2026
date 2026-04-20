@@ -1942,42 +1942,49 @@
         </section>
         @endif
 
-        <section class="matelas-products-simple" id="products" aria-label="Tous les produits">
+        <section class="matelas-products-simple" id="products" aria-label="Tous les produits" style="padding:100px 0;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%)">
             <div class="container">
-                <div class="matelas-products-simple__head">
-                    <h2 class="matelas-products-simple__title">Tous nos produits</h2>
-                    <p class="matelas-products-simple__desc">{{ $products->total() }} modèles disponibles</p>
+                <div class="matelas-products-simple__head" style="text-align:center;max-width:800px;margin:0 auto 60px">
+                    <div class="matelas-products-simple__badge" style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:24px;border:1px solid rgba(236,72,153,.3)">
+                        <span style="color:#ec4899;font-size:0.8125rem;letter-spacing:2px;text-transform:uppercase;font-weight:600">Collection complète</span>
+                    </div>
+                    <h2 class="matelas-products-simple__title" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:#0f172a;margin-bottom:16px;letter-spacing:-.02em">Nos produits</h2>
+                    <p class="matelas-products-simple__desc" style="font-size:1.125rem;color:#64748b;max-width:600px;margin:0 auto">{{ $products->total() }} modèles disponibles pour tous vos besoins</p>
                 </div>
-                <div class="matelas-products-simple__grid">
+                <div class="matelas-products-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;max-width:1400px;margin:0 auto">
                     @foreach($products as $product)
                         @php
                             $defaultVariant = $product?->variants?->sortBy('price')->first();
                             $price = $defaultVariant?->price ?? $product->price;
                         @endphp
-                        <article class="matelas-product-simple-card">
-                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                <div class="matelas-product-simple-card__media">
-                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                        <article class="matelas-product-simple-card" style="background:#fff;border-radius:24px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 10px 40px rgba(0,0,0,.06);transition:all .4s cubic-bezier(0.4,0,0.2,1);position:relative">
+                            <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit;display:block">
+                                <div class="matelas-product-simple-card__media" style="position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#f8fafc,#f1f5f9);overflow:hidden">
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    <div class="matelas-product-simple-card__overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%);transition:opacity .4s ease;opacity:0"></div>
                                 </div>
                             </a>
-                            <div class="matelas-product-simple-card__body">
+                            <div class="matelas-product-simple-card__body" style="padding:24px">
                                 <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                    <h3 class="matelas-product-simple-card__name">{{ $product->name }}</h3>
+                                    <h3 class="matelas-product-simple-card__name" style="font-weight:800;color:#0f172a;margin:0 0 12px;font-size:1.125rem;line-height:1.4;transition:color .3s ease">{{ $product->name }}</h3>
                                 </a>
-                                <div class="matelas-product-simple-card__price">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
-                                <form action="{{ route('cart.add') }}" method="POST">
+                                <div class="matelas-product-simple-card__price" style="font-weight:800;color:#ec4899;font-size:1.5rem;margin-bottom:16px">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
+                                <form action="{{ route('cart.add') }}" method="POST" style="margin-top:16px">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="product_variant_id" value="{{ $defaultVariant?->id }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <button class="matelas-product-simple-card__btn" type="submit">Ajouter au panier</button>
+                                    <button class="matelas-product-simple-card__btn" type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9375rem;transition:all .3s ease;border:0;cursor:pointer">
+                                        <svg style="width:18px;height:18px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        Ajouter au panier
+                                    </button>
                                 </form>
                             </div>
                         </article>
                     @endforeach
                 </div>
                 @if(method_exists($products, 'links'))
-                    <div class="matelas-products-simple__pagination">
+                    <div class="matelas-products-simple__pagination" style="margin-top:60px">
                         {{ $products->links('pagination::bootstrap-5') }}
                     </div>
                 @endif
@@ -2189,107 +2196,30 @@
             }
 
             .matelas-products-simple {
-                padding: 60px 0 80px;
-                background: linear-gradient(180deg, rgba(248, 250, 252, 0), #f8fafc)
-            }
-
-            .matelas-products-simple__head {
-                max-width: 1200px;
-                margin: 0 auto 30px;
-                padding: 24px;
-                border-radius: 24px;
-                background: linear-gradient(180deg, rgba(11, 27, 58, .04), rgba(11, 27, 58, 0));
-                border: 1px solid rgba(226, 232, 240, .85)
-            }
-
-            .matelas-products-simple__title {
-                margin: 0 0 6px;
-                font-size: 26px;
-                font-weight: 1000;
-                color: #0b1b3a;
-                letter-spacing: -.03em
-            }
-
-            .matelas-products-simple__desc {
-                margin: 0;
-                font-size: 14px;
-                font-weight: 700;
-                color: #64748b
-            }
-
-            .matelas-products-simple__grid {
-                display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 18px;
-                max-width: 1200px;
-                margin: 0 auto
-            }
-
-            .matelas-product-simple-card {
-                background: #fff;
-                border-radius: 22px;
-                overflow: hidden;
-                border: 1px solid #e2e8f0;
-                box-shadow: 0 12px 32px rgba(2, 6, 23, .06);
-                transition: all .3s cubic-bezier(.4, 0, .2, 1)
+                padding: 100px 0;
+                background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
             }
 
             .matelas-product-simple-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 20px 48px rgba(2, 6, 23, .1)
+                transform: translateY(-12px) scale(1.02);
+                box-shadow: 0 25px 50px -12px rgba(236, 72, 153, .3);
             }
 
-            .matelas-product-simple-card__media {
-                aspect-ratio: 1;
-                background: linear-gradient(135deg, #f8fafc, #f1f5f9)
+            .matelas-product-simple-card:hover .matelas-product-simple-card__overlay {
+                opacity: 1;
             }
 
-            .matelas-product-simple-card__media img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block
+            .matelas-product-simple-card:hover img {
+                transform: scale(1.08);
             }
 
-            .matelas-product-simple-card__body {
-                padding: 16px
+            .matelas-product-simple-card:hover .matelas-product-simple-card__name {
+                color: #ec4899;
             }
 
-            .matelas-product-simple-card__name {
-                font-weight: 1000;
-                color: #0b1b3a;
-                margin: 0 0 8px;
-                font-size: 15px;
-                line-height: 1.3
-            }
-
-            .matelas-product-simple-card__price {
-                font-weight: 1000;
-                color: #ff3a7f;
-                font-size: 18px;
-                margin-bottom: 12px
-            }
-
-            .matelas-product-simple-card__btn {
-                width: 100%;
-                padding: 12px;
-                border-radius: 999px;
-                background: linear-gradient(135deg, #ff3a7f, #ff2e72);
-                color: #fff;
-                font-weight: 1000;
-                border: 0;
-                cursor: pointer;
-                transition: all .2s
-            }
-
-            .matelas-product-simple-card__btn:hover {
-                filter: brightness(1.08);
-                transform: scale(1.02)
-            }
-
-            .matelas-products-simple__pagination {
-                text-align: center;
-                margin-top: 30px
+            .matelas-product-simple-card:hover .matelas-product-simple-card__btn {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(236, 72, 153, .4);
             }
 
             @media (max-width: 991px) {
