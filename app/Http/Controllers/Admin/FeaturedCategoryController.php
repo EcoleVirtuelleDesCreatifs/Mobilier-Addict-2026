@@ -37,7 +37,7 @@ class FeaturedCategoryController extends Controller
         $data['cta'] = $data['cta'] ?? 'Découvrir';
 
         if ($request->hasFile('image')) {
-            $data['image'] = ImageOptimizer::uploadAndOptimize($request->file('image'), 'featured-categories');
+            $data['image'] = ImageOptimizer::storePublicUpload($request->file('image'), 'uploads/featured-categories', 1200, 80);
         }
 
         FeaturedCategory::create($data);
@@ -68,9 +68,9 @@ class FeaturedCategoryController extends Controller
 
         if ($request->hasFile('image')) {
             if ($featured_category->image) {
-                ImageOptimizer::delete($featured_category->image);
+                @unlink(public_path($featured_category->image));
             }
-            $data['image'] = ImageOptimizer::uploadAndOptimize($request->file('image'), 'featured-categories');
+            $data['image'] = ImageOptimizer::storePublicUpload($request->file('image'), 'uploads/featured-categories', 1200, 80);
         }
 
         $featured_category->update($data);
@@ -81,7 +81,7 @@ class FeaturedCategoryController extends Controller
     public function destroy(FeaturedCategory $featured_category)
     {
         if ($featured_category->image) {
-            ImageOptimizer::delete($featured_category->image);
+            @unlink(public_path($featured_category->image));
         }
         $featured_category->delete();
 
