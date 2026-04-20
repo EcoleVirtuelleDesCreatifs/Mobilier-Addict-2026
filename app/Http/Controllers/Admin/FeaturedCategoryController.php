@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\FeaturedCategory;
+use App\Models\Menu;
 use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 
@@ -17,13 +18,14 @@ class FeaturedCategoryController extends Controller
 
     public function create()
     {
-        return view('admin.featured_categories.create');
+        $menus = Menu::query()->active()->ordered()->get();
+        return view('admin.featured_categories.create', compact('menus'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'menu_slug' => ['nullable', 'string', 'max:255'],
+            'menu_id' => ['nullable', 'exists:menus,id'],
             'title' => ['required', 'string', 'max:255'],
             'cta' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:5120'],
@@ -47,13 +49,14 @@ class FeaturedCategoryController extends Controller
 
     public function edit(FeaturedCategory $featured_category)
     {
-        return view('admin.featured_categories.edit', compact('featured_category'));
+        $menus = Menu::query()->active()->ordered()->get();
+        return view('admin.featured_categories.edit', compact('featured_category', 'menus'));
     }
 
     public function update(Request $request, FeaturedCategory $featured_category)
     {
         $data = $request->validate([
-            'menu_slug' => ['nullable', 'string', 'max:255'],
+            'menu_id' => ['nullable', 'exists:menus,id'],
             'title' => ['required', 'string', 'max:255'],
             'cta' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:5120'],

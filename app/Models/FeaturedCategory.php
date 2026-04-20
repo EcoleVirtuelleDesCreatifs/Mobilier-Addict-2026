@@ -12,7 +12,7 @@ class FeaturedCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'menu_slug',
+        'menu_id',
         'title',
         'cta',
         'image',
@@ -24,6 +24,11 @@ class FeaturedCategory extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 
     public function scopeActive(Builder $query): Builder
     {
