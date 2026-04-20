@@ -1793,12 +1793,12 @@
             </div>
         </section>
         @else
-        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}">
+        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
             <div class="container">
                 <div class="matelas-hero-simple__inner" data-reveal>
-                    <div class="matelas-hero-simple__badge">Qualité professionnelle</div>
-                    <h1 class="matelas-hero-simple__title">{{ $menu->name }}</h1>
-                    <p class="matelas-hero-simple__subtitle">Découvrez notre gamme de {{ Str::lower($menu->name) }} pour un confort optimal.</p>
+                    <div class="matelas-hero-simple__badge" style="background:rgba(236,72,153,.18);border-color:rgba(236,72,153,.35)">Collection</div>
+                    <h1 class="matelas-hero-simple__title">{{ $pageTitle }}</h1>
+                    <p class="matelas-hero-simple__subtitle">Découvrez notre sélection de produits de qualité supérieure pour votre confort quotidien.</p>
                     <div class="matelas-hero-simple__stats">
                         <div class="matelas-hero-simple__stat">
                             <strong>{{ $products->total() }}</strong>
