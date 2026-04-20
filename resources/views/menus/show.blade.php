@@ -1838,7 +1838,16 @@
                     <h2 class="matelas-categories-simple__title" style="font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:#0f172a;margin-bottom:20px;letter-spacing:-.03em;line-height:1.1">Nos gammes</h2>
                     <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:#64748b;max-width:600px;margin:0 auto;line-height:1.7">Découvrez notre sélection de matelas premium pour un confort exceptionnel</p>
                 </div>
-                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:36px;max-width:1400px;margin:0 auto">
+                <div class="matelas-categories-simple__grid" style="display:flex;flex-wrap:nowrap;gap:32px;overflow-x:auto;padding:10px 0;scrollbar-width:none;max-width:1400px;margin:0 auto">
+                    <style>
+                        .matelas-categories-simple__grid::-webkit-scrollbar {
+                            display: none;
+                        }
+                        .matelas-categories-simple__grid {
+                            -ms-overflow-style: none;
+                            scrollbar-width: none;
+                        }
+                    </style>
                     @foreach($tabDefs as $tab)
                         @php
                             $items = $allMatelas->filter(function ($p) use ($tab) {
@@ -1851,7 +1860,7 @@
                             $count = $items->count();
                             $firstImage = $items->first()?->image ?? null;
                         @endphp
-                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.08);transition:all .5s cubic-bezier(0.4,0,0.2,1);display:block;position:relative;border:1px solid rgba(226,232,240,.6)">
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.08);transition:all .5s cubic-bezier(0.4,0,0.2,1);display:block;position:relative;border:1px solid rgba(226,232,240,.6);flex:0 0 380px">
                             <div class="matelas-category-simple-card__overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,0) 0%,rgba(15,23,42,0.8) 100%);transition:all .5s cubic-bezier(0.4,0,0.2,1);opacity:0;z-index:2"></div>
                             <div class="matelas-category-simple-card__media" style="position:relative;height:280px;overflow:hidden">
                                 @if($firstImage)
