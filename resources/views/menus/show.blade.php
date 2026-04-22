@@ -2698,7 +2698,7 @@
         </section>
         @endif
 
-        <section class="matelas-products-simple" id="products" aria-label="Tous les produits" style="padding:100px 0;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%)">
+        <section class="matelas-products-simple is-visible" id="products" aria-label="Tous les produits" style="padding:100px 0;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%)">
             <div class="container">
                 <div class="matelas-products-simple__head" style="text-align:center;max-width:800px;margin:0 auto 60px">
                     <div class="matelas-products-simple__badge" style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:24px;border:1px solid rgba(236,72,153,.3)">
