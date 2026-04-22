@@ -4,7 +4,247 @@
 @section('meta_description', 'Découvrez nos produits pour ' . $pageTitle . ' sur Mobilier Addict.')
 
 @section('content')
-    @php $isMatelasMenu = strtolower(trim((string) ($menu->slug ?? ''))) === 'matelas'; @endphp
+    @php
+        $menuSlug = strtolower(trim((string) ($menu->slug ?? '')));
+        $isMatelasMenu = $menuSlug === 'matelas';
+        $isProtegeMatelas = $menuSlug === 'protege-matelas';
+
+        $designSlug = match ($menuSlug) {
+            'matelas' => 'matelas',
+            'oreillers-et-taies' => 'oreillers',
+            'meuble-et-fauteuil' => 'lits-sommiers',
+            'protege-matelas' => 'draps-couettes',
+            default => $menuSlug,
+        };
+
+        $pageConfig = match ($designSlug) {
+            'matelas' => [
+                'badge' => '✨ Retrouvez le sommeil que vous méritez',
+                'title' => 'Matelas',
+                'headline' => 'Dormez profond. Réveillez-vous léger.',
+                'subtitle' => "Un bon matelas ne se contente pas d'être confortable : il change vos journées. Découvrez des matelas pensés pour soulager, soutenir et apaiser.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Soutien qui libère', 'text' => "Votre corps s'aligne naturellement. Moins de tensions, plus d'énergie le matin."],
+                    ['title' => 'Douceur qui apaise', 'text' => 'Un accueil moelleux, une sensation "hôtel" à la maison, nuit après nuit.'],
+                    ['title' => 'Qualité durable', 'text' => 'Des matériaux pensés pour durer : confort stable, finitions premium, garantie.'],
+                ],
+                'cta_title' => "Besoin d'un conseil rapide ?",
+                'cta_text' => 'Dis-nous ta position de sommeil, on te guide vers le bon confort.',
+                'cta_button' => 'Je choisis mon confort',
+                'faq' => [
+                    ['q' => 'Quel confort choisir (ferme, mi-ferme, moelleux) ?', 'a' => "Si tu dors sur le dos ou le ventre, privilégie un soutien plus ferme. Sur le côté, un accueil plus moelleux aide à relâcher les épaules et les hanches."],
+                    ['q' => 'En combien de temps je ressens la différence ?', 'a' => "Souvent dès les premières nuits : sommeil plus stable, réveil plus facile. Le corps s'adapte ensuite progressivement pour un confort optimal."],
+                    ['q' => "Et si j'hésite encore ?", 'a' => "Écris-nous : on te recommande le meilleur compromis selon ta morphologie, ta position de sommeil et tes préférences."],
+                ],
+                'hero_card_badge_top' => 'Confort',
+                'hero_card_badge_bottom' => 'qui rassure',
+                'carousel_title' => 'Nos Best-Sellers Matelas',
+                'carousel_desc' => 'Les matelas préférés de nos clients — découvrez pourquoi.',
+                'inspire_title' => 'Trouvez Votre Confort Idéal',
+                'inspire_desc' => 'Chaque corps est unique. Découvrez nos matelas adaptés à votre morphologie.',
+                'mission_title' => 'Un Sommeil Réparateur, Chaque Nuit',
+                'mission_desc' => 'Chez Mobilier Addict, nous croyons qu\'un bon matelas transforme vos nuits et vos journées. Nous sélectionnons des matelas qui soulagent, soutiennent et apaisent pour un réveil plein d\'énergie.',
+                'reco_title' => 'Nos Matelas Recommandés',
+                'reco_desc' => 'Le top pour un sommeil profond et réparateur.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+3 000</span> dormeurs satisfaits',
+                'why_subtitle' => 'Ils ont retrouvé un sommeil de qualité grâce à nos matelas. À votre tour !',
+                'why_stats' => [
+                    ['number' => '98%', 'label' => 'Clients satisfaits'],
+                    ['number' => '10 ans', 'label' => 'Garantie matelas'],
+                    ['number' => '100 nuits', 'label' => 'Essai gratuit'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Soutien Ergonomique Certifié', 'text' => 'Nos matelas épousent votre corps pour un alignement parfait de la colonne.'],
+                    ['title' => 'Essai 100 Nuits Sans Risque', 'text' => 'Testez votre matelas chez vous. Pas convaincu ? Retour et remboursement gratuits.'],
+                    ['title' => 'Livraison Express & Installation', 'text' => 'Livré chez vous en 48h. Nos experts installent et reprennent l\'ancien matelas.'],
+                    ['title' => 'Matériaux Sains & Certifiés', 'text' => 'Mousses certifiées, tissus hypoallergéniques, fabrication responsable.'],
+                ],
+            ],
+            'oreillers' => [
+                'badge' => '💤 Votre nuque vous dira merci',
+                'title' => 'Oreillers & Taies',
+                'headline' => 'Le petit détail qui change tout.',
+                'subtitle' => "Maintien, douceur, fraîcheur : trouvez l'oreiller qui épouse votre posture et libère vos tensions.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Maintien précis', 'text' => "L'oreiller soutient la nuque sans pousser la tête vers l'avant."],
+                    ['title' => 'Fraîcheur douce', 'text' => 'Des matières respirantes pour moins de chaleur et plus de confort.'],
+                    ['title' => 'Réveil plus léger', 'text' => 'Moins de raideurs, plus de mobilité dès le matin.'],
+                ],
+                'cta_title' => 'Oreiller idéal, en 30 secondes',
+                'cta_text' => 'Dis-nous ta position (dos / côté / ventre) et ta préférence (souple / ferme).',
+                'cta_button' => 'Je trouve le bon oreiller',
+                'faq' => [
+                    ['q' => 'Quel oreiller pour dormir sur le côté ?', 'a' => "Un oreiller plus haut aide à garder la nuque alignée avec la colonne."],
+                    ['q' => 'Mémoire de forme ou fibres ?', 'a' => "La mémoire de forme épouse la nuque. Les fibres sont plus aérées et modulables."],
+                    ['q' => 'Comment entretenir mon oreiller ?', 'a' => "Aère-le régulièrement et privilégie une housse protectrice. Suis les consignes de lavage."],
+                ],
+                'hero_card_badge_top' => 'Maintien',
+                'hero_card_badge_bottom' => 'sans tension',
+                'carousel_title' => 'Nos Best-Sellers Oreillers',
+                'carousel_desc' => 'Les oreillers préférés de nos clients — pour des nuits sans tension.',
+                'inspire_title' => 'Libérez Votre Nuque',
+                'inspire_desc' => 'Un bon oreiller change tout. Trouvez celui qui correspond à votre position de sommeil.',
+                'mission_title' => 'Votre Nuque Mérite le Meilleur',
+                'mission_desc' => 'Un oreiller adapté à votre morphologie et votre position de sommeil transforme vos nuits. Fini les réveils avec des douleurs cervicales.',
+                'reco_title' => 'Nos Oreillers Recommandés',
+                'reco_desc' => 'Sélectionnés pour leur maintien et leur confort.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+2 000</span> clients soulagés',
+                'why_subtitle' => 'Ils ont dit adieu aux douleurs cervicales. À votre tour !',
+                'why_stats' => [
+                    ['number' => '97%', 'label' => 'Clients satisfaits'],
+                    ['number' => '2 ans', 'label' => 'Garantie oreiller'],
+                    ['number' => '30 nuits', 'label' => 'Essai gratuit'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Maintien Cervical Optimal', 'text' => 'Oreillers ergonomiques qui alignent naturellement votre nuque.'],
+                    ['title' => 'Essai 30 Nuits Satisfait', 'text' => 'Testez votre oreiller. Pas adapté ? Échange ou remboursement.'],
+                    ['title' => 'Livraison Rapide & Soignée', 'text' => 'Livré sous 48h dans un emballage protecteur.'],
+                    ['title' => 'Matières Hypoallergéniques', 'text' => 'Tissus respirants et anti-acariens pour un sommeil sain.'],
+                ],
+            ],
+            'lits-sommiers' => [
+                'badge' => '🛏️ Élégance & robustesse',
+                'title' => 'Meubles & Fauteuils',
+                'headline' => 'Une chambre qui inspire.',
+                'subtitle' => "Un lit beau, solide et silencieux : le point de départ d'un intérieur apaisant.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Silence absolu', 'text' => 'Fini les grincements. Un sommeil continu, sans micro-réveils.'],
+                    ['title' => 'Stabilité qui rassure', 'text' => 'Une structure solide, un soutien fiable, nuit après nuit.'],
+                    ['title' => 'Style qui apaise', 'text' => 'Une chambre élégante qui donne envie de rentrer et souffler.'],
+                ],
+                'cta_title' => 'Le lit parfait existe',
+                'cta_text' => "Choisis ton style et ta taille : on t'aide à trouver la base idéale pour ton matelas.",
+                'cta_button' => 'Je choisis mon lit',
+                'faq' => [
+                    ['q' => 'Sommiers : lattes ou tapissier ?', 'a' => "Les lattes offrent plus d'aération et de soutien. Le tapissier ajoute un rendu plus décoratif."],
+                    ['q' => 'Comment éviter un lit qui grince ?', 'a' => "Une structure stable, des fixations de qualité et un bon serrage font toute la différence."],
+                    ['q' => 'Quelle hauteur de lit choisir ?', 'a' => "Une hauteur confortable facilite le lever et donne une sensation plus premium à la chambre."],
+                ],
+                'hero_card_badge_top' => 'Silence',
+                'hero_card_badge_bottom' => 'et style',
+                'carousel_title' => 'Nos Best-Sellers Meubles',
+                'carousel_desc' => 'Les meubles préférés de nos clients — découvrez pourquoi.',
+                'inspire_title' => 'Créez Votre Refuge de Bien-Être',
+                'inspire_desc' => 'Chaque nuit mérite d\'être exceptionnelle. Découvrez nos univers pensés pour éveiller vos sens.',
+                'mission_title' => 'Transformer Votre Chambre en Sanctuaire',
+                'mission_desc' => 'Chez Mobilier Addict, nous croyons qu\'un lit de qualité est le fondement d\'un sommeil réparateur. Nous sélectionnons des structures élégantes, stables et silencieuses qui subliment votre espace.',
+                'reco_title' => 'Nos Meubles Recommandés',
+                'reco_desc' => 'Le top pour une chambre stable, silencieuse et élégante.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+2 500</span> clients satisfaits',
+                'why_subtitle' => 'Ils nous ont fait confiance pour transformer leur chambre. À votre tour !',
+                'why_stats' => [
+                    ['number' => '98%', 'label' => 'Clients satisfaits'],
+                    ['number' => '10 ans', 'label' => 'Garantie structure'],
+                    ['number' => '48h', 'label' => 'Livraison express'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Qualité Premium Garantie', 'text' => 'Sélection rigoureuse des meilleurs fabricants européens.'],
+                    ['title' => 'Conseil Personnalisé Gratuit', 'text' => 'Un expert dédié vous guide pour choisir le lit parfait.'],
+                    ['title' => 'Garantie Satisfait ou Remboursé', 'text' => '30 jours pour tester. Retour gratuit, remboursement intégral.'],
+                    ['title' => 'Livraison & Montage Inclus', 'text' => 'Livré chez vous en 48h avec montage par nos experts.'],
+                ],
+            ],
+            'draps-couettes' => [
+                'badge' => '🧺 Douceur qui rassure',
+                'title' => 'Protège-Matelas',
+                'headline' => 'Votre cocon, chaque nuit.',
+                'subtitle' => "Des matières respirantes, des finitions premium et une sensation de propre qui donne envie d'aller se coucher.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Douceur immédiate', 'text' => 'Une sensation enveloppante, comme à l'hôtel, dès la première nuit.'],
+                    ['title' => 'Respirant', 'text' => 'Des tissus qui laissent circuler l'air pour un sommeil plus frais.'],
+                    ['title' => 'Élégance simple', 'text' => 'Des couleurs et finitions qui transforment la chambre en cocon.'],
+                ],
+                'cta_title' => 'Votre lit mérite ce confort',
+                'cta_text' => "Choisis la matière et la taille : on t'aide à composer l'ensemble parfait.",
+                'cta_button' => 'Je compose mon linge de lit',
+                'faq' => [
+                    ['q' => 'Quelle taille choisir ?', 'a' => "Vérifie les dimensions de ton matelas et privilégie une housse adaptée (bonnet)."],
+                    ['q' => 'Quelle matière est la plus confortable ?', 'a' => "Le coton est polyvalent. Le percale est plus frais. Le satin est plus doux et soyeux."],
+                    ['q' => 'Couette chaude ou légère ?', 'a' => "Tout dépend de la saison et de ta sensibilité à la chaleur. Une couette 4 saisons est idéale."],
+                ],
+                'hero_card_badge_top' => 'Douceur',
+                'hero_card_badge_bottom' => 'premium',
+                'carousel_title' => 'Nos Best-Sellers Protège-Matelas',
+                'carousel_desc' => 'Protège-matelas préférés de nos clients — douceur garantie.',
+                'inspire_title' => 'Créez Votre Cocon de Douceur',
+                'inspire_desc' => 'Des matières nobles et des finitions soignées pour transformer chaque nuit.',
+                'mission_title' => 'Le Linge de Lit Qui Fait la Différence',
+                'mission_desc' => 'Des draps qui respirent, des couettes qui enveloppent, des matières qui durent. Transformez votre lit en véritable refuge.',
+                'reco_title' => 'Notre Linge de Lit Recommandé',
+                'reco_desc' => 'Sélectionné pour sa douceur et sa qualité exceptionnelle.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+1 800</span> clients conquis',
+                'why_subtitle' => 'Ils ont transformé leur lit en cocon. Découvrez leur secret.',
+                'why_stats' => [
+                    ['number' => '99%', 'label' => 'Clients satisfaits'],
+                    ['number' => '5 ans', 'label' => 'Durée de vie'],
+                    ['number' => '60°C', 'label' => 'Lavable'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Matières Nobles Certifiées', 'text' => 'Coton bio, percale 80 fils, satin de qualité hôtelière.'],
+                    ['title' => 'Confort Toutes Saisons', 'text' => 'Couettes légères en été, chaudes en hiver, ou 4 saisons.'],
+                    ['title' => 'Livraison Soignée', 'text' => 'Emballage premium, livraison rapide et suivi en temps réel.'],
+                    ['title' => 'Entretien Facile', 'text' => 'Lavable en machine, séchage rapide, repassage minimal.'],
+                ],
+            ],
+            default => [
+                'badge' => '✨ Qualité premium',
+                'title' => $menu->name ?? 'Nos Produits',
+                'headline' => 'Découvrez notre sélection.',
+                'subtitle' => 'Des produits de qualité supérieure pour votre confort quotidien.',
+                'hero_bg' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Qualité', 'text' => 'Produits sélectionnés pour leur qualité exceptionnelle.'],
+                    ['title' => 'Confort', 'text' => 'Confort optimal pour votre quotidien.'],
+                    ['title' => 'Garantie', 'text' => 'Satisfaction garantie ou remboursement.'],
+                ],
+                'cta_title' => 'Besoin de conseils ?',
+                'cta_text' => 'Notre équipe est là pour vous guider dans votre choix.',
+                'cta_button' => 'Contactez-nous',
+                'faq' => [
+                    ['q' => 'Comment choisir ?', 'a' => 'Notre équipe vous conseille selon vos besoins.'],
+                    ['q' => 'Livraison ?', 'a' => 'Livraison rapide partout en Côte d\'Ivoire.'],
+                    ['q' => 'Garantie ?', 'a' => 'Tous nos produits sont garantis.'],
+                ],
+                'hero_card_badge_top' => 'Qualité',
+                'hero_card_badge_bottom' => 'garantie',
+                'carousel_title' => 'Nos Best-Sellers',
+                'carousel_desc' => 'Les produits préférés de nos clients.',
+                'inspire_title' => 'Découvrez Notre Collection',
+                'inspire_desc' => 'Des produits pensés pour votre confort.',
+                'mission_title' => 'Votre Confort, Notre Priorité',
+                'mission_desc' => 'Nous sélectionnons des produits de qualité pour améliorer votre quotidien.',
+                'reco_title' => 'Nos Produits Recommandés',
+                'reco_desc' => 'Sélectionnés pour leur qualité et leur confort.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+1 000</span> clients satisfaits',
+                'why_subtitle' => 'Ils nous font confiance. À votre tour !',
+                'why_stats' => [
+                    ['number' => '98%', 'label' => 'Clients satisfaits'],
+                    ['number' => '2 ans', 'label' => 'Garantie'],
+                    ['number' => '48h', 'label' => 'Livraison'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Qualité Premium', 'text' => 'Produits sélectionnés avec soin.'],
+                    ['title' => 'Service Client', 'text' => 'Support réactif et disponible.'],
+                    ['title' => 'Livraison Rapide', 'text' => 'Livraison express en 48h.'],
+                    ['title' => 'Paiement Sécurisé', 'text' => 'Paiements sécurisés multiples options.'],
+                ],
+            ],
+        };
+    @endphp
 
     @if ($isMatelasMenu)
         <style>
@@ -1766,77 +2006,287 @@
             }
         </style>
 
+    <style>
+        /* Dynamic Hero Section */
+        .matelas-hero {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 100px 0;
+        }
+
+        .matelas-hero__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.85) 100%);
+        }
+
+        .matelas-hero__container {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .matelas-hero__content {
+            color: #fff;
+        }
+
+        .matelas-hero__badge {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(236, 72, 153, 0.2);
+            border: 1px solid rgba(236, 72, 153, 0.4);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .matelas-hero__title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin: 0 0 20px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .matelas-hero__subtitle {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin: 0 0 32px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .matelas-hero__stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .matelas-hero__stat {
+            text-align: center;
+        }
+
+        .matelas-hero__stat strong {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .matelas-hero__stat span {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .matelas-hero__card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .matelas-hero__card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .matelas-hero__card-badge-top,
+        .matelas-hero__card-badge-bottom {
+            position: absolute;
+            left: 20px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: #0f172a;
+        }
+
+        .matelas-hero__card-badge-top {
+            top: 20px;
+        }
+
+        .matelas-hero__card-badge-bottom {
+            bottom: 20px;
+        }
+
+        /* Benefits Section */
+        .matelas-benefits {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+
+        .matelas-benefits__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .matelas-benefit-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .matelas-benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .matelas-benefit-card__icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: #fff;
+        }
+
+        .matelas-benefit-card__title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px;
+        }
+
+        .matelas-benefit-card__text {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* CTA Section */
+        .matelas-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .matelas-cta__title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin: 0 0 16px;
+        }
+
+        .matelas-cta__text {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .matelas-cta__button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #fff;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .matelas-cta__button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .matelas-hero__container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .matelas-hero__stats {
+                gap: 24px;
+            }
+
+            .matelas-hero__card {
+                order: -1;
+            }
+        }
+    </style>
+
     @if(!($isProtegeMatelas ?? false))
     <div class="matelas-page">
-        @if(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
-        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#1a2942,#0f172a)">
-            <div class="container">
-                <div class="matelas-hero-simple__inner" data-reveal>
-                    <div class="matelas-hero-simple__badge" style="background:rgba(59,130,246,.18);border-color:rgba(59,130,246,.35)">Design & Confort</div>
-                    <h1 class="matelas-hero-simple__title">Meubles & Fauteuils</h1>
-                    <p class="matelas-hero-simple__subtitle">Transformez votre intérieur avec notre collection de meubles et fauteuils alliant esthétique moderne et confort exceptionnel.</p>
-                    <div class="matelas-hero-simple__stats">
-                        <div class="matelas-hero-simple__stat">
-                            <strong>{{ $products->total() }}</strong>
-                            <span>Créations</span>
-                        </div>
-                        <div class="matelas-hero-simple__stat">
-                            <strong>Design</strong>
-                            <span>Unique</span>
-                        </div>
-                        <div class="matelas-hero-simple__stat">
-                            <strong>Livraison</strong>
-                            <span>Gratuite</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        @elseif(strtolower(trim((string) $menu->slug)) === 'oreillers-et-taies')
-        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:120px 0">
-            <div class="container">
-                <div class="matelas-hero-simple__inner" data-reveal>
-                    <div class="matelas-hero-simple__badge" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);color:#fff">Collection Sommeil</div>
-                    <h1 class="matelas-hero-simple__title" style="font-size:clamp(2.5rem,5vw,4rem)">{{ $pageTitle }}</h1>
-                    <p class="matelas-hero-simple__subtitle" style="font-size:1.125rem;max-width:600px;margin:0 auto">Découvrez notre gamme d'oreillers et taies d'oreiller pour un sommeil parfait et un confort optimal.</p>
-                    <div class="matelas-hero-simple__stats">
-                        <div class="matelas-hero-simple__stat">
+        <!-- Dynamic Hero Section -->
+        <section class="matelas-hero" style="background-image: url('{{ $pageConfig['hero_bg'] }}')">
+            <div class="matelas-hero__overlay"></div>
+            <div class="container matelas-hero__container">
+                <div class="matelas-hero__content">
+                    <div class="matelas-hero__badge">{{ $pageConfig['badge'] }}</div>
+                    <h1 class="matelas-hero__title">{{ $pageConfig['headline'] }}</h1>
+                    <p class="matelas-hero__subtitle">{{ $pageConfig['subtitle'] }}</p>
+                    <div class="matelas-hero__stats">
+                        <div class="matelas-hero__stat">
                             <strong>{{ $products->total() }}</strong>
                             <span>Produits</span>
                         </div>
-                        <div class="matelas-hero-simple__stat">
-                            <strong>Confort</strong>
-                            <span>Optimal</span>
-                        </div>
-                        <div class="matelas-hero-simple__stat">
+                        <div class="matelas-hero__stat">
                             <strong>Livraison</strong>
                             <span>Gratuite</span>
                         </div>
+                        <div class="matelas-hero__stat">
+                            <strong>Garantie</strong>
+                            <span>2 ans</span>
+                        </div>
                     </div>
+                </div>
+                <div class="matelas-hero__card">
+                    <div class="matelas-hero__card-badge-top">{{ $pageConfig['hero_card_badge_top'] }}</div>
+                    <img src="{{ $pageConfig['hero_card'] }}" alt="{{ $pageConfig['title'] }}" />
+                    <div class="matelas-hero__card-badge-bottom">{{ $pageConfig['hero_card_badge_bottom'] }}</div>
                 </div>
             </div>
         </section>
-        @else
-        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+
+        <!-- Benefits Section -->
+        <section class="matelas-benefits">
             <div class="container">
-                <div class="matelas-hero-simple__inner" data-reveal>
-                    <div class="matelas-hero-simple__badge" style="background:rgba(236,72,153,.18);border-color:rgba(236,72,153,.35)">Collection</div>
-                    <h1 class="matelas-hero-simple__title">{{ $pageTitle }}</h1>
-                    <p class="matelas-hero-simple__subtitle">Découvrez notre sélection de produits de qualité supérieure pour votre confort quotidien.</p>
-                    <div class="matelas-hero-simple__stats">
-                        <div class="matelas-hero-simple__stat">
-                            <strong>{{ $products->total() }}</strong>
-                            <span>Produits</span>
+                <div class="matelas-benefits__grid">
+                    @foreach($pageConfig['benefits'] as $benefit)
+                    <div class="matelas-benefit-card">
+                        <div class="matelas-benefit-card__icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg>
                         </div>
-                        <div class="matelas-hero-simple__stat">
-                            <strong>Livraison</strong>
-                            <span>Gratuite</span>
-                        </div>
+                        <h3 class="matelas-benefit-card__title">{{ $benefit['title'] }}</h3>
+                        <p class="matelas-benefit-card__text">{{ $benefit['text'] }}</p>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </section>
-        @endif
+
+        <!-- CTA Section -->
+        <section class="matelas-cta">
+            <div class="container">
+                <div class="matelas-cta__content">
+                    <h2 class="matelas-cta__title">{{ $pageConfig['cta_title'] }}</h2>
+                    <p class="matelas-cta__text">{{ $pageConfig['cta_text'] }}</p>
+                    <a href="https://wa.me/{{ whatsapp_number() }}" class="matelas-cta__button" target="_blank">{{ $pageConfig['cta_button'] }}</a>
+                </div>
+            </div>
+        </section>
 
         @if(strtolower(trim((string) $menu->slug)) === 'matelas')
         @php
