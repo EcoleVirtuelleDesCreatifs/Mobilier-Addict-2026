@@ -6,7 +6,7 @@
 @section('content')
     @php
         $menuSlug = strtolower(trim((string) ($menu->slug ?? '')));
-        $isMatelasMenu = $menuSlug === 'matelas';
+        $isMatelasMenu = in_array($menuSlug, ['matelas', 'lit-canape', 'electromenager', 'oreillers-et-taies', 'drap-et-couettes']);
         $isProtegeMatelas = $menuSlug === 'protege-matelas';
 
         $designSlug = match ($menuSlug) {
