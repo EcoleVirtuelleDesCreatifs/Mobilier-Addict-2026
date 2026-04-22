@@ -2233,6 +2233,25 @@
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
+
+            .matelas-category-simple-card {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .matelas-category-simple-card__media {
+                width: 40%;
+                height: auto;
+                min-height: 200px;
+            }
+
+            .matelas-category-simple-card__content {
+                width: 60%;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
         }
 
         /* FAQ Section */
