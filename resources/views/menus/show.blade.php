@@ -2225,6 +2225,170 @@
                 order: -1;
             }
         }
+
+        /* FAQ Section */
+        .matelas-faq {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .matelas-faq__header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .matelas-faq__title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .matelas-faq__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .matelas-faq-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .matelas-faq-item__question {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 12px;
+        }
+
+        .matelas-faq-item__answer {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Mission Section */
+        .matelas-mission {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .matelas-mission__content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .matelas-mission__title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            margin: 0 0 24px;
+        }
+
+        .matelas-mission__text {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        /* Why Choose Section */
+        .matelas-why {
+            padding: 100px 0;
+            background: #f8fafc;
+        }
+
+        .matelas-why__header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .matelas-why__title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 16px;
+        }
+
+        .matelas-why__subtitle {
+            font-size: 1.125rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .matelas-why__stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .matelas-why__stat {
+            text-align: center;
+        }
+
+        .matelas-why__stat strong {
+            display: block;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .matelas-why__stat span {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .matelas-why__benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .matelas-why__benefit {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .matelas-why__benefit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .matelas-why__benefit-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px;
+        }
+
+        .matelas-why__benefit-text {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .matelas-why__stats {
+                flex-direction: column;
+                gap: 32px;
+            }
+        }
     </style>
 
     @if(!($isProtegeMatelas ?? false))
@@ -2284,6 +2448,59 @@
                     <h2 class="matelas-cta__title">{{ $pageConfig['cta_title'] }}</h2>
                     <p class="matelas-cta__text">{{ $pageConfig['cta_text'] }}</p>
                     <a href="https://wa.me/{{ whatsapp_number() }}" class="matelas-cta__button" target="_blank">{{ $pageConfig['cta_button'] }}</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="matelas-faq">
+            <div class="container">
+                <div class="matelas-faq__header">
+                    <h2 class="matelas-faq__title">Questions Fréquentes</h2>
+                </div>
+                <div class="matelas-faq__grid">
+                    @foreach($pageConfig['faq'] as $index => $faqItem)
+                    <div class="matelas-faq-item">
+                        <h3 class="matelas-faq-item__question">{{ $faqItem['q'] }}</h3>
+                        <p class="matelas-faq-item__answer">{{ $faqItem['a'] }}</p>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="matelas-mission">
+            <div class="container">
+                <div class="matelas-mission__content">
+                    <h2 class="matelas-mission__title">{{ $pageConfig['mission_title'] }}</h2>
+                    <p class="matelas-mission__text">{{ $pageConfig['mission_desc'] }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Section -->
+        <section class="matelas-why">
+            <div class="container">
+                <div class="matelas-why__header">
+                    <h2 class="matelas-why__title">{{ $pageConfig['why_title'] }}</h2>
+                    <p class="matelas-why__subtitle">{{ $pageConfig['why_subtitle'] }}</p>
+                </div>
+                <div class="matelas-why__stats">
+                    @foreach($pageConfig['why_stats'] as $stat)
+                    <div class="matelas-why__stat">
+                        <strong>{{ $stat['number'] }}</strong>
+                        <span>{{ $stat['label'] }}</span>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="matelas-why__benefits">
+                    @foreach($pageConfig['why_benefits'] as $benefit)
+                    <div class="matelas-why__benefit">
+                        <h3 class="matelas-why__benefit-title">{{ $benefit['title'] }}</h3>
+                        <p class="matelas-why__benefit-text">{{ $benefit['text'] }}</p>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
