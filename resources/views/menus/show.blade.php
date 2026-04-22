@@ -1688,12 +1688,21 @@
                 display: flex;
                 flex-direction: column;
                 min-height: 310px;
-                transition: transform .18s ease, box-shadow .18s ease;
             }
 
-            .matelas-mini:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 18px 40px rgba(2, 6, 23, .08);
+            .matelas-why__benefit {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 22px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                min-height: 310px;
+            }
+
+            .matelas-why__benefit:hover {
+                transform: none;
+                box-shadow: none;
             }
 
             .matelas-mini__media {
@@ -2485,13 +2494,7 @@
             background: #fff;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .matelas-why__benefit:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e2e8f0;
         }
 
         .matelas-why__benefit-title {
@@ -2602,19 +2605,19 @@
                             $count = $items->count();
                             $firstImage = $items->first()?->image ?? null;
                         @endphp
-                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:2px solid rgba(255,255,255,.1);transition:all .4s cubic-bezier(0.4,0,0.2,1)">
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                             <div class="matelas-category-simple-card__media" style="position:relative;height:320px;overflow:hidden">
                                 @if($tab['key'] === 'medicosoins')
-                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop" alt="MedicoSoins" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop" alt="MedicoSoins" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                 @elseif($tab['key'] === 'confort_soft')
-                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop" alt="Confort Soft" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop" alt="Confort Soft" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                 @elseif($tab['key'] === 'addict')
-                                    <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop" alt="Addict" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop" alt="Addict" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                 @elseif($tab['key'] === 'luxury')
-                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop" alt="Luxury" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop" alt="Luxury" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                 @else
                                     @if($firstImage)
-                                        <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                        <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                     @else
                                         <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:5rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
                                     @endif
@@ -2623,7 +2626,7 @@
                             <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
                                 <h3 class="matelas-category-simple-card__name" style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">{{ $tab['label'] }}</h3>
                                 <p class="matelas-category-simple-card__desc" style="font-size:1.125rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">{{ $tab['desc'] }}</p>
-                                <div class="matelas-category-simple-card__arrow" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem;transition:all .3s ease">
+                                <div class="matelas-category-simple-card__arrow" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem">
                                     Découvrir <span style="font-size:1.1rem;font-weight:900">→</span>
                                 </div>
                             </div>
@@ -2634,17 +2637,17 @@
         </section>
         <style>
             .matelas-category-simple-card:hover {
-                transform: translateY(-8px);
-                border-color: rgba(236,72,153,.5);
-                box-shadow: 0 32px 64px -16px rgba(236,72,153,.3);
+                transform: none;
+                border-color: rgba(255,255,255,.1);
             }
-            .matelas-category-simple-card:hover img {
-                transform:scale(1.1);
+
+            .matelas-category-simple-card:hover .matelas-category-simple-card__media img {
+                transform: none;
             }
             .matelas-category-simple-card:hover .matelas-category-simple-card__arrow {
-                background: #ec4899;
-                color: #fff;
-                transform: translateX(8px);
+                background: rgba(236,72,153,.15);
+                color: #ec4899;
+                transform: none;
             }
         </style>
         @elseif(strtolower(trim((string) $menu->slug)) === 'meuble-et-fauteuil')
@@ -2709,16 +2712,16 @@
                             $defaultVariant = $product?->variants?->sortBy('price')->first();
                             $price = $defaultVariant?->price ?? $product->price;
                         @endphp
-                        <article class="matelas-product-simple-card" style="background:#fff;border-radius:24px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 10px 40px rgba(0,0,0,.06);transition:all .4s cubic-bezier(0.4,0,0.2,1);position:relative">
+                        <article class="matelas-product-simple-card" style="background:#fff;border-radius:24px;overflow:hidden;border:1px solid #e2e8f0;position:relative">
                             <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit;display:block">
                                 <div class="matelas-product-simple-card__media" style="position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#f8fafc,#f1f5f9);overflow:hidden">
-                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
-                                    <div class="matelas-product-simple-card__overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%);transition:opacity .4s ease;opacity:0"></div>
+                                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+                                    <div class="matelas-product-simple-card__overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%);opacity:0"></div>
                                 </div>
                             </a>
                             <div class="matelas-product-simple-card__body" style="padding:24px">
                                 <a href="{{ route('product.show', $product->slug) }}" style="text-decoration:none;color:inherit">
-                                    <h3 class="matelas-product-simple-card__name" style="font-weight:800;color:#0f172a;margin:0 0 12px;font-size:1.125rem;line-height:1.4;transition:color .3s ease">{{ $product->name }}</h3>
+                                    <h3 class="matelas-product-simple-card__name" style="font-weight:800;color:#0f172a;margin:0 0 12px;font-size:1.125rem;line-height:1.4">{{ $product->name }}</h3>
                                 </a>
                                 <div class="matelas-product-simple-card__price" style="font-weight:800;color:#ec4899;font-size:1.5rem;margin-bottom:16px">{{ $price !== null ? number_format((float) $price, 0, ',', '.') . 'F' : '' }}</div>
                                 <form action="{{ route('cart.add') }}" method="POST" style="margin-top:16px">
@@ -2726,7 +2729,7 @@
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="product_variant_id" value="{{ $defaultVariant?->id }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <button class="matelas-product-simple-card__btn" type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9375rem;transition:all .3s ease;border:0;cursor:pointer">
+                                    <button class="matelas-product-simple-card__btn" type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9375rem;border:0;cursor:pointer">
                                         <svg style="width:18px;height:18px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                         Ajouter au panier
                                     </button>
@@ -2953,25 +2956,25 @@
             }
 
             .matelas-product-simple-card:hover {
-                transform: translateY(-12px) scale(1.02);
-                box-shadow: 0 25px 50px -12px rgba(236, 72, 153, .3);
-            }
-
-            .matelas-product-simple-card:hover .matelas-product-simple-card__overlay {
-                opacity: 1;
-            }
-
-            .matelas-product-simple-card:hover img {
-                transform: scale(1.08);
+                transform: none;
+                box-shadow: none;
             }
 
             .matelas-product-simple-card:hover .matelas-product-simple-card__name {
-                color: #ec4899;
+                color: #0f172a;
             }
 
-            .matelas-product-simple-card:hover .matelas-product-simple-card__btn {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(236, 72, 153, .4);
+            .matelas-product-simple-card:hover .matelas-product-simple-card__media img {
+                transform: none;
+            }
+
+            .matelas-product-simple-card:hover .matelas-product-simple-card__overlay {
+                opacity: 0;
+            }
+
+            .matelas-product-simple-card__btn:hover {
+                transform: none;
+                box-shadow: none;
             }
 
             @media (max-width: 991px) {
