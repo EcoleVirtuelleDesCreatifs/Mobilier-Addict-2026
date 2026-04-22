@@ -421,6 +421,79 @@
     </section>
     @endif
 
+    <!-- Marketing Section - Inspired by CIL -->
+    <section class="product-marketing-section">
+        <div class="container">
+            <div class="product-marketing__content">
+                <div class="product-marketing__badge">Excellence</div>
+                <h2 class="product-marketing__title">L'Excellence du Sommeil chez Mobilier Addict</h2>
+                <p class="product-marketing__text">Découvrez nos produits de qualité supérieure pour un confort optimal. Fini les nuits agitées et le mal de dos. Nos produits sont conçus pour vous offrir le sommeil parfait que vous méritez.</p>
+                <a href="{{ route('home') }}" class="product-marketing__cta">Découvrir nos engagements</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="product-contact-section">
+        <div class="container">
+            <div class="product-contact__grid">
+                <div class="product-contact__card">
+                    <div class="product-contact__icon">
+                        <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="currentColor"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="product-contact__title">Nous appeler</h3>
+                        <p class="product-contact__text">Notre équipe est à votre écoute pour vous conseiller et assister dans vos commandes.</p>
+                        <a href="tel:{{ whatsapp_number() }}" class="product-contact__link">{{ whatsapp_number() }}</a>
+                    </div>
+                </div>
+                <div class="product-contact__card">
+                    <div class="product-contact__icon">
+                        <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="product-contact__title">Nos magasins</h3>
+                        <p class="product-contact__text">Trouvez votre magasin Mobilier Addict pour essayer et acheter vos produits.</p>
+                        <a href="{{ route('home') }}" class="product-contact__link">Trouver un magasin</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Grid Section -->
+    <section class="product-categories-section">
+        <div class="container">
+            <div class="product-categories__header">
+                <h2 class="product-categories__title">Découvrir nos autres catégories</h2>
+                <p class="product-categories__subtitle">Explorez notre gamme complète de produits pour votre confort</p>
+            </div>
+            <div class="product-categories__grid">
+                @php
+                    $categories = \App\Models\Category::active()->take(4)->get();
+                @endphp
+                @foreach($categories as $category)
+                    @php
+                        $categoryProductCount = $category->products()->where('is_active', true)->count();
+                    @endphp
+                    <a href="{{ route('univers.show', $category->slug) }}" class="product-category-card">
+                        <div class="product-category-card__media">
+                            @if($category->image)
+                                <img src="@image_url($category->image)" alt="{{ $category->name }}" loading="lazy" />
+                            @else
+                                <div class="product-category-card__placeholder">{{ $category->name[0] }}</div>
+                            @endif
+                        </div>
+                        <div class="product-category-card__content">
+                            <h3 class="product-category-card__name">{{ $category->name }}</h3>
+                            <span class="product-category-card__count">{{ $categoryProductCount }} produits</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <!-- Related Products -->
     @if($relatedProducts->count())
     <section class="product-related">
@@ -1283,4 +1356,224 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<style>
+    /* Marketing Section */
+    .product-marketing-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        text-align: center;
+    }
+
+    .product-marketing__content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .product-marketing__badge {
+        display: inline-block;
+        padding: 10px 24px;
+        background: rgba(255, 255, 255, .2);
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+    }
+
+    .product-marketing__title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 900;
+        margin: 0 0 20px;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    .product-marketing__text {
+        font-size: 1.125rem;
+        line-height: 1.7;
+        margin: 0 0 32px;
+        color: rgba(255, 255, 255, .9);
+    }
+
+    .product-marketing__cta {
+        display: inline-block;
+        padding: 16px 32px;
+        background: #fff;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .product-marketing__cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+    }
+
+    /* Contact Section */
+    .product-contact-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+
+    .product-contact__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .product-contact__card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .product-contact__card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
+    }
+
+    .product-contact__icon {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        color: #fff;
+    }
+
+    .product-contact__title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 12px;
+    }
+
+    .product-contact__text {
+        font-size: 1rem;
+        color: #64748b;
+        line-height: 1.6;
+        margin: 0 0 16px;
+    }
+
+    .product-contact__link {
+        color: #667eea;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 1.125rem;
+    }
+
+    .product-contact__link:hover {
+        text-decoration: underline;
+    }
+
+    /* Categories Section */
+    .product-categories-section {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .product-categories__header {
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .product-categories__title {
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 12px;
+    }
+
+    .product-categories__subtitle {
+        font-size: 1.125rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .product-categories__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .product-category-card {
+        display: block;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+    }
+
+    .product-category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, .12);
+        border-color: #667eea;
+    }
+
+    .product-category-card__media {
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        overflow: hidden;
+    }
+
+    .product-category-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .product-category-card:hover .product-category-card__media img {
+        transform: scale(1.05);
+    }
+
+    .product-category-card__placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 900;
+        color: #667eea;
+    }
+
+    .product-category-card__content {
+        padding: 24px;
+        text-align: center;
+    }
+
+    .product-category-card__name {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 8px;
+    }
+
+    .product-category-card__count {
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+</style>
 @endsection
