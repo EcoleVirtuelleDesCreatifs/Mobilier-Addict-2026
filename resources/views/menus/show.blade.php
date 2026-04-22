@@ -1989,7 +1989,7 @@
                     <h2 class="matelas-products-simple__title" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:#0f172a;margin-bottom:16px;letter-spacing:-.02em">Nos produits</h2>
                     <p class="matelas-products-simple__desc" style="font-size:1.125rem;color:#64748b;max-width:600px;margin:0 auto">{{ $products->total() }} modèles disponibles pour tous vos besoins</p>
                 </div>
-                <div class="matelas-products-simple__grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;max-width:1400px;margin:0 auto">
+                <div class="matelas-products-simple__grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1400px;margin:0 auto">
                     @foreach($products as $product)
                         @php
                             $defaultVariant = $product?->variants?->sortBy('price')->first();
