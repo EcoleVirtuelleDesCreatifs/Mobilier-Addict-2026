@@ -3726,12 +3726,12 @@
                     <div style="color:#fff">
                         <h4 style="font-size:1.125rem;font-weight:700;margin-bottom:24px;color:#fff">Nos Produits</h4>
                         <div style="display:flex;flex-direction:column;gap:12px">
-                            <a href="http://127.0.0.1:8000/univers/matelas" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Matelas</a>
-                            <a href="http://127.0.0.1:8000/univers/oreillers" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Oreillers</a>
-                            <a href="http://127.0.0.1:8000/univers/draps-couettes" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Draps &amp; Couettes</a>
-                            <a href="http://127.0.0.1:8000/univers/protection" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Protège-Matelas</a>
-                            <a href="http://127.0.0.1:8000/univers/lits-sommiers" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Lits &amp; Sommiers</a>
-                            <a href="http://127.0.0.1:8000/univers/electromenager" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Électroménager</a>
+                            <a href="http://127.0.0.1:8000/menu/matelas" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Matelas</a>
+                            <a href="http://127.0.0.1:8000/menu/oreillers" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Oreillers</a>
+                            <a href="http://127.0.0.1:8000/menu/draps-couettes" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Draps &amp; Couettes</a>
+                            <a href="http://127.0.0.1:8000/menu/protection" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Protège-Matelas</a>
+                            <a href="http://127.0.0.1:8000/menu/lits-sommiers" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Lits &amp; Sommiers</a>
+                            <a href="http://127.0.0.1:8000/menu/electromenager" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Électroménager</a>
                         </div>
                     </div>
                 </div>
