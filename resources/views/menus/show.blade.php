@@ -2589,7 +2589,7 @@
                     <h2 class="matelas-categories-simple__title" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:#fff;margin-bottom:20px;letter-spacing:-.02em;line-height:1.1">Nos gammes</h2>
                     <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">Découvrez notre sélection de gammes premium</p>
                 </div>
-                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
+                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:1fr;gap:32px;max-width:600px;margin:0 auto">
                     @foreach($tabDefs as $tab)
                         @php
                             $items = $allMatelas->filter(function ($p) use ($tab) {
