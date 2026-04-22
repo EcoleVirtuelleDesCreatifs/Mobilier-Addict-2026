@@ -1792,6 +1792,30 @@
                 </div>
             </div>
         </section>
+        @elseif(strtolower(trim((string) $menu->slug)) === 'oreillers-et-taies')
+        <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:120px 0">
+            <div class="container">
+                <div class="matelas-hero-simple__inner" data-reveal>
+                    <div class="matelas-hero-simple__badge" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);color:#fff">Collection Sommeil</div>
+                    <h1 class="matelas-hero-simple__title" style="font-size:clamp(2.5rem,5vw,4rem)">{{ $pageTitle }}</h1>
+                    <p class="matelas-hero-simple__subtitle" style="font-size:1.125rem;max-width:600px;margin:0 auto">Découvrez notre gamme d'oreillers et taies d'oreiller pour un sommeil parfait et un confort optimal.</p>
+                    <div class="matelas-hero-simple__stats">
+                        <div class="matelas-hero-simple__stat">
+                            <strong>{{ $products->total() }}</strong>
+                            <span>Produits</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>Confort</strong>
+                            <span>Optimal</span>
+                        </div>
+                        <div class="matelas-hero-simple__stat">
+                            <strong>Livraison</strong>
+                            <span>Gratuite</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         @else
         <section class="matelas-hero-simple" aria-label="{{ $pageTitle }}" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
             <div class="container">
