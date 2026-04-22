@@ -2479,10 +2479,20 @@
                         @endphp
                         <a href="#products" class="matelas-category-simple-card" data-category="{{ $tab['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:2px solid rgba(255,255,255,.1);transition:all .4s cubic-bezier(0.4,0,0.2,1)">
                             <div class="matelas-category-simple-card__media" style="position:relative;height:320px;overflow:hidden">
-                                @if($firstImage)
-                                    <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                @if($tab['key'] === 'medicosoins')
+                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop" alt="MedicoSoins" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                @elseif($tab['key'] === 'confort_soft')
+                                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop" alt="Confort Soft" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                @elseif($tab['key'] === 'addict')
+                                    <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop" alt="Addict" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                @elseif($tab['key'] === 'luxury')
+                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop" alt="Luxury" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
                                 @else
-                                    <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:5rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
+                                    @if($firstImage)
+                                        <img src="@image_url($firstImage)" alt="{{ $tab['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.4,0,0.2,1)" />
+                                    @else
+                                        <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:5rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
+                                    @endif
                                 @endif
                             </div>
                             <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
