@@ -2484,7 +2484,6 @@
                                 @else
                                     <div style="width:100%;height:100%;background:{{ $tab['color'] ?? '#3b82f6' }};display:flex;align-items:center;justify-content:center;font-size:5rem;font-weight:950;color:#fff">{{ $tab['label'][0] }}</div>
                                 @endif
-                                <div class="matelas-category-simple-card__badge" style="position:absolute;top:20px;right:20px;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);padding:12px 24px;border-radius:30px;font-weight:800;font-size:0.9375rem;color:#fff;border:1px solid rgba(255,255,255,.2);box-shadow:0 8px 24px rgba(0,0,0,.4)">{{ $count }} modèles</div>
                             </div>
                             <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
                                 <h3 class="matelas-category-simple-card__name" style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">{{ $tab['label'] }}</h3>
