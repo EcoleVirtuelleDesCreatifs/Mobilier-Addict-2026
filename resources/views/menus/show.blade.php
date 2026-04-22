@@ -2224,6 +2224,15 @@
             .matelas-hero__card {
                 order: -1;
             }
+
+            .matelas-benefits__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .matelas-categories-simple__grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
         }
 
         /* FAQ Section */
@@ -2868,7 +2877,7 @@
                 }
 
                 .matelas-products-simple__grid {
-                    grid-template-columns: repeat(3, minmax(0, 1fr))
+                    grid-template-columns: 1fr
                 }
             }
 
