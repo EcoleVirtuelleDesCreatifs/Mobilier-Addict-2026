@@ -11,9 +11,11 @@
 
         $designSlug = match ($menuSlug) {
             'matelas' => 'matelas',
-            'oreillers-et-taies' => 'oreillers',
-            'meuble-et-fauteuil' => 'lits-sommiers',
-            'protege-matelas' => 'draps-couettes',
+            'oreillers-et-taies' => 'matelas',
+            'meuble-et-fauteuil' => 'matelas',
+            'drap-et-couettes' => 'matelas',
+            'electromenager' => 'matelas',
+            'lit-canape' => 'matelas',
             default => $menuSlug,
         };
 
@@ -2570,7 +2572,7 @@
             </div>
         </section>
 
-        @if(strtolower(trim((string) $menu->slug)) === 'matelas')
+        @if(in_array(strtolower(trim((string) $menu->slug)), ['matelas', 'lit-canape', 'electromenager', 'oreillers-et-taies', 'drap-et-couettes']))
         @php
             $allMatelas = collect($matelasCategoryGroups ?? [])->flatMap(function ($g) {
                 return $g['products'] ?? [];
