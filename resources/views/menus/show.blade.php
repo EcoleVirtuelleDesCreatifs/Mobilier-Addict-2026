@@ -246,6 +246,31 @@
                 ],
             ],
         };
+
+        // Override images based on menuSlug
+        $menuImages = match ($menuSlug) {
+            'lit-canape' => [
+                'hero_bg' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=900&h=1100&fit=crop',
+            ],
+            'electromenager' => [
+                'hero_bg' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&h=1100&fit=crop',
+            ],
+            'oreillers-et-taies' => [
+                'hero_bg' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=900&h=1100&fit=crop',
+            ],
+            'drap-et-couettes' => [
+                'hero_bg' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&h=1100&fit=crop',
+            ],
+            default => [],
+        };
+
+        if (!empty($menuImages)) {
+            $pageConfig = array_merge($pageConfig, $menuImages);
+        }
     @endphp
 
     @if ($isMatelasMenu)
