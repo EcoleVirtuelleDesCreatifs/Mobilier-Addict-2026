@@ -2148,7 +2148,7 @@
         .matelas-benefit-card__icon {
             width: 64px;
             height: 64px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ec4899, #be185d);
             border-radius: 50%;
             display: flex;
             align-items: center;
