@@ -2310,8 +2310,8 @@
             }
 
             .matelas-products-simple__grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
+                grid-template-columns: 1fr !important;
+                max-width: 100%;
             }
 
             /* Container padding mobile */
