@@ -2279,48 +2279,25 @@
             }
 
             .matelas-categories-simple__grid {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                gap: 16px;
-                padding: 0 16px;
-                -webkit-overflow-scrolling: touch;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 24px;
             }
 
             .matelas-category-simple-card {
-                display: flex;
-                flex-direction: row;
-                min-width: 280px;
-                scroll-snap-align: start;
-                flex-shrink: 0;
-                border-radius: 16px;
+                display: block;
             }
 
             .matelas-category-simple-card__media {
-                width: 40%;
-                height: auto;
-                min-height: 180px;
+                height: 240px;
             }
 
             .matelas-category-simple-card__content {
-                width: 60%;
-                padding: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
+                padding: 24px;
             }
 
             .matelas-category-simple-card__name {
-                font-size: 1.25rem;
-            }
-
-            .matelas-category-simple-card__desc {
-                font-size: 0.875rem;
-            }
-
-            .matelas-category-simple-card__arrow {
-                padding: 10px 20px;
-                font-size: 0.875rem;
+                font-size: 1.5rem;
             }
 
             /* Products Section Mobile */
