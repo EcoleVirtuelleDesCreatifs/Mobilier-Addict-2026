@@ -2212,6 +2212,12 @@
         }
 
         @media (max-width: 768px) {
+            /* Hero Section Mobile */
+            .matelas-hero {
+                min-height: auto;
+                padding: 60px 0;
+            }
+
             .matelas-hero__container {
                 grid-template-columns: 1fr;
                 gap: 40px;
@@ -2219,14 +2225,57 @@
 
             .matelas-hero__stats {
                 gap: 24px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .matelas-hero__stat {
+                min-width: 100px;
             }
 
             .matelas-hero__card {
                 order: -1;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .matelas-hero__title {
+                font-size: 2rem;
+            }
+
+            .matelas-hero__subtitle {
+                font-size: 1rem;
+            }
+
+            /* Benefits Section Mobile */
+            .matelas-benefits {
+                padding: 60px 0;
             }
 
             .matelas-benefits__grid {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .matelas-benefit-card {
+                padding: 32px 24px;
+            }
+
+            /* Categories Section Mobile */
+            .matelas-categories-simple {
+                padding: 60px 0;
+            }
+
+            .matelas-categories-simple__head {
+                margin-bottom: 40px;
+            }
+
+            .matelas-categories-simple__title {
+                font-size: 2rem;
+            }
+
+            .matelas-categories-simple__desc {
+                font-size: 1rem;
             }
 
             .matelas-categories-simple__grid {
@@ -2241,23 +2290,87 @@
             .matelas-category-simple-card {
                 display: flex;
                 flex-direction: row;
-                min-width: 300px;
+                min-width: 280px;
                 scroll-snap-align: start;
                 flex-shrink: 0;
+                border-radius: 16px;
             }
 
             .matelas-category-simple-card__media {
                 width: 40%;
                 height: auto;
-                min-height: 200px;
+                min-height: 180px;
             }
 
             .matelas-category-simple-card__content {
                 width: 60%;
-                padding: 24px;
+                padding: 20px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+            }
+
+            .matelas-category-simple-card__name {
+                font-size: 1.25rem;
+            }
+
+            .matelas-category-simple-card__desc {
+                font-size: 0.875rem;
+            }
+
+            .matelas-category-simple-card__arrow {
+                padding: 10px 20px;
+                font-size: 0.875rem;
+            }
+
+            /* Products Section Mobile */
+            .matelas-products-simple {
+                padding: 60px 0;
+            }
+
+            .matelas-products-simple__title {
+                font-size: 2rem;
+            }
+
+            .matelas-products-simple__grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            /* Container padding mobile */
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .matelas-hero__title {
+                font-size: 1.75rem;
+            }
+
+            .matelas-hero__badge {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+
+            .matelas-benefit-card {
+                padding: 24px 20px;
+            }
+
+            .matelas-category-simple-card {
+                min-width: 260px;
+            }
+
+            .matelas-category-simple-card__media {
+                min-height: 160px;
+            }
+
+            .matelas-category-simple-card__content {
+                padding: 16px;
+            }
+
+            .matelas-category-simple-card__name {
+                font-size: 1.125rem;
             }
         }
 
