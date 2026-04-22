@@ -162,7 +162,7 @@
                 'hero_card' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=900&h=1100&fit=crop',
                 'benefits' => [
                     ['title' => 'Douceur immédiate', 'text' => "Une sensation enveloppante, comme à l'hôtel, dès la première nuit."],
-                    ['title' => 'Respirant', 'text' => 'Des tissus qui laissent circuler l'air pour un sommeil plus frais.'],
+                    ['title' => 'Respirant', 'text' => "Des tissus qui laissent circuler l'air pour un sommeil plus frais."],
                     ['title' => 'Élégance simple', 'text' => 'Des couleurs et finitions qui transforment la chambre en cocon.'],
                 ],
                 'cta_title' => 'Votre lit mérite ce confort',
