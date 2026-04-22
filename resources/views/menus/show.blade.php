@@ -2289,7 +2289,8 @@
 
             .matelas-categories-simple__grid {
                 display: grid;
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+                max-width: 100%;
                 gap: 24px;
             }
 
