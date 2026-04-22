@@ -27,7 +27,7 @@
                 'hero_card' => 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=900&h=1100&fit=crop',
                 'benefits' => [
                     ['title' => 'Soutien qui libère', 'text' => "Votre corps s'aligne naturellement. Moins de tensions, plus d'énergie le matin."],
-                    ['title' => 'Douceur qui apaise', 'text' => 'Un accueil moelleux, une sensation "hôtel" à la maison, nuit après nuit.'],
+                    ['title' => 'Douceur qui apaise', 'text' => "Un accueil moelleux, une sensation \"hôtel\" à la maison, nuit après nuit."],
                     ['title' => 'Qualité durable', 'text' => 'Des matériaux pensés pour durer : confort stable, finitions premium, garantie.'],
                 ],
                 'cta_title' => "Besoin d'un conseil rapide ?",
@@ -161,7 +161,7 @@
                 'hero_bg' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1920&h=900&fit=crop',
                 'hero_card' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=900&h=1100&fit=crop',
                 'benefits' => [
-                    ['title' => 'Douceur immédiate', 'text' => 'Une sensation enveloppante, comme à l'hôtel, dès la première nuit.'],
+                    ['title' => 'Douceur immédiate', 'text' => "Une sensation enveloppante, comme à l'hôtel, dès la première nuit."],
                     ['title' => 'Respirant', 'text' => 'Des tissus qui laissent circuler l'air pour un sommeil plus frais.'],
                     ['title' => 'Élégance simple', 'text' => 'Des couleurs et finitions qui transforment la chambre en cocon.'],
                 ],
