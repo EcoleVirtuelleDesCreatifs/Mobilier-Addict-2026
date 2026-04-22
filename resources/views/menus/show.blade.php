@@ -2230,13 +2230,20 @@
             }
 
             .matelas-categories-simple__grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 16px;
+                padding: 0 16px;
+                -webkit-overflow-scrolling: touch;
             }
 
             .matelas-category-simple-card {
                 display: flex;
                 flex-direction: row;
+                min-width: 300px;
+                scroll-snap-align: start;
+                flex-shrink: 0;
             }
 
             .matelas-category-simple-card__media {
