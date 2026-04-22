@@ -41,16 +41,6 @@
             </div>
 
             <div class="footer-new__col">
-                <h4 class="footer-new__title">Nos Produits</h4>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'matelas']) }}">Matelas</a>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'oreillers']) }}">Oreillers</a>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'draps-couettes']) }}">Draps & Couettes</a>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'protection']) }}">Protège-Matelas</a>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'lits-sommiers']) }}">Lits & Sommiers</a>
-                <a class="footer-new__link" href="{{ route('univers.show', ['slug' => 'electromenager']) }}">Électroménager</a>
-            </div>
-
-            <div class="footer-new__col">
                 <h4 class="footer-new__title">Informations</h4>
                 <a class="footer-new__link" href="{{ route('pages.about') }}">À propos de nous</a>
                 <a class="footer-new__link" href="{{ route('pages.contact') }}">Contactez-nous</a>
