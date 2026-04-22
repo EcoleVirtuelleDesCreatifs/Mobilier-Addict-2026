@@ -3726,12 +3726,12 @@
                     <div style="color:#fff">
                         <h4 style="font-size:1.125rem;font-weight:700;margin-bottom:24px;color:#fff">Nos Produits</h4>
                         <div style="display:flex;flex-direction:column;gap:12px">
-                            <a href="{{ url('/univers/matelas') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Matelas</a>
-                            <a href="{{ url('/univers/oreillers') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Oreillers</a>
-                            <a href="{{ url('/univers/draps-couettes') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Draps & Couettes</a>
-                            <a href="{{ url('/univers/protection') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Protège-Matelas</a>
-                            <a href="{{ url('/univers/lits-sommiers') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Lits & Sommiers</a>
-                            <a href="{{ url('/univers/electromenager') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Électroménager</a>
+                            <a href="{{ url('/menu/matelas') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Matelas</a>
+                            <a href="{{ url('/menu/oreillers') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Oreillers</a>
+                            <a href="{{ url('/menu/draps-couettes') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Draps & Couettes</a>
+                            <a href="{{ url('/menu/protection') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Protège-Matelas</a>
+                            <a href="{{ url('/menu/lits-sommiers') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Lits & Sommiers</a>
+                            <a href="{{ url('/menu/electromenager') }}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:0.9375rem;transition:color .3s ease">Électroménager</a>
                         </div>
                     </div>
                 </div>
