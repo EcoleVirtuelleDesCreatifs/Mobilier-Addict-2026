@@ -255,7 +255,7 @@
             ],
             'electromenager' => [
                 'hero_bg' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=1920&h=900&fit=crop',
-                'hero_card' => 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&h=1100&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&h=1100&fit=crop',
             ],
             'oreillers-et-taies' => [
                 'hero_bg' => 'https://images.unsplash.com/photo-1582582429416-03ad554aab0d?w=1920&h=900&fit=crop',
