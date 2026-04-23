@@ -2728,7 +2728,7 @@
         <section class="matelas-products-simple is-visible" id="products" aria-label="Tous les produits" style="padding:100px 0;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%)">
             <div class="container">
                 <div class="matelas-products-simple__head" style="text-align:center;max-width:800px;margin:0 auto 60px">
-                    <div class="matelas-products-simple__badge" style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:12px;border:1px solid rgba(236,72,153,.3)">
+                    <div class="matelas-products-simple__badge" style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:7px;border:1px solid rgba(236,72,153,.3)">
                         <span style="color:#ec4899;font-size:0.8125rem;letter-spacing:2px;text-transform:uppercase;font-weight:600">Collection complète</span>
                     </div>
                     <h2 class="matelas-products-simple__title" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:#0f172a;margin-bottom:16px;letter-spacing:-.02em">Nos produits</h2>
