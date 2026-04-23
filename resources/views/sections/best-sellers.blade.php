@@ -98,7 +98,7 @@
 
         .bestsellers-modern__layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 40px;
             align-items: start
         }
@@ -110,7 +110,8 @@
             overflow: hidden;
             border: 1px solid rgba(255,255,255,.1);
             box-shadow: 0 30px 80px rgba(0,0,0,.3);
-            position: relative
+            position: relative;
+            grid-column: 1 / 3
         }
 
         .bestsellers-modern__hero-badge {
@@ -384,11 +385,16 @@
 
         @media (max-width: 1024px) {
             .bestsellers-modern__layout {
-                grid-template-columns: 1fr
+                grid-template-columns: 1fr 1fr
+            }
+
+            .bestsellers-modern__hero {
+                grid-column: 1 / 2
             }
 
             .bestsellers-modern__list {
-                grid-template-columns: repeat(2, 1fr)
+                grid-column: 2 / 3;
+                grid-template-columns: 1fr
             }
         }
 
@@ -397,7 +403,16 @@
                 padding: 60px 0
             }
 
+            .bestsellers-modern__layout {
+                grid-template-columns: 1fr
+            }
+
+            .bestsellers-modern__hero {
+                grid-column: 1 / 2
+            }
+
             .bestsellers-modern__list {
+                grid-column: 1 / 2;
                 grid-template-columns: 1fr
             }
 
