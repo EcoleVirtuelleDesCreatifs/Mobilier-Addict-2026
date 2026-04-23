@@ -447,22 +447,22 @@
             <div class="footer-optimized__grid">
                 <!-- Brand Section -->
                 <div>
-                    <a href="{{ route('home') }}" class="footer-optimized__brand-logo">
-                        <img src="{{ asset('assets/logo/mobile/logo.png') }}" alt="Mobilier Addict" />
+                    <a href="http://127.0.0.1:8000" class="footer-optimized__brand-logo">
+                        <img src="http://127.0.0.1:8000/assets/logo/mobile/logo.png" alt="Mobilier Addict" />
                     </a>
                     <p class="footer-optimized__brand-desc">Votre partenaire sommeil depuis 2015. Nous sélectionnons les meilleurs produits pour transformer vos nuits en moments de pur confort.</p>
                     <div class="footer-optimized__social">
                         <a href="#" aria-label="Facebook" class="footer-optimized__social-link">
-                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="2" fill="none"></path></svg>
                         </a>
                         <a href="#" aria-label="Instagram" class="footer-optimized__social-link">
-                            <svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+                            <svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2" fill="none"></rect><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"></circle><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"></circle></svg>
                         </a>
                         <a href="#" aria-label="WhatsApp" class="footer-optimized__social-link">
-                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" fill="none"></path></svg>
                         </a>
                         <a href="#" aria-label="YouTube" class="footer-optimized__social-link">
-                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" stroke="currentColor" stroke-width="2" fill="none"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg>
+                            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" stroke="currentColor" stroke-width="2" fill="none"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"></polygon></svg>
                         </a>
                     </div>
                 </div>
@@ -474,27 +474,27 @@
                     </div>
                     <h4 class="footer-optimized__section-title">Nos Menus</h4>
                     <div class="footer-optimized__links">
-                        <a href="{{ url('/menu') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Accueil
                         </a>
-                        <a href="{{ url('/menu/lit-canape') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu/lit-canape" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Lit &amp; Canapé
                         </a>
-                        <a href="{{ url('/menu/electromenager') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu/electromenager" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Électroménager
                         </a>
-                        <a href="{{ url('/menu/matelas') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu/matelas" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Matelas
                         </a>
-                        <a href="{{ url('/menu/oreillers-et-taies') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu/oreillers-et-taies" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Oreillers et taies
                         </a>
-                        <a href="{{ url('/menu/drap-et-couettes') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/menu/drap-et-couettes" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Drap et Couettes
                         </a>
@@ -508,23 +508,23 @@
                     </div>
                     <h4 class="footer-optimized__section-title">Informations</h4>
                     <div class="footer-optimized__links">
-                        <a href="{{ route('pages.about') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/a-propos" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             À propos de nous
                         </a>
-                        <a href="{{ route('pages.contact') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/contact" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Contactez-nous
                         </a>
-                        <a href="{{ route('pages.customer-service') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/service-client" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Service client
                         </a>
-                        <a href="{{ route('pages.shipping-returns') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/livraison-retours" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Livraison &amp; Retours
                         </a>
-                        <a href="{{ route('pages.faq') }}" class="footer-optimized__link">
+                        <a href="http://127.0.0.1:8000/faq" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             FAQ
                         </a>
@@ -556,7 +556,7 @@
                         </div>
                     </div>
                     <div style="margin-top:32px">
-                        <a href="{{ url('/b2b') }}" class="footer-optimized__b2b-btn">Espace B2B <span style="font-size:1.25rem">→</span></a>
+                        <a href="http://127.0.0.1:8000/b2b" class="footer-optimized__b2b-btn">Espace B2B <span style="font-size:1.25rem">→</span></a>
                     </div>
                 </div>
             </div>
