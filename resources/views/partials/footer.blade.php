@@ -567,7 +567,7 @@
     <div class="footer-optimized__bottom">
         <div class="container">
             <div class="footer-optimized__bottom-content">
-                <p class="footer-optimized__copyright">© {{ date('Y') }} Mobilier Addict. Tous droits réservés. Crafted with ❤️ in Côte d'Ivoire</p>
+                <p class="footer-optimized__copyright">© {{ date('Y') }} Mobilier Addict. Tous droits réservés. Design By Ingenieux Digital</p>
                 <div class="footer-optimized__legal-links">
                     <a href="{{ route('pages.legal') }}" class="footer-optimized__legal-link">Mentions légales</a>
                     <a href="{{ route('pages.privacy') }}" class="footer-optimized__legal-link">Politique de confidentialité</a>
