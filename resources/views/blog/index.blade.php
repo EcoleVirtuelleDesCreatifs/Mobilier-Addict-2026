@@ -514,33 +514,33 @@
         </div>
 
         <div class="blog-index-modern__body" id="articles">
-            @if($featured)
+            @if($blogFeaturedPost)
                 <div class="blog-index-modern__section">
                     <div class="blog-index-modern__section-header">
                         <h2 class="blog-index-modern__section-title">À la une</h2>
                         <p class="blog-index-modern__section-subtitle">Un article sélectionné pour commencer fort.</p>
                     </div>
-                    <a href="{{ route('blog.show', $featured->slug) }}" class="blog-index-modern__featured">
+                    <a href="{{ route('blog.show', $blogFeaturedPost->slug) }}" class="blog-index-modern__featured">
                         <div class="blog-index-modern__featured-image">
-                            @if($featured->image)
-                                <img src="@image_url($featured->image)" alt="{{ $featured->image_alt ?: $featured->title }}" loading="lazy" />
+                            @if($blogFeaturedPost->image)
+                                <img src="@image_url($blogFeaturedPost->image)" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" loading="lazy" />
                             @else
-                                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&h=600&fit=crop" alt="{{ $featured->image_alt ?: $featured->title }}" loading="lazy" />
+                                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&h=600&fit=crop" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" loading="lazy" />
                             @endif
                             <span class="blog-index-modern__featured-badge">À la une</span>
                         </div>
                         <div class="blog-index-modern__featured-content">
                             <div class="blog-index-modern__meta">
-                                <span class="blog-index-modern__meta-item"><i class="fa-solid fa-tag"></i> {{ $featured->category?->name ?: 'Article' }}</span>
-                                @if($featured->published_at)
-                                    <span class="blog-index-modern__meta-item"><i class="fa-regular fa-calendar"></i> {{ $featured->published_at->format('d M Y') }}</span>
+                                <span class="blog-index-modern__meta-item"><i class="fa-solid fa-tag"></i> {{ $blogFeaturedPost->category?->name ?: 'Article' }}</span>
+                                @if($blogFeaturedPost->published_at)
+                                    <span class="blog-index-modern__meta-item"><i class="fa-regular fa-calendar"></i> {{ $blogFeaturedPost->published_at->format('d M Y') }}</span>
                                 @endif
-                                @if($featured->reading_time)
-                                    <span class="blog-index-modern__meta-item"><i class="fa-regular fa-clock"></i> {{ (int) $featured->reading_time }} min</span>
+                                @if($blogFeaturedPost->reading_time)
+                                    <span class="blog-index-modern__meta-item"><i class="fa-regular fa-clock"></i> {{ (int) $blogFeaturedPost->reading_time }} min</span>
                                 @endif
                             </div>
-                            <h3 class="blog-index-modern__featured-title">{{ $featured->title }}</h3>
-                            <p class="blog-index-modern__featured-excerpt">{{ $featured->excerpt ?: ' ' }}</p>
+                            <h3 class="blog-index-modern__featured-title">{{ $blogFeaturedPost->title }}</h3>
+                            <p class="blog-index-modern__featured-excerpt">{{ $blogFeaturedPost->excerpt ?: ' ' }}</p>
                             <span class="blog-index-modern__featured-link">Lire l'article <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
@@ -553,7 +553,7 @@
                     <p class="blog-index-modern__section-subtitle">Idées déco, conseils literie, inspirations et guides pratiques.</p>
                 </div>
                 <div class="blog-index-modern__grid">
-                    @foreach($posts as $post)
+                    @foreach($blogPosts as $post)
                         <a href="{{ route('blog.show', $post->slug) }}" class="blog-index-modern__card">
                             <div class="blog-index-modern__card-image">
                                 @if($post->image)
@@ -577,7 +577,7 @@
                 </div>
 
                 <div class="blog-index-modern__pagination">
-                    {{ $posts->links() }}
+                    {{ $blogPosts->links() }}
                 </div>
             </div>
 

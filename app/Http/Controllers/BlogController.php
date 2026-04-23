@@ -8,22 +8,22 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $featured = BlogPost::query()
+        $blogFeaturedPost = BlogPost::query()
             ->active()
             ->featured()
             ->ordered()
             ->with(['category'])
             ->first();
 
-        $posts = BlogPost::query()
+        $blogPosts = BlogPost::query()
             ->active()
-            ->when($featured, fn ($q) => $q->where('id', '!=', $featured->id))
+            ->when($blogFeaturedPost, fn ($q) => $q->where('id', '!=', $blogFeaturedPost->id))
             ->ordered()
             ->with(['category'])
             ->paginate(12)
             ->withQueryString();
 
-        return view('blog.index', compact('featured', 'posts'));
+        return view('blog.index', compact('blogFeaturedPost', 'blogPosts'));
     }
 
     public function show(string $slug)
