@@ -329,6 +329,7 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/invoices', [InvoiceController::class, 'index'])->middleware('permission:orders.view')->name('admin.invoices.index');
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->middleware('permission:orders.view')->name('admin.invoices.show');
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->middleware('permission:orders.view')->name('admin.invoices.pdf');
     Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.invoices.store');
     Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.invoices.status');
 

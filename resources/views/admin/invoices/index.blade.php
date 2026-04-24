@@ -51,6 +51,7 @@
                                     <td class="text-end fw-semibold">{{ number_format((float) $invoice->total, 0, ',', '.') }}F</td>
                                     <td class="text-end">
                                         <a href="{{ route('admin.invoices.show', $invoice) }}" class="btn btn-sm btn-admin-ghost">Voir</a>
+                                        <a href="{{ route('admin.invoices.pdf', $invoice) }}" class="btn btn-sm btn-admin-primary">PDF</a>
                                     </td>
                                 </tr>
                             @empty

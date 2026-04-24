@@ -10,6 +10,7 @@
                 </div>
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{{ route('admin.invoices.index') }}" class="btn btn-admin-ghost">Retour</a>
+                    <a href="{{ route('admin.invoices.pdf', $invoice) }}" class="btn btn-admin-primary">Télécharger PDF</a>
                     @if($invoice->order_id)
                         <a href="{{ route('admin.orders.show', $invoice->order_id) }}" class="btn btn-admin-ghost">Voir commande</a>
                     @endif

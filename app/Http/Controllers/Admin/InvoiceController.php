@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -90,6 +91,17 @@ class InvoiceController extends Controller
         $invoice->update($update);
 
         return back()->with('status', 'Statut de la facture mis à jour.');
+    }
+
+    public function downloadPdf(Invoice $invoice)
+    {
+        $invoice->load(['items.product', 'order']);
+
+        $pdf = Pdf::loadView('admin.invoices.pdf', [
+            'invoice' => $invoice,
+        ]);
+
+        return $pdf->download('facture-' . $invoice->number . '.pdf');
     }
 
     private function nextNumber(): string
