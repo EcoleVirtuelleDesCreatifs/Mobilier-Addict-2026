@@ -2709,7 +2709,7 @@
                     @foreach($litCanapeCategories as $category)
                         <a href="#products" class="matelas-category-simple-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                             <div class="matelas-category-simple-card__media" style="position:relative;height:320px;overflow:hidden">
-                                <img src="{{ $category['image'] }}" alt="{{ $category['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+                                <img src="{!! $category['image'] !!}" alt="{{ $category['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                             </div>
                             <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
                                 <h3 class="matelas-category-simple-card__name" style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">{{ $category['label'] }}</h3>
@@ -2761,7 +2761,7 @@
                     @foreach($electromenagerCategories as $category)
                         <a href="#products" class="matelas-category-simple-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                             <div class="matelas-category-simple-card__media" style="position:relative;height:320px;overflow:hidden">
-                                <img src="{{ $category['image'] }}" alt="{{ $category['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+                                <img src="{!! $category['image'] !!}" alt="{{ $category['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                             </div>
                             <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
                                 <h3 class="matelas-category-simple-card__name" style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">{{ $category['label'] }}</h3>
