@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\HomeSectionController;
 use App\Http\Controllers\Admin\StatsController;
+use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\FacebookPixelController;
 use App\Http\Controllers\Admin\NewProductsButtonController;
 use App\Http\Controllers\Admin\SpaceSectionController;
@@ -319,6 +320,12 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->middleware('permission:orders.view')->name('admin.orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view')->name('admin.orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.orders.status');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->middleware('permission:orders.view')->name('admin.invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->middleware('permission:orders.view')->name('admin.invoices.show');
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->middleware('permission:orders.view')->name('admin.invoices.pdf');
+    Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.invoices.store');
+    Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.invoices.status');
 
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
     Route::get('/home-sections/create', [HomeSectionController::class, 'create'])->name('admin.home_sections.create');
