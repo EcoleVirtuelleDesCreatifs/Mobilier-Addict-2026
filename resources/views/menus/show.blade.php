@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
-@section('title', $pageConfig['title'] . ' - Mobilier Addict')
-@section('meta_description', $pageConfig['headline'] . ' ' . $pageConfig['subtitle'])
+@section('title', $pageTitle . ' - Mobilier Addict')
+@section('meta_description', 'Découvrez nos produits pour ' . $pageTitle . ' sur Mobilier Addict.')
 
 @section('content')
     @php
