@@ -45,7 +45,7 @@
 
         .bestsellers-clean__grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px
         }
 
@@ -63,22 +63,11 @@
             transform: translateY(-4px)
         }
 
-        .bestsellers-clean__card--featured {
-            grid-column: 1 / 3;
-            grid-row: 1 / 3;
-            display: flex;
-            flex-direction: column
-        }
-
         .bestsellers-clean__card-media {
             position: relative;
             height: 220px;
             overflow: hidden;
             background: #f8fafc
-        }
-
-        .bestsellers-clean__card--featured .bestsellers-clean__card-media {
-            height: 320px
         }
 
         .bestsellers-clean__card-media img {
@@ -109,11 +98,6 @@
             padding: 20px
         }
 
-        .bestsellers-clean__card--featured .bestsellers-clean__card-body {
-            padding: 28px;
-            flex: 1
-        }
-
         .bestsellers-clean__rating {
             display: flex;
             align-items: center;
@@ -140,21 +124,11 @@
             overflow: hidden
         }
 
-        .bestsellers-clean__card--featured .bestsellers-clean__name {
-            font-size: 1.5rem;
-            margin-bottom: 16px
-        }
-
         .bestsellers-clean__price {
             font-size: 1.25rem;
             font-weight: 800;
             color: #ec4899;
             margin-bottom: 16px
-        }
-
-        .bestsellers-clean__card--featured .bestsellers-clean__price {
-            font-size: 2rem;
-            margin-bottom: 24px
         }
 
         .bestsellers-clean__price-old {
@@ -207,11 +181,6 @@
             .bestsellers-clean__grid {
                 grid-template-columns: repeat(2, 1fr)
             }
-
-            .bestsellers-clean__card--featured {
-                grid-column: 1 / 3;
-                grid-row: auto
-            }
         }
 
         @media (max-width: 768px) {
@@ -223,16 +192,8 @@
                 grid-template-columns: 1fr
             }
 
-            .bestsellers-clean__card--featured {
-                grid-column: 1
-            }
-
             .bestsellers-clean__card-media {
                 height: 200px
-            }
-
-            .bestsellers-clean__card--featured .bestsellers-clean__card-media {
-                height: 280px
             }
         }
     </style>
@@ -245,56 +206,18 @@
         </div>
 
         @php
-            $featured = ($favoriteProducts ?? collect())->first();
-            $others = ($favoriteProducts ?? collect())->slice(1)->take(3);
+            $allProducts = ($favoriteProducts ?? collect());
         @endphp
 
         <div class="bestsellers-clean__grid">
-            @if($featured)
-                <article class="bestsellers-clean__card bestsellers-clean__card--featured" aria-label="{{ $featured->name }}">
-                    @if(!empty($featured->discount_percent) && (int) $featured->discount_percent > 0)
-                        <div class="bestsellers-clean__badge-discount">-{{ (int) $featured->discount_percent }}%</div>
-                    @endif
-
-                    <div class="bestsellers-clean__card-media">
-                        <img src="@image_url($featured->image)" alt="{{ $featured->name }}" loading="eager" />
-                    </div>
-                    <div class="bestsellers-clean__card-body">
-                        <div class="bestsellers-clean__rating">
-                            <span>★</span>
-                            <span class="bestsellers-clean__rating-text">4.9</span>
-                            <span class="bestsellers-clean__rating-count">(2.4k)</span>
-                        </div>
-                        <h3 class="bestsellers-clean__name">{{ $featured->name }}</h3>
-                        <div class="bestsellers-clean__price">
-                            {{ $featured->formatted_price }}
-                            @if(!empty($featured->formatted_old_price))
-                                <span class="bestsellers-clean__price-old">{{ $featured->formatted_old_price }}</span>
-                            @endif
-                        </div>
-                        <div class="bestsellers-clean__actions">
-                            <a href="{{ $featured->slug ? route('product.show', $featured->slug) : route('demo.product') }}" class="bestsellers-clean__btn bestsellers-clean__btn--primary">
-                                Voir
-                            </a>
-                            <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $featured->id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button class="bestsellers-clean__btn bestsellers-clean__btn--secondary" type="submit">Panier</button>
-                            </form>
-                        </div>
-                    </div>
-                </article>
-            @endif
-
-            @forelse($others as $product)
+            @foreach($allProducts as $product)
                 <article class="bestsellers-clean__card" aria-label="{{ $product->name }}">
                     @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
                         <div class="bestsellers-clean__badge-discount">-{{ (int) $product->discount_percent }}%</div>
                     @endif
 
                     <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="bestsellers-clean__card-media">
-                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy">
                     </a>
                     <div class="bestsellers-clean__card-body">
                         <h3 class="bestsellers-clean__name">{{ $product->name }}</h3>
@@ -312,8 +235,7 @@
                         </form>
                     </div>
                 </article>
-            @empty
-            @endforelse
+            @endforeach
         </div>
     </div>
 </section>
