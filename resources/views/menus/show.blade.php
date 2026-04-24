@@ -182,7 +182,7 @@
                 'inspire_title' => 'Modernisez Votre Maison',
                 'inspire_desc' => 'Des appareils innovants pour une vie plus simple et confortable.',
                 'mission_title' => 'Innovation au Quotidien',
-                'mission_desc' => 'Notre sélection d\'électroménager allie performance, économie d\'énergie et design moderne pour faciliter votre quotidien.',
+                'mission_desc' => "Notre sélection d'électroménager allie performance, économie d'énergie et design moderne pour faciliter votre quotidien.",
                 'reco_title' => 'Notre Électroménager Recommandé',
                 'reco_desc' => 'Sélectionné pour sa performance et sa durabilité.',
                 'reco_bg' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=600&fit=crop',
