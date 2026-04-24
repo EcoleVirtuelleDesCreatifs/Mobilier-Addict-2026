@@ -144,11 +144,6 @@
                                             <div class="d-flex justify-content-end gap-2 flex-wrap">
                                                 <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-admin-ghost">Voir</a>
 
-                                                <form method="POST" action="{{ route('admin.orders.invoices.store', $order) }}">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-sm btn-admin-primary">Facture</button>
-                                                </form>
-
                                                 @if($status === 'pending')
                                                     <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                                                         @csrf

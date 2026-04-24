@@ -32,11 +32,6 @@
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{{ route('admin.orders.index') }}" class="btn btn-admin-ghost">Retour</a>
 
-                    <form method="POST" action="{{ route('admin.orders.invoices.store', $order) }}">
-                        @csrf
-                        <button type="submit" class="btn btn-admin-primary">Créer Facture</button>
-                    </form>
-
                     <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                         @csrf
                         @method('PUT')
