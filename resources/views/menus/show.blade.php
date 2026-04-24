@@ -2741,9 +2741,9 @@
         @elseif(strtolower(trim((string) $menu->slug)) === 'electromenager')
         @php
             $electromenagerCategories = [
-                ['key' => 'gazinieres', 'label' => 'Gazinières', 'desc' => 'Cuisine au gaz', 'image' => 'https://images.unsplash.com/photo-1556910103-1c02745a30bf?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
-                ['key' => 'frigo', 'label' => 'Frigo', 'desc' => 'Conservation optimale', 'image' => 'https://images.unsplash.com/photo-1571175443880-49e1d6b7c3d2?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
-                ['key' => 'climatiseurs', 'label' => 'Climatiseurs', 'desc' => 'Fraîcheur garantie', 'image' => 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&h=600&fit=crop', 'color' => '#ec4899'],
+                ['key' => 'gazinieres', 'label' => 'Gazinières', 'desc' => 'Cuisine au gaz', 'image' => 'https://images.unsplash.com/photo-1584622050111-993a426fbf0a?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
+                ['key' => 'frigo', 'label' => 'Frigo', 'desc' => 'Conservation optimale', 'image' => 'https://images.unsplash.com/photo-1556910103-1c02745a30bf?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
+                ['key' => 'climatiseurs', 'label' => 'Climatiseurs', 'desc' => 'Fraîcheur garantie', 'image' => 'https://images.unsplash.com/photo-1545459817-211849c3e4db?w=800&h=600&fit=crop', 'color' => '#ec4899'],
                 ['key' => 'mixeurs', 'label' => 'Mixeurs', 'desc' => 'Préparation facile', 'image' => 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
             ];
         @endphp
