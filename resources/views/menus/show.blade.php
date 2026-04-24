@@ -2741,10 +2741,10 @@
         @elseif(strtolower(trim((string) $menu->slug)) === 'electromenager')
         @php
             $electromenagerCategories = [
-                ['key' => 'gazinieres', 'label' => 'Gazinières', 'desc' => 'Cuisine au gaz', 'image' => 'https://images.unsplash.com/photo-1584622050111-993a426fbf0a?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
-                ['key' => 'frigo', 'label' => 'Frigo', 'desc' => 'Conservation optimale', 'image' => 'https://images.unsplash.com/photo-1556910103-1c02745a30bf?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
-                ['key' => 'climatiseurs', 'label' => 'Climatiseurs', 'desc' => 'Fraîcheur garantie', 'image' => 'https://images.unsplash.com/photo-1545459817-211849c3e4db?w=800&h=600&fit=crop', 'color' => '#ec4899'],
-                ['key' => 'mixeurs', 'label' => 'Mixeurs', 'desc' => 'Préparation facile', 'image' => 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
+                ['key' => 'gazinieres', 'label' => 'Gazinières', 'desc' => 'Cuisine au gaz', 'image' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
+                ['key' => 'frigo', 'label' => 'Frigo', 'desc' => 'Conservation optimale', 'image' => 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
+                ['key' => 'climatiseurs', 'label' => 'Climatiseurs', 'desc' => 'Fraîcheur garantie', 'image' => 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&h=600&fit=crop', 'color' => '#ec4899'],
+                ['key' => 'mixeurs', 'label' => 'Mixeurs', 'desc' => 'Préparation facile', 'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
             ];
         @endphp
 
