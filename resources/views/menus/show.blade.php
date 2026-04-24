@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
-@section('title', $pageTitle)
-@section('meta_description', 'Découvrez nos produits pour ' . $pageTitle . ' sur Mobilier Addict.')
+@section('title', $pageConfig['title'] . ' - Mobilier Addict')
+@section('meta_description', $pageConfig['headline'] . ' ' . $pageConfig['subtitle'])
 
 @section('content')
     @php
@@ -11,11 +11,11 @@
 
         $designSlug = match ($menuSlug) {
             'matelas' => 'matelas',
-            'oreillers-et-taies' => 'matelas',
-            'meuble-et-fauteuil' => 'matelas',
-            'drap-et-couettes' => 'matelas',
-            'electromenager' => 'matelas',
-            'lit-canape' => 'matelas',
+            'oreillers-et-taies' => 'oreillers',
+            'meuble-et-fauteuil' => 'lits-sommiers',
+            'drap-et-couettes' => 'draps-couettes',
+            'electromenager' => 'electromenager',
+            'lit-canape' => 'lit-canape',
             default => $menuSlug,
         };
 
@@ -110,8 +110,97 @@
                     ['title' => 'Matières Hypoallergéniques', 'text' => 'Tissus respirants et anti-acariens pour un sommeil sain.'],
                 ],
             ],
+            'lit-canape' => [
+                'badge' => '🛋️ Confort 2 en 1',
+                'title' => 'Lits Canapés',
+                'headline' => 'Le jour canapé, la nuit lit.',
+                'subtitle' => "Gagnez de l'espace sans sacrifier le confort. Nos lits canapés allient praticité et qualité de sommeil.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Gain de place', 'text' => "Transformez votre salon en chambre d'amis en quelques secondes."],
+                    ['title' => 'Confort optimal', 'text' => "Un matelas de qualité pour des nuits reposantes, même en canapé."],
+                    ['title' => 'Design moderne', 'text' => "Des styles variés pour s'intégrer parfaitement à votre intérieur."],
+                ],
+                'cta_title' => 'Trouvez votre lit canapé idéal',
+                'cta_text' => "Choisissez la taille, le style et le confort qui vous conviennent.",
+                'cta_button' => 'Je choisis mon lit canapé',
+                'faq' => [
+                    ['q' => 'Quel type de mécanisme choisir ?', 'a' => "Le clic-clac est simple et rapide. Le convertisseur offre plus de confort avec un vrai matelas."],
+                    ['q' => 'Est-ce confortable pour dormir ?', 'a' => "Oui, nos modèles sont équipés de vrais matelas pour un sommeil de qualité."],
+                    ['q' => 'Quelle taille pour mon espace ?', 'a' => "Mesurez votre espace. Les modèles 140-160cm sont idéaux pour 2 personnes."],
+                ],
+                'hero_card_badge_top' => 'Confort',
+                'hero_card_badge_bottom' => 'versatile',
+                'carousel_title' => 'Nos Best-Sellers Lits Canapés',
+                'carousel_desc' => 'Les lits canapés préférés de nos clients — praticité garantie.',
+                'inspire_title' => 'Optimisez Votre Espace',
+                'inspire_desc' => 'Un salon le jour, une chambre la nuit. Découvrez nos solutions gain de place.',
+                'mission_title' => 'Confort et Praticité Réunis',
+                'mission_desc' => 'Nos lits canapés sont conçus pour vous offrir un confort optimal tout en maximisant votre espace de vie.',
+                'reco_title' => 'Nos Lits Canapés Recommandés',
+                'reco_desc' => 'Sélectionnés pour leur confort et leur facilité d\'utilisation.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+1 500</span> clients satisfaits',
+                'why_subtitle' => 'Ils ont optimisé leur espace sans sacrifier le confort. À votre tour !',
+                'why_stats' => [
+                    ['number' => '96%', 'label' => 'Clients satisfaits'],
+                    ['number' => '5 ans', 'label' => 'Garantie mécanisme'],
+                    ['number' => '48h', 'label' => 'Livraison express'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Mécanismes Testés', 'text' => 'Mécanismes robustes testés pour 10 000 ouvertures.'],
+                    ['title' => 'Matelas de Qualité', 'text' => 'Vrais matelas pour un confort optimal nuit après nuit.'],
+                    ['title' => 'Design Varié', 'text' => 'Styles modernes, scandinaves, classiques pour tous les goûts.'],
+                    ['title' => 'Garantie Satisfait', 'text' => '30 jours pour tester. Retour gratuit si non satisfait.'],
+                ],
+            ],
+            'electromenager' => [
+                'badge' => '⚡ Innovation & performance',
+                'title' => 'Électroménager',
+                'headline' => 'Simplifiez votre quotidien.',
+                'subtitle' => "Des appareils performants et durables pour faciliter votre vie au quotidien avec style et efficacité.",
+                'hero_bg' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=900&fit=crop',
+                'hero_card' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&h=1100&fit=crop',
+                'benefits' => [
+                    ['title' => 'Performance optimale', 'text' => "Des appareils puissants pour des résultats professionnels à la maison."],
+                    ['title' => 'Économie d'énergie', 'text' => "Technologies éco-responsables pour réduire votre consommation."],
+                    ['title' => 'Design moderne', 'text' => "Esthétique soignée pour sublimer votre intérieur."],
+                ],
+                'cta_title' => 'Équipez-vous intelligemment',
+                'cta_text' => "Découvrez notre sélection d'appareils pour une maison moderne et fonctionnelle.",
+                'cta_button' => 'Je découvre l\'électroménager',
+                'faq' => [
+                    ['q' => 'Quelle classe énergétique choisir ?', 'a' => "Privilégiez les classes A++ ou A+++ pour une consommation minimale."],
+                    ['q' => 'Les appareils sont-ils garantis ?', 'a' => "Oui, tous nos appareils bénéficient d\'une garantie fabricant de 2 ans minimum."],
+                    ['q' => 'Livraison et installation ?', 'a' => "Livraison gratuite et installation incluse pour les gros électroménagers."],
+                ],
+                'hero_card_badge_top' => 'Performance',
+                'hero_card_badge_bottom' => 'éco-responsable',
+                'carousel_title' => 'Nos Best-Sellers Électroménager',
+                'carousel_desc' => 'Les appareils préférés de nos clients — performance garantie.',
+                'inspire_title' => 'Modernisez Votre Maison',
+                'inspire_desc' => 'Des appareils innovants pour une vie plus simple et confortable.',
+                'mission_title' => 'Innovation au Quotidien',
+                'mission_desc' => 'Notre sélection d\'électroménager allie performance, économie d\'énergie et design moderne pour faciliter votre quotidien.',
+                'reco_title' => 'Notre Électroménager Recommandé',
+                'reco_desc' => 'Sélectionné pour sa performance et sa durabilité.',
+                'reco_bg' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=600&fit=crop',
+                'why_title' => 'Rejoignez <span>+1 200</span> clients satisfaits',
+                'why_subtitle' => 'Ils nous font confiance pour équiper leur maison. À votre tour !',
+                'why_stats' => [
+                    ['number' => '95%', 'label' => 'Clients satisfaits'],
+                    ['number' => '2 ans', 'label' => 'Garantie fabricant'],
+                    ['number' => '48h', 'label' => 'Livraison express'],
+                ],
+                'why_benefits' => [
+                    ['title' => 'Haute Performance', 'text' => 'Appareils puissants pour des résultats optimaux.'],
+                    ['title' => 'Éco-Responsable', 'text' => 'Technologies économes en énergie A+++'],
+                    ['title' => 'Installation Incluse', 'text' => 'Livraison et mise en service par nos experts.'],
+                    ['title' => 'Service Après-Vente', 'text' => 'Support technique disponible 7j/7.'],
+                ],
+            ],
             'lits-sommiers' => [
-                'badge' => '🛏️ Élégance & robustesse',
                 'title' => 'Meubles & Fauteuils',
                 'headline' => 'Une chambre qui inspire.',
                 'subtitle' => "Un lit beau, solide et silencieux : le point de départ d'un intérieur apaisant.",
@@ -157,7 +246,7 @@
             ],
             'draps-couettes' => [
                 'badge' => '🧺 Douceur qui rassure',
-                'title' => 'Protège-Matelas',
+                'title' => 'Draps & Couettes',
                 'headline' => 'Votre cocon, chaque nuit.',
                 'subtitle' => "Des matières respirantes, des finitions premium et une sensation de propre qui donne envie d'aller se coucher.",
                 'hero_bg' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1920&h=900&fit=crop',
@@ -177,8 +266,8 @@
                 ],
                 'hero_card_badge_top' => 'Douceur',
                 'hero_card_badge_bottom' => 'premium',
-                'carousel_title' => 'Nos Best-Sellers Protège-Matelas',
-                'carousel_desc' => 'Protège-matelas préférés de nos clients — douceur garantie.',
+                'carousel_title' => 'Nos Best-Sellers Draps & Couettes',
+                'carousel_desc' => 'Le linge de lit préféré de nos clients — douceur garantie.',
                 'inspire_title' => 'Créez Votre Cocon de Douceur',
                 'inspire_desc' => 'Des matières nobles et des finitions soignées pour transformer chaque nuit.',
                 'mission_title' => 'Le Linge de Lit Qui Fait la Différence',
