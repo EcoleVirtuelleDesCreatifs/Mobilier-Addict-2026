@@ -447,8 +447,8 @@
             <div class="footer-optimized__grid">
                 <!-- Brand Section -->
                 <div>
-                    <a href="http://127.0.0.1:8000" class="footer-optimized__brand-logo">
-                        <img src="http://127.0.0.1:8000/assets/logo/mobile/logo.png" alt="Mobilier Addict" />
+                    <a href="{{ url('/') }}" class="footer-optimized__brand-logo">
+                        <img src="{{ asset('logo/mobile/logo.png') }}" alt="Mobilier Addict" />
                     </a>
                     <p class="footer-optimized__brand-desc">Votre partenaire sommeil depuis 2015. Nous sélectionnons les meilleurs produits pour transformer vos nuits en moments de pur confort.</p>
                     <div class="footer-optimized__social">
@@ -474,27 +474,27 @@
                     </div>
                     <h4 class="footer-optimized__section-title">Nos Menus</h4>
                     <div class="footer-optimized__links">
-                        <a href="http://127.0.0.1:8000/menu" class="footer-optimized__link">
+                        <a href="{{ url('/menu') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Accueil
                         </a>
-                        <a href="http://127.0.0.1:8000/menu/lit-canape" class="footer-optimized__link">
+                        <a href="{{ url('/menu/lit-canape') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Lit &amp; Canapé
                         </a>
-                        <a href="http://127.0.0.1:8000/menu/electromenager" class="footer-optimized__link">
+                        <a href="{{ url('/menu/electromenager') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Électroménager
                         </a>
-                        <a href="http://127.0.0.1:8000/menu/matelas" class="footer-optimized__link">
+                        <a href="{{ url('/menu/matelas') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Matelas
                         </a>
-                        <a href="http://127.0.0.1:8000/menu/oreillers-et-taies" class="footer-optimized__link">
+                        <a href="{{ url('/menu/oreillers-et-taies') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Oreillers et taies
                         </a>
-                        <a href="http://127.0.0.1:8000/menu/drap-et-couettes" class="footer-optimized__link">
+                        <a href="{{ url('/menu/drap-et-couettes') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--pink"></span>
                             Drap et Couettes
                         </a>
@@ -508,23 +508,23 @@
                     </div>
                     <h4 class="footer-optimized__section-title">Informations</h4>
                     <div class="footer-optimized__links">
-                        <a href="http://127.0.0.1:8000/a-propos" class="footer-optimized__link">
+                        <a href="{{ url('/a-propos') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             À propos de nous
                         </a>
-                        <a href="http://127.0.0.1:8000/contact" class="footer-optimized__link">
+                        <a href="{{ url('/contact') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Contactez-nous
                         </a>
-                        <a href="http://127.0.0.1:8000/service-client" class="footer-optimized__link">
+                        <a href="{{ url('/service-client') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Service client
                         </a>
-                        <a href="http://127.0.0.1:8000/livraison-retours" class="footer-optimized__link">
+                        <a href="{{ url('/livraison-retours') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             Livraison &amp; Retours
                         </a>
-                        <a href="http://127.0.0.1:8000/faq" class="footer-optimized__link">
+                        <a href="{{ url('/faq') }}" class="footer-optimized__link">
                             <span class="footer-optimized__link-dot footer-optimized__link-dot--blue"></span>
                             FAQ
                         </a>
@@ -556,7 +556,7 @@
                         </div>
                     </div>
                     <div style="margin-top:32px">
-                        <a href="http://127.0.0.1:8000/b2b" class="footer-optimized__b2b-btn">Espace B2B <span style="font-size:1.25rem">→</span></a>
+                        <a href="{{ url('/b2b') }}" class="footer-optimized__b2b-btn">Espace B2B <span style="font-size:1.25rem">→</span></a>
                     </div>
                 </div>
             </div>
