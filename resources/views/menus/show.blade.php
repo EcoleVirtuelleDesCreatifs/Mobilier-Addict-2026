@@ -2686,7 +2686,59 @@
             </div>
         </section>
 
-        @if(in_array(strtolower(trim((string) $menu->slug)), ['matelas', 'lit-canape', 'electromenager', 'oreillers-et-taies', 'drap-et-couettes']))
+        @if(strtolower(trim((string) $menu->slug)) === 'lit-canape')
+        @php
+            $litCanapeCategories = [
+                ['key' => 'clic_clac', 'label' => 'Clic-Clac', 'desc' => 'Simple et rapide', 'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
+                ['key' => 'convertisseur', 'label' => 'Convertisseur', 'desc' => 'Confort optimal', 'image' => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
+                ['key' => 'rapido', 'label' => 'Rapido', 'desc' => 'Ouverture facile', 'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop', 'color' => '#ec4899'],
+                ['key' => 'bz', 'label' => 'BZ', 'desc' => 'Compact', 'image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
+            ];
+        @endphp
+
+        <section class="matelas-categories-simple reveal is-visible" id="differents" aria-label="Nos gammes" style="background:#0f172a;padding:100px 0">
+            <div class="container">
+                <div class="matelas-categories-simple__head" style="text-align:center;margin-bottom:80px">
+                    <div class="matelas-categories-simple__badge" style="display:inline-block;padding:12px 28px;background:rgba(236,72,153,.15);border:2px solid rgba(236,72,153,.3);border-radius:50px;margin-bottom:32px">
+                        <span style="color:#ec4899;font-size:0.875rem;letter-spacing:3px;text-transform:uppercase;font-weight:800">Collection</span>
+                    </div>
+                    <h2 class="matelas-categories-simple__title" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:#fff;margin-bottom:20px;letter-spacing:-.02em;line-height:1.1">Nos gammes</h2>
+                    <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">Découvrez notre sélection de lits canapés par mécanisme</p>
+                </div>
+                <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
+                    @foreach($litCanapeCategories as $category)
+                        <a href="#products" class="matelas-category-simple-card" data-category="{{ $category['key'] }}" style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
+                            <div class="matelas-category-simple-card__media" style="position:relative;height:320px;overflow:hidden">
+                                <img src="{{ $category['image'] }}" alt="{{ $category['label'] }}" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+                            </div>
+                            <div class="matelas-category-simple-card__content" style="padding:40px;position:relative">
+                                <h3 class="matelas-category-simple-card__name" style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">{{ $category['label'] }}</h3>
+                                <p class="matelas-category-simple-card__desc" style="font-size:1.125rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">{{ $category['desc'] }}</p>
+                                <div class="matelas-category-simple-card__arrow" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem">
+                                    Découvrir <span style="font-size:1.1rem;font-weight:900">→</span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+        <style>
+            .matelas-category-simple-card:hover {
+                transform: none;
+                border-color: rgba(255,255,255,.1);
+            }
+
+            .matelas-category-simple-card:hover .matelas-category-simple-card__media img {
+                transform: none;
+            }
+            .matelas-category-simple-card:hover .matelas-category-simple-card__arrow {
+                background: rgba(236,72,153,.15);
+                color: #ec4899;
+                transform: none;
+            }
+        </style>
+        @elseif(in_array(strtolower(trim((string) $menu->slug)), ['matelas', 'electromenager', 'oreillers-et-taies', 'drap-et-couettes']))
         @php
             $allMatelas = collect($matelasCategoryGroups ?? [])->flatMap(function ($g) {
                 return $g['products'] ?? [];
