@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
-use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -97,14 +97,11 @@ class InvoiceController extends Controller
     {
         $invoice->load(['items.product', 'order']);
 
-        $html = view('admin.invoices.pdf', ['invoice' => $invoice])->render();
+        $pdf = Pdf::loadView('admin.invoices.pdf', [
+            'invoice' => $invoice,
+        ]);
 
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        return $dompdf->stream('facture-' . $invoice->number . '.pdf');
+        return $pdf->download('facture-' . $invoice->number . '.pdf');
     }
 
     private function nextNumber(): string
