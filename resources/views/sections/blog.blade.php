@@ -1,95 +1,50 @@
-        <section class="blog-modern" aria-label="Magazine & Conseils">
+        <section class="blog-classic" aria-label="Magazine & Conseils">
     <style>
-        .blog-modern {
-            position: relative;
-            padding: 120px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden
+        .blog-classic {
+            padding: 100px 0;
+            background: #f8fafc
         }
 
-        .blog-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%221.5%22 fill=%22rgba(255,255,255,.05)%22/></svg>');
-            background-size: 40px 40px;
-            opacity: .5
-        }
-
-        .blog-modern__bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px)
-        }
-
-        .blog-modern__bg-circle--1 {
-            width: 600px;
-            height: 600px;
-            background: rgba(236,72,153,.3);
-            top: -200px;
-            right: -200px
-        }
-
-        .blog-modern__bg-circle--2 {
-            width: 400px;
-            height: 400px;
-            background: rgba(59,130,246,.3);
-            bottom: -100px;
-            left: -100px
-        }
-
-        .blog-modern__container {
-            position: relative;
+        .blog-classic__container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px
         }
 
-        .blog-modern__header {
+        .blog-classic__header {
             text-align: center;
             margin-bottom: 60px
         }
 
-        .blog-modern__badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 24px;
-            background: rgba(255,255,255,.2);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255,255,255,.3);
+        .blog-classic__label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #0f172a;
             color: #fff;
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px
         }
 
-        .blog-modern__title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            color: #fff;
-            margin: 0 0 20px;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            text-shadow: 0 4px 20px rgba(0,0,0,.1)
+        .blog-classic__title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.2
         }
 
-        .blog-modern__title span {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text
+        .blog-classic__title span {
+            color: #ec4899
         }
 
-        .blog-modern__subtitle {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,.9);
+        .blog-classic__subtitle {
+            font-size: 1.125rem;
+            color: #64748b;
             margin: 0;
             max-width: 600px;
             margin-left: auto;
@@ -97,265 +52,244 @@
             line-height: 1.6
         }
 
-        .blog-modern__grid {
+        .blog-classic__grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 32px;
             margin-bottom: 48px
         }
 
-        .blog-modern__card {
-            background: rgba(255,255,255,.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
+        .blog-classic__card {
+            background: #fff;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
-            transition: all .4s cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 2px 12px rgba(0,0,0,.06);
+            transition: all .3s ease;
             text-decoration: none;
-            color: inherit
+            color: inherit;
+            display: flex;
+            flex-direction: column
         }
 
-        .blog-modern__card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0,0,0,.3)
+        .blog-classic__card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,.12)
         }
 
-        .blog-modern__card--featured {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 0
+        .blog-classic__card--featured {
+            grid-column: 1 / 2
         }
 
-        .blog-modern__card--featured .blog-modern__card-image {
-            min-height: 400px
-        }
-
-        .blog-modern__card-image {
+        .blog-classic__card-image {
             position: relative;
-            width: 100%;
             height: 240px;
             overflow: hidden
         }
 
-        .blog-modern__card--featured .blog-modern__card-image {
-            height: 100%;
-            min-height: 400px
+        .blog-classic__card--featured .blog-classic__card-image {
+            height: 300px
         }
 
-        .blog-modern__card-image img {
+        .blog-classic__card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform .5s ease
         }
 
-        .blog-modern__card:hover .blog-modern__card-image img {
-            transform: scale(1.1)
+        .blog-classic__card:hover .blog-classic__card-image img {
+            transform: scale(1.08)
         }
 
-        .blog-modern__card-badge {
+        .blog-classic__card-badge {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+            top: 16px;
+            left: 16px;
+            padding: 6px 16px;
+            background: #0f172a;
             color: #fff;
-            border-radius: 20px;
-            font-size: 0.8125rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(236,72,153,.4)
+            letter-spacing: 0.5px
         }
 
-        .blog-modern__card-content {
-            padding: 28px
-        }
-
-        .blog-modern__card--featured .blog-modern__card-content {
-            padding: 40px;
+        .blog-classic__card-content {
+            padding: 24px;
+            flex: 1;
             display: flex;
-            flex-direction: column;
-            justify-content: center
+            flex-direction: column
         }
 
-        .blog-modern__card-meta {
+        .blog-classic__card--featured .blog-classic__card-content {
+            padding: 32px
+        }
+
+        .blog-classic__card-meta {
             display: flex;
             gap: 16px;
             margin-bottom: 16px;
-            flex-wrap: wrap
-        }
-
-        .blog-modern__meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.875rem;
-            color: #64748b;
+            font-size: 0.8125rem;
+            color: #94a3b8;
             font-weight: 500
         }
 
-        .blog-modern__meta-item i {
-            color: #ec4899
-        }
-
-        .blog-modern__card-title {
-            font-size: 1.5rem;
-            font-weight: 800;
+        .blog-classic__card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
             color: #0f172a;
             margin: 0 0 12px;
-            line-height: 1.3;
-            letter-spacing: -0.01em
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+            flex: 1
         }
 
-        .blog-modern__card--featured .blog-modern__card-title {
-            font-size: 2rem;
-            margin-bottom: 20px
+        .blog-classic__card--featured .blog-classic__card-title {
+            font-size: 1.5rem;
+            margin-bottom: 16px
         }
 
-        .blog-modern__card-excerpt {
-            font-size: 1rem;
+        .blog-classic__card-excerpt {
+            font-size: 0.9375rem;
             color: #64748b;
             line-height: 1.6;
-            margin: 0 0 20px
+            margin: 0 0 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden
         }
 
-        .blog-modern__card--featured .blog-modern__card-excerpt {
-            font-size: 1.125rem;
-            margin-bottom: 28px
-        }
-
-        .blog-modern__card-link {
+        .blog-classic__card-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             color: #ec4899;
             font-weight: 700;
-            font-size: 0.9375rem;
+            font-size: 0.875rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: all .3s ease
+            margin-top: auto
         }
 
-        .blog-modern__card-link:hover {
-            color: #be185d;
-            gap: 12px
-        }
-
-        .blog-modern__cta {
+        .blog-classic__cta {
             text-align: center
         }
 
-        .blog-modern__cta-btn {
+        .blog-classic__cta-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 20px 48px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #0f172a;
-            border-radius: 50px;
+            padding: 16px 40px;
+            background: #0f172a;
+            color: #fff;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: 800;
-            font-size: 1.0625rem;
+            font-weight: 700;
+            font-size: 0.9375rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 10px 40px rgba(255,215,0,.4);
             transition: all .3s ease
         }
 
-        .blog-modern__cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(255,215,0,.5)
+        .blog-classic__cta-btn:hover {
+            background: #ec4899;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(236,72,153,.3)
         }
 
         @media (max-width: 1024px) {
-            .blog-modern__card--featured {
-                grid-template-columns: 1fr
+            .blog-classic__grid {
+                grid-template-columns: repeat(2, 1fr)
             }
 
-            .blog-modern__card--featured .blog-modern__card-image {
-                min-height: 300px
+            .blog-classic__card--featured {
+                grid-column: 1 / -1
             }
         }
 
         @media (max-width: 768px) {
-            .blog-modern {
+            .blog-classic {
                 padding: 80px 0
             }
 
-            .blog-modern__grid {
+            .blog-classic__grid {
                 grid-template-columns: 1fr;
                 gap: 24px
             }
 
-            .blog-modern__card--featured .blog-modern__card-content {
-                padding: 28px
+            .blog-classic__card--featured {
+                grid-column: 1
             }
 
-            .blog-modern__card--featured .blog-modern__card-title {
-                font-size: 1.5rem
+            .blog-classic__card-image {
+                height: 200px
+            }
+
+            .blog-classic__card--featured .blog-classic__card-image {
+                height: 260px
             }
         }
     </style>
 
-    <div class="blog-modern__bg-circle blog-modern__bg-circle--1"></div>
-    <div class="blog-modern__bg-circle blog-modern__bg-circle--2"></div>
-
-    <div class="blog-modern__container">
-        <div class="blog-modern__header">
-            <span class="blog-modern__badge">
-                <i class="fa-solid fa-sparkles"></i> Notre Magazine
-            </span>
-            <h2 class="blog-modern__title">Inspirations &<br><span>Conseils Déco</span></h2>
-            <p class="blog-modern__subtitle">Découvrez nos articles pour sublimer votre intérieur et créer un espace qui vous ressemble</p>
+    <div class="blog-classic__container">
+        <div class="blog-classic__header">
+            <span class="blog-classic__label">Notre Magazine</span>
+            <h2 class="blog-classic__title">Inspirations & <span>Conseils Déco</span></h2>
+            <p class="blog-classic__subtitle">Découvrez nos articles pour sublimer votre intérieur et créer un espace qui vous ressemble</p>
         </div>
 
-        <div class="blog-modern__grid">
+        <div class="blog-classic__grid">
             @if($blogFeaturedPost)
-                <a href="{{ route('blog.show', $blogFeaturedPost->slug) }}" class="blog-modern__card blog-modern__card--featured">
-                    <div class="blog-modern__card-image">
+                <a href="{{ route('blog.show', $blogFeaturedPost->slug) }}" class="blog-classic__card blog-classic__card--featured">
+                    <div class="blog-classic__card-image">
                         <img src="@image_url($blogFeaturedPost->image)" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" loading="lazy" />
-                        <span class="blog-modern__card-badge">À la une</span>
+                        <span class="blog-classic__card-badge">À la une</span>
                     </div>
-                    <div class="blog-modern__card-content">
-                        <div class="blog-modern__card-meta">
-                            <span class="blog-modern__meta-item"><i class="fa-solid fa-tag"></i> {{ $blogFeaturedPost->category?->name ?: 'Article' }}</span>
-                            @if($blogFeaturedPost->published_at)
-                                <span class="blog-modern__meta-item"><i class="fa-regular fa-calendar"></i> {{ $blogFeaturedPost->published_at->format('d M Y') }}</span>
+                    <div class="blog-classic__card-content">
+                        <div class="blog-classic__card-meta">
+                            @if($blogFeaturedPost->category)
+                                <span>{{ $blogFeaturedPost->category->name }}</span>
                             @endif
-                            @if($blogFeaturedPost->reading_time)
-                                <span class="blog-modern__meta-item"><i class="fa-regular fa-clock"></i> {{ (int) $blogFeaturedPost->reading_time }} min</span>
+                            @if($blogFeaturedPost->published_at)
+                                <span>{{ $blogFeaturedPost->published_at->format('d M Y') }}</span>
                             @endif
                         </div>
-                        <h3 class="blog-modern__card-title">{{ $blogFeaturedPost->title }}</h3>
-                        <p class="blog-modern__card-excerpt">{{ $blogFeaturedPost->excerpt ?: ' ' }}</p>
-                        <span class="blog-modern__card-link">Lire l'article <i class="fa-solid fa-arrow-right"></i></span>
+                        <h3 class="blog-classic__card-title">{{ $blogFeaturedPost->title }}</h3>
+                        <p class="blog-classic__card-excerpt">{{ $blogFeaturedPost->excerpt ?: ' ' }}</p>
+                        <span class="blog-classic__card-link">Lire l'article <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
             @endif
 
-            @foreach(($blogPosts ?? collect()) as $post)
-                <a href="{{ route('blog.show', $post->slug) }}" class="blog-modern__card">
-                    <div class="blog-modern__card-image">
+            @php
+                $listPosts = ($blogPosts ?? collect())->take(2);
+            @endphp
+
+            @foreach($listPosts as $post)
+                <a href="{{ route('blog.show', $post->slug) }}" class="blog-classic__card">
+                    <div class="blog-classic__card-image">
                         <img src="@image_url($post->image)" alt="{{ $post->image_alt ?: $post->title }}" loading="lazy" />
                     </div>
-                    <div class="blog-modern__card-content">
-                        <div class="blog-modern__card-meta">
-                            <span class="blog-modern__meta-item"><i class="fa-solid fa-tag"></i> {{ $post->category?->name ?: 'Article' }}</span>
+                    <div class="blog-classic__card-content">
+                        <div class="blog-classic__card-meta">
+                            @if($post->category)
+                                <span>{{ $post->category->name }}</span>
+                            @endif
                             @if($post->published_at)
-                                <span class="blog-modern__meta-item"><i class="fa-regular fa-calendar"></i> {{ $post->published_at->format('d M Y') }}</span>
+                                <span>{{ $post->published_at->format('d M Y') }}</span>
                             @endif
                         </div>
-                        <h3 class="blog-modern__card-title">{{ $post->title }}</h3>
-                        <span class="blog-modern__card-link">Lire <i class="fa-solid fa-chevron-right"></i></span>
+                        <h3 class="blog-classic__card-title">{{ $post->title }}</h3>
+                        <span class="blog-classic__card-link">Lire <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
             @endforeach
         </div>
 
-        <div class="blog-modern__cta">
-            <a class="blog-modern__cta-btn" href="{{ route('blog.index') }}">
+        <div class="blog-classic__cta">
+            <a class="blog-classic__cta-btn" href="{{ route('blog.index') }}">
                 <i class="fa-solid fa-newspaper"></i> Voir tous les articles
             </a>
         </div>
