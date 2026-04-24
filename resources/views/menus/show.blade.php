@@ -164,7 +164,7 @@
                 'hero_card' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&h=1100&fit=crop',
                 'benefits' => [
                     ['title' => 'Performance optimale', 'text' => "Des appareils puissants pour des résultats professionnels à la maison."],
-                    ['title' => 'Économie d'énergie', 'text' => "Technologies éco-responsables pour réduire votre consommation."],
+                    ['title' => 'Économie d\'énergie', 'text' => "Technologies éco-responsables pour réduire votre consommation."],
                     ['title' => 'Design moderne', 'text' => "Esthétique soignée pour sublimer votre intérieur."],
                 ],
                 'cta_title' => 'Équipez-vous intelligemment',
