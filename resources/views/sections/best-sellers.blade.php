@@ -1,453 +1,247 @@
-        <section class="bestsellers-modern" aria-label="Nos meilleurs produits">
+        <section class="bestsellers-clean" aria-label="Nos meilleurs produits">
     <style>
-        .bestsellers-modern {
-            position: relative;
-            padding: 100px 0;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            overflow: hidden
+        .bestsellers-clean {
+            padding: 80px 0;
+            background: #fff
         }
 
-        .bestsellers-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%221%22 fill=%22rgba(255,255,255,.02)%22/></svg>');
-            background-size: 60px 60px
-        }
-
-        .bestsellers-modern__bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            pointer-events: none
-        }
-
-        .bestsellers-modern__bg-circle--1 {
-            width: 700px;
-            height: 700px;
-            background: rgba(236,72,153,.2);
-            top: -250px;
-            right: -150px
-        }
-
-        .bestsellers-modern__bg-circle--2 {
-            width: 500px;
-            height: 500px;
-            background: rgba(59,130,246,.15);
-            bottom: -150px;
-            left: -150px
-        }
-
-        .bestsellers-modern__container {
-            position: relative;
+        .bestsellers-clean__container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px
         }
 
-        .bestsellers-modern__header {
+        .bestsellers-clean__header {
             text-align: center;
-            margin-bottom: 60px
+            margin-bottom: 50px
         }
 
-        .bestsellers-modern__badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-            border-radius: 50px;
-            margin-bottom: 24px;
+        .bestsellers-clean__badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #ec4899;
             color: #fff;
-            font-size: 0.9375rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            box-shadow: 0 8px 32px rgba(236,72,153,.4)
-        }
-
-        .bestsellers-modern__title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            color: #fff;
-            margin: 0 0 20px;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            text-shadow: 0 4px 30px rgba(0,0,0,.3)
-        }
-
-        .bestsellers-modern__title span {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text
-        }
-
-        .bestsellers-modern__subtitle {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,.75);
-            margin: 0;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6
-        }
-
-        .bestsellers-modern__layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 40px;
-            align-items: start
-        }
-
-        .bestsellers-modern__hero {
-            background: rgba(255,255,255,.05);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,.1);
-            box-shadow: 0 30px 80px rgba(0,0,0,.3);
-            position: relative;
-            grid-column: 1 / 3
-        }
-
-        .bestsellers-modern__hero-badge {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            padding: 10px 24px;
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-            color: #fff;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 8px 24px rgba(236,72,153,.4);
-            z-index: 10
-        }
-
-        .bestsellers-modern__hero-badge--new {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%)
-        }
-
-        .bestsellers-modern__hero-badge--hot {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%)
-        }
-
-        .bestsellers-modern__hero-media {
-            position: relative;
-            min-height: 400px;
-            overflow: hidden;
-            background: rgba(255,255,255,.03)
-        }
-
-        .bestsellers-modern__hero-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 40px;
-            transition: transform .5s ease
-        }
-
-        .bestsellers-modern__hero:hover .bestsellers-modern__hero-media img {
-            transform: scale(1.05)
-        }
-
-        .bestsellers-modern__hero-content {
-            padding: 40px
-        }
-
-        .bestsellers-modern__hero-trust {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            border-radius: 4px;
             margin-bottom: 20px;
-            padding: 12px 20px;
-            background: rgba(255,215,0,.1);
-            border-radius: 50px;
-            border: 1px solid rgba(255,215,0,.2);
-            width: fit-content
-        }
-
-        .bestsellers-modern__hero-trust-icon {
-            font-size: 1.25rem;
-            color: #ffd700
-        }
-
-        .bestsellers-modern__hero-trust-text {
-            color: #ffd700;
-            font-weight: 800;
-            font-size: 1rem
-        }
-
-        .bestsellers-modern__hero-trust-count {
-            color: rgba(255,255,255,.7);
-            font-size: 0.875rem
-        }
-
-        .bestsellers-modern__hero-name {
-            font-size: 1.75rem;
-            font-weight: 900;
-            color: #fff;
-            margin: 0 0 20px;
-            line-height: 1.2;
-            letter-spacing: -0.02em
-        }
-
-        .bestsellers-modern__hero-prices {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px
-        }
-
-        .bestsellers-modern__hero-price {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #ffd700;
-            letter-spacing: -0.02em
-        }
-
-        .bestsellers-modern__hero-old {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,.5);
-            text-decoration: line-through;
-            font-weight: 600
-        }
-
-        .bestsellers-modern__hero-actions {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap
-        }
-
-        .bestsellers-modern__hero-cta {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.8125rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all .3s ease;
-            border: none;
-            cursor: pointer
+            letter-spacing: 1px
         }
 
-        .bestsellers-modern__hero-cta--primary {
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            color: #fff;
-            box-shadow: 0 10px 40px rgba(236,72,153,.4)
+        .bestsellers-clean__title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px;
+            letter-spacing: -0.02em
         }
 
-        .bestsellers-modern__hero-cta--primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(236,72,153,.5)
+        .bestsellers-clean__subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            margin: 0
         }
 
-        .bestsellers-modern__hero-cta--secondary {
-            background: rgba(255,255,255,.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,.2);
-            color: #fff
-        }
-
-        .bestsellers-modern__hero-cta--secondary:hover {
-            background: rgba(255,255,255,.15);
-            transform: translateY(-2px)
-        }
-
-        .bestsellers-modern__list {
+        .bestsellers-clean__grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 24px
         }
 
-        .bestsellers-modern__card {
-            background: rgba(255,255,255,.05);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
+        .bestsellers-clean__card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,.1);
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
-            transition: all .4s ease;
-            position: relative
-        }
-
-        .bestsellers-modern__card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 80px rgba(0,0,0,.3)
-        }
-
-        .bestsellers-modern__card-badge {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            padding: 6px 16px;
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-            color: #fff;
-            border-radius: 16px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 6px 20px rgba(236,72,153,.4);
-            z-index: 10
-        }
-
-        .bestsellers-modern__card-badge--new {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%)
-        }
-
-        .bestsellers-modern__card-badge--hot {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%)
-        }
-
-        .bestsellers-modern__card-media {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-            background: rgba(255,255,255,.03)
-        }
-
-        .bestsellers-modern__card-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 20px;
-            transition: transform .5s ease
-        }
-
-        .bestsellers-modern__card:hover .bestsellers-modern__card-media img {
-            transform: scale(1.08)
-        }
-
-        .bestsellers-modern__card-body {
-            padding: 24px
-        }
-
-        .bestsellers-modern__card-name {
-            font-size: 1.125rem;
-            font-weight: 800;
-            color: #fff;
-            margin: 0 0 16px;
-            line-height: 1.3;
-            letter-spacing: -0.01em
-        }
-
-        .bestsellers-modern__card-prices {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px
-        }
-
-        .bestsellers-modern__card-price {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #ffd700;
-            letter-spacing: -0.02em
-        }
-
-        .bestsellers-modern__card-old {
-            font-size: 1rem;
-            color: rgba(255,255,255,.5);
-            text-decoration: line-through;
-            font-weight: 600
-        }
-
-        .bestsellers-modern__card-cta {
-            width: 100%;
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.9375rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
             transition: all .3s ease
         }
 
-        .bestsellers-modern__card-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(236,72,153,.4)
+        .bestsellers-clean__card:hover {
+            border-color: #ec4899;
+            box-shadow: 0 8px 24px rgba(236,72,153,.15);
+            transform: translateY(-4px)
+        }
+
+        .bestsellers-clean__card--featured {
+            grid-column: 1 / 3;
+            grid-row: 1 / 3;
+            display: flex;
+            flex-direction: column
+        }
+
+        .bestsellers-clean__card-media {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background: #f8fafc
+        }
+
+        .bestsellers-clean__card--featured .bestsellers-clean__card-media {
+            height: 320px
+        }
+
+        .bestsellers-clean__card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 30px;
+            transition: transform .3s ease
+        }
+
+        .bestsellers-clean__card:hover .bestsellers-clean__card-media img {
+            transform: scale(1.05)
+        }
+
+        .bestsellers-clean__badge-discount {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 12px;
+            background: #ec4899;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700
+        }
+
+        .bestsellers-clean__card-body {
+            padding: 20px
+        }
+
+        .bestsellers-clean__card--featured .bestsellers-clean__card-body {
+            padding: 28px;
+            flex: 1
+        }
+
+        .bestsellers-clean__rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: #f59e0b
+        }
+
+        .bestsellers-clean__rating-count {
+            color: #64748b;
+            font-size: 0.8125rem
+        }
+
+        .bestsellers-clean__name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden
+        }
+
+        .bestsellers-clean__card--featured .bestsellers-clean__name {
+            font-size: 1.5rem;
+            margin-bottom: 16px
+        }
+
+        .bestsellers-clean__price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ec4899;
+            margin-bottom: 16px
+        }
+
+        .bestsellers-clean__card--featured .bestsellers-clean__price {
+            font-size: 2rem;
+            margin-bottom: 24px
+        }
+
+        .bestsellers-clean__price-old {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-left: 8px;
+            font-weight: 500
+        }
+
+        .bestsellers-clean__actions {
+            display: flex;
+            gap: 12px
+        }
+
+        .bestsellers-clean__btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all .2s ease
+        }
+
+        .bestsellers-clean__btn--primary {
+            background: #ec4899;
+            color: #fff
+        }
+
+        .bestsellers-clean__btn--primary:hover {
+            background: #be185d
+        }
+
+        .bestsellers-clean__btn--secondary {
+            background: #f1f5f9;
+            color: #0f172a
+        }
+
+        .bestsellers-clean__btn--secondary:hover {
+            background: #e2e8f0
+        }
+
+        .bestsellers-clean__btn--full {
+            width: 100%
         }
 
         @media (max-width: 1024px) {
-            .bestsellers-modern__layout {
-                grid-template-columns: 1fr 1fr
+            .bestsellers-clean__grid {
+                grid-template-columns: repeat(2, 1fr)
             }
 
-            .bestsellers-modern__hero {
-                grid-column: 1 / 2
-            }
-
-            .bestsellers-modern__list {
-                grid-column: 2 / 3;
-                grid-template-columns: 1fr
+            .bestsellers-clean__card--featured {
+                grid-column: 1 / 3;
+                grid-row: auto
             }
         }
 
         @media (max-width: 768px) {
-            .bestsellers-modern {
+            .bestsellers-clean {
                 padding: 60px 0
             }
 
-            .bestsellers-modern__layout {
+            .bestsellers-clean__grid {
                 grid-template-columns: 1fr
             }
 
-            .bestsellers-modern__hero {
-                grid-column: 1 / 2
+            .bestsellers-clean__card--featured {
+                grid-column: 1
             }
 
-            .bestsellers-modern__list {
-                grid-column: 1 / 2;
-                grid-template-columns: 1fr
+            .bestsellers-clean__card-media {
+                height: 200px
             }
 
-            .bestsellers-modern__hero-media {
-                min-height: 300px
-            }
-
-            .bestsellers-modern__hero-content {
-                padding: 28px
-            }
-
-            .bestsellers-modern__hero-name {
-                font-size: 1.5rem
-            }
-
-            .bestsellers-modern__hero-actions {
-                flex-direction: column
-            }
-
-            .bestsellers-modern__hero-cta {
-                width: 100%
+            .bestsellers-clean__card--featured .bestsellers-clean__card-media {
+                height: 280px
             }
         }
     </style>
 
-    <div class="bestsellers-modern__bg-circle bestsellers-modern__bg-circle--1"></div>
-    <div class="bestsellers-modern__bg-circle bestsellers-modern__bg-circle--2"></div>
-
-    <div class="bestsellers-modern__container">
-        <div class="bestsellers-modern__header">
-            <span class="bestsellers-modern__badge">
-                <i class="fa-solid fa-crown"></i> Best-Sellers
-            </span>
-            <h2 class="bestsellers-modern__title">Les préférés de <span>nos clients</span></h2>
-            <p class="bestsellers-modern__subtitle">Qualité premium, satisfaction garantie, livraison rapide</p>
+    <div class="bestsellers-clean__container">
+        <div class="bestsellers-clean__header">
+            <span class="bestsellers-clean__badge">Best-Sellers</span>
+            <h2 class="bestsellers-clean__title">Les préférés de nos clients</h2>
+            <p class="bestsellers-clean__subtitle">Qualité premium, satisfaction garantie</p>
         </div>
 
         @php
@@ -455,83 +249,71 @@
             $others = ($favoriteProducts ?? collect())->slice(1)->take(3);
         @endphp
 
-        <div class="bestsellers-modern__layout">
+        <div class="bestsellers-clean__grid">
             @if($featured)
-                <article class="bestsellers-modern__hero" aria-label="{{ $featured->name }}">
+                <article class="bestsellers-clean__card bestsellers-clean__card--featured" aria-label="{{ $featured->name }}">
                     @if(!empty($featured->discount_percent) && (int) $featured->discount_percent > 0)
-                        <div class="bestsellers-modern__hero-badge">-{{ (int) $featured->discount_percent }}%</div>
-                    @elseif(!empty($featured->badge_type) && $featured->badge_type === 'new')
-                        <div class="bestsellers-modern__hero-badge bestsellers-modern__hero-badge--new">NEW</div>
-                    @elseif(!empty($featured->badge_type) && $featured->badge_type === 'hot')
-                        <div class="bestsellers-modern__hero-badge bestsellers-modern__hero-badge--hot">HOT</div>
+                        <div class="bestsellers-clean__badge-discount">-{{ (int) $featured->discount_percent }}%</div>
                     @endif
 
-                    <div class="bestsellers-modern__hero-media">
+                    <div class="bestsellers-clean__card-media">
                         <img src="@image_url($featured->image)" alt="{{ $featured->name }}" loading="eager" />
                     </div>
-                    <div class="bestsellers-modern__hero-content">
-                        <div class="bestsellers-modern__hero-trust">
-                            <span class="bestsellers-modern__hero-trust-icon">★</span>
-                            <span class="bestsellers-modern__hero-trust-text">4.9/5</span>
-                            <span class="bestsellers-modern__hero-trust-count">(2.4k avis)</span>
+                    <div class="bestsellers-clean__card-body">
+                        <div class="bestsellers-clean__rating">
+                            <span>★</span>
+                            <span class="bestsellers-clean__rating-text">4.9</span>
+                            <span class="bestsellers-clean__rating-count">(2.4k)</span>
                         </div>
-                        <h3 class="bestsellers-modern__hero-name">{{ $featured->name }}</h3>
-                        <div class="bestsellers-modern__hero-prices">
-                            <span class="bestsellers-modern__hero-price">{{ $featured->formatted_price }}</span>
+                        <h3 class="bestsellers-clean__name">{{ $featured->name }}</h3>
+                        <div class="bestsellers-clean__price">
+                            {{ $featured->formatted_price }}
                             @if(!empty($featured->formatted_old_price))
-                                <span class="bestsellers-modern__hero-old">{{ $featured->formatted_old_price }}</span>
+                                <span class="bestsellers-clean__price-old">{{ $featured->formatted_old_price }}</span>
                             @endif
                         </div>
-                        <div class="bestsellers-modern__hero-actions">
-                            <a href="{{ $featured->slug ? route('product.show', $featured->slug) : route('demo.product') }}" class="bestsellers-modern__hero-cta bestsellers-modern__hero-cta--primary">
-                                Voir le produit
+                        <div class="bestsellers-clean__actions">
+                            <a href="{{ $featured->slug ? route('product.show', $featured->slug) : route('demo.product') }}" class="bestsellers-clean__btn bestsellers-clean__btn--primary">
+                                Voir
                             </a>
                             <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $featured->id }}">
                                 <input type="hidden" name="quantity" value="1">
-                                <button class="bestsellers-modern__hero-cta bestsellers-modern__hero-cta--secondary" type="submit">
-                                    <span aria-hidden="true">+</span> Panier
-                                </button>
+                                <button class="bestsellers-clean__btn bestsellers-clean__btn--secondary" type="submit">Panier</button>
                             </form>
                         </div>
                     </div>
                 </article>
             @endif
 
-            <div class="bestsellers-modern__list">
-                @forelse($others as $product)
-                    <article class="bestsellers-modern__card" aria-label="{{ $product->name }}">
-                        @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                            <div class="bestsellers-modern__card-badge">-{{ (int) $product->discount_percent }}%</div>
-                        @elseif(!empty($product->badge_type) && $product->badge_type === 'new')
-                            <div class="bestsellers-modern__card-badge bestsellers-modern__card-badge--new">NEW</div>
-                        @elseif(!empty($product->badge_type) && $product->badge_type === 'hot')
-                            <div class="bestsellers-modern__card-badge bestsellers-modern__card-badge--hot">HOT</div>
-                        @endif
+            @forelse($others as $product)
+                <article class="bestsellers-clean__card" aria-label="{{ $product->name }}">
+                    @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                        <div class="bestsellers-clean__badge-discount">-{{ (int) $product->discount_percent }}%</div>
+                    @endif
 
-                        <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="bestsellers-modern__card-media">
-                            <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
-                        </a>
-                        <div class="bestsellers-modern__card-body">
-                            <h3 class="bestsellers-modern__card-name">{{ $product->name }}</h3>
-                            <div class="bestsellers-modern__card-prices">
-                                <span class="bestsellers-modern__card-price">{{ $product->formatted_price }}</span>
-                                @if(!empty($product->formatted_old_price))
-                                    <span class="bestsellers-modern__card-old">{{ $product->formatted_old_price }}</span>
-                                @endif
-                            </div>
-                            <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button class="bestsellers-modern__card-cta" type="submit">Ajouter</button>
-                            </form>
+                    <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="bestsellers-clean__card-media">
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" />
+                    </a>
+                    <div class="bestsellers-clean__card-body">
+                        <h3 class="bestsellers-clean__name">{{ $product->name }}</h3>
+                        <div class="bestsellers-clean__price">
+                            {{ $product->formatted_price }}
+                            @if(!empty($product->formatted_old_price))
+                                <span class="bestsellers-clean__price-old">{{ $product->formatted_old_price }}</span>
+                            @endif
                         </div>
-                    </article>
-                @empty
-                @endforelse
-            </div>
+                        <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button class="bestsellers-clean__btn bestsellers-clean__btn--primary bestsellers-clean__btn--full" type="submit">Ajouter</button>
+                        </form>
+                    </div>
+                </article>
+            @empty
+            @endforelse
         </div>
     </div>
 </section>

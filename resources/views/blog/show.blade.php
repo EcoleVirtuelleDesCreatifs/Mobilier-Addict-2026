@@ -25,7 +25,7 @@
         </div>
 
         <div class="blog-post__hero">
-            <img src="{{ $post->image ? asset($post->image) : 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&h=600&fit=crop' }}" alt="{{ $post->image_alt ?: $post->title }}" loading="lazy" />
+            <img src="@image_url($post->image)" alt="{{ $post->image_alt ?: $post->title }}" loading="lazy" />
         </div>
 
         <div class="blog-post__content">
@@ -40,7 +40,7 @@
                         <article class="blog-card">
                             <a href="{{ route('blog.show', $p->slug) }}" style="text-decoration:none;color:inherit">
                                 <div class="blog-card__media">
-                                    <img src="{{ $p->image ? asset($p->image) : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=500&fit=crop' }}" alt="{{ $p->image_alt ?: $p->title }}" loading="lazy" />
+                                    <img src="@image_url($p->image)" alt="{{ $p->image_alt ?: $p->title }}" loading="lazy" />
                                 </div>
                                 <div class="blog-card__body">
                                     <div class="blog-page__meta">

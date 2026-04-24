@@ -315,7 +315,7 @@
             @if($blogFeaturedPost)
                 <a href="{{ route('blog.show', $blogFeaturedPost->slug) }}" class="blog-modern__card blog-modern__card--featured">
                     <div class="blog-modern__card-image">
-                        <img src="{{ $blogFeaturedPost->image ? asset($blogFeaturedPost->image) : 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=500&fit=crop' }}" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" loading="lazy" />
+                        <img src="@image_url($blogFeaturedPost->image)" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" loading="lazy" />
                         <span class="blog-modern__card-badge">À la une</span>
                     </div>
                     <div class="blog-modern__card-content">
@@ -338,7 +338,7 @@
             @foreach(($blogPosts ?? collect()) as $post)
                 <a href="{{ route('blog.show', $post->slug) }}" class="blog-modern__card">
                     <div class="blog-modern__card-image">
-                        <img src="{{ $post->image ? asset($post->image) : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop' }}" alt="{{ $post->image_alt ?: $post->title }}" loading="lazy" />
+                        <img src="@image_url($post->image)" alt="{{ $post->image_alt ?: $post->title }}" loading="lazy" />
                     </div>
                     <div class="blog-modern__card-content">
                         <div class="blog-modern__card-meta">
