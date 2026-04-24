@@ -2689,10 +2689,10 @@
         @if(strtolower(trim((string) $menu->slug)) === 'lit-canape')
         @php
             $litCanapeCategories = [
-                ['key' => 'clic_clac', 'label' => 'Clic-Clac', 'desc' => 'Simple et rapide', 'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
-                ['key' => 'convertisseur', 'label' => 'Convertisseur', 'desc' => 'Confort optimal', 'image' => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
-                ['key' => 'rapido', 'label' => 'Rapido', 'desc' => 'Ouverture facile', 'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop', 'color' => '#ec4899'],
-                ['key' => 'bz', 'label' => 'BZ', 'desc' => 'Compact', 'image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
+                ['key' => 'fauteuil', 'label' => 'Fauteuil', 'desc' => 'Confort et style', 'image' => 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=600&fit=crop', 'color' => '#3b82f6'],
+                ['key' => 'table_manger', 'label' => 'Table à manger', 'desc' => 'Design fonctionnel', 'image' => 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=600&fit=crop', 'color' => '#8b5cf6'],
+                ['key' => 'bureaux', 'label' => 'Bureaux', 'desc' => 'Espace travail', 'image' => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&h=600&fit=crop', 'color' => '#ec4899'],
+                ['key' => 'canapes', 'label' => 'Canapés', 'desc' => 'Détente optimale', 'image' => 'https://images.unsplash.com/photo-1550226891-ef816aed4a98?w=800&h=600&fit=crop', 'color' => '#f59e0b'],
             ];
         @endphp
 
@@ -2703,7 +2703,7 @@
                         <span style="color:#ec4899;font-size:0.875rem;letter-spacing:3px;text-transform:uppercase;font-weight:800">Collection</span>
                     </div>
                     <h2 class="matelas-categories-simple__title" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:#fff;margin-bottom:20px;letter-spacing:-.02em;line-height:1.1">Nos gammes</h2>
-                    <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">Découvrez notre sélection de lits canapés par mécanisme</p>
+                    <p class="matelas-categories-simple__desc" style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">Découvrez notre sélection de meubles pour votre intérieur</p>
                 </div>
                 <div class="matelas-categories-simple__grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
                     @foreach($litCanapeCategories as $category)
