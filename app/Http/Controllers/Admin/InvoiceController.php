@@ -7,7 +7,6 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
 use Dompdf\Dompdf;
-use Dompdf\Options;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -98,11 +97,7 @@ class InvoiceController extends Controller
     {
         $invoice->load(['items.product', 'order']);
 
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-
-        $dompdf = new Dompdf($options);
+        $dompdf = new Dompdf();
         $html = view('admin.invoices.pdf', ['invoice' => $invoice])->render();
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
