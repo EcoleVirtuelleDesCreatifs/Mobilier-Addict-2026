@@ -5,6 +5,12 @@
 
 @section('content')
 <style>
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+    }
+
     @media (max-width: 768px) {
         .products-grid {
             grid-template-columns: 1fr !important;
@@ -45,7 +51,7 @@
                 Qualité Premium ({{ $products->count() }} produits)
             </h2>
         </div>
-        <div class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+        <div class="products-grid">
             @forelse($products as $product)
                 <div class="product-card" style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.1);">
                     <a href="{{ $product->slug ? route('product.show', $product->slug) : '#' }}" style="text-decoration: none; color: inherit;">
