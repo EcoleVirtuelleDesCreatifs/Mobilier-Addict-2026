@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -97,7 +97,8 @@ class InvoiceController extends Controller
     {
         $invoice->load(['items.product', 'order']);
 
-        $pdf = Pdf::loadView('admin.invoices.pdf', [
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.invoices.pdf', [
             'invoice' => $invoice,
         ]);
 
