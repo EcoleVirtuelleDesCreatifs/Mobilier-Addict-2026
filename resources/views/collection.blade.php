@@ -32,6 +32,19 @@
     .product-card:hover::before {
         opacity: 1;
     }
+
+    @media (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
 </style>
 
 <section style="min-height: 60vh; background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%); position: relative; overflow: hidden; display: flex; align-items: center;">
@@ -62,7 +75,7 @@
                 Qualité Premium ({{ $products->count() }} produits)
             </h2>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;">
+        <div class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;">
             @forelse($products as $product)
                 <div class="product-card" style="background: rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1;">
                     <a href="{{ $product->slug ? route('product.show', $product->slug) : '#' }}" style="text-decoration: none; color: inherit;">
