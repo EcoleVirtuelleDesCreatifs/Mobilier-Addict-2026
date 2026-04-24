@@ -16,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind('dompdf.wrapper', function ($app) {
+            return new \Barryvdh\DomPDF\PDF($app['dompdf']);
+        });
     }
 
     /**
