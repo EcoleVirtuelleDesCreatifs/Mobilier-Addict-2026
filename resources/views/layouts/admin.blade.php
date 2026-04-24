@@ -302,7 +302,6 @@
 					<ul aria-expanded="false" class="{{ $openOrdersGroup ? 'mm-show' : '' }}">
 						<li><a href="{{ route('admin.orders.index') }}">Commandes</a></li>
 						<li><a href="{{ route('admin.invoices.index') }}">Factures</a></li>
-						<li><a href="{{ route('admin.quotes.index') }}">Devis</a></li>
 					</ul>
                     </li>
 
