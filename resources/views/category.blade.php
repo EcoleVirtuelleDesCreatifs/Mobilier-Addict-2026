@@ -23,10 +23,68 @@
             grid-template-columns: repeat(2, 1fr) !important;
         }
     }
+
+    .category-cover {
+        position: relative;
+        min-height: 60vh;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        overflow: hidden;
+    }
+
+    .category-cover::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 80%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .category-cover::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        left: -20%;
+        width: 80%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        animation: float 25s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(30px, 30px) rotate(180deg); }
+    }
+
+    .category-cover-image {
+        position: absolute;
+        right: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45%;
+        max-width: 600px;
+        opacity: 0.3;
+        filter: blur(2px);
+        z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+        .category-cover-image {
+            width: 70%;
+            right: 50%;
+            transform: translateY(-50%) translateX(50%);
+            opacity: 0.2;
+        }
+    }
 </style>
 
-<section style="min-height: 50vh; background: #0f172a; position: relative; padding: 80px 0;">
-    <div class="container" style="position: relative; z-index: 1;">
+<section class="category-cover" style="padding: 80px 0;">
+    @if(isset($category->image))
+    <img src="{!! $category->image !!}" alt="{{ $category->name }}" class="category-cover-image" />
+    @endif
+    <div class="container" style="position: relative; z-index: 2;">
         <div class="row justify-content-center">
             <div class="col-lg-8" style="text-align: center;">
                 <div style="display: inline-block; padding: 8px 20px; background: rgba(236, 72, 153, 0.15); border-radius: 30px; margin-bottom: 24px;">
@@ -35,7 +93,7 @@
                 <h1 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #fff; margin-bottom: 16px; line-height: 1.1;">
                     {{ $category->name }}
                 </h1>
-                @if($category->description)
+                @if(isset($category->description) && $category->description)
                 <p style="font-size: 1.125rem; color: rgba(255,255,255,0.8); margin-bottom: 0; line-height: 1.6;">
                     {{ $category->description }}
                 </p>
