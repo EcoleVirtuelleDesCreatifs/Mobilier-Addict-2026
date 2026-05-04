@@ -26,7 +26,7 @@
 
     .category-cover {
         position: relative;
-        min-height: 100vh;
+        min-height: 60vh;
         background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
         overflow: hidden;
         display: flex;
