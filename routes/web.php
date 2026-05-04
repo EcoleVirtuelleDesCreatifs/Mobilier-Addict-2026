@@ -155,12 +155,56 @@ Route::get('/collection', function () {
 })->name('collection.index');
 
 Route::get('/categories/{slug}', function ($slug) {
+    // Try to get category from database
     $category = Category::where('slug', $slug)
         ->where('is_active', true)
         ->with(['products' => function ($query) {
             $query->active()->ordered();
         }])
-        ->firstOrFail();
+        ->first();
+
+    // Fallback to hardcoded data if category not found
+    if (!$category) {
+        $fallbackCategories = [
+            'gazinieres' => [
+                'name' => 'Gazinières',
+                'slug' => 'gazinieres',
+                'description' => 'Cuisine au gaz',
+                'image' => 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop',
+                'color' => '#3b82f6',
+            ],
+            'frigo' => [
+                'name' => 'Frigo',
+                'slug' => 'frigo',
+                'description' => 'Conservation optimale',
+                'image' => 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&h=600&fit=crop',
+                'color' => '#8b5cf6',
+            ],
+            'climatiseurs' => [
+                'name' => 'Climatiseurs',
+                'slug' => 'climatiseurs',
+                'description' => 'Fraîcheur garantie',
+                'image' => 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&h=600&fit=crop',
+                'color' => '#ec4899',
+            ],
+            'mixeurs' => [
+                'name' => 'Mixeurs',
+                'slug' => 'mixeurs',
+                'description' => 'Préparation facile',
+                'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop',
+                'color' => '#f59e0b',
+            ],
+        ];
+
+        if (!isset($fallbackCategories[$slug])) {
+            abort(404);
+        }
+
+        $categoryData = $fallbackCategories[$slug];
+        $category = (object) array_merge($categoryData, [
+            'products' => collect([]),
+        ]);
+    }
 
     return view('category', compact('category'));
 })->name('category.show');
