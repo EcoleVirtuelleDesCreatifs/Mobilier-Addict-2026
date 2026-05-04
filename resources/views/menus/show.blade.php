@@ -2934,7 +2934,7 @@
                             <div class="matelas-categories-simple__grid"
                                 style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
                                 @foreach ($litCanapeCategories as $category)
-                                    <a href="#products" class="matelas-category-simple-card"
+                                    <a href="{{ route('category.show', $category['key']) }}" class="matelas-category-simple-card"
                                         data-category="{{ $category['key'] }}"
                                         style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                                         <div class="matelas-category-simple-card__media"
@@ -3151,7 +3151,7 @@
                                         $count = $items->count();
                                         $firstImage = $items->first()?->image ?? null;
                                     @endphp
-                                    <a href="#products" class="matelas-category-simple-card"
+                                    <a href="{{ route('category.show', $tab['key']) }}" class="matelas-category-simple-card"
                                         data-category="{{ $tab['key'] }}"
                                         style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                                         <div class="matelas-category-simple-card__media"

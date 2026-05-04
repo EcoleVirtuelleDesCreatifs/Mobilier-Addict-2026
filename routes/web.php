@@ -166,6 +166,7 @@ Route::get('/categories/{slug}', function ($slug) {
     // Fallback to hardcoded data if category not found
     if (!$category) {
         $fallbackCategories = [
+            // Electromenager categories
             'gazinieres' => [
                 'name' => 'Gazinières',
                 'slug' => 'gazinieres',
@@ -192,6 +193,64 @@ Route::get('/categories/{slug}', function ($slug) {
                 'slug' => 'mixeurs',
                 'description' => 'Préparation facile',
                 'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop',
+                'color' => '#f59e0b',
+            ],
+            // Matelas categories
+            'medicosoins' => [
+                'name' => 'MedicoSoins',
+                'slug' => 'medicosoins',
+                'description' => 'Soutien orthopédique',
+                'image' => 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=800&h=600&fit=crop',
+                'color' => '#3b82f6',
+            ],
+            'confort_soft' => [
+                'name' => 'Confort Soft',
+                'slug' => 'confort_soft',
+                'description' => 'Douceur absolue',
+                'image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop',
+                'color' => '#8b5cf6',
+            ],
+            'addict' => [
+                'name' => 'Addict',
+                'slug' => 'addict',
+                'description' => 'Le choix passionné',
+                'image' => 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800&h=600&fit=crop',
+                'color' => '#ec4899',
+            ],
+            'luxury' => [
+                'name' => 'Luxury',
+                'slug' => 'luxury',
+                'description' => 'Haut de gamme',
+                'image' => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&h=600&fit=crop',
+                'color' => '#f59e0b',
+            ],
+            // Lit-canape categories
+            'fauteuil' => [
+                'name' => 'Fauteuil',
+                'slug' => 'fauteuil',
+                'description' => 'Confort et style',
+                'image' => 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=600&fit=crop',
+                'color' => '#3b82f6',
+            ],
+            'table_manger' => [
+                'name' => 'Table à manger',
+                'slug' => 'table_manger',
+                'description' => 'Design fonctionnel',
+                'image' => 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=600&fit=crop',
+                'color' => '#8b5cf6',
+            ],
+            'bureaux' => [
+                'name' => 'Bureaux',
+                'slug' => 'bureaux',
+                'description' => 'Espace travail',
+                'image' => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&h=600&fit=crop',
+                'color' => '#ec4899',
+            ],
+            'canapes' => [
+                'name' => 'Canapés',
+                'slug' => 'canapes',
+                'description' => 'Détente optimale',
+                'image' => 'https://images.unsplash.com/photo-1550226891-ef816aed4a98?w=800&h=600&fit=crop',
                 'color' => '#f59e0b',
             ],
         ];
