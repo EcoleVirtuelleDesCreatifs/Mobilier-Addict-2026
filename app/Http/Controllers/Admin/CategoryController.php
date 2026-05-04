@@ -15,31 +15,43 @@ class CategoryController extends Controller
     {
         $search = $request->string('q')->trim()->toString();
 
-        $baseQuery = Category::query()->with(['parent', 'section']);
+        $menus = Menu::query()
+            ->orderBy('position')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
 
-        if ($search) {
-            $baseQuery->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%");
-            });
+        $categoriesByMenu = [];
+
+        foreach ($menus as $menu) {
+            $query = Category::query()
+                ->with(['parent', 'section'])
+                ->whereHas('menus', function ($q) use ($menu) {
+                    $q->where('menus.id', $menu->id);
+                });
+
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            }
+
+            $categoriesByMenu[$menu->id] = $query
+                ->orderBy('order')
+                ->orderBy('name')
+                ->get();
         }
 
-        $productCategories = (clone $baseQuery)
-            ->whereNull('section_id')
+        // Categories without menu
+        $unassignedCategories = Category::query()
+            ->with(['parent', 'section'])
+            ->whereDoesntHave('menus')
             ->orderBy('order')
             ->orderBy('name')
-            ->paginate(15, ['*'], 'product_page')
-            ->withQueryString();
+            ->get();
 
-        $sectionCategories = (clone $baseQuery)
-            ->whereNotNull('section_id')
-            ->orderBy('section_id')
-            ->orderBy('order')
-            ->orderBy('name')
-            ->paginate(15, ['*'], 'section_page')
-            ->withQueryString();
-
-        return view('admin.categories.index', compact('productCategories', 'sectionCategories'));
+        return view('admin.categories.index', compact('menus', 'categoriesByMenu', 'unassignedCategories'));
     }
 
     public function create()

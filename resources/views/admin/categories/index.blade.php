@@ -5,8 +5,8 @@
         <div class="container-fluid">
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
                 <div>
-                    <h1 class="h3 fw-bold mb-1">Catégories</h1>
-                    <div class="small" style="color: var(--admin-muted);">Structure utilisée sur la home et la navigation.</div>
+                    <h1 class="h3 fw-bold mb-1">Catégories par menu</h1>
+                    <div class="small" style="color: var(--admin-muted);">Gestion des catégories pour la section "Nos gammes" de chaque menu.</div>
                 </div>
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-admin-primary">Ajouter</a>
             </div>
@@ -27,109 +27,111 @@
                 </form>
             </div>
 
-            <div class="admin-card p-0 overflow-hidden">
-                <div class="table-responsive">
-                    <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
-                        <thead style="color: var(--admin-muted);">
-                            <tr>
-                                <th style="width:72px;">Image</th>
-                                <th>Catégorie</th>
-                                <th>Parent</th>
-                                <th>Section</th>
-                                <th class="text-center">Actif</th>
-                                <th style="width:160px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-top: 1px solid var(--admin-border);">
-                                <td colspan="6" class="fw-semibold" style="color: var(--admin-muted);">Catégories produits</td>
-                            </tr>
-
-                            @forelse($productCategories as $category)
-                                <tr style="border-top: 1px solid var(--admin-border);">
-                                    <td>
-                                        <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
-                                            <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="fw-semibold">{{ $category->name }}</div>
-                                        <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
-                                    </td>
-                                    <td class="small">{{ $category->parent?->name ?: '—' }}</td>
-                                    <td class="small">—</td>
-                                    <td class="text-center">
-                                        <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
-                                            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center py-4" style="color: var(--admin-muted);">Aucune catégorie produit.</td>
-                                </tr>
-                            @endforelse
-
-                            <tr style="border-top: 1px solid var(--admin-border);">
-                                <td colspan="6" class="fw-semibold" style="color: var(--admin-muted);">Catégories par section</td>
-                            </tr>
-
-                            @forelse($sectionCategories as $category)
-                                <tr style="border-top: 1px solid var(--admin-border);">
-                                    <td>
-                                        <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
-                                            <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="fw-semibold">{{ $category->name }}</div>
-                                        <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
-                                    </td>
-                                    <td class="small">{{ $category->parent?->name ?: '—' }}</td>
-                                    <td class="small">{{ $category->section?->title ?: '—' }}</td>
-                                    <td class="text-center">
-                                        <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
-                                            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center py-4" style="color: var(--admin-muted);">Aucune catégorie liée à une section.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="mt-3">
-                @if($productCategories->hasPages())
-                    {{ $productCategories->links('pagination::bootstrap-5') }}
-                @endif
-
-                @if($sectionCategories->hasPages())
-                    <div class="mt-2">
-                        {{ $sectionCategories->links('pagination::bootstrap-5') }}
+            @foreach($menus as $menu)
+                <div class="admin-card p-0 overflow-hidden mb-3">
+                    <div class="p-3" style="background: var(--admin-bg-subtle);">
+                        <h4 class="mb-0">{{ $menu->name }}</h4>
+                        <div class="small" style="color: var(--admin-muted);">{{ $menu->slug }}</div>
                     </div>
-                @endif
-            </div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
+                            <thead style="color: var(--admin-muted);">
+                                <tr>
+                                    <th style="width:72px;">Image</th>
+                                    <th>Catégorie</th>
+                                    <th>Parent</th>
+                                    <th class="text-center">Actif</th>
+                                    <th style="width:160px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($categoriesByMenu[$menu->id] ?? collect() as $category)
+                                    <tr style="border-top: 1px solid var(--admin-border);">
+                                        <td>
+                                            <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
+                                                <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold">{{ $category->name }}</div>
+                                            <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
+                                        </td>
+                                        <td class="small">{{ $category->parent?->name ?: '—' }}</td>
+                                        <td class="text-center">
+                                            <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
+                                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4" style="color: var(--admin-muted);">Aucune catégorie pour ce menu.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
+
+            @if($unassignedCategories->isNotEmpty())
+                <div class="admin-card p-0 overflow-hidden mb-3">
+                    <div class="p-3" style="background: var(--admin-bg-subtle);">
+                        <h4 class="mb-0">Catégories non assignées</h4>
+                        <div class="small" style="color: var(--admin-muted);">Catégories sans menu</div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
+                            <thead style="color: var(--admin-muted);">
+                                <tr>
+                                    <th style="width:72px;">Image</th>
+                                    <th>Catégorie</th>
+                                    <th>Parent</th>
+                                    <th class="text-center">Actif</th>
+                                    <th style="width:160px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($unassignedCategories as $category)
+                                    <tr style="border-top: 1px solid var(--admin-border);">
+                                        <td>
+                                            <div class="rounded-3 overflow-hidden" style="width:56px;height:56px;border:1px solid var(--admin-border);">
+                                                <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold">{{ $category->name }}</div>
+                                            <div class="small" style="color: var(--admin-muted);">{{ $category->slug }}</div>
+                                        </td>
+                                        <td class="small">{{ $category->parent?->name ?: '—' }}</td>
+                                        <td class="text-center">
+                                            <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $category->is_active ? 'Oui' : 'Non' }}</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
+                                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
