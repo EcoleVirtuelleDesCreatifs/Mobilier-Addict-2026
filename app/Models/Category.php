@@ -18,6 +18,8 @@ class Category extends Model
         'image_alt',
         'parent_id',
         'section_id',
+        'menu_id',
+        'color',
         'products_count',
         'size',
         'order',

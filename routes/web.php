@@ -154,6 +154,17 @@ Route::get('/collection', function () {
     return view('collection', compact('products'));
 })->name('collection.index');
 
+Route::get('/categories/{slug}', function ($slug) {
+    $category = Category::where('slug', $slug)
+        ->where('is_active', true)
+        ->with(['products' => function ($query) {
+            $query->active()->ordered();
+        }])
+        ->firstOrFail();
+
+    return view('category', compact('category'));
+})->name('category.show');
+
 Route::get('/nouveautes', function () {
     $products = Product::query()
         ->active()
