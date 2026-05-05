@@ -148,4 +148,35 @@
     Content body end
 ***********************************-->
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+
+    if (nameInput && slugInput) {
+        nameInput.addEventListener('input', function() {
+            // Only auto-generate if slug is empty or hasn't been manually modified
+            if (!slugInput.dataset.modified) {
+                const slug = this.value
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+                slugInput.value = slug;
+            }
+        });
+
+        // Mark slug as modified when user manually edits it
+        slugInput.addEventListener('input', function() {
+            if (this.value !== '') {
+                this.dataset.modified = 'true';
+            }
+        });
+    }
+});
+</script>
+
 @endsection
