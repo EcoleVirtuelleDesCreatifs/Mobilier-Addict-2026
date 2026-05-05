@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+            'track.visitor' => \App\Http\Middleware\TrackVisitor::class,
+        ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackVisitor::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
