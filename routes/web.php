@@ -262,6 +262,7 @@ Route::get('/categories/{slug}', function ($slug) {
         $categoryData = $fallbackCategories[$slug];
         $category = (object) array_merge($categoryData, [
             'products' => collect([]),
+            'productsMany' => collect([]),
         ]);
     }
 
