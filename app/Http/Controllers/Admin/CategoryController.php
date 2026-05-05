@@ -76,7 +76,7 @@ class CategoryController extends Controller
             'image' => ['required', 'image', 'max:4096'],
             'image_alt' => ['nullable', 'string', 'max:255'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'size' => ['required', 'in:small,medium,large'],
+            'size' => ['nullable', 'in:small,medium,large'],
             'order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -87,9 +87,10 @@ class CategoryController extends Controller
         ]);
 
         $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']));
+        $data['size'] = $data['size'] ?? 'medium';
         $data['order'] = $data['order'] ?? 0;
         $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
-        $data['is_active'] = (bool) ($data['is_active'] ?? false);
+        $data['is_active'] = (bool) ($data['is_active'] ?? true);
         $data['products_count'] = 0;
 
         $data['image'] = $this->storeUploadedImage($request->file('image'), 'categories');
@@ -129,7 +130,7 @@ class CategoryController extends Controller
             'image' => ['nullable', 'image', 'max:4096'],
             'image_alt' => ['nullable', 'string', 'max:255'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'size' => ['required', 'in:small,medium,large'],
+            'size' => ['nullable', 'in:small,medium,large'],
             'order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -140,9 +141,10 @@ class CategoryController extends Controller
         ]);
 
         $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']), $category->id);
-        $data['order'] = $data['order'] ?? 0;
-        $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
-        $data['is_active'] = (bool) ($data['is_active'] ?? false);
+        $data['size'] = $data['size'] ?? $category->size ?? 'medium';
+        $data['order'] = $data['order'] ?? $category->order ?? 0;
+        $data['is_featured'] = (bool) ($data['is_featured'] ?? $category->is_featured ?? false);
+        $data['is_active'] = (bool) ($data['is_active'] ?? $category->is_active ?? true);
 
         if ($request->hasFile('image')) {
             $data['image'] = $this->storeUploadedImage($request->file('image'), 'categories');
