@@ -158,7 +158,7 @@ Route::get('/categories/{slug}', function ($slug) {
     // Try to get category from database
     $category = Category::where('slug', $slug)
         ->where('is_active', true)
-        ->with(['products' => function ($query) {
+        ->with(['productsMany' => function ($query) {
             $query->active()->ordered();
         }])
         ->first();
