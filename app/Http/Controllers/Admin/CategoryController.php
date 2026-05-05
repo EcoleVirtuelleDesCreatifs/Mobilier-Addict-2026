@@ -82,6 +82,8 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'menu_ids' => ['nullable', 'array'],
             'menu_ids.*' => ['integer', 'exists:menus,id'],
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['integer', 'exists:products,id'],
         ]);
 
         $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']));
@@ -96,6 +98,9 @@ class CategoryController extends Controller
 
         $menuIds = $request->input('menu_ids', []);
         $category->menus()->sync(is_array($menuIds) ? $menuIds : []);
+
+        $productIds = $request->input('product_ids', []);
+        $category->products()->sync(is_array($productIds) ? $productIds : []);
 
         return redirect()->route('admin.categories.index')->with('status', 'Catégorie créée avec succès.');
     }
@@ -130,6 +135,8 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'menu_ids' => ['nullable', 'array'],
             'menu_ids.*' => ['integer', 'exists:menus,id'],
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['integer', 'exists:products,id'],
         ]);
 
         $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']), $category->id);
@@ -145,6 +152,9 @@ class CategoryController extends Controller
 
         $menuIds = $request->input('menu_ids', []);
         $category->menus()->sync(is_array($menuIds) ? $menuIds : []);
+
+        $productIds = $request->input('product_ids', []);
+        $category->products()->sync(is_array($productIds) ? $productIds : []);
 
         return redirect()->route('admin.categories.index')->with('status', 'Catégorie mise à jour.');
     }

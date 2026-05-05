@@ -99,6 +99,23 @@
                         </div>
                     </div>
 
+                    <div class="col-12">
+                        <label class="form-label">Produits rattachés</label>
+                        <select name="product_ids[]" class="form-select" multiple style="height: 200px;">
+                            @php
+                                $products = \App\Models\Product::query()
+                                    ->orderBy('name')
+                                    ->get();
+                            @endphp
+                            @foreach($products as $product)
+                                <option value="{{ $product->id }}" @selected(in_array($product->id, old('product_ids', [])))>
+                                    {{ $product->name }} ({{ $product->price }}F)
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="small" style="color: var(--admin-muted); margin-top: 4px;">Sélectionnez les produits à afficher dans cette catégorie</div>
+                    </div>
+
                     <div class="col-12 d-flex justify-content-end gap-2">
                         <a href="{{ route('admin.categories.index') }}" class="btn btn-admin-ghost">Annuler</a>
                         <button type="submit" class="btn btn-admin-primary">Créer</button>
