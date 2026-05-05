@@ -639,34 +639,60 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Real-time visitor stats
     function updateRealtimeStats() {
+        console.log('Fetching realtime stats...');
         fetch('{{ route('admin.dashboard.realtime-stats') }}')
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
             .then(data => {
+                console.log('Realtime stats data:', data);
+
                 // Update visitor counts
-                document.getElementById('currentVisitorsCount').textContent = new Intl.NumberFormat().format(data.currentVisitors);
-                document.getElementById('visitorsLast5Minutes').textContent = new Intl.NumberFormat().format(data.visitorsLast5Minutes);
-                document.getElementById('visitorsLastHour').textContent = new Intl.NumberFormat().format(data.visitorsLastHour);
-                document.getElementById('visitorsToday').textContent = new Intl.NumberFormat().format(data.visitorsToday);
-                document.getElementById('viewsToday').textContent = new Intl.NumberFormat().format(data.viewsToday);
+                if (document.getElementById('currentVisitorsCount')) {
+                    document.getElementById('currentVisitorsCount').textContent = new Intl.NumberFormat().format(data.currentVisitors);
+                }
+                if (document.getElementById('visitorsLast5Minutes')) {
+                    document.getElementById('visitorsLast5Minutes').textContent = new Intl.NumberFormat().format(data.visitorsLast5Minutes);
+                }
+                if (document.getElementById('visitorsLastHour')) {
+                    document.getElementById('visitorsLastHour').textContent = new Intl.NumberFormat().format(data.visitorsLastHour);
+                }
+                if (document.getElementById('visitorsToday')) {
+                    document.getElementById('visitorsToday').textContent = new Intl.NumberFormat().format(data.visitorsToday);
+                }
+                if (document.getElementById('viewsToday')) {
+                    document.getElementById('viewsToday').textContent = new Intl.NumberFormat().format(data.viewsToday);
+                }
 
                 // Update timestamp
-                const timestamp = new Date(data.timestamp);
-                document.getElementById('lastUpdate').textContent = timestamp.toLocaleTimeString('fr-FR');
+                if (document.getElementById('lastUpdate') && data.timestamp) {
+                    const timestamp = new Date(data.timestamp);
+                    document.getElementById('lastUpdate').textContent = timestamp.toLocaleTimeString('fr-FR');
+                }
 
                 // Update top pages
                 const topPagesContainer = document.getElementById('topPagesContainer');
-                if (data.topPages && data.topPages.length > 0) {
-                    topPagesContainer.innerHTML = data.topPages.map(page => {
-                        const url = new URL(page.url, window.location.origin);
-                        const path = url.pathname;
-                        return `<span class="badge badge-light" style="background: rgba(255,255,255,0.2); color: white;">${path} (${page.views})</span>`;
-                    }).join('');
-                } else {
-                    topPagesContainer.innerHTML = '<span class="text-white-50">Aucune donnée disponible</span>';
+                if (topPagesContainer) {
+                    if (data.topPages && data.topPages.length > 0) {
+                        topPagesContainer.innerHTML = data.topPages.map(page => {
+                            const url = new URL(page.url, window.location.origin);
+                            const path = url.pathname;
+                            return `<span class="badge badge-light" style="background: rgba(255,255,255,0.2); color: white;">${path} (${page.views})</span>`;
+                        }).join('');
+                    } else {
+                        topPagesContainer.innerHTML = '<span class="text-white-50">Aucune donnée disponible</span>';
+                    }
                 }
             })
             .catch(error => {
                 console.error('Error fetching realtime stats:', error);
+
+                // Show error in the UI
+                const topPagesContainer = document.getElementById('topPagesContainer');
+                if (topPagesContainer) {
+                    topPagesContainer.innerHTML = '<span class="text-danger">Erreur de chargement</span>';
+                }
             });
     }
 
