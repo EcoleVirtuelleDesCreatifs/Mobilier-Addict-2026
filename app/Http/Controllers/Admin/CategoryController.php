@@ -86,7 +86,7 @@ class CategoryController extends Controller
             'product_ids.*' => ['integer', 'exists:products,id'],
         ]);
 
-        $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']));
+        $data['slug'] = $this->makeUniqueSlug($data['slug'] ?? Str::slug($data['name']));
         $data['size'] = $data['size'] ?? 'medium';
         $data['order'] = $data['order'] ?? 0;
         $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
@@ -140,7 +140,7 @@ class CategoryController extends Controller
             'product_ids.*' => ['integer', 'exists:products,id'],
         ]);
 
-        $data['slug'] = $this->makeUniqueSlug($data['slug'] ?: Str::slug($data['name']), $category->id);
+        $data['slug'] = $this->makeUniqueSlug($data['slug'] ?? Str::slug($data['name']), $category->id);
         $data['size'] = $data['size'] ?? $category->size ?? 'medium';
         $data['order'] = $data['order'] ?? $category->order ?? 0;
         $data['is_featured'] = (bool) ($data['is_featured'] ?? $category->is_featured ?? false);
