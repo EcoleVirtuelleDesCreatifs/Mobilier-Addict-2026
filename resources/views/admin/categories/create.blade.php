@@ -28,13 +28,7 @@
                 <div class="row g-3">
                     <div class="col-12">
                         <label class="form-label">Nom de la catégorie</label>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" required>
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label">Slug</label>
-                        <input type="text" name="slug" id="slug" value="{{ old('slug') }}" class="form-control">
-                        <small class="text-muted">Généré automatiquement depuis le nom</small>
+                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
                     </div>
 
                     <div class="col-12">
@@ -84,34 +78,5 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const nameInput = document.getElementById('name');
-    const slugInput = document.getElementById('slug');
-
-    if (nameInput && slugInput) {
-        nameInput.addEventListener('input', function() {
-            if (!slugInput.dataset.modified) {
-                const slug = this.value
-                    .toLowerCase()
-                    .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
-                    .replace(/[^a-z0-9\s-]/g, '')
-                    .trim()
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-');
-                slugInput.value = slug;
-            }
-        });
-
-        slugInput.addEventListener('input', function() {
-            if (this.value !== '') {
-                this.dataset.modified = 'true';
-            }
-        });
-    }
-});
-</script>
 
 @endsection
