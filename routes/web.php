@@ -253,6 +253,35 @@ Route::get('/categories/{slug}', function ($slug) {
                 'image' => 'https://images.unsplash.com/photo-1550226891-ef816aed4a98?w=800&h=600&fit=crop',
                 'color' => '#f59e0b',
             ],
+            // Mobilier Accessoire categories
+            'tables' => [
+                'name' => 'Tables',
+                'slug' => 'tables',
+                'description' => 'Design fonctionnel',
+                'image' => 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=600&fit=crop',
+                'color' => '#3b82f6',
+            ],
+            'chaises' => [
+                'name' => 'Chaises',
+                'slug' => 'chaises',
+                'description' => 'Confort optimal',
+                'image' => 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800&h=600&fit=crop',
+                'color' => '#8b5cf6',
+            ],
+            'rangement' => [
+                'name' => 'Rangement',
+                'slug' => 'rangement',
+                'description' => 'Organisation pratique',
+                'image' => 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=800&h=600&fit=crop',
+                'color' => '#ec4899',
+            ],
+            'accessoires' => [
+                'name' => 'Accessoires',
+                'slug' => 'accessoires',
+                'description' => 'Finitions parfaites',
+                'image' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop',
+                'color' => '#f59e0b',
+            ],
         ];
 
         if (!isset($fallbackCategories[$slug])) {
