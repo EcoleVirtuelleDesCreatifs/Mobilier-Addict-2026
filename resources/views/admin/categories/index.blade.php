@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="col-12 col-md-2">
                                         <div class="small" style="color: var(--admin-muted);">Produits</div>
-                                        <div class="fw-semibold">{{ $category->products->count() }}</div>
+                                        <div class="fw-semibold">{{ $category->productsMany()->count() }}</div>
                                     </div>
                                     <div class="col-12 col-md-1">
                                         <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">
@@ -119,7 +119,7 @@
                                     </div>
                                     <div class="col-12 col-md-2">
                                         <div class="small" style="color: var(--admin-muted);">Produits</div>
-                                        <div class="fw-semibold">{{ $category->products->count() }}</div>
+                                        <div class="fw-semibold">{{ $category->productsMany()->count() }}</div>
                                     </div>
                                     <div class="col-12 col-md-1">
                                         <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">

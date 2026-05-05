@@ -67,7 +67,7 @@
                                 $products = \App\Models\Product::query()
                                     ->orderBy('name')
                                     ->get();
-                                $categoryProductIds = $category->products()->pluck('products.id')->values()->all();
+                                $categoryProductIds = $category->productsMany()->pluck('products.id')->values()->all();
                             @endphp
                             @foreach($products as $product)
                                 <option value="{{ $product->id }}" @selected(in_array($product->id, $categoryProductIds))>

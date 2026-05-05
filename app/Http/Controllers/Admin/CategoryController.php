@@ -101,7 +101,7 @@ class CategoryController extends Controller
         $category->menus()->sync(is_array($menuIds) ? $menuIds : []);
 
         $productIds = $request->input('product_ids', []);
-        $category->products()->sync(is_array($productIds) ? $productIds : []);
+        $category->productsMany()->sync(is_array($productIds) ? $productIds : []);
 
         return redirect()->route('admin.categories.index')->with('status', 'Catégorie créée avec succès.');
     }
@@ -156,7 +156,7 @@ class CategoryController extends Controller
         $category->menus()->sync(is_array($menuIds) ? $menuIds : []);
 
         $productIds = $request->input('product_ids', []);
-        $category->products()->sync(is_array($productIds) ? $productIds : []);
+        $category->productsMany()->sync(is_array($productIds) ? $productIds : []);
 
         return redirect()->route('admin.categories.index')->with('status', 'Catégorie mise à jour.');
     }
