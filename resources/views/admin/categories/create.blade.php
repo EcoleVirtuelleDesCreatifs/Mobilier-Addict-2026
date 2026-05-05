@@ -26,77 +26,36 @@
                 @csrf
 
                 <div class="row g-3">
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label">Nom</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
+                    <div class="col-12">
+                        <label class="form-label">Nom de la catégorie</label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" required>
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label">Slug (optionnel)</label>
-                        <input type="text" name="slug" value="{{ old('slug') }}" class="form-control">
+
+                    <div class="col-12">
+                        <label class="form-label">Slug</label>
+                        <input type="text" name="slug" id="slug" value="{{ old('slug') }}" class="form-control">
+                        <small class="text-muted">Généré automatiquement depuis le nom</small>
                     </div>
 
                     <div class="col-12">
                         <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
+                        <textarea name="description" class="form-control" rows="3">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="col-12 col-lg-6">
                         <label class="form-label">Image</label>
                         <input type="file" name="image" class="form-control" required>
                     </div>
+
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Texte alternatif (alt)</label>
-                        <input type="text" name="image_alt" value="{{ old('image_alt') }}" class="form-control">
-                    </div>
-
-                    <div class="col-12 col-lg-4">
-                        <label class="form-label">Parent</label>
-                        <select name="parent_id" class="form-select">
-                            <option value="">—</option>
-                            @foreach($parents as $parent)
-                                <option value="{{ $parent->id }}" @selected(old('parent_id') == $parent->id)>{{ $parent->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-lg-4">
                         <label class="form-label">Menus rattachés</label>
-                        <select name="menu_ids[]" class="form-select" multiple>
+                        <select name="menu_ids[]" class="form-select" multiple style="height: 120px;">
                             @foreach(($menus ?? collect()) as $menu)
                                 <option value="{{ $menu->id }}" @selected(in_array($menu->id, old('menu_ids', [])))>
                                     {{ $menu->name }}
                                 </option>
                             @endforeach
                         </select>
-                    </div>
-
-                    <div class="col-12 col-lg-4">
-                        <label class="form-label">Taille</label>
-                        <select name="size" class="form-select" required>
-                            @foreach(['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large'] as $k => $v)
-                                <option value="{{ $k }}" @selected(old('size', 'small') === $k)>{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <label class="form-label">Ordre</label>
-                        <input type="number" name="order" value="{{ old('order', 0) }}" class="form-control">
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <label class="form-label">Actif</label>
-                        <select name="is_active" class="form-select">
-                            <option value="1" @selected(old('is_active', 1) == 1)>Oui</option>
-                            <option value="0" @selected(old('is_active', 1) == 0)>Non</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="is_featured" @checked(old('is_featured'))>
-                            <label class="form-check-label" for="is_featured">Mis en avant</label>
-                        </div>
                     </div>
 
                     <div class="col-12">
@@ -124,4 +83,35 @@
             </form>
         </div>
     </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+
+    if (nameInput && slugInput) {
+        nameInput.addEventListener('input', function() {
+            if (!slugInput.dataset.modified) {
+                const slug = this.value
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+                slugInput.value = slug;
+            }
+        });
+
+        slugInput.addEventListener('input', function() {
+            if (this.value !== '') {
+                this.dataset.modified = 'true';
+            }
+        });
+    }
+});
+</script>
+
 @endsection
