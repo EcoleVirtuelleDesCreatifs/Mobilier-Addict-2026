@@ -391,6 +391,7 @@ Route::get('/admin/login', function () {
 Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/monthly-stats', [DashboardController::class, 'monthlyStats'])->name('admin.dashboard.monthly-stats');
+    Route::get('/home/realtime-stats', [DashboardController::class, 'realtimeStats'])->name('admin.dashboard.realtime-stats');
 
     Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->name('admin.settings.facebook-pixel.edit');
     Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->name('admin.settings.facebook-pixel.update');

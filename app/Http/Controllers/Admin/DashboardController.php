@@ -214,4 +214,73 @@ class DashboardController extends Controller
             'bestCategory' => null,
         ]);
     }
+
+    public function realtimeStats(): JsonResponse
+    {
+        $hasPageViews = Schema::hasTable('page_views');
+
+        $now = Carbon::now();
+        $fiveMinutesAgo = $now->copy()->subMinutes(5);
+        $oneHourAgo = $now->copy()->subHour();
+        $today = $now->copy()->startOfDay();
+
+        $currentVisitors = 0;
+        $visitorsLast5Minutes = 0;
+        $visitorsLastHour = 0;
+        $visitorsToday = 0;
+        $viewsToday = 0;
+
+        if ($hasPageViews) {
+            // Count current visitors (active in last 5 minutes)
+            $currentVisitors = (int) PageView::query()
+                ->where('created_at', '>=', $fiveMinutesAgo)
+                ->distinct('visitor_id')
+                ->count('visitor_id');
+
+            // Visitors in last 5 minutes
+            $visitorsLast5Minutes = (int) PageView::query()
+                ->where('created_at', '>=', $fiveMinutesAgo)
+                ->distinct('visitor_id')
+                ->count('visitor_id');
+
+            // Visitors in last hour
+            $visitorsLastHour = (int) PageView::query()
+                ->where('created_at', '>=', $oneHourAgo)
+                ->distinct('visitor_id')
+                ->count('visitor_id');
+
+            // Visitors today
+            $visitorsToday = (int) PageView::query()
+                ->where('created_at', '>=', $today)
+                ->distinct('visitor_id')
+                ->count('visitor_id');
+
+            // Views today
+            $viewsToday = (int) PageView::query()
+                ->where('created_at', '>=', $today)
+                ->count();
+        }
+
+        // Get top pages today
+        $topPages = collect();
+        if ($hasPageViews) {
+            $topPages = PageView::query()
+                ->select('url', \DB::raw('COUNT(*) as views'))
+                ->where('created_at', '>=', $today)
+                ->groupBy('url')
+                ->orderByDesc('views')
+                ->limit(5)
+                ->get();
+        }
+
+        return response()->json([
+            'currentVisitors' => $currentVisitors,
+            'visitorsLast5Minutes' => $visitorsLast5Minutes,
+            'visitorsLastHour' => $visitorsLastHour,
+            'visitorsToday' => $visitorsToday,
+            'viewsToday' => $viewsToday,
+            'topPages' => $topPages,
+            'timestamp' => $now->toIso8601String(),
+        ]);
+    }
 }

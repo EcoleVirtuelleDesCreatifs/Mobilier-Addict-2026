@@ -31,6 +31,60 @@
             </div>
         </div>
 
+        <!-- Visiteurs en temps réel -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="text-white font-w700 mb-1">
+                                    <i class="fas fa-users me-2"></i>Visiteurs en temps réel
+                                </h3>
+                                <p class="text-white-50 mb-0">Dernière mise à jour: <span id="lastUpdate">--:--:--</span></p>
+                            </div>
+                            <div class="text-end">
+                                <h1 class="text-white font-w700 mb-0" style="font-size: 3rem;" id="currentVisitorsCount">--</h1>
+                                <span class="text-white-75">visiteurs actifs (5 min)</span>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-white font-w600 mb-0" id="visitorsLast5Minutes">--</h4>
+                                    <small class="text-white-50">5 dernières minutes</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-white font-w600 mb-0" id="visitorsLastHour">--</h4>
+                                    <small class="text-white-50">Dernière heure</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-white font-w600 mb-0" id="visitorsToday">--</h4>
+                                    <small class="text-white-50">Aujourd'hui</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-white font-w600 mb-0" id="viewsToday">--</h4>
+                                    <small class="text-white-50">Vues aujourd'hui</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h5 class="text-white font-w600 mb-2">Top pages aujourd'hui:</h5>
+                            <div id="topPagesContainer" class="d-flex flex-wrap" style="gap: 8px;">
+                                <span class="text-white-50">Chargement...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Statistiques générales -->
         <div class="row mb-4">
             <div class="col-xl-3 col-lg-6 col-sm-6">
@@ -583,6 +637,45 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Real-time visitor stats
+    function updateRealtimeStats() {
+        fetch('{{ route('admin.dashboard.realtime-stats') }}')
+            .then(response => response.json())
+            .then(data => {
+                // Update visitor counts
+                document.getElementById('currentVisitorsCount').textContent = new Intl.NumberFormat().format(data.currentVisitors);
+                document.getElementById('visitorsLast5Minutes').textContent = new Intl.NumberFormat().format(data.visitorsLast5Minutes);
+                document.getElementById('visitorsLastHour').textContent = new Intl.NumberFormat().format(data.visitorsLastHour);
+                document.getElementById('visitorsToday').textContent = new Intl.NumberFormat().format(data.visitorsToday);
+                document.getElementById('viewsToday').textContent = new Intl.NumberFormat().format(data.viewsToday);
+
+                // Update timestamp
+                const timestamp = new Date(data.timestamp);
+                document.getElementById('lastUpdate').textContent = timestamp.toLocaleTimeString('fr-FR');
+
+                // Update top pages
+                const topPagesContainer = document.getElementById('topPagesContainer');
+                if (data.topPages && data.topPages.length > 0) {
+                    topPagesContainer.innerHTML = data.topPages.map(page => {
+                        const url = new URL(page.url, window.location.origin);
+                        const path = url.pathname;
+                        return `<span class="badge badge-light" style="background: rgba(255,255,255,0.2); color: white;">${path} (${page.views})</span>`;
+                    }).join('');
+                } else {
+                    topPagesContainer.innerHTML = '<span class="text-white-50">Aucune donnée disponible</span>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching realtime stats:', error);
+            });
+    }
+
+    // Initial load
+    updateRealtimeStats();
+
+    // Update every 30 seconds
+    setInterval(updateRealtimeStats, 30000);
+
     const monthSelector = document.getElementById('monthSelector');
 
     if (monthSelector) {
