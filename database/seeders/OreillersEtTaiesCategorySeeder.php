@@ -23,11 +23,10 @@ class OreillersEtTaiesCategorySeeder extends Seeder
                 'name' => 'MedicoSoins',
                 'slug' => 'medicosoins',
                 'description' => 'Soutien orthopédique',
-                'image' => 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=800&h=600&fit=crop',
+                'image' => 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop',
                 'color' => '#3b82f6',
                 'is_active' => true,
                 'order' => 1,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Confort Soft',
@@ -37,35 +36,33 @@ class OreillersEtTaiesCategorySeeder extends Seeder
                 'color' => '#8b5cf6',
                 'is_active' => true,
                 'order' => 2,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Addict',
                 'slug' => 'addict',
                 'description' => 'Le choix passionné',
-                'image' => 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800&h=600&fit=crop',
+                'image' => 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop',
                 'color' => '#ec4899',
                 'is_active' => true,
                 'order' => 3,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Luxury',
                 'slug' => 'luxury',
                 'description' => 'Haut de gamme',
-                'image' => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&h=600&fit=crop',
+                'image' => 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop',
                 'color' => '#f59e0b',
                 'is_active' => true,
                 'order' => 4,
-                'menu_id' => $menu->id,
             ],
         ];
 
-        foreach ($categories as $category) {
-            \App\Models\Category::updateOrCreate(
-                ['slug' => $category['slug']],
-                $category
+        foreach ($categories as $categoryData) {
+            $category = \App\Models\Category::updateOrCreate(
+                ['slug' => $categoryData['slug']],
+                $categoryData
             );
+            $category->menus()->sync([$menu->id]);
         }
     }
 }

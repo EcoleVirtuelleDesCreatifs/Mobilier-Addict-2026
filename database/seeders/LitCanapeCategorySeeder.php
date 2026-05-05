@@ -27,7 +27,6 @@ class LitCanapeCategorySeeder extends Seeder
                 'color' => '#3b82f6',
                 'is_active' => true,
                 'order' => 1,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Table à manger',
@@ -37,7 +36,6 @@ class LitCanapeCategorySeeder extends Seeder
                 'color' => '#8b5cf6',
                 'is_active' => true,
                 'order' => 2,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Bureaux',
@@ -47,7 +45,6 @@ class LitCanapeCategorySeeder extends Seeder
                 'color' => '#ec4899',
                 'is_active' => true,
                 'order' => 3,
-                'menu_id' => $menu->id,
             ],
             [
                 'name' => 'Canapés',
@@ -57,15 +54,15 @@ class LitCanapeCategorySeeder extends Seeder
                 'color' => '#f59e0b',
                 'is_active' => true,
                 'order' => 4,
-                'menu_id' => $menu->id,
             ],
         ];
 
-        foreach ($categories as $category) {
-            \App\Models\Category::updateOrCreate(
-                ['slug' => $category['slug']],
-                $category
+        foreach ($categories as $categoryData) {
+            $category = \App\Models\Category::updateOrCreate(
+                ['slug' => $categoryData['slug']],
+                $categoryData
             );
+            $category->menus()->sync([$menu->id]);
         }
     }
 }
