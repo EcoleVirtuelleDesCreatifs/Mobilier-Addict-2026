@@ -1,267 +1,197 @@
-        <section class="bestsellers-clean" aria-label="Nos meilleurs produits">
+        <section class="best-sellers" aria-label="Nos meilleurs produits">
     <style>
-        .bestsellers-clean {
-            padding: 80px 0;
-            background: #fff
-        }
-
-        .bestsellers-clean__container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px
-        }
-
-        .bestsellers-clean__header {
-            text-align: center;
-            margin-bottom: 50px
-        }
-
-        .bestsellers-clean__badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-            color: #fff;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            font-size: 0.8125rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(236,72,153,.3)
-        }
-
-        .bestsellers-clean__title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0 0 12px;
-            letter-spacing: -0.02em
-        }
-
-        .bestsellers-clean__subtitle {
-            font-size: 1rem;
-            color: #64748b;
-            margin: 0
-        }
-
-        .bestsellers-clean__grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px
-        }
-
-        .bestsellers-clean__card {
+        .best-sellers {
+            padding: 80px 6%;
             background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all .4s cubic-bezier(.4,0,.2,1);
-            position: relative
+            font-family: Arial, sans-serif;
         }
 
-        .bestsellers-clean__card:hover {
-            border-color: #ec4899;
-            box-shadow: 0 20px 60px rgba(236,72,153,.2);
-            transform: translateY(-8px)
+        .section-header {
+            text-align: center;
+            margin-bottom: 55px;
         }
 
-        .bestsellers-clean__card-media {
+        .section-badge {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #f0559d, #d92776);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 46px;
+            color: #101828;
+            font-weight: 900;
+        }
+
+        .section-header p {
+            margin-top: 14px;
+            font-size: 16px;
+            color: #667085;
+        }
+
+        .products-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .product-card {
             position: relative;
-            height: 240px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)
+            background: #fff;
+            border: 1px solid #e5eaf3;
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 18px 45px rgba(16, 24, 40, 0.06);
+            transition: all 0.3s ease;
         }
 
-        .bestsellers-clean__card-media img {
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(16, 24, 40, 0.1);
+        }
+
+        .discount {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 2;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff9b21, #ef7900);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgba(239, 121, 0, 0.3);
+        }
+
+        .product-image {
+            height: 260px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #f8fafc;
+            margin-bottom: 20px;
+        }
+
+        .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 30px;
-            transition: transform .5s ease
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .bestsellers-clean__card:hover .bestsellers-clean__card-media img {
-            transform: scale(1.1)
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
         }
 
-        .bestsellers-clean__badge-discount {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #fff;
-            border-radius: 50px;
-            font-size: 0.75rem;
+        .product-info h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #101828;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(245,158,11,.4)
         }
 
-        .bestsellers-clean__card-body {
-            padding: 24px
+        .product-info p {
+            margin: 8px 0 16px;
+            color: #667085;
+            font-size: 14px;
         }
 
-        .bestsellers-clean__name {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin: 0 0 16px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 48px
-        }
-
-        .bestsellers-clean__price {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #ec4899;
-            margin-bottom: 20px;
-            letter-spacing: -0.02em
-        }
-
-        .bestsellers-clean__price-old {
-            font-size: 1rem;
-            color: #94a3b8;
-            text-decoration: line-through;
-            margin-left: 8px;
-            font-weight: 500
-        }
-
-        .bestsellers-clean__actions {
+        .price {
             display: flex;
-            gap: 12px
-        }
-
-        .bestsellers-clean__btn {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all .3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px
-        }
-
-        .bestsellers-clean__btn--primary {
-            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(236,72,153,.3)
-        }
-
-        .bestsellers-clean__btn--primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(236,72,153,.4)
-        }
-
-        .bestsellers-clean__btn--secondary {
-            background: #f1f5f9;
-            color: #0f172a;
-            border: 1px solid #e2e8f0
-        }
-
-        .bestsellers-clean__btn--secondary:hover {
-            background: #e2e8f0;
-            transform: translateY(-2px)
-        }
-
-        .bestsellers-clean__btn--full {
-            width: 100%
-        }
-
-        .bestsellers-clean__btn-icon {
-            display: inline-flex;
             align-items: center;
-            gap: 8px
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .price strong {
+            color: #101828;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .price span {
+            color: #98a2b3;
+            text-decoration: line-through;
+            font-size: 14px;
+        }
+
+        .product-card button {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            background: #101828;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .product-card button:hover {
+            background: #000;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 1024px) {
-            .bestsellers-clean__grid {
+            .products-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 24px
             }
         }
 
-        @media (max-width: 768px) {
-            .bestsellers-clean {
-                padding: 60px 0
+        @media (max-width: 600px) {
+            .section-header h2 {
+                font-size: 34px;
             }
 
-            .bestsellers-clean__grid {
-                grid-template-columns: 1fr
-            }
-
-            .bestsellers-clean__card-media {
-                height: 200px
-            }
-
-            .bestsellers-clean__name {
-                font-size: 1rem;
-                min-height: 44px
-            }
-
-            .bestsellers-clean__price {
-                font-size: 1.25rem
+            .products-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 
-    <div class="bestsellers-clean__container">
-        <div class="bestsellers-clean__header">
-            <span class="bestsellers-clean__badge">Best-Sellers</span>
-            <h2 class="bestsellers-clean__title">Les préférés de nos clients</h2>
-            <p class="bestsellers-clean__subtitle">Qualité premium, satisfaction garantie</p>
-        </div>
+    <div class="section-header">
+        <span class="section-badge">BEST-SELLERS</span>
+        <h2>Les préférés de nos clients</h2>
+        <p>Qualité premium, confort durable, satisfaction garantie</p>
+    </div>
 
-        @php
-            $allProducts = ($favoriteProducts ?? collect());
-        @endphp
+    @php
+        $allProducts = ($favoriteProducts ?? collect());
+    @endphp
 
-        <div class="bestsellers-clean__grid">
-            @foreach($allProducts as $product)
-                <article class="bestsellers-clean__card" aria-label="{{ $product->name }}">
-                    @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
-                        <div class="bestsellers-clean__badge-discount">-{{ (int) $product->discount_percent }}%</div>
-                    @endif
+    <div class="products-grid">
+        @foreach($allProducts as $product)
+            <article class="product-card" aria-label="{{ $product->name }}">
+                @if(!empty($product->discount_percent) && (int) $product->discount_percent > 0)
+                    <span class="discount">-{{ (int) $product->discount_percent }}%</span>
+                @endif
 
-                    <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="bestsellers-clean__card-media">
-                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy">
-                    </a>
-                    <div class="bestsellers-clean__card-body">
-                        <h3 class="bestsellers-clean__name">{{ $product->name }}</h3>
-                        <div class="bestsellers-clean__price">
-                            {{ $product->formatted_price }}
-                            @if(!empty($product->formatted_old_price))
-                                <span class="bestsellers-clean__price-old">{{ $product->formatted_old_price }}</span>
-                            @endif
-                        </div>
-                        <div class="bestsellers-clean__actions">
-                            <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="bestsellers-clean__btn bestsellers-clean__btn--secondary">
-                                <span class="bestsellers-clean__btn-icon">
-                                    <i class="fa-solid fa-eye"></i> Voir
-                                </span>
-                            </a>
-                            <form action="{{ route('cart.add') }}" method="POST" style="margin:0">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button class="bestsellers-clean__btn bestsellers-clean__btn--primary" type="submit">
-                                    <span class="bestsellers-clean__btn-icon">
-                                        <i class="fa-solid fa-cart-plus"></i> Ajouter
-                                    </span>
-                                </button>
-                            </form>
-                        </div>
+                <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" class="product-image">
+                    <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy">
+                </a>
+                <div class="product-info">
+                    <h3>{{ $product->name }}</h3>
+                    <p>{{ Str::limit($product->description ?? '', 80) }}</p>
+                    <div class="price">
+                        <strong>{{ $product->formatted_price }}</strong>
+                        @if(!empty($product->formatted_old_price))
+                            <span>{{ $product->formatted_old_price }}</span>
+                        @endif
                     </div>
-                </article>
-            @endforeach
-        </div>
+                    <a href="{{ $product->slug ? route('product.show', $product->slug) : route('demo.product') }}" style="text-decoration:none">
+                        <button type="button">Voir le produit</button>
+                    </a>
+                </div>
+            </article>
+        @endforeach
     </div>
 </section>
