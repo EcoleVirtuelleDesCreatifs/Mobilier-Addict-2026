@@ -3261,16 +3261,14 @@
                         <div class="matelas-products-simple__head"
                             style="text-align:center;max-width:800px;margin:0 auto 60px">
                             <div class="matelas-products-simple__badge"
-                                style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin:40px 0 44px;border:1px solid rgba(236,72,153,.3)">
-                                <span
-                                    style="color:#ec4899;font-size:0.8125rem;letter-spacing:2px;text-transform:uppercase;font-weight:600">Collection
-                                    complète</span>
+                                style="display:inline-block;padding:18px 55px;border:2px solid #f5a4c7;background:#fdebf4;color:#ec4f9a;border-radius:50px;font-size:22px;font-weight:700;letter-spacing:8px;margin-bottom:45px">
+                                <span style="color:#ec4f9a;font-size:22px;letter-spacing:8px;text-transform:uppercase;font-weight:700">COLLECTION COMPLÈTE</span>
                             </div>
                             <h2 class="matelas-products-simple__title"
-                                style="font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:#0f172a;margin-bottom:8px;letter-spacing:-.02em;line-height:1.1">
+                                style="font-size:88px;font-weight:900;color:#111827;margin:0;letter-spacing:-.02em;line-height:1">
                                 Nos produits</h2>
                             <p class="matelas-products-simple__desc"
-                                style="font-size:1.125rem;color:#64748b;max-width:600px;margin:0 auto">
+                                style="font-size:28px;color:#66738a;max-width:600px;margin:25px auto 0">
                                 {{ $products->total() }} modèles disponibles pour tous vos besoins</p>
                         </div>
                         <div class="matelas-products-simple__grid"
