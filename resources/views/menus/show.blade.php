@@ -3261,7 +3261,7 @@
                         <div class="matelas-products-simple__head"
                             style="text-align:center;max-width:800px;margin:0 auto 60px">
                             <div class="matelas-products-simple__badge"
-                                style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin-bottom:44px;border:1px solid rgba(236,72,153,.3)">
+                                style="display:inline-block;padding:10px 24px;background:rgba(236,72,153,.15);border-radius:30px;margin:40px 0 44px;border:1px solid rgba(236,72,153,.3)">
                                 <span
                                     style="color:#ec4899;font-size:0.8125rem;letter-spacing:2px;text-transform:uppercase;font-weight:600">Collection
                                     complète</span>
