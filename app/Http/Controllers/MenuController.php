@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Category;
 use Illuminate\Support\Str;
 
 class MenuController extends Controller
@@ -15,6 +16,15 @@ class MenuController extends Controller
         }
 
         $menu = Menu::query()->where('slug', $slug)->firstOrFail();
+
+        // Load categories for this menu
+        $menuCategories = Category::query()
+            ->where('is_active', true)
+            ->whereHas('menus', function($query) use ($menu) {
+                $query->where('menus.id', $menu->id);
+            })
+            ->orderBy('order')
+            ->get();
 
         $matelasModels = null;
         $matelasCategories = null;
@@ -160,6 +170,6 @@ class MenuController extends Controller
 
         $pageTitle = $menu->name;
 
-        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas'));
+        return view('menus.show', compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas', 'menuCategories'));
     }
 }

@@ -2978,42 +2978,9 @@
                             transform: none;
                         }
                     </style>
-                @elseif(strtolower(trim((string) $menu->slug)) === 'electromenager')
+                @elseif(in_array(strtolower(trim((string) $menu->slug)), ['electromenager', 'mobilier-accessoire']))
                     @php
-                        $electromenagerCategories = [
-                            [
-                                'key' => 'gazinieres',
-                                'label' => 'Gazinières',
-                                'desc' => 'Cuisine au gaz',
-                                'image' =>
-                                    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop',
-                                'color' => '#3b82f6',
-                            ],
-                            [
-                                'key' => 'frigo',
-                                'label' => 'Frigo',
-                                'desc' => 'Conservation optimale',
-                                'image' =>
-                                    'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&h=600&fit=crop',
-                                'color' => '#8b5cf6',
-                            ],
-                            [
-                                'key' => 'climatiseurs',
-                                'label' => 'Climatiseurs',
-                                'desc' => 'Fraîcheur garantie',
-                                'image' =>
-                                    'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&h=600&fit=crop',
-                                'color' => '#ec4899',
-                            ],
-                            [
-                                'key' => 'mixeurs',
-                                'label' => 'Mixeurs',
-                                'desc' => 'Préparation facile',
-                                'image' =>
-                                    'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&h=600&fit=crop',
-                                'color' => '#f59e0b',
-                            ],
-                        ];
+                        $menuCategoriesData = $menuCategories ?? collect();
                     @endphp
 
                     <section class="matelas-categories-simple reveal is-visible" id="differents" aria-label="Nos gammes"
@@ -3030,113 +2997,36 @@
                                     Nos gammes</h2>
                                 <p class="matelas-categories-simple__desc"
                                     style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">
-                                    Découvrez notre sélection d'électroménager</p>
+                                    Découvrez notre sélection de {{ strtolower(trim((string) $menu->slug)) === 'electromenager' ? 'électroménager' : 'mobilier et accessoires' }}</p>
                             </div>
                             <div class="matelas-categories-simple__grid"
                                 style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
-                                @foreach ($electromenagerCategories as $category)
-                                    <a href="{{ route('category.show', $category['key']) }}"
-                                        class="matelas-category-simple-card" data-category="{{ $category['key'] }}"
+                                @forelse($menuCategoriesData as $category)
+                                    <a href="{{ route('category.show', $category->slug) }}"
+                                        class="matelas-category-simple-card" data-category="{{ $category->slug }}"
                                         style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                                         <div class="matelas-category-simple-card__media"
                                             style="position:relative;height:320px;overflow:hidden">
-                                            <img src="{!! $category['image'] !!}" alt="{{ $category['label'] }}"
+                                            <img src="@image_url($category->image)" alt="{{ $category->name }}"
                                                 loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                         </div>
                                         <div class="matelas-category-simple-card__content"
                                             style="padding:40px;position:relative">
                                             <h3 class="matelas-category-simple-card__name"
                                                 style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">
-                                                {{ $category['label'] }}</h3>
+                                                {{ $category->name }}</h3>
                                             <p class="matelas-category-simple-card__desc"
                                                 style="font-size:1.125rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">
-                                                {{ $category['desc'] }}</p>
+                                                {{ $category->description }}</p>
                                             <div class="matelas-category-simple-card__arrow"
                                                 style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem">
                                                 Découvrir <span style="font-size:1.1rem;font-weight:900">→</span>
                                             </div>
                                         </div>
                                     </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </section>
-                @elseif(strtolower(trim((string) $menu->slug)) === 'mobilier-accessoire')
-                    @php
-                        $mobilierAccessoireCategories = [
-                            [
-                                'key' => 'tables',
-                                'label' => 'Tables',
-                                'desc' => 'Design fonctionnel',
-                                'image' => 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=600&fit=crop',
-                                'color' => '#3b82f6',
-                            ],
-                            [
-                                'key' => 'chaises',
-                                'label' => 'Chaises',
-                                'desc' => 'Confort optimal',
-                                'image' => 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800&h=600&fit=crop',
-                                'color' => '#8b5cf6',
-                            ],
-                            [
-                                'key' => 'rangement',
-                                'label' => 'Rangement',
-                                'desc' => 'Organisation pratique',
-                                'image' => 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=800&h=600&fit=crop',
-                                'color' => '#ec4899',
-                            ],
-                            [
-                                'key' => 'accessoires',
-                                'label' => 'Accessoires',
-                                'desc' => 'Finitions parfaites',
-                                'image' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop',
-                                'color' => '#f59e0b',
-                            ],
-                        ];
-                    @endphp
-
-                    <section class="matelas-categories-simple reveal is-visible" id="differents" aria-label="Nos gammes"
-                        style="background:#0f172a;padding:100px 0">
-                        <div class="container">
-                            <div class="matelas-categories-simple__head" style="text-align:center;margin-bottom:80px">
-                                <div class="matelas-categories-simple__badge"
-                                    style="display:inline-block;padding:12px 28px;background:rgba(236,72,153,.15);border:2px solid rgba(236,72,153,.3);border-radius:50px;margin-bottom:32px">
-                                    <span
-                                        style="color:#ec4899;font-size:0.875rem;letter-spacing:3px;text-transform:uppercase;font-weight:800">Collection</span>
-                                </div>
-                                <h2 class="matelas-categories-simple__title"
-                                    style="font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:#fff;margin-bottom:20px;letter-spacing:-.02em;line-height:1.1">
-                                    Nos gammes</h2>
-                                <p class="matelas-categories-simple__desc"
-                                    style="font-size:1.25rem;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.7">
-                                    Découvrez notre sélection de mobilier et accessoires</p>
-                            </div>
-                            <div class="matelas-categories-simple__grid"
-                                style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
-                                @foreach ($mobilierAccessoireCategories as $category)
-                                    <a href="{{ route('category.show', $category['key']) }}"
-                                        class="matelas-category-simple-card" data-category="{{ $category['key'] }}"
-                                        style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
-                                        <div class="matelas-category-simple-card__media"
-                                            style="position:relative;height:320px;overflow:hidden">
-                                            <img src="{!! $category['image'] !!}" alt="{{ $category['label'] }}"
-                                                loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-                                        </div>
-                                        <div class="matelas-category-simple-card__content"
-                                            style="padding:40px;position:relative">
-                                            <h3 class="matelas-category-simple-card__name"
-                                                style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">
-                                                {{ $category['label'] }}</h3>
-                                            <p class="matelas-category-simple-card__desc"
-                                                style="font-size:1.125rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">
-                                                {{ $category['desc'] }}</p>
-                                            <div class="matelas-category-simple-card__arrow"
-                                                style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem">
-                                                Découvrir <span style="font-size:1.1rem;font-weight:900">→</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
+                                @empty
+                                    <div class="col-12 text-center text-white">Aucune catégorie disponible pour ce menu.</div>
+                                @endforelse
                             </div>
                         </div>
                     </section>
