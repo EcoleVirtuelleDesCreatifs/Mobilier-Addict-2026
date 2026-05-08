@@ -12,7 +12,6 @@
 @include('sections.guarantees')
 @include('sections.new-products')
 @include('sections.spaces')
-@include('sections.best-sellers')
 @include('sections.collection')
 @include('sections.accessories')
 @include('sections.brands')
