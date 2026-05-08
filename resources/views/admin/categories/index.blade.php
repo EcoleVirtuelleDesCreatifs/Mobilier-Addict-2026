@@ -32,7 +32,12 @@
                     <div class="p-4" style="background: var(--admin-bg-subtle); border-bottom: 1px solid var(--admin-border);">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="mb-1">{{ $menu->name }}</h4>
+                                <h4 class="mb-1">
+                                    <a href="{{ route('menu.show', $menu->slug) }}" target="_blank" class="text-decoration-none text-dark hover-primary">
+                                        {{ $menu->name }}
+                                        <i class="fas fa-external-link-alt small ms-2" style="color: var(--admin-muted);"></i>
+                                    </a>
+                                </h4>
                                 <div class="small" style="color: var(--admin-muted);">{{ $menu->slug }}</div>
                             </div>
                             <div class="badge bg-primary">{{ $categoriesByMenu[$menu->id]?->count() ?? 0 }} catégories</div>
