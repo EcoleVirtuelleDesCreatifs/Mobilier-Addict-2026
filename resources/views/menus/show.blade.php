@@ -3006,21 +3006,21 @@
                                         class="matelas-category-simple-card" data-category="{{ $category->slug }}"
                                         style="text-decoration:none;color:inherit;background:#1e293b;border-radius:24px;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,255,255,.1)">
                                         <div class="matelas-category-simple-card__media"
-                                            style="position:relative;height:320px;overflow:hidden">
+                                            style="position:relative;height:380px;overflow:hidden">
                                             <img src="@image_url($category->image)" alt="{{ $category->name }}"
                                                 loading="lazy" style="width:100%;height:100%;object-fit:cover" />
                                         </div>
                                         <div class="matelas-category-simple-card__content"
-                                            style="padding:40px;position:relative">
+                                            style="padding:50px;position:relative">
                                             <h3 class="matelas-category-simple-card__name"
-                                                style="font-size:2rem;font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-.01em;line-height:1.1">
+                                                style="font-size:2.25rem;font-weight:900;color:#fff;margin:0 0 16px;letter-spacing:-.01em;line-height:1.1">
                                                 {{ $category->name }}</h3>
                                             <p class="matelas-category-simple-card__desc"
-                                                style="font-size:1.125rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">
+                                                style="font-size:1.25rem;color:rgba(255,255,255,.6);margin:0;line-height:1.6">
                                                 {{ $category->description }}</p>
                                             <div class="matelas-category-simple-card__arrow"
-                                                style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:0.9375rem">
-                                                Découvrir <span style="font-size:1.1rem;font-weight:900">→</span>
+                                                style="display:inline-flex;align-items:center;gap:8px;margin-top:28px;padding:14px 28px;background:rgba(236,72,153,.15);color:#ec4899;border-radius:30px;font-weight:800;font-size:1rem">
+                                                Découvrir <span style="font-size:1.2rem;font-weight:900">→</span>
                                             </div>
                                         </div>
                                     </a>
