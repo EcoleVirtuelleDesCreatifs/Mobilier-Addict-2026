@@ -3000,7 +3000,7 @@
                                     Découvrez notre sélection de {{ strtolower(trim((string) $menu->slug)) === 'electromenager' ? 'électroménager' : 'mobilier et accessoires' }}</p>
                             </div>
                             <div class="matelas-categories-simple__grid"
-                                style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1400px;margin:0 auto">
+                                style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1400px;margin:0 auto">
                                 @forelse($menuCategoriesData as $category)
                                     <a href="{{ route('category.show', $category->slug) }}"
                                         class="matelas-category-simple-card" data-category="{{ $category->slug }}"
