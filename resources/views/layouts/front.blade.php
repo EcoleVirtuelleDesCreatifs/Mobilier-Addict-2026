@@ -51,8 +51,11 @@
         @php
             $cssPath = public_path('css/style.css');
             $cssVersion = is_file($cssPath) ? substr(md5_file($cssPath), 0, 12) : time();
+            $sectionsCssPath = public_path('assets/css/sections.css');
+            $sectionsCssVersion = is_file($sectionsCssPath) ? substr(md5_file($sectionsCssPath), 0, 12) : time();
         @endphp
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ $cssVersion }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/sections.css') }}?v={{ $sectionsCssVersion }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
 
         @stack('styles')
