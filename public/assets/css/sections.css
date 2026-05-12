@@ -181,155 +181,243 @@
     box-shadow: 0 8px 24px rgba(236, 31, 117, 0.4);
 }
 
-/* Blog Minimal Section */
-.blog-minimal {
-  padding: 100px 20px;
-  background: #fff;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* Blog Modern Section */
+.blog-modern {
+  padding: 120px 20px;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.blog-minimal__container {
-  max-width: 1200px;
+.blog-modern__container {
+  max-width: 1280px;
   margin: auto;
 }
 
-.blog-minimal__header {
+.blog-modern__header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
 }
 
-.blog-minimal__header h2 {
-  margin: 0 0 12px;
-  font-size: 32px;
-  font-weight: 300;
-  color: #1a1a1a;
-  letter-spacing: 2px;
+.blog-modern__label {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
-.blog-minimal__header p {
+.blog-modern__header h2 {
+  margin: 0 0 16px;
+  font-size: 48px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.blog-modern__header p {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   color: #666;
-  font-weight: 300;
+  font-weight: 400;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.blog-minimal__grid {
+.blog-modern__grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 32px;
 }
 
-.blog-minimal__card {
+.blog-modern__card {
   position: relative;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: opacity 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.blog-minimal__card:hover {
-  opacity: 0.7;
+.blog-modern__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
-.blog-minimal__image {
-  margin-bottom: 20px;
+.blog-modern__card--featured {
+  grid-row: span 2;
+}
+
+.blog-modern__image {
+  position: relative;
   overflow: hidden;
 }
 
-.blog-minimal__card--featured .blog-minimal__image {
-  margin-bottom: 24px;
+.blog-modern__card--featured .blog-modern__image {
+  height: 320px;
 }
 
-.blog-minimal__image img {
+.blog-modern__card:not(.blog-modern__card--featured) .blog-modern__image {
+  height: 200px;
+}
+
+.blog-modern__image img {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
-.blog-minimal__content {
-  padding: 0;
+.blog-modern__card:hover .blog-modern__image img {
+  transform: scale(1.05);
 }
 
-.blog-minimal__date {
+.blog-modern__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.blog-modern__card:hover .blog-modern__overlay {
+  opacity: 1;
+}
+
+.blog-modern__content {
+  padding: 24px;
+}
+
+.blog-modern__card--featured .blog-modern__content {
+  padding: 32px;
+}
+
+.blog-modern__tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.blog-modern__date {
   display: block;
   color: #999;
   font-size: 13px;
-  font-weight: 300;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
+  font-weight: 500;
+  margin-bottom: 12px;
 }
 
-.blog-minimal__content h3 {
-  margin: 0;
+.blog-modern__content h3 {
+  margin: 0 0 12px;
   color: #1a1a1a;
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1.4;
 }
 
-.blog-minimal__card--featured h3 {
-  font-size: 24px;
-  font-weight: 300;
+.blog-modern__card--featured h3 {
+  font-size: 28px;
+  font-weight: 700;
   line-height: 1.3;
+  margin-bottom: 16px;
 }
 
-.blog-minimal__content p {
-  margin: 12px 0 0;
+.blog-modern__content p {
+  margin: 0 0 16px;
   color: #666;
   font-size: 15px;
-  font-weight: 300;
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.blog-minimal__cta {
+.blog-modern__read {
+  display: inline-flex;
+  align-items: center;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.blog-modern__card:hover .blog-modern__read {
+  color: #764ba2;
+}
+
+.blog-modern__cta {
   text-align: center;
   margin-top: 60px;
 }
 
-.blog-minimal__btn {
+.blog-modern__btn {
   display: inline-block;
-  padding: 12px 30px;
-  border: 1px solid #1a1a1a;
-  color: #1a1a1a;
+  padding: 16px 40px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 300;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
 }
 
-.blog-minimal__btn:hover {
-  background: #1a1a1a;
-  color: #fff;
+.blog-modern__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
 }
 
 @media (max-width: 1024px) {
-  .blog-minimal__grid {
+  .blog-modern__grid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .blog-minimal__card--featured {
+  .blog-modern__card--featured {
     grid-column: 1 / -1;
+    grid-row: span 1;
   }
 }
 
 @media (max-width: 700px) {
-  .blog-minimal {
+  .blog-modern {
     padding: 80px 16px;
   }
 
-  .blog-minimal__grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
+  .blog-modern__header h2 {
+    font-size: 36px;
   }
 
-  .blog-minimal__card--featured {
+  .blog-modern__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .blog-modern__card--featured {
     grid-column: 1;
   }
 
-  .blog-minimal__header h2 {
-    font-size: 28px;
+  .blog-modern__card--featured .blog-modern__image,
+  .blog-modern__card:not(.blog-modern__card--featured) .blog-modern__image {
+    height: 220px;
+  }
+
+  .blog-modern__card--featured h3 {
+    font-size: 24px;
   }
 }
 .mattress-section {
