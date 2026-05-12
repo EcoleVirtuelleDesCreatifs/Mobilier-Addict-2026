@@ -184,7 +184,7 @@
 /* Blog Modern Section */
 .blog-modern {
   padding: 120px 20px;
-  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  background: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -195,77 +195,86 @@
 
 .blog-modern__header {
   text-align: center;
-  margin-bottom: 70px;
+  margin-bottom: 80px;
+  padding-bottom: 40px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .blog-modern__label {
   display: inline-block;
-  padding: 8px 20px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 10px 24px;
+  border-radius: 30px;
+  background: #667eea;
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .blog-modern__header h2 {
-  margin: 0 0 16px;
-  font-size: 48px;
-  font-weight: 700;
+  margin: 0 0 20px;
+  font-size: 52px;
+  font-weight: 800;
   color: #1a1a1a;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .blog-modern__header p {
   margin: 0;
-  font-size: 18px;
+  font-size: 19px;
   color: #666;
   font-weight: 400;
-  max-width: 600px;
+  max-width: 650px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6;
 }
 
 .blog-modern__grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 32px;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 40px;
 }
 
 .blog-modern__card {
   position: relative;
   background: #fff;
-  border-radius: 24px;
+  border: 2px solid #e8e8e8;
+  border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .blog-modern__card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
 }
 
 .blog-modern__card--featured {
   grid-row: span 2;
+  border-color: #667eea;
+  background: #fafbff;
 }
 
 .blog-modern__image {
   position: relative;
   overflow: hidden;
+  background: #f5f5f5;
 }
 
 .blog-modern__card--featured .blog-modern__image {
-  height: 320px;
+  height: 380px;
+  border-bottom: 3px solid #667eea;
 }
 
 .blog-modern__card:not(.blog-modern__card--featured) .blog-modern__image {
-  height: 200px;
+  height: 240px;
+  border-bottom: 2px solid #e8e8e8;
 }
 
 .blog-modern__image img {
@@ -276,13 +285,13 @@
 }
 
 .blog-modern__card:hover .blog-modern__image img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .blog-modern__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(102, 126, 234, 0.2) 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -292,54 +301,57 @@
 }
 
 .blog-modern__content {
-  padding: 24px;
+  padding: 28px;
 }
 
 .blog-modern__card--featured .blog-modern__content {
-  padding: 32px;
+  padding: 36px;
 }
 
 .blog-modern__tag {
   display: inline-block;
-  padding: 6px 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: #667eea;
   color: #fff;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .blog-modern__date {
   display: block;
-  color: #999;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 12px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .blog-modern__content h3 {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   color: #1a1a1a;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .blog-modern__card--featured h3 {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 16px;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #667eea;
 }
 
 .blog-modern__content p {
-  margin: 0 0 16px;
-  color: #666;
-  font-size: 15px;
-  line-height: 1.6;
+  margin: 0 0 20px;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.7;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -350,9 +362,11 @@
   display: inline-flex;
   align-items: center;
   color: #667eea;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 15px;
   transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .blog-modern__card:hover .blog-modern__read {
@@ -361,30 +375,36 @@
 
 .blog-modern__cta {
   text-align: center;
-  margin-top: 60px;
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 2px solid #f0f0f0;
 }
 
 .blog-modern__btn {
   display: inline-block;
-  padding: 16px 40px;
+  padding: 18px 48px;
   border-radius: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: #fff;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 15px;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.35);
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .blog-modern__btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+  background: #764ba2;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.45);
 }
 
 @media (max-width: 1024px) {
   .blog-modern__grid {
     grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
 
   .blog-modern__card--featured {
@@ -395,16 +415,25 @@
 
 @media (max-width: 700px) {
   .blog-modern {
-    padding: 80px 16px;
+    padding: 80px 20px;
+  }
+
+  .blog-modern__header {
+    margin-bottom: 60px;
+    padding-bottom: 30px;
   }
 
   .blog-modern__header h2 {
-    font-size: 36px;
+    font-size: 40px;
+  }
+
+  .blog-modern__header p {
+    font-size: 17px;
   }
 
   .blog-modern__grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 32px;
   }
 
   .blog-modern__card--featured {
@@ -413,11 +442,15 @@
 
   .blog-modern__card--featured .blog-modern__image,
   .blog-modern__card:not(.blog-modern__card--featured) .blog-modern__image {
-    height: 220px;
+    height: 260px;
   }
 
   .blog-modern__card--featured h3 {
-    font-size: 24px;
+    font-size: 28px;
+  }
+
+  .blog-modern__cta {
+    margin-top: 60px;
   }
 }
 .mattress-section {
