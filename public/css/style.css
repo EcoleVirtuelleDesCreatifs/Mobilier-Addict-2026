@@ -976,6 +976,7 @@ button{-webkit-tap-highlight-color:transparent}
 }
 @media(min-width:1024px){
   .cat-card--large{grid-row:span 2}
+  .cat-card--wide{grid-column:auto}
 }
 .cat-card img{
   width:100%;

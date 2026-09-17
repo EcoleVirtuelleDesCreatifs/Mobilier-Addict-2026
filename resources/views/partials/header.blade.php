@@ -51,32 +51,14 @@
                 <h3 class="mobile-nav__title"><i class="fa-solid fa-bed"></i> Mobilier Addict</h3>
                 <p class="mobile-nav__subtitle">Votre partenaire sommeil premium</p>
             </div>
-            <a class="nav-link nav-link--active" href="{{ route('home') }}">
-                <span class="nav-link__icon"><i class="fa-solid fa-house"></i></span>
-                Accueil
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-bed"></i></span>
-                Matelas
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-cloud"></i></span>
-                Oreillers
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-sheet-plastic"></i></span>
-                Draps & Couettes
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-plug"></i></span>
-                Électroménager & Meubles
-            </a>
-            <a class="nav-link" href="#">
-                <span class="nav-link__icon"><i class="fa-solid fa-couch"></i></span>
-                Lits
-            </a>
+            @foreach (config('menu.main') as $item)
+                <a class="nav-link {{ $loop->first ? 'nav-link--active' : '' }}" href="{{ $item['url'] }}">
+                    <span class="nav-link__icon"><i class="fa-solid {{ $item['icon'] }}"></i></span>
+                    {{ $item['label'] }}
+                </a>
+            @endforeach
             <div class="mobile-nav__footer">
-                <a class="mobile-nav__cta" href="#">Explorer la collection <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="mobile-nav__cta" href="{{ config('menu.main.0.url') }}">Explorer la collection <i class="fa-solid fa-arrow-right"></i></a>
                 <p style="color:rgba(255,255,255,.6);font-size:13px;margin:12px 0">Besoin d'aide ? Contactez-nous</p>
                 <div class="mobile-nav__contact">
                     <a href="tel:+221771234567" aria-label="Téléphone"><i class="fa-solid fa-phone"></i></a>
