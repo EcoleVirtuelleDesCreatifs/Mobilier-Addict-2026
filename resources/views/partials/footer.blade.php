@@ -30,12 +30,9 @@
 
             <div class="footer-new__col">
                 <h4 class="footer-new__title">Nos Produits</h4>
-                <a class="footer-new__link" href="#">Matelas</a>
-                <a class="footer-new__link" href="#">Oreillers</a>
-                <a class="footer-new__link" href="#">Draps & Couettes</a>
-                <a class="footer-new__link" href="#">Protège-Matelas</a>
-                <a class="footer-new__link" href="#">Lits & Sommiers</a>
-                <a class="footer-new__link" href="#">Électroménager</a>
+                @foreach (array_slice(config('menu.main'), 1) as $item)
+                    <a class="footer-new__link" href="{{ $item['url'] }}">{{ $item['label'] }}</a>
+                @endforeach
             </div>
 
             <div class="footer-new__col">
