@@ -6021,3 +6021,102 @@ blockquote {
     width: 100%;
     margin-right: 0;
     margin-bottom: 15px; } }
+
+/* ==========================================================================
+   Trust section (refonte)
+   ========================================================================== */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px; }
+
+.trust-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 28px 28px 24px;
+  background: #fff;
+  border: 1px solid #e8eaed;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+
+.trust-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary-color);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .3s ease; }
+
+.trust-card:hover {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow: 0 18px 40px rgba(0, 35, 77, .10); }
+
+.trust-card:hover::before {
+  transform: scaleY(1); }
+
+.trust-card-icon {
+  flex: 0 0 68px;
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 35, 77, .06);
+  transition: background .3s ease; }
+
+.trust-card-icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  transition: filter .3s ease; }
+
+.trust-card:hover .trust-card-icon {
+  background: var(--primary-color); }
+
+.trust-card:hover .trust-card-icon img {
+  filter: brightness(0) invert(1); }
+
+.trust-card-title {
+  color: var(--primary-color);
+  margin-bottom: 4px; }
+
+.trust-card-text {
+  color: #77889B;
+  line-height: 1.5; }
+
+.trust-card-num {
+  position: absolute;
+  right: 16px;
+  bottom: -14px;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(0, 35, 77, .05);
+  pointer-events: none; }
+
+@media (max-width: 1199px) {
+  .trust-card {
+    padding: 24px 20px; }
+  .trust-card-icon {
+    flex-basis: 56px;
+    width: 56px;
+    height: 56px; }
+  .trust-card-icon img {
+    width: 30px;
+    height: 30px; }
+  .trust-card-title {
+    font-size: 16px; } }
+
+@media (max-width: 991px) {
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 16px; } }
