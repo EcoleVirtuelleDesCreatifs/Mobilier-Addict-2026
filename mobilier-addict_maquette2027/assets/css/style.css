@@ -4142,7 +4142,8 @@ blockquote {
   grid-template-columns: 45% auto auto;
   -ms-grid-rows: 1fr 24px 1fr;
   grid-template-rows: repeat(2, 1fr);
-  grid-template-areas: "first second second" "first third fourth";
+  grid-template-areas: "first second second"
+ "first third fourth";
   -webkit-column-gap: 24px;
   column-gap: 24px;
   row-gap: 24px; }
@@ -6023,100 +6024,114 @@ blockquote {
     margin-bottom: 15px; } }
 
 /* ==========================================================================
-   Trust section (refonte)
+   Trust band (refonte)
    ========================================================================== */
-.trust-grid {
+.trust-band-inner {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px; }
-
-.trust-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 28px 28px 28px 24px;
-  background: #fff;
-  border: 1px solid #e8eaed;
+  padding: 8px 0;
   border-radius: 16px;
+  background: linear-gradient(120deg, var(--primary-color) 0%, #0b3a75 100%);
+  color: #fff;
   overflow: hidden;
-  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+  isolation: isolate; }
 
-.trust-card::before {
+.trust-band-inner::before,
+.trust-band-inner::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--primary-color);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform .3s ease; }
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1; }
 
-.trust-card:hover {
-  transform: translateY(-4px);
-  border-color: transparent;
-  box-shadow: 0 18px 40px rgba(0, 35, 77, .10); }
+.trust-band-inner::before {
+  width: 320px;
+  height: 320px;
+  right: -120px;
+  top: -180px;
+  background: radial-gradient(circle, rgba(247, 107, 106, .35) 0%, rgba(247, 107, 106, 0) 70%); }
 
-.trust-card:hover::before {
-  transform: scaleY(1); }
+.trust-band-inner::after {
+  width: 260px;
+  height: 260px;
+  left: -100px;
+  bottom: -160px;
+  background: radial-gradient(circle, rgba(255, 255, 255, .12) 0%, rgba(255, 255, 255, 0) 70%); }
 
-.trust-card-icon {
-  flex: 0 0 68px;
-  width: 68px;
-  height: 68px;
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px 32px;
+  border-left: 1px solid rgba(255, 255, 255, .12); }
+
+.trust-item:first-child {
+  border-left: 0; }
+
+.trust-item-icon {
+  position: relative;
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 35, 77, .06);
-  transition: background .3s ease; }
+  background: var(--secondary-color);
+  box-shadow: 0 10px 24px rgba(247, 107, 106, .35);
+  transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
 
-.trust-card-icon img {
-  width: 36px;
-  height: 36px;
+.trust-item-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, .35);
+  transition: transform .6s ease; }
+
+.trust-item-icon img {
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  transition: filter .3s ease; }
-
-.trust-card:hover .trust-card-icon {
-  background: var(--primary-color); }
-
-.trust-card:hover .trust-card-icon img {
   filter: brightness(0) invert(1); }
 
-.trust-card-title {
-  color: var(--primary-color);
-  margin-bottom: 4px; }
+.trust-item:hover .trust-item-icon {
+  transform: scale(1.08); }
 
-.trust-card-text {
-  color: #77889B;
+.trust-item:hover .trust-item-icon::after {
+  transform: rotate(180deg); }
+
+.trust-item-title {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 6px; }
+
+.trust-item-text {
+  color: rgba(255, 255, 255, .72);
   line-height: 1.5; }
 
-.trust-card-num {
-  position: absolute;
-  right: 16px;
-  bottom: -14px;
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1;
-  color: rgba(0, 35, 77, .05);
-  pointer-events: none; }
-
 @media (max-width: 1199px) {
-  .trust-card {
-    padding: 24px 20px; }
-  .trust-card-icon {
+  .trust-item {
+    padding: 24px 20px;
+    gap: 14px; }
+  .trust-item-icon {
     flex-basis: 56px;
     width: 56px;
     height: 56px; }
-  .trust-card-icon img {
-    width: 30px;
-    height: 30px; }
-  .trust-card-title {
+  .trust-item-icon img {
+    width: 28px;
+    height: 28px; }
+  .trust-item-title {
     font-size: 16px; } }
 
 @media (max-width: 991px) {
-  .trust-grid {
+  .trust-band-inner {
     grid-template-columns: 1fr;
-    gap: 16px; } }
+    padding: 0; }
+  .trust-item {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    padding: 22px 24px; }
+  .trust-item:first-child {
+    border-top: 0; } }
