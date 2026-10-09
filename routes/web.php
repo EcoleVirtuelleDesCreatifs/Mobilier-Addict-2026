@@ -47,6 +47,7 @@ Route::middleware(TrackPageView::class)->group(function () {
     Route::get('/jeu/{participant}', [\App\Http\Controllers\GameController::class, 'show'])->name('game.show');
     Route::post('/jeu/{participant}/soutien', [\App\Http\Controllers\GameController::class, 'support'])->name('game.support');
     Route::get('/jeu/{participant}/badge', [\App\Http\Controllers\GameController::class, 'badge'])->name('game.badge');
+    Route::get('/media/{path}', [\App\Http\Controllers\PublicMediaController::class, 'show'])->where('path', '.*')->name('media.show');
 
 Route::get('/sitemap.xml', function () {
     $urls = [];

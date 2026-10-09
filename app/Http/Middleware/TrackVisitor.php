@@ -15,14 +15,14 @@ class TrackVisitor
         $response = $next($request);
 
         // Only track GET requests and if page_views table exists
-        if ($request->isMethod('GET') && Schema::hasTable('page_views')) {
+        if ($request->isMethod('GET') && !$request->routeIs('media.show') && Schema::hasTable('page_views')) {
             try {
                 // Get or generate visitor ID from cookie
                 $visitorId = $request->cookie('visitor_id');
 
                 if (!$visitorId) {
                     $visitorId = uniqid('visitor_', true);
-                    $response->withCookie(cookie('visitor_id', $visitorId, 525600)); // 1 year
+                    $response->headers->setCookie(cookie('visitor_id', $visitorId, 525600)); // 1 year
                 }
 
                 // Don't track admin pages

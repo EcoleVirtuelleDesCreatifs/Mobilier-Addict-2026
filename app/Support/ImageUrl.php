@@ -25,30 +25,33 @@ class ImageUrl
 
         $path = ltrim($path, '/');
 
-        if (preg_match('/\.(jpe?g|png)$/i', $path)) {
-            $webpPath = preg_replace('/\.(jpe?g|png)$/i', '.webp', $path);
-            if (is_string($webpPath) && $webpPath !== $path) {
-                if (Str::startsWith($webpPath, 'uploads/') && is_file(public_path($webpPath))) {
-                    $path = $webpPath;
-                } elseif (Str::startsWith($webpPath, 'storage/')) {
-                    $storageRelative = Str::after($webpPath, 'storage/');
-                    if (is_file(storage_path('app/public/' . $storageRelative)) || is_file(public_path($webpPath))) {
-                        $path = $webpPath;
-                    }
+        if (Str::startsWith($path, 'uploads/')) {
+            if (preg_match('/\.(jpe?g|png)$/i', $path)) {
+                $webp = preg_replace('/\.(jpe?g|png)$/i', '.webp', $path);
+                if (is_string($webp) && is_file(public_path($webp))) {
+                    $path = $webp;
                 }
             }
-        }
 
-        if (Str::startsWith($path, 'uploads/')) {
             return asset($path);
         }
 
-        if (Str::startsWith($path, 'storage/')) {
-            return asset('storage/' . Str::after($path, 'storage/'));
+        $relative = Str::startsWith($path, 'storage/') ? Str::after($path, 'storage/') : $path;
+        $relative = preg_replace('#^public/#', '', $relative);
+
+        if (preg_match('/\.(jpe?g|png)$/i', $relative)) {
+            $webp = preg_replace('/\.(jpe?g|png)$/i', '.webp', $relative);
+            if (is_string($webp) && is_file(storage_path('app/public/' . $webp))) {
+                $relative = $webp;
+            }
         }
 
-        $path = preg_replace('#^public/#', '', $path);
+        if (is_file(storage_path('app/public/' . $relative))) {
+            $encoded = implode('/', array_map('rawurlencode', explode('/', $relative)));
 
-        return asset('storage/' . $path);
+            return url('media/' . $encoded);
+        }
+
+        return asset('storage/' . $relative);
     }
 }
