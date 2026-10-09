@@ -1,0 +1,1444 @@
+@extends('maquette.layout')
+
+@section('content')
+
+        <!-- slideshow start -->
+        <div class="slideshow-section position-relative">
+          <div
+            class="slideshow-active activate-slider"
+            data-slick='{
+                            "autoplay": true,
+                            "autoplaySpeed": 2000,
+                            "speed": 600,
+                            "cssEase": "ease",
+                            "pauseOnHover": true,
+                            "pauseOnFocus": true,
+                            "infinite": true,
+                            "slidesToShow": 1,
+                            "slidesToScroll": 1,
+                            "dots": true,
+                            "arrows": true,
+                            "responsive": [
+                                {
+                                    "breakpoint": 768,
+                                    "settings": {
+                                        "arrows": false
+                                    }
+                                }
+                            ],
+                            "fade": true
+                        }'
+          >
+            @php
+                $defaultSlides = collect([
+                    ['img' => 'assets/hero/mobilier-addict-slide-1.png', 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'ACHETER', 'url' => route('category.show', 'matelas')],
+                    ['img' => 'assets/hero/mobilier-addict-slide-2.png', 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'ACHETER', 'url' => route('category.show', 'oreillers-et-taies')],
+                    ['img' => 'assets/hero/mobilier-addict-slide-3.png', 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'ACHETER', 'url' => route('category.show', 'mobilier-accessoire')],
+                ]);
+
+                $slides = ($heroSlides ?? collect())->isNotEmpty()
+                    ? $heroSlides->map(fn ($s) => [
+                        'img' => $s->image,
+                        'alt' => $s->image_alt ?: ($s->title ?? 'Mobilier Addict'),
+                        'badge' => $s->badge,
+                        'title' => $s->title,
+                        'highlight' => $s->title_highlight,
+                        'desc' => $s->description,
+                        'btn' => $s->btn_primary_text ?: 'ACHETER',
+                        'url' => $s->btn_primary_url ?: route('collection.index'),
+                    ])->values()
+                    : $defaultSlides;
+            @endphp
+            @foreach($slides as $i => $s)
+            <div class="slide-item slide-item-bag position-relative">
+              <img loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" class="slide-img d-none d-md-block"
+                src="@image_url($s['img'])"
+                alt="{{ $s['alt'] }}"
+              />
+              <img loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" class="slide-img d-md-none"
+                src="@image_url($s['img'])"
+                alt="{{ $s['alt'] }}"
+              />
+              <div class="content-absolute content-slide">
+                <div
+                  class="container height-inherit d-flex align-items-center justify-content-start"
+                >
+                  <div class="content-box slide-content slide-content-1 py-4">
+                    @if($s['badge'])
+                      <span class="slide-badge animate__animated animate__fadeInUp">{{ $s['badge'] }}</span>
+                    @endif
+                    <h2
+                      class="slide-heading heading_72 animate__animated animate__fadeInUp"
+                      data-animation="animate__animated animate__fadeInUp"
+                    >
+                      {{ $s['title'] }}@if($s['highlight']) <span class="featured-title-accent">{{ $s['highlight'] }}</span>@endif
+                    </h2>
+                    @if($s['desc'])
+                    <p
+                      class="slide-subheading heading_24 animate__animated animate__fadeInUp"
+                      data-animation="animate__animated animate__fadeInUp"
+                    >
+                      {{ $s['desc'] }}
+                    </p>
+                    @endif
+                    <a
+                      class="btn-primary slide-btn animate__animated animate__fadeInUp"
+                      href="{{ $s['url'] }}"
+                      data-animation="animate__animated animate__fadeInUp"
+                      >{{ $s['btn'] }}</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endforeach
+          </div>
+          <div class="activate-arrows"></div>
+          <div class="activate-dots dot-tools"></div>
+        </div>
+        <!-- slideshow end -->
+
+        <!-- trusted badge start -->
+        <div class="trusted-section mt-100 overflow-hidden">
+          <div class="container">
+            <div
+              class="trust-strip"
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
+              <div class="trust-item">
+                <span class="trust-item-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"
+                    />
+                    <path d="M15 18H9" />
+                    <path
+                      d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"
+                    />
+                    <circle cx="17" cy="18" r="2" />
+                    <circle cx="7" cy="18" r="2" />
+                  </svg>
+                </span>
+                <div class="trust-item-body">
+                  <h2 class="heading_18 trust-item-title">
+                    Livraison Express
+                  </h2>
+                  <p class="text_16 trust-item-text">
+                    Gratuite dès 50.000F • Sous 48h partout
+                  </p>
+                </div>
+              </div>
+              <div class="trust-item">
+                <span class="trust-item-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                    <path d="M6 15h4" />
+                  </svg>
+                </span>
+                <div class="trust-item-body">
+                  <h2 class="heading_18 trust-item-title">
+                    Paiement Flexible
+                  </h2>
+                  <p class="text_16 trust-item-text">
+                    À la livraison ou en 3x sans frais
+                  </p>
+                </div>
+              </div>
+              <div class="trust-item">
+                <span class="trust-item-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                    />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                </span>
+                <div class="trust-item-body">
+                  <h2 class="heading_18 trust-item-title">
+                    Garantie 10 Ans
+                  </h2>
+                  <p class="text_16 trust-item-text">
+                    Qualité certifiée et durable
+                  </p>
+                </div>
+              </div>
+              <div class="trust-item">
+                <span class="trust-item-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 14v-3a9 9 0 0 1 18 0v3" />
+                    <path
+                      d="M3 14a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"
+                    />
+                    <path
+                      d="M21 14a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2Z"
+                    />
+                    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+                  </svg>
+                </span>
+                <div class="trust-item-body">
+                  <h2 class="heading_18 trust-item-title">
+                    Support 24/7
+                  </h2>
+                  <p class="text_16 trust-item-text">
+                    Experts disponibles à tout moment
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- trusted badge end -->
+
+        <!-- banner start -->
+        <div class="grid-banner mt-100 overflow-hidden">
+          <div class="collection-tab-inner mt-0">
+            <div class="container">
+              <div class="grid-container-2">
+                <a
+                  class="grid-item grid-item-1 promo-card"
+                  href="{{ route('category.show', 'matelas') }}"
+                  data-aos="fade-right"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="promo-card-img"
+                    src="{{ asset('assets/blo_01/matelas.png') }}"
+                    alt="Nos matelas"
+                  />
+                  <span class="promo-card-badge">-20 %</span>
+                  <div class="promo-card-overlay">
+                    <p class="promo-card-kicker">Cashback immédiat</p>
+                    <h2 class="heading_34 promo-card-title">Nos matelas</h2>
+                    <span class="promo-card-cta">
+                      Voir plus
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-2 promo-card"
+                  href="{{ route('category.show', 'oreillers-et-taies') }}"
+                  data-aos="fade-right"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="promo-card-img"
+                    src="{{ asset('assets/blo_01/oreillers.png') }}"
+                    alt="Nos oreillers"
+                  />
+                  <div class="promo-card-overlay">
+                    <p class="promo-card-kicker">Cashback immédiat</p>
+                    <h2 class="heading_34 promo-card-title">Nos oreillers</h2>
+                    <span class="promo-card-cta">
+                      Voir plus
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-3 promo-card promo-card--feature"
+                  href="{{ route('category.show', 'drap-et-couettes') }}"
+                  data-aos="fade-left"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="promo-card-img"
+                    src="{{ asset('assets/blo_01/couettes.png') }}"
+                    alt="Nos couettes"
+                  />
+                  <div class="promo-card-overlay">
+                    <p class="promo-card-kicker">Cashback immédiat</p>
+                    <h2 class="heading_34 promo-card-title">Nos couettes</h2>
+                    <span class="promo-card-cta">
+                      Voir plus
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- banner end -->
+
+        <!-- shop by category start -->
+        <div class="shop-category cat-band mt-100 overflow-hidden">
+          <div class="collection-tab-inner mt-0">
+            <div class="container">
+              <div
+                class="featured-head"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <div class="featured-head-text">
+                  <p class="featured-kicker">Explorez nos univers</p>
+                  <h2 class="section-heading featured-title">
+                    Acheter par catégorie
+                  </h2>
+                </div>
+              </div>
+              <div class="grid-container shop-category-inner">
+                <a
+                  class="grid-item grid-item-1 cat-card"
+                  href="{{ route('category.show', 'matelas') }}"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="cat-card-img"
+                    src="{{ asset('assets/bloc_02/matelas.png') }}"
+                    alt="Matelas"
+                  />
+                  <div class="cat-card-label">
+                    <span class="cat-card-info">
+                      <span class="cat-card-kicker">Confort &amp; soutien</span>
+                      <span class="cat-card-name">Matelas</span>
+                    </span>
+                    <span class="cat-card-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-2 cat-card"
+                  href="{{ route('category.show', 'oreillers-et-taies') }}"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="cat-card-img"
+                    src="{{ asset('assets/bloc_02/oreiller-taies.png') }}"
+                    alt="Oreillers et taies"
+                  />
+                  <div class="cat-card-label">
+                    <span class="cat-card-info">
+                      <span class="cat-card-kicker">Douceur &amp; maintien</span>
+                      <span class="cat-card-name">Oreillers et taies</span>
+                    </span>
+                    <span class="cat-card-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-3 cat-card"
+                  href="{{ route('category.show', 'drap-et-couettes') }}"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="cat-card-img"
+                    src="{{ asset('assets/bloc_02/drap-couettes.png') }}"
+                    alt="Drap et Couettes"
+                  />
+                  <div class="cat-card-label">
+                    <span class="cat-card-info">
+                      <span class="cat-card-kicker">Linge de lit</span>
+                      <span class="cat-card-name">Drap et Couettes</span>
+                    </span>
+                    <span class="cat-card-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-4 cat-card"
+                  href="{{ route('category.show', 'mobilier-accessoire') }}"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="cat-card-img"
+                    src="{{ asset('assets/bloc_02/mobilier-accessoires.png') }}"
+                    alt="Mobiliers et Accessoires"
+                  />
+                  <div class="cat-card-label">
+                    <span class="cat-card-info">
+                      <span class="cat-card-kicker">Pour votre intérieur</span>
+                      <span class="cat-card-name">Mobiliers &amp; Accessoires</span>
+                    </span>
+                    <span class="cat-card-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+                    </span>
+                  </div>
+                </a>
+                <a
+                  class="grid-item grid-item-5 cat-card"
+                  href="{{ route('category.show', 'electromenager') }}"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <img loading="lazy" decoding="async"                     class="cat-card-img"
+                    src="{{ asset('assets/bloc_02/electromenager.png') }}"
+                    alt="Électroménager"
+                  />
+                  <div class="cat-card-label">
+                    <span class="cat-card-info">
+                      <span class="cat-card-kicker">Maison connectée</span>
+                      <span class="cat-card-name">Électroménager</span>
+                    </span>
+                    <span class="cat-card-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- shop by category end -->
+
+        <!-- collection start -->
+        <div class="featured-collection mt-100 overflow-hidden">
+          <div class="collection-tab-inner">
+            <div class="container">
+              <div
+                class="featured-head"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <div class="featured-head-text">
+                  <p class="featured-kicker">Notre sélection</p>
+                  <h2 class="section-heading featured-title">
+                    Nos matelas <span class="featured-title-accent">en vedette</span>
+                  </h2>
+                </div>
+                <a class="featured-link" href="{{ route('category.show', 'matelas') }}">
+                  Voir tout
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m13 6 6 6-6 6" />
+                  </svg>
+                </a>
+              </div>
+              <div class="row featured-grid">
+                @forelse($matelasProducts as $product)
+                  <div class="col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-duration="700">
+                    @include('maquette.includes.shop-card')
+                  </div>
+                @empty
+                  <div class="col-12 text-center py-5">
+                    <p class="text_16">Notre sélection de matelas arrive bientôt.</p>
+                  </div>
+                @endforelse
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- collection end -->
+
+
+
+        <!-- sur-mesure start -->
+        <div class="sm-band mt-100 overflow-hidden">
+          <div class="container">
+            <div
+              class="sm-head"
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
+              <span class="sm-badge">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M3 10.5 12 3l9 7.5"
+                  />
+                  <path
+                    d="M5 9.5V21h14V9.5"
+                  />
+                  <path d="M9 21v-6h6v6" />
+                </svg>
+                Solutions adaptées
+              </span>
+              <h2 class="section-heading sm-title">Sur-<span class="sm-title-accent">mesure</span></h2>
+              <p class="sm-sub">
+                Que vous équipiez un hôtel, un appartement ou votre maison
+                familiale, nous avons la solution parfaite.
+              </p>
+            </div>
+            <div class="sm-grid">
+              <a
+                class="sm-card sm-card-1"
+                href="{{ route('pages.hotellerie') }}"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <img loading="lazy" decoding="async"                   class="sm-card-img"
+                  src="{{ asset('assets/sur-mesure/hotellerie.png') }}"
+                  alt="Hôtellerie"
+                />
+                <div class="sm-card-text">
+                  <span class="sm-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18h18"/><path d="M6 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"/></svg>
+                  </span>
+                  <h3 class="sm-card-title">Hôtellerie</h3>
+                  <p class="sm-card-sub">
+                    Solutions professionnelles pour hôtels, chambres d'hôtes
+                    et résidences de tourisme.
+                  </p>
+                  <span class="sm-card-cta">
+                    Découvrir
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a
+                class="sm-card sm-card-2"
+                href="{{ route('pages.appartement-meuble') }}"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <img loading="lazy" decoding="async"                   class="sm-card-img"
+                  src="{{ asset('assets/sur-mesure/appartement-meuble.png') }}"
+                  alt="Appartement Meublé"
+                />
+                <div class="sm-card-text">
+                  <span class="sm-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1H6v-1a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>
+                  </span>
+                  <h3 class="sm-card-title">Appartement Meublé</h3>
+                  <p class="sm-card-sub">
+                    Des essentiels pratiques et élégants pour vos espaces meublés.
+                  </p>
+                  <span class="sm-card-cta">
+                    Découvrir
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a
+                class="sm-card sm-card-3"
+                href="{{ route('pages.studio') }}"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <img loading="lazy" decoding="async"                   class="sm-card-img"
+                  src="{{ asset('assets/sur-mesure/studio.png') }}"
+                  alt="Studio"
+                />
+                <div class="sm-card-text">
+                  <span class="sm-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>
+                  </span>
+                  <h3 class="sm-card-title">Studio</h3>
+                  <p class="sm-card-sub">
+                    Des solutions compactes pour un maximum de confort.
+                  </p>
+                  <span class="sm-card-cta">
+                    Découvrir
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a
+                class="sm-card sm-card-4"
+                href="{{ route('pages.famille') }}"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <img loading="lazy" decoding="async"                   class="sm-card-img"
+                  src="{{ asset('assets/sur-mesure/famille.png') }}"
+                  alt="Famille"
+                />
+                <div class="sm-card-text">
+                  <span class="sm-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </span>
+                  <h3 class="sm-card-title">Famille</h3>
+                  <p class="sm-card-sub">
+                    Matelas, couettes, oreillers et linge de lit pour toute la
+                    famille, du bébé aux grands-parents.
+                  </p>
+                  <span class="sm-card-cta">
+                    Découvrir
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- sur-mesure end -->
+
+        <!-- all products start -->
+        <div class="pc-band mt-100 overflow-hidden">
+          <div class="container">
+            <div class="pc-head" data-aos="fade-up" data-aos-duration="700">
+              <span class="pc-kicker">Catalogue complet</span>
+              <div class="pc-head-row">
+                <h2 class="section-heading pc-title">Tous nos produits</h2>
+                <p class="pc-sub">
+                  De la literie à l'électroménager, tout l'équipement de
+                  votre intérieur réuni au même endroit.
+                </p>
+              </div>
+            </div>
+            <div class="pc-grid">
+              <a class="pc-card" href="{{ route('category.show', 'matelas') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_1CIVZl8UG6.jpg" alt="Matelas" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Matelas</h3>
+                    <p class="pc-card-text">Ressorts, mousse et mémoire de forme, toutes tailles</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a class="pc-card" href="{{ route('category.show', 'oreillers-et-taies') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_xCatLOv9hZ.jpg" alt="Oreillers et taies" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Oreillers &amp; taies</h3>
+                    <p class="pc-card-text">Moelleux ou ferme, pour toutes les positions de sommeil</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a class="pc-card" href="{{ route('category.show', 'drap-et-couettes') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.jpg" alt="Draps et couettes" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Draps &amp; couettes</h3>
+                    <p class="pc-card-text">Linge de lit doux et respirant, adapté au climat</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a class="pc-card" href="{{ route('category.show', 'mobilier-accessoire') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1770689632_0OTK5fkOpt.jpg" alt="Lits et mobilier de chambre" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Lits &amp; chambre</h3>
+                    <p class="pc-card-text">Cadres de lit, commodes et rangements pour la chambre</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a class="pc-card" href="{{ route('category.show', 'mobilier-accessoire') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1770738680_Z9FYQSbomB.jpg" alt="Mobilier et accessoires" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Mobilier &amp; accessoires</h3>
+                    <p class="pc-card-text">Canapés, fauteuils, tables et meubles du quotidien</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+              <a class="pc-card" href="{{ route('category.show', 'electromenager') }}" data-aos="fade-up" data-aos-duration="700">
+                <div class="pc-card-media">
+                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_1CIVZl8UG6.jpg" alt="Électroménager" loading="lazy" decoding="async">
+                </div>
+                <div class="pc-card-body">
+                  <div>
+                    <h3 class="pc-card-title">Électroménager</h3>
+                    <p class="pc-card-text">Les essentiels de la maison, de la cuisine à la buanderie</p>
+                  </div>
+                  <span class="pc-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- all products end -->
+
+        <!-- video start -->
+        <div class="video-section mt-100 overflow-hidden">
+          <div
+            class="overlay-furniture section-spacing"
+            style="
+              background: url('assets/img/video/video-furniture.jpg')
+                no-repeat fixed bottom center/cover;
+            "
+          >
+            <div class="container video-container">
+              <div class="row">
+                <div class="col-12">
+                  <div
+                    class="video-tools d-flex align-items-center justify-content-center"
+                  >
+                    <div class="video-button-area">
+                      <a
+                        class="video-button"
+                        href="{{ route('home') }}#video-modal"
+                        data-bs-toggle="modal"
+                      >
+                        <svg
+                          width="22"
+                          height="26"
+                          viewBox="0 0 22 26"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M21.5 12.134C22.1667 12.5189 22.1667 13.4811 21.5 13.866L2 25.1244C1.33333 25.5093 0.499999 25.0281 0.499999 24.2583L0.5 1.74167C0.5 0.971867 1.33333 0.490743 2 0.875643L21.5 12.134Z"
+                            fill="#FEFEFE"
+                          />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" tabindex="-1" id="video-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="modal-content">
+                <div class="modal-header border-0">
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Fermer"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <iframe
+                    height="600"
+                    src="https://www.youtube.com/embed/tvPnrfQCiCo"
+                    title="Lecteur vidéo YouTube"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- video end -->
+
+
+
+        <!-- testimonial start -->
+        <div class="testimonial-section mt-100 overflow-hidden home-section">
+          <div class="testimonial-inner">
+            <div class="container">
+              <div class="row">
+                <div
+                  class="col-lg-5 col-md-12 col-12"
+                  data-aos="fade-right"
+                  data-aos-duration="700"
+                >
+                  <div class="section-header">
+                    <h2 class="section-heading primary-color">
+                      Ce que disent nos clients
+                    </h2>
+                    <p class="section-subheading">
+                      Les services fournis ont été fluides et satisfaisants. Les produits livrés étaient à la hauteur de nos attentes.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-lg-6 offset-lg-1 col-md-12 col-12"
+                  data-aos="fade-left"
+                  data-aos-duration="700"
+                >
+                  <div class="testimonial-container position-relative">
+                    <div
+                      class="testimonial-slideshow common-slider"
+                      data-slick='{
+                                            "slidesToShow": 1,
+                                            "slidesToScroll": 1,
+                                            "dots": false,
+                                            "arrows": true
+                                        }'
+                    >
+                      <div class="testimonial-item">
+                        <div
+                          class="testimonial-icon-wrap d-flex align-items-center"
+                        >
+                          <div class="testimonial-icon-quote">
+                            <svg
+                              width="40"
+                              height="29"
+                              viewBox="0 0 40 29"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M0 28.99L11.7 0H19.5L12.22 28.99H0ZM20.28 28.99L32.11 0H39.91L32.5 28.99H20.28Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            class="testimonial-icon-star d-flex align-items-center ms-3"
+                          >
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                          </div>
+                        </div>
+                        <p class="testimonial-review my-4 text_16">
+                          « J'achète mes matelas chez Mobilier Addict depuis 6 ans. J'adore leur service réactif et je n'ai jamais eu de problème avec leurs matelas. »
+                        </p>
+                        <div
+                          class="testimonial-reviewer d-flex align-items-center"
+                        >
+                          <div class="reviewer-img">
+                            <img loading="lazy" decoding="async"                               src="{{ asset('assets/maquette/') }}/img/testimonial/avatar.svg"
+                              alt="Avatar client"
+                            />
+                          </div>
+                          <div class="reviewer-info ms-4">
+                            <h4
+                              class="reviewer-name heading_18 mb-2 primary-color"
+                            >
+                              Floyd Miles
+                            </h4>
+                            <p class="reviewer-desig text_14 m-0">
+                              Dirigeant, Hypebeast
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="testimonial-item">
+                        <div
+                          class="testimonial-icon-wrap d-flex align-items-center"
+                        >
+                          <div class="testimonial-icon-quote">
+                            <svg
+                              width="40"
+                              height="29"
+                              viewBox="0 0 40 29"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M0 28.99L11.7 0H19.5L12.22 28.99H0ZM20.28 28.99L32.11 0H39.91L32.5 28.99H20.28Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            class="testimonial-icon-star d-flex align-items-center ms-3"
+                          >
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                          </div>
+                        </div>
+                        <p class="testimonial-review my-4 text_16">
+                          « J'achète mes matelas chez Mobilier Addict depuis 6 ans. J'adore leur service réactif et je n'ai jamais eu de problème avec leurs matelas. »
+                        </p>
+                        <div
+                          class="testimonial-reviewer d-flex align-items-center"
+                        >
+                          <div class="reviewer-img">
+                            <img loading="lazy" decoding="async"                               src="{{ asset('assets/maquette/') }}/img/testimonial/avatar.svg"
+                              alt="Avatar client"
+                            />
+                          </div>
+                          <div class="reviewer-info ms-4">
+                            <h4
+                              class="reviewer-name heading_18 mb-2 primary-color"
+                            >
+                              Floyd Miles
+                            </h4>
+                            <p class="reviewer-desig text_14 m-0">
+                              Dirigeant, Hypebeast
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="testimonial-item">
+                        <div
+                          class="testimonial-icon-wrap d-flex align-items-center"
+                        >
+                          <div class="testimonial-icon-quote">
+                            <svg
+                              width="40"
+                              height="29"
+                              viewBox="0 0 40 29"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M0 28.99L11.7 0H19.5L12.22 28.99H0ZM20.28 28.99L32.11 0H39.91L32.5 28.99H20.28Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            class="testimonial-icon-star d-flex align-items-center ms-3"
+                          >
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                            <img loading="lazy" decoding="async" src="{{ asset('assets/maquette/') }}/img/icon/star.png" alt="" aria-hidden="true" />
+                          </div>
+                        </div>
+                        <p class="testimonial-review my-4 text_16">
+                          « J'achète mes matelas chez Mobilier Addict depuis 6 ans. J'adore leur service réactif et je n'ai jamais eu de problème avec leurs matelas. »
+                        </p>
+                        <div
+                          class="testimonial-reviewer d-flex align-items-center"
+                        >
+                          <div class="reviewer-img">
+                            <img loading="lazy" decoding="async"                               src="{{ asset('assets/maquette/') }}/img/testimonial/avatar.svg"
+                              alt="Avatar client"
+                            />
+                          </div>
+                          <div class="reviewer-info ms-4">
+                            <h4
+                              class="reviewer-name heading_18 mb-2 primary-color"
+                            >
+                              Floyd Miles
+                            </h4>
+                            <p class="reviewer-desig text_14 m-0">
+                              Dirigeant, Hypebeast
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="activate-arrows show-arrows-always article-arrows arrows-white"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- testimonial end -->
+
+        <!-- single banner start -->
+        <div class="single-banner-section mt-100 overflow-hidden">
+          <div class="position-relative overlay">
+            <img loading="lazy" decoding="async"               class="single-banner-img"
+              src="{{ asset('assets/bandeau/bandeau.png') }}"
+              alt="Matelas sur mesure Mobilier Addict"
+            />
+
+            <div class="content-absolute content-slide">
+              <div
+                class="container height-inherit d-flex align-items-center justify-content-start"
+              >
+                <div
+                  class="content-box single-banner-content py-4"
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                >
+                  <h2
+                    class="single-banner-heading heading_42 text-white animate__animated animate__fadeInUp"
+                    data-animation="animate__animated animate__fadeInUp"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    Matelas sur <span class="single-banner-accent">mesure</span>
+                  </h2>
+                  <p
+                    class="single-banner-text text_16 text-white animate__animated animate__fadeInUp"
+                    data-animation="animate__animated animate__fadeInUp"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    Un matelas adapté à votre morphologie et à vos habitudes de sommeil.
+                  </p>
+                  <a
+                    class="btn-primary single-banner-btn animate__animated animate__fadeInUp"
+                    href="{{ route('category.show', 'matelas') }}"
+                    data-animation="animate__animated animate__fadeInUp"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    DÉCOUVRIR
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </a>
+                  <div class="single-banner-perks">
+                    <span class="single-banner-perk">
+                      <span class="single-banner-perk-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18h18"/><path d="M6 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"/></svg>
+                      </span>
+                      Confort optimal
+                    </span>
+                    <span class="single-banner-perk">
+                      <span class="single-banner-perk-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      </span>
+                      Qualité durable
+                    </span>
+                    <span class="single-banner-perk">
+                      <span class="single-banner-perk-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M12 2 2 12h20L12 2z" transform="rotate(45 12 12)"/><path d="M12 4l6 8H6l6-8z"/></svg>
+                      </span>
+                      Choix de tailles
+                    </span>
+                    <span class="single-banner-perk">
+                      <span class="single-banner-perk-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>
+                      </span>
+                      Différentes tailles
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- single banner end -->
+
+        <!-- latest blog start -->
+        <div class="latest-blog-section blog-v2 mt-100 overflow-hidden home-section">
+          <div class="latest-blog-inner">
+            <div class="container">
+              <div
+                class="featured-head"
+                data-aos="fade-up"
+                data-aos-duration="700"
+              >
+                <div class="featured-head-text">
+                  <p class="featured-kicker">Le magazine</p>
+                  <h2 class="section-heading featured-title">
+                    Derniers articles
+                  </h2>
+                </div>
+                <a class="featured-link" href="{{ route('blog.index') }}">
+                  Tous les articles
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m13 6 6 6-6 6" />
+                  </svg>
+                </a>
+              </div>
+              <div class="article-card-container position-relative">
+                <div
+                  class="common-slider"
+                  data-slick='{
+                                "slidesToShow": 3,
+                                "slidesToScroll": 1,
+                                "dots": false,
+                                "arrows": true,
+                                "responsive": [
+                                  {
+                                    "breakpoint": 1281,
+                                    "settings": {
+                                      "slidesToShow": 2
+                                    }
+                                  },
+                                  {
+                                    "breakpoint": 602,
+                                    "settings": {
+                                      "slidesToShow": 1
+                                    }
+                                  }
+                                ]
+                            }'
+                >
+                  <div
+                    class="article-slick-item"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    <div class="article-card blog-card">
+                      <a class="article-card-img-wrapper" href="{{ route('blog.index') }}">
+                        <img loading="lazy" decoding="async"                           src="{{ asset('assets/maquette/') }}/img/blog/furniture-1.jpg"
+                          alt="img"
+                          class="article-card-img rounded"
+                        />
+
+                        <span class="article-tag article-tag-absolute rounded"
+                          >Décoration</span
+                        >
+                      </a>
+                      <p
+                        class="article-card-published text_12 d-flex align-items-center"
+                      >
+                        <span class="article-date d-flex align-items-center">
+                          <span class="icon-publish">
+                            <svg
+                              width="17"
+                              height="18"
+                              viewBox="0 0 17 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3.46875 0.875V1.59375H0.59375V17.4063H16.4063V1.59375H13.5313V0.875H12.0938V1.59375H4.90625V0.875H3.46875ZM2.03125 3.03125H3.46875V3.75H4.90625V3.03125H12.0938V3.75H13.5313V3.03125H14.9688V4.46875H2.03125V3.03125ZM2.03125 5.90625H14.9688V15.9688H2.03125V5.90625ZM6.34375 7.34375V8.78125H7.78125V7.34375H6.34375ZM9.21875 7.34375V8.78125H10.6563V7.34375H9.21875ZM12.0938 7.34375V8.78125H13.5313V7.34375H12.0938ZM3.46875 10.2188V11.6563H4.90625V10.2188H3.46875ZM6.34375 10.2188V11.6563H7.78125V10.2188H6.34375ZM9.21875 10.2188V11.6563H10.6563V10.2188H9.21875ZM12.0938 10.2188V11.6563H13.5313V10.2188H12.0938ZM3.46875 13.0938V14.5313H4.90625V13.0938H3.46875ZM6.34375 13.0938V14.5313H7.78125V13.0938H6.34375ZM9.21875 13.0938V14.5313H10.6563V13.0938H9.21875Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">30 décembre 2022</span>
+                        </span>
+                        <span
+                          class="article-author d-flex align-items-center ms-4"
+                        >
+                          <span class="icon-author"
+                            ><svg
+                              width="15"
+                              height="17"
+                              viewBox="0 0 15 17"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M7.5 0.59375C4.72888 0.59375 2.46875 2.85388 2.46875 5.625C2.46875 7.3573 3.35315 8.89587 4.69238 9.80274C2.12903 10.9033 0.3125 13.447 0.3125 16.4063H1.75C1.75 13.2224 4.31616 10.6563 7.5 10.6563C10.6838 10.6563 13.25 13.2224 13.25 16.4063H14.6875C14.6875 13.447 12.871 10.9033 10.3076 9.80274C11.6469 8.89587 12.5313 7.3573 12.5313 5.625C12.5313 2.85388 10.2711 0.59375 7.5 0.59375ZM7.5 2.03125C9.49341 2.03125 11.0938 3.63159 11.0938 5.625C11.0938 7.61841 9.49341 9.21875 7.5 9.21875C5.50659 9.21875 3.90625 7.61841 3.90625 5.625C3.90625 3.63159 5.50659 2.03125 7.5 2.03125Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">Lara Joe</span>
+                        </span>
+                      </p>
+                      <h2 class="article-card-heading heading_18">
+                        <a class="heading_18" href="{{ route('blog.index') }}">
+                          Bien choisir son matelas.
+                        </a>
+                      </h2>
+                      <a class="blog-card-more" href="{{ route('blog.index') }}">
+                        Lire l'article
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m13 6 6 6-6 6" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    class="article-slick-item"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    <div class="article-card blog-card">
+                      <a class="article-card-img-wrapper" href="{{ route('blog.index') }}">
+                        <img loading="lazy" decoding="async"                           src="{{ asset('assets/maquette/') }}/img/blog/furniture-2.jpg"
+                          alt="img"
+                          class="article-card-img rounded"
+                        />
+                        <span class="article-tag article-tag-absolute rounded"
+                          >Mobilier</span
+                        >
+                      </a>
+                      <p
+                        class="article-card-published text_12 d-flex align-items-center"
+                      >
+                        <span class="article-date d-flex align-items-center">
+                          <span class="icon-publish">
+                            <svg
+                              width="17"
+                              height="18"
+                              viewBox="0 0 17 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3.46875 0.875V1.59375H0.59375V17.4063H16.4063V1.59375H13.5313V0.875H12.0938V1.59375H4.90625V0.875H3.46875ZM2.03125 3.03125H3.46875V3.75H4.90625V3.03125H12.0938V3.75H13.5313V3.03125H14.9688V4.46875H2.03125V3.03125ZM2.03125 5.90625H14.9688V15.9688H2.03125V5.90625ZM6.34375 7.34375V8.78125H7.78125V7.34375H6.34375ZM9.21875 7.34375V8.78125H10.6563V7.34375H9.21875ZM12.0938 7.34375V8.78125H13.5313V7.34375H12.0938ZM3.46875 10.2188V11.6563H4.90625V10.2188H3.46875ZM6.34375 10.2188V11.6563H7.78125V10.2188H6.34375ZM9.21875 10.2188V11.6563H10.6563V10.2188H9.21875ZM12.0938 10.2188V11.6563H13.5313V10.2188H12.0938ZM3.46875 13.0938V14.5313H4.90625V13.0938H3.46875ZM6.34375 13.0938V14.5313H7.78125V13.0938H6.34375ZM9.21875 13.0938V14.5313H10.6563V13.0938H9.21875Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">30 décembre 2022</span>
+                        </span>
+                        <span
+                          class="article-author d-flex align-items-center ms-4"
+                        >
+                          <span class="icon-author"
+                            ><svg
+                              width="15"
+                              height="17"
+                              viewBox="0 0 15 17"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M7.5 0.59375C4.72888 0.59375 2.46875 2.85388 2.46875 5.625C2.46875 7.3573 3.35315 8.89587 4.69238 9.80274C2.12903 10.9033 0.3125 13.447 0.3125 16.4063H1.75C1.75 13.2224 4.31616 10.6563 7.5 10.6563C10.6838 10.6563 13.25 13.2224 13.25 16.4063H14.6875C14.6875 13.447 12.871 10.9033 10.3076 9.80274C11.6469 8.89587 12.5313 7.3573 12.5313 5.625C12.5313 2.85388 10.2711 0.59375 7.5 0.59375ZM7.5 2.03125C9.49341 2.03125 11.0938 3.63159 11.0938 5.625C11.0938 7.61841 9.49341 9.21875 7.5 9.21875C5.50659 9.21875 3.90625 7.61841 3.90625 5.625C3.90625 3.63159 5.50659 2.03125 7.5 2.03125Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">Lara Joe</span>
+                        </span>
+                      </p>
+                      <h2 class="article-card-heading heading_18">
+                        <a class="heading_18" href="{{ route('blog.index') }}">
+                          Les secrets d'un sommeil réparateur.
+                        </a>
+                      </h2>
+                      <a class="blog-card-more" href="{{ route('blog.index') }}">
+                        Lire l'article
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m13 6 6 6-6 6" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    class="article-slick-item"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    <div class="article-card blog-card">
+                      <a class="article-card-img-wrapper" href="{{ route('blog.index') }}">
+                        <img loading="lazy" decoding="async"                           src="{{ asset('assets/maquette/') }}/img/blog/furniture-3.jpg"
+                          alt="img"
+                          class="article-card-img rounded"
+                        />
+                        <span class="article-tag article-tag-absolute rounded"
+                          >Cuisine</span
+                        >
+                      </a>
+                      <p
+                        class="article-card-published text_12 d-flex align-items-center"
+                      >
+                        <span class="article-date d-flex align-items-center">
+                          <span class="icon-publish">
+                            <svg
+                              width="17"
+                              height="18"
+                              viewBox="0 0 17 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3.46875 0.875V1.59375H0.59375V17.4063H16.4063V1.59375H13.5313V0.875H12.0938V1.59375H4.90625V0.875H3.46875ZM2.03125 3.03125H3.46875V3.75H4.90625V3.03125H12.0938V3.75H13.5313V3.03125H14.9688V4.46875H2.03125V3.03125ZM2.03125 5.90625H14.9688V15.9688H2.03125V5.90625ZM6.34375 7.34375V8.78125H7.78125V7.34375H6.34375ZM9.21875 7.34375V8.78125H10.6563V7.34375H9.21875ZM12.0938 7.34375V8.78125H13.5313V7.34375H12.0938ZM3.46875 10.2188V11.6563H4.90625V10.2188H3.46875ZM6.34375 10.2188V11.6563H7.78125V10.2188H6.34375ZM9.21875 10.2188V11.6563H10.6563V10.2188H9.21875ZM12.0938 10.2188V11.6563H13.5313V10.2188H12.0938ZM3.46875 13.0938V14.5313H4.90625V13.0938H3.46875ZM6.34375 13.0938V14.5313H7.78125V13.0938H6.34375ZM9.21875 13.0938V14.5313H10.6563V13.0938H9.21875Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">30 décembre 2022</span>
+                        </span>
+                        <span
+                          class="article-author d-flex align-items-center ms-4"
+                        >
+                          <span class="icon-author"
+                            ><svg
+                              width="15"
+                              height="17"
+                              viewBox="0 0 15 17"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M7.5 0.59375C4.72888 0.59375 2.46875 2.85388 2.46875 5.625C2.46875 7.3573 3.35315 8.89587 4.69238 9.80274C2.12903 10.9033 0.3125 13.447 0.3125 16.4063H1.75C1.75 13.2224 4.31616 10.6563 7.5 10.6563C10.6838 10.6563 13.25 13.2224 13.25 16.4063H14.6875C14.6875 13.447 12.871 10.9033 10.3076 9.80274C11.6469 8.89587 12.5313 7.3573 12.5313 5.625C12.5313 2.85388 10.2711 0.59375 7.5 0.59375ZM7.5 2.03125C9.49341 2.03125 11.0938 3.63159 11.0938 5.625C11.0938 7.61841 9.49341 9.21875 7.5 9.21875C5.50659 9.21875 3.90625 7.61841 3.90625 5.625C3.90625 3.63159 5.50659 2.03125 7.5 2.03125Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">Lara Joe</span>
+                        </span>
+                      </p>
+                      <h2 class="article-card-heading heading_18">
+                        <a class="heading_18" href="{{ route('blog.index') }}">
+                          Oreiller ou traversin : que choisir ?
+                        </a>
+                      </h2>
+                      <a class="blog-card-more" href="{{ route('blog.index') }}">
+                        Lire l'article
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m13 6 6 6-6 6" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    class="article-slick-item"
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                  >
+                    <div class="article-card blog-card">
+                      <a class="article-card-img-wrapper" href="{{ route('blog.index') }}">
+                        <img loading="lazy" decoding="async"                           src="{{ asset('assets/maquette/') }}/img/blog/furniture-4.jpg"
+                          alt="img"
+                          class="article-card-img rounded"
+                        />
+                        <span class="article-tag article-tag-absolute rounded"
+                          >Mobilier</span
+                        >
+                      </a>
+                      <p
+                        class="article-card-published text_12 d-flex align-items-center"
+                      >
+                        <span class="article-date d-flex align-items-center">
+                          <span class="icon-publish">
+                            <svg
+                              width="17"
+                              height="18"
+                              viewBox="0 0 17 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3.46875 0.875V1.59375H0.59375V17.4063H16.4063V1.59375H13.5313V0.875H12.0938V1.59375H4.90625V0.875H3.46875ZM2.03125 3.03125H3.46875V3.75H4.90625V3.03125H12.0938V3.75H13.5313V3.03125H14.9688V4.46875H2.03125V3.03125ZM2.03125 5.90625H14.9688V15.9688H2.03125V5.90625ZM6.34375 7.34375V8.78125H7.78125V7.34375H6.34375ZM9.21875 7.34375V8.78125H10.6563V7.34375H9.21875ZM12.0938 7.34375V8.78125H13.5313V7.34375H12.0938ZM3.46875 10.2188V11.6563H4.90625V10.2188H3.46875ZM6.34375 10.2188V11.6563H7.78125V10.2188H6.34375ZM9.21875 10.2188V11.6563H10.6563V10.2188H9.21875ZM12.0938 10.2188V11.6563H13.5313V10.2188H12.0938ZM3.46875 13.0938V14.5313H4.90625V13.0938H3.46875ZM6.34375 13.0938V14.5313H7.78125V13.0938H6.34375ZM9.21875 13.0938V14.5313H10.6563V13.0938H9.21875Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">30 décembre 2022</span>
+                        </span>
+                        <span
+                          class="article-author d-flex align-items-center ms-4"
+                        >
+                          <span class="icon-author"
+                            ><svg
+                              width="15"
+                              height="17"
+                              viewBox="0 0 15 17"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M7.5 0.59375C4.72888 0.59375 2.46875 2.85388 2.46875 5.625C2.46875 7.3573 3.35315 8.89587 4.69238 9.80274C2.12903 10.9033 0.3125 13.447 0.3125 16.4063H1.75C1.75 13.2224 4.31616 10.6563 7.5 10.6563C10.6838 10.6563 13.25 13.2224 13.25 16.4063H14.6875C14.6875 13.447 12.871 10.9033 10.3076 9.80274C11.6469 8.89587 12.5313 7.3573 12.5313 5.625C12.5313 2.85388 10.2711 0.59375 7.5 0.59375ZM7.5 2.03125C9.49341 2.03125 11.0938 3.63159 11.0938 5.625C11.0938 7.61841 9.49341 9.21875 7.5 9.21875C5.50659 9.21875 3.90625 7.61841 3.90625 5.625C3.90625 3.63159 5.50659 2.03125 7.5 2.03125Z"
+                                fill="#00234D"
+                              />
+                            </svg>
+                          </span>
+                          <span class="ms-2">Lara Joe</span>
+                        </span>
+                      </p>
+                      <h2 class="article-card-heading heading_18">
+                        <a class="heading_18" href="{{ route('blog.index') }}">
+                          Les secrets d'un sommeil réparateur.
+                        </a>
+                      </h2>
+                      <a class="blog-card-more" href="{{ route('blog.index') }}">
+                        Lire l'article
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m13 6 6 6-6 6" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="activate-arrows show-arrows-always article-arrows arrows-white"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- latest blog end -->
+@endsection

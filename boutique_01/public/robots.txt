@@ -1,0 +1,48 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /ma/admin
+Disallow: /login
+Disallow: /register
+Disallow: /panier
+Disallow: /cart
+Disallow: /devis-sur-mesure
+Disallow: /search
+Disallow: /*?*
+Disallow: /storage/
+Disallow: /assets/admin/
+
+# Crawlers d'IA et moteurs de recherche : autoriser l'indexation du contenu public
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /ma/admin
+Disallow: /login
+Disallow: /panier
+Disallow: /cart
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /ma/admin
+Disallow: /login
+Disallow: /panier
+Disallow: /cart
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /ma/admin
+Disallow: /login
+Disallow: /panier
+Disallow: /cart
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /ma/admin
+Disallow: /login
+Disallow: /panier
+Disallow: /cart
+
+Sitemap: /sitemap.xml
