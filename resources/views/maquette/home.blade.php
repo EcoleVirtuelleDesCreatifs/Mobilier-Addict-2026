@@ -70,9 +70,9 @@
           >
             @php
                 $defaultSlides = collect([
-                    ['img' => 'assets/hero/mobilier-addict-slide-1.png', 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'ACHETER', 'url' => route('category.show', 'matelas')],
-                    ['img' => 'assets/hero/mobilier-addict-slide-2.png', 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'ACHETER', 'url' => route('category.show', 'oreillers-et-taies')],
-                    ['img' => 'assets/hero/mobilier-addict-slide-3.png', 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'ACHETER', 'url' => route('category.show', 'mobilier-accessoire')],
+                    ['img' => asset('assets/slider/slide-1.jpg'), 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'ACHETER', 'url' => route('category.show', 'matelas')],
+                    ['img' => asset('assets/slider/slide-2.jpg'), 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'ACHETER', 'url' => route('category.show', 'oreillers-et-taies')],
+                    ['img' => asset('assets/slider/slide-3.jpg'), 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'ACHETER', 'url' => route('category.show', 'mobilier-accessoire')],
                 ]);
 
                 $slides = ($heroSlides ?? collect())->isNotEmpty()

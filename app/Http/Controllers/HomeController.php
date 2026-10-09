@@ -8,6 +8,7 @@ use App\Models\Section;
 use App\Models\Slide;
 use App\Models\SpaceSection;
 use App\Models\SpaceCard;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -85,7 +86,9 @@ class HomeController extends Controller
         $heroSlides = Slide::query()
             ->active()
             ->ordered()
-            ->get();
+            ->get()
+            ->filter(fn (Slide $slide) => $this->slideImageExists($slide->image))
+            ->values();
 
         $spaceSection = SpaceSection::query()
             ->active()
@@ -242,5 +245,25 @@ class HomeController extends Controller
             'blogFeaturedPost',
             'blogPosts'
         ));
+    }
+
+    private function slideImageExists(?string $path): bool
+    {
+        $path = trim((string) $path);
+        if ($path === '') {
+            return false;
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://', '//'])) {
+            return true;
+        }
+
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+        $path = preg_replace('#^storage/app/public/#', '', $path);
+        $path = preg_replace('#^(public/)?storage/#', '', $path);
+
+        return is_file(storage_path('app/public/' . $path))
+            || is_file(public_path($path))
+            || is_file(public_path('storage/' . $path));
     }
 }

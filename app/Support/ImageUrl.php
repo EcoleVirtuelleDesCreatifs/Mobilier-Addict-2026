@@ -39,35 +39,15 @@ class ImageUrl
             }
         }
 
-        $prefix = (string) config('app.image_url_public_prefix', 'storage');
-        $useStorageAppPublic = $prefix === 'storage_app_public';
-        $usePublicStorage = $prefix === 'public_storage';
-
-        if (Str::startsWith($path, ['uploads/', 'storage/'])) {
-            if (Str::startsWith($path, 'uploads/') && ($useStorageAppPublic || $usePublicStorage)) {
-                return asset('public/' . $path);
-            }
-            if (Str::startsWith($path, 'storage/')) {
-                if ($useStorageAppPublic) {
-                    return asset('storage/app/public/' . Str::after($path, 'storage/'));
-                }
-                if ($usePublicStorage) {
-                    return asset('public/' . $path);
-                }
-            }
-
+        if (Str::startsWith($path, 'uploads/')) {
             return asset($path);
         }
 
+        if (Str::startsWith($path, 'storage/')) {
+            return asset('storage/' . Str::after($path, 'storage/'));
+        }
+
         $path = preg_replace('#^public/#', '', $path);
-
-        if ($useStorageAppPublic) {
-            return asset('storage/app/public/' . $path);
-        }
-
-        if ($usePublicStorage) {
-            return asset('public/storage/' . $path);
-        }
 
         return asset('storage/' . $path);
     }
