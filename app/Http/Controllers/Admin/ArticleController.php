@@ -152,7 +152,7 @@ class ArticleController extends Controller
         $path = ImageOptimizer::storeStoragePublic($request->file('upload'), 'articles', 1600, 80);
 
         return response()->json([
-            'url' => \Illuminate\Support\Facades\Storage::disk('public')->url($path),
+            'url' => image_url($path),
         ]);
     }
 }

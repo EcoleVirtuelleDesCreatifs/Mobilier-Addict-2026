@@ -4,7 +4,6 @@ namespace App\Support;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class ImageOptimizer
 {
@@ -57,21 +56,8 @@ class ImageOptimizer
         int $quality = 80
     ): string {
         $dir = trim(str_replace('\\', '/', $dir), '/');
-        $baseName = time() . '_' . Str::random(10);
 
-        if (self::isAvailable()) {
-            $relativePath = $dir . '/' . $baseName . '.webp';
-            $tmpPath = storage_path('app/tmp-' . $baseName . '.webp');
-
-            $ok = self::convertToWebp($file->getPathname(), $tmpPath, $maxWidth, $quality);
-            if ($ok) {
-                Storage::disk('public')->put($relativePath, file_get_contents($tmpPath));
-                @unlink($tmpPath);
-                return $relativePath;
-            }
-        }
-
-        return $file->store($dir, 'public');
+        return self::storePublicUpload($file, 'uploads/' . $dir, $maxWidth, $quality);
     }
 
     public static function optimizeFileInPlace(string $absolutePath, int $maxWidth, int $quality = 80): bool

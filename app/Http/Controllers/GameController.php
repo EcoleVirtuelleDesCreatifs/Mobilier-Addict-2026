@@ -6,6 +6,7 @@ use App\Models\GameParticipant;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Support\GameBadge;
+use App\Support\ImageOptimizer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -93,8 +94,7 @@ class GameController extends Controller
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('game/photos', 'public');
-            $photoPath = $photoPath ? 'storage/' . $photoPath : null;
+            $photoPath = ImageOptimizer::storePublicUpload($request->file('photo'), 'uploads/game/photos', 1200, 82);
         }
 
         $participant = GameParticipant::createWithUniqueSlug([

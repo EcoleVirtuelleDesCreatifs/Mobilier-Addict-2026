@@ -7,6 +7,7 @@ use App\Http\Controllers\GameController;
 use App\Models\GameParticipant;
 use App\Models\SiteSetting;
 use App\Support\GameBadge;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -90,8 +91,7 @@ class GameParticipantController extends Controller
             $data['photo'] = null;
             $photoChanged = true;
         } elseif ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('game/photos', 'public');
-            $data['photo'] = $path ? 'storage/' . $path : $participant->photo;
+            $data['photo'] = ImageOptimizer::storePublicUpload($request->file('photo'), 'uploads/game/photos', 1200, 82);
             $photoChanged = true;
         } else {
             unset($data['photo']);
@@ -127,6 +127,11 @@ class GameParticipantController extends Controller
         $path = trim((string) $path);
         if (str_starts_with($path, 'storage/')) {
             Storage::disk('public')->delete(substr($path, 8));
+        } elseif (str_starts_with($path, 'uploads/')) {
+            $file = public_path($path);
+            if (is_file($file)) {
+                @unlink($file);
+            }
         }
     }
 }
