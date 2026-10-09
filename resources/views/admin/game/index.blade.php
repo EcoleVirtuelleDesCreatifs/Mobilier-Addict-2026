@@ -90,7 +90,7 @@
                                     <a href="{{ route('admin.game.index', array_merge(request()->except(['sort','dir','page']), ['sort' => 'supports', 'dir' => request('dir') === 'desc' ? 'asc' : 'desc'])) }}" class="text-reset text-decoration-none">Soutiens{{ request('sort') === 'supports' ? (request('dir') === 'asc' ? ' ↑' : ' ↓') : '' }}</a>
                                 </th>
                                 <th>Date</th>
-                                <th style="width:150px;"></th>
+                                <th style="width:230px;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,7 +115,8 @@
                                     <td class="text-end">
                                         <div class="d-flex justify-content-end gap-2">
                                             <a href="{{ route('game.show', $p->slug) }}" target="_blank" class="btn btn-sm btn-admin-ghost">Voir</a>
-                                            <form method="POST" action="{{ route('admin.game.destroy', $p) }}" onsubmit="return confirm('Supprimer ce participant ?');">
+                                            <a href="{{ route('admin.game.edit', $p) }}" class="btn btn-sm btn-admin-primary">Modifier</a>
+                                            <form method="POST" action="{{ route('admin.game.destroy', $p) }}" onsubmit="return confirm('Supprimer ce participant et ses fichiers ?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>

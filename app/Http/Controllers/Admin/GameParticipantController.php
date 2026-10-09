@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GameController;
 use App\Models\GameParticipant;
 use App\Models\SiteSetting;
+use App\Support\GameBadge;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GameParticipantController extends Controller
 {
@@ -53,10 +56,77 @@ class GameParticipantController extends Controller
             : 'Aucune date de fin — le jeu reste ouvert.');
     }
 
+    public function edit(GameParticipant $participant)
+    {
+        return view('admin.game.edit', [
+            'participant' => $participant,
+            'prizes' => GameController::PRIZES,
+        ]);
+    }
+
+    public function update(Request $request, GameParticipant $participant)
+    {
+        $data = $request->validate([
+            'lastname' => ['required', 'string', 'max:100'],
+            'firstnames' => ['required', 'string', 'max:150'],
+            'whatsapp' => ['required', 'string', 'max:32'],
+            'city' => ['required', 'string', 'max:120'],
+            'public_name' => ['required', 'string', 'max:60'],
+            'prize' => ['required', 'string', 'in:' . implode(',', GameController::PRIZES)],
+            'supports_count' => ['required', 'integer', 'min:0'],
+            'photo' => ['nullable', 'image', 'max:4096'],
+            'remove_photo' => ['nullable', 'boolean'],
+        ], [
+            'required' => 'Ce champ est obligatoire.',
+            'photo.image' => 'La photo doit être une image valide.',
+            'photo.max' => 'La photo ne doit pas dépasser 4 Mo.',
+        ]);
+
+        $oldPhoto = $participant->photo;
+        $oldBadge = $participant->badge_path;
+        $photoChanged = false;
+
+        if ($request->boolean('remove_photo')) {
+            $data['photo'] = null;
+            $photoChanged = true;
+        } elseif ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('game/photos', 'public');
+            $data['photo'] = $path ? 'storage/' . $path : $participant->photo;
+            $photoChanged = true;
+        } else {
+            unset($data['photo']);
+        }
+
+        unset($data['remove_photo']);
+        $participant->update($data);
+
+        $newBadge = GameBadge::generate($participant->fresh());
+        if ($newBadge) {
+            $participant->update(['badge_path' => $newBadge]);
+            $this->deletePublicFile($oldBadge);
+        }
+
+        if ($photoChanged && $oldPhoto !== $participant->photo) {
+            $this->deletePublicFile($oldPhoto);
+        }
+
+        return redirect()->route('admin.game.index')->with('status', 'Participant et badge mis à jour.');
+    }
+
     public function destroy(GameParticipant $participant)
     {
+        $this->deletePublicFile($participant->photo);
+        $this->deletePublicFile($participant->badge_path);
         $participant->delete();
 
         return redirect()->route('admin.game.index')->with('status', 'Participant supprimé.');
+    }
+
+    private function deletePublicFile(?string $path): void
+    {
+        $path = trim((string) $path);
+        if (str_starts_with($path, 'storage/')) {
+            Storage::disk('public')->delete(substr($path, 8));
+        }
     }
 }

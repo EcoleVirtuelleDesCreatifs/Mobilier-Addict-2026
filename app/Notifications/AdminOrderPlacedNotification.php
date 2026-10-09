@@ -37,22 +37,22 @@ class AdminOrderPlacedNotification extends Notification
     {
         $order = $this->order;
 
-        $subject = 'Nouvelle commande #' . $order->id . ' - Mobilier Addict';
-
         $customerName = trim(($order->firstnames ?? '') . ' ' . ($order->lastname ?? ''));
         $customerLine = $customerName !== '' ? $customerName : 'Client';
 
         $adminUrl = url(route('admin.orders.show', $order, false));
 
         return (new MailMessage)
-            ->subject($subject)
+            ->subject('[Commande #' . $order->id . '] Nouvelle vente à traiter')
             ->greeting('Nouvelle commande reçue')
-            ->line('Commande #' . $order->id . ' à traiter.')
-            ->line('Client : ' . $customerLine)
-            ->line('Téléphone/WhatsApp : ' . ($order->phone ?: ($order->whatsapp ?: '—')))
-            ->line('Total : ' . number_format((float) $order->total, 0, ',', '.') . ' F')
-            ->line('Livraison : ' . ($order->shipping_method ?: '—') . ' • ' . ($order->delivery_place ?: '—'))
-            ->action('Voir la commande', $adminUrl)
-            ->line('Merci de prendre en charge la commande rapidement.');
+            ->line('Une nouvelle commande vient d’être enregistrée sur le site Mobilier Addict.')
+            ->line('**Référence :** #' . $order->id)
+            ->line('**Client :** ' . $customerLine)
+            ->line('**Contact :** ' . ($order->phone ?: ($order->whatsapp ?: '—')))
+            ->line('**Montant total :** ' . number_format((float) $order->total, 0, ',', '.') . ' FCFA')
+            ->line('**Livraison :** ' . ($order->shipping_method ?: 'À définir') . ' — ' . ($order->delivery_place ?: 'Lieu non renseigné'))
+            ->action('Ouvrir la commande', $adminUrl)
+            ->line('Merci de vérifier les articles, le paiement et les modalités de livraison avant de contacter le client.')
+            ->salutation('Administration Mobilier Addict');
     }
 }

@@ -39,13 +39,19 @@ class AdminQuoteRequestNotification extends Notification
         $contact = trim(($quote->firstnames ?? '') . ' ' . ($quote->lastname ?? ''));
 
         return (new MailMessage)
-            ->subject('Nouvelle demande de devis ' . $quote->number . ' - Mobilier Addict')
-            ->greeting('Demande de devis reçue')
-            ->line('Référence : ' . $quote->number)
-            ->line('Structure : ' . ($quote->company_name ?? '—'))
-            ->line('Contact : ' . ($contact !== '' ? $contact : '—'))
-            ->line('WhatsApp : ' . ($quote->whatsapp ?? '—'))
-            ->when($quote->email, fn ($mail) => $mail->line('E-mail : ' . $quote->email))
-            ->action('Voir la demande', url(route('admin.quotes.show', $quote, false)));
+            ->subject('[Devis ' . $quote->number . '] Nouvelle demande client')
+            ->greeting('Nouvelle demande de devis')
+            ->line('Une demande sur mesure vient d’être envoyée depuis le site Mobilier Addict.')
+            ->line('**Référence :** ' . $quote->number)
+            ->line('**Structure :** ' . ($quote->company_name ?: 'Non renseignée'))
+            ->line('**Contact :** ' . ($contact !== '' ? $contact : 'Non renseigné'))
+            ->line('**WhatsApp :** ' . ($quote->whatsapp ?: 'Non renseigné'))
+            ->when($quote->email, fn (MailMessage $mail) => $mail->line('**E-mail :** ' . $quote->email))
+            ->when($quote->budget_range, fn (MailMessage $mail) => $mail->line('**Budget indicatif :** ' . $quote->budget_range))
+            ->line('**Besoin exprimé :**')
+            ->line($quote->details ?: 'Aucun détail fourni.')
+            ->action('Préparer le devis', url(route('admin.quotes.show', $quote, false)))
+            ->line('Traitez la demande depuis l’administration puis contactez le client avec une proposition adaptée.')
+            ->salutation('Administration Mobilier Addict');
     }
 }

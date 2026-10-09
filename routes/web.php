@@ -488,6 +488,8 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/jeu', [\App\Http\Controllers\Admin\GameParticipantController::class, 'index'])->name('admin.game.index');
     Route::post('/jeu/reglages', [\App\Http\Controllers\Admin\GameParticipantController::class, 'updateSettings'])->name('admin.game.settings');
+    Route::get('/jeu/{participant}/modifier', [\App\Http\Controllers\Admin\GameParticipantController::class, 'edit'])->name('admin.game.edit');
+    Route::put('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'update'])->name('admin.game.update');
     Route::delete('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'destroy'])->name('admin.game.destroy');
 
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');

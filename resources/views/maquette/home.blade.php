@@ -1,5 +1,44 @@
 @extends('maquette.layout')
 
+@push('styles')
+<style>
+  .new-drop{margin-top:100px;padding:88px 0;background:#f7f4f6;position:relative;overflow:hidden;}
+  .new-drop::before{content:"NOUVEAU";position:absolute;top:-38px;right:-18px;font-size:clamp(80px,15vw,210px);font-weight:900;letter-spacing:-.06em;color:rgba(0,35,77,.035);line-height:1;pointer-events:none;}
+  .new-drop-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:34px;position:relative;z-index:1;}
+  .new-drop-kicker{display:inline-flex;align-items:center;gap:10px;color:#ec4899;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;}
+  .new-drop-kicker::before{content:"";width:38px;height:2px;background:#ec4899;}
+  .new-drop-title{font-size:clamp(32px,4vw,56px);font-weight:800;color:#00234D;line-height:1.05;letter-spacing:-.04em;margin:0;}
+  .new-drop-title span{color:#ec4899;font-style:italic;}
+  .new-drop-all{display:inline-flex;align-items:center;gap:10px;color:#00234D;font-size:13px;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #ec4899;padding-bottom:5px;white-space:nowrap;}
+  .new-drop-all:hover{color:#ec4899;}
+  .new-drop-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;position:relative;z-index:1;}
+  .new-drop-main{position:relative;min-height:610px;border-radius:30px;overflow:hidden;background:#00234D;text-decoration:none;display:block;}
+  .new-drop-main img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transition:transform .6s ease;}
+  .new-drop-main:hover img{transform:scale(1.04);}
+  .new-drop-main::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,35,77,.05) 35%,rgba(0,35,77,.94) 100%);}
+  .new-drop-main-copy{position:absolute;z-index:2;left:36px;right:36px;bottom:34px;color:#fff;}
+  .new-drop-label{display:inline-block;background:#ec4899;color:#fff;border-radius:999px;padding:8px 15px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;}
+  .new-drop-main h3{font-size:clamp(25px,3vw,38px);font-weight:800;line-height:1.12;color:#fff;margin:0 0 10px;}
+  .new-drop-main-price{font-size:19px;font-weight:800;color:#fff;}
+  .new-drop-main-price del{font-size:13px;color:rgba(255,255,255,.55);font-weight:500;margin-left:8px;}
+  .new-drop-main-arrow{position:absolute;z-index:2;right:28px;top:28px;width:52px;height:52px;border-radius:50%;background:#fff;color:#00234D;display:flex;align-items:center;justify-content:center;transition:.2s;}
+  .new-drop-main:hover .new-drop-main-arrow{background:#ec4899;color:#fff;transform:rotate(-10deg);}
+  .new-drop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;}
+  .new-drop-card{background:#fff;border-radius:24px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease;}
+  .new-drop-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(0,35,77,.11);}
+  .new-drop-card-media{aspect-ratio:1.28/1;overflow:hidden;background:#eee;}
+  .new-drop-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .new-drop-card:hover img{transform:scale(1.06);}
+  .new-drop-card-num{position:absolute;top:12px;left:12px;width:32px;height:32px;border-radius:50%;background:#00234D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;z-index:1;}
+  .new-drop-card-body{padding:16px 18px 18px;}
+  .new-drop-card h3{font-size:15px;line-height:1.35;font-weight:800;color:#00234D;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .new-drop-card-price{color:#ec4899;font-size:14px;font-weight:800;}
+  .new-drop-card-price del{color:#999;font-size:11px;font-weight:500;margin-left:5px;}
+  @media(max-width:991.98px){.new-drop-layout{grid-template-columns:1fr}.new-drop-main{min-height:520px}.new-drop-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:575.98px){.new-drop{padding:62px 0}.new-drop-head{align-items:start;flex-direction:column}.new-drop-main{min-height:440px;border-radius:22px}.new-drop-main-copy{left:24px;right:24px;bottom:24px}.new-drop-grid{gap:12px}.new-drop-card{border-radius:18px}.new-drop-card-body{padding:13px}.new-drop-card h3{font-size:13px}.new-drop-card-num{width:28px;height:28px}.new-drop-all{font-size:11px}}
+</style>
+@endpush
+
 @section('content')
 
         <!-- slideshow start -->
@@ -560,7 +599,65 @@
         </div>
         <!-- collection end -->
 
+        @if(($newProducts ?? collect())->isNotEmpty())
+          @php
+            $newDropLead = $newProducts->first();
+            $newDropRest = $newProducts->skip(1)->take(4);
+          @endphp
+          <section class="new-drop" aria-labelledby="new-drop-title">
+            <div class="container">
+              <div class="new-drop-head" data-aos="fade-up" data-aos-duration="700">
+                <div>
+                  <div class="new-drop-kicker">Fraîchement arrivés</div>
+                  <h2 class="new-drop-title" id="new-drop-title">Les nouveautés<br><span>qui changent tout.</span></h2>
+                </div>
+                <a href="{{ route('nouveautes.index') }}" class="new-drop-all">
+                  Voir toutes les nouveautés
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                </a>
+              </div>
 
+              <div class="new-drop-layout">
+                <a href="{{ route('product.show', $newDropLead->slug) }}" class="new-drop-main" data-aos="fade-right" data-aos-duration="750">
+                  <img src="@image_url($newDropLead->image)" alt="{{ $newDropLead->name }}" loading="lazy" decoding="async">
+                  <span class="new-drop-main-arrow" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </span>
+                  <div class="new-drop-main-copy">
+                    <span class="new-drop-label">Nouveau drop</span>
+                    <h3>{{ $newDropLead->name }}</h3>
+                    <div class="new-drop-main-price">
+                      {{ number_format((float) $newDropLead->price, 0, ',', ' ') }} FCFA
+                      @if($newDropLead->old_price && $newDropLead->old_price > $newDropLead->price)
+                        <del>{{ number_format((float) $newDropLead->old_price, 0, ',', ' ') }} FCFA</del>
+                      @endif
+                    </div>
+                  </div>
+                </a>
+
+                <div class="new-drop-grid">
+                  @foreach($newDropRest as $product)
+                    <a href="{{ route('product.show', $product->slug) }}" class="new-drop-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ min($loop->index * 80, 240) }}">
+                      <span class="new-drop-card-num">0{{ $loop->iteration + 1 }}</span>
+                      <div class="new-drop-card-media">
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" decoding="async">
+                      </div>
+                      <div class="new-drop-card-body">
+                        <h3>{{ $product->name }}</h3>
+                        <div class="new-drop-card-price">
+                          {{ number_format((float) $product->price, 0, ',', ' ') }} FCFA
+                          @if($product->old_price && $product->old_price > $product->price)
+                            <del>{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</del>
+                          @endif
+                        </div>
+                      </div>
+                    </a>
+                  @endforeach
+                </div>
+              </div>
+            </div>
+          </section>
+        @endif
 
         <!-- sur-mesure start -->
         <div class="sm-band mt-100 overflow-hidden">

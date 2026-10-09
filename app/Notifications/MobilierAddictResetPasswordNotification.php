@@ -15,13 +15,12 @@ class MobilierAddictResetPasswordNotification extends ResetPassword
         ], false));
 
         return (new MailMessage)
-            ->subject('COMPTE ADMINISTRATEUR - MOBILIER ADDICT')
+            ->subject('Réinitialisation de votre mot de passe Mobilier Addict')
             ->greeting('Bonjour' . (!empty($notifiable->name) ? ' ' . $notifiable->name : '') . ',')
-            ->line("Vous êtes invité à administrer le site Mobilier Addict.")
-            ->line("Pour activer votre compte, choisissez votre mot de passe en cliquant sur le bouton ci-dessous.")
-            ->action('Créer mon mot de passe maintenant', $resetUrl)
-            ->line('Ce lien est sécurisé et expirera dans 60 minutes.')
-            ->line("Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer cet email.")
-            ->salutation('À très vite,\nL’équipe Mobilier Addict');
+            ->line('Nous avons reçu une demande de réinitialisation du mot de passe associé à votre compte.')
+            ->action('Choisir un nouveau mot de passe', $resetUrl)
+            ->line('Pour votre sécurité, ce lien personnel expirera dans 60 minutes et ne pourra être utilisé qu’une seule fois.')
+            ->line('Si vous n’êtes pas à l’origine de cette demande, aucune action n’est nécessaire. Votre mot de passe actuel reste inchangé.')
+            ->salutation("Bien cordialement,\nL’équipe Mobilier Addict");
     }
 }

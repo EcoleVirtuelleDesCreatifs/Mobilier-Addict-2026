@@ -24,26 +24,22 @@ class QuoteConfirmationNotification extends Notification
         $contact = trim(($quote->firstnames ?? '') . ' ' . ($quote->lastname ?? ''));
 
         $mail = (new MailMessage)
-            ->subject('Confirmation de votre demande de devis ' . $quote->number . ' - Mobilier Addict')
+            ->subject('Votre demande de devis ' . $quote->number . ' a bien été reçue')
             ->greeting('Bonjour ' . ($contact !== '' ? $contact : 'Client') . ',')
-            ->line('Nous avons bien reçu votre demande de devis. Voici le récapitulatif :')
-            ->line('')
-            ->line('**Référence** : ' . $quote->number)
-            ->line('**Structure** : ' . ($quote->company_name ?? '—'))
-            ->line('**Type de structure** : ' . (self::organizationLabel($quote->organization_type) ?? '—'))
-            ->line('**Contact** : ' . ($contact !== '' ? $contact : '—'))
-            ->line('**WhatsApp** : ' . ($quote->whatsapp ?? '—'))
-            ->when($quote->phone, fn(MailMessage $m) => $m->line('**Téléphone** : ' . $quote->phone))
-            ->when($quote->email, fn(MailMessage $m) => $m->line('**E-mail** : ' . $quote->email))
-            ->when($quote->delivery_place, fn(MailMessage $m) => $m->line('**Lieu de livraison** : ' . $quote->delivery_place))
-            ->when($quote->delivery_day, fn(MailMessage $m) => $m->line('**Date de livraison souhaitée** : ' . $quote->delivery_day->format('d/m/Y')))
-            ->when($quote->budget_range, fn(MailMessage $m) => $m->line('**Budget indicatif** : ' . (self::budgetLabel($quote->budget_range) ?? '—')))
-            ->line('')
-            ->line('**Détail de votre besoin** :')
-            ->line($quote->details)
-            ->line('')
-            ->line('Notre équipe étudie votre demande et vous recontactera rapidement par WhatsApp ou par téléphone.')
-            ->line('Merci de votre confiance.');
+            ->line('Merci d’avoir contacté Mobilier Addict. Votre demande a bien été transmise à notre équipe commerciale.')
+            ->line('**Référence de suivi :** ' . $quote->number)
+            ->line('**Structure :** ' . ($quote->company_name ?: 'Non renseignée'))
+            ->line('**Type de structure :** ' . (self::organizationLabel($quote->organization_type) ?? 'Non renseigné'))
+            ->line('**WhatsApp :** ' . ($quote->whatsapp ?: 'Non renseigné'))
+            ->when($quote->phone, fn (MailMessage $m) => $m->line('**Téléphone :** ' . $quote->phone))
+            ->when($quote->delivery_place, fn (MailMessage $m) => $m->line('**Lieu de livraison :** ' . $quote->delivery_place))
+            ->when($quote->delivery_day, fn (MailMessage $m) => $m->line('**Date souhaitée :** ' . $quote->delivery_day->format('d/m/Y')))
+            ->when($quote->budget_range, fn (MailMessage $m) => $m->line('**Budget indicatif :** ' . (self::budgetLabel($quote->budget_range) ?? 'À définir')))
+            ->line('**Votre besoin :**')
+            ->line($quote->details ?: 'Aucun détail fourni.')
+            ->line('Un conseiller étudiera votre projet et vous contactera par WhatsApp, téléphone ou e-mail afin de préciser les besoins et préparer une proposition adaptée.')
+            ->line('Conservez la référence **' . $quote->number . '** pour faciliter le suivi de votre demande.')
+            ->salutation("Merci pour votre confiance,\nL’équipe Mobilier Addict");
 
         return $mail;
     }

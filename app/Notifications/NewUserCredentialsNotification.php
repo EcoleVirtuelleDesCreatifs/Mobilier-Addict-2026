@@ -23,14 +23,17 @@ class NewUserCredentialsNotification extends Notification
     {
         $loginUrl = url('/login');
 
+        $name = trim((string) ($notifiable->name ?? ''));
+
         return (new MailMessage)
-            ->subject('Vos accès - Mobilier Addict')
-            ->greeting('Bonjour ' . ($notifiable->name ?? '') . ',')
-            ->line('Un compte vient d\'être créé pour vous sur Mobilier Addict.')
-            ->line('Identifiants :')
-            ->line('Email : ' . ($notifiable->email ?? ''))
-            ->line('Mot de passe : ' . $this->plainPassword)
-            ->action('Se connecter', $loginUrl)
-            ->line('Pour des raisons de sécurité, vous pouvez modifier votre mot de passe après connexion.');
+            ->subject('Votre accès à l’administration Mobilier Addict')
+            ->greeting('Bonjour' . ($name !== '' ? ' ' . $name : '') . ',')
+            ->line('Votre compte administrateur Mobilier Addict est maintenant disponible.')
+            ->line('**Adresse e-mail :** ' . ($notifiable->email ?? ''))
+            ->line('**Mot de passe temporaire :** ' . $this->plainPassword)
+            ->action('Accéder à mon compte', $loginUrl)
+            ->line('Pour protéger votre accès, connectez-vous puis remplacez immédiatement ce mot de passe temporaire depuis votre profil.')
+            ->line('Si vous ne reconnaissez pas cette invitation, contactez l’administrateur du site sans utiliser ces identifiants.')
+            ->salutation('L’équipe Mobilier Addict');
     }
 }
