@@ -29,15 +29,38 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query
-            ->orderBy('updated_at', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15)
-            ->withQueryString();
+        match ($request->string('status')->toString()) {
+            'online' => $query->where('is_active', true),
+            'offline' => $query->where('is_active', false),
+            'low_stock' => $query->where('stock', '<=', 5),
+            default => null,
+        };
 
-        $productsTotalCount = Product::query()->count();
-        $productsOnlineCount = Product::query()->where('is_active', true)->count();
-        $productsOfflineCount = Product::query()->where('is_active', false)->count();
+        if ($menuId = (int) $request->input('menu_id')) {
+            $query->whereHas('menus', fn ($q) => $q->where('menus.id', $menuId));
+        }
+
+        $sort = $request->string('sort')->toString();
+        $dir = $request->string('dir')->toString() === 'asc' ? 'asc' : 'desc';
+
+        match ($sort) {
+            'name' => $query->orderBy('name', $dir),
+            'price' => $query->orderBy('price', $dir),
+            'stock' => $query->orderBy('stock', $dir),
+            default => $query->orderBy('updated_at', 'desc')->orderBy('created_at', 'desc'),
+        };
+
+        $products = $query->paginate(15)->withQueryString();
+
+        $counts = Product::query()
+            ->selectRaw('COUNT(*) as total, SUM(is_active = 1) as online, SUM(is_active = 0) as offline')
+            ->first();
+
+        $productsTotalCount = (int) ($counts->total ?? 0);
+        $productsOnlineCount = (int) ($counts->online ?? 0);
+        $productsOfflineCount = (int) ($counts->offline ?? 0);
+
+        $filterMenus = Menu::query()->orderBy('name')->get(['id', 'name']);
 
         $bestSellingProduct = null;
         if (Schema::hasTable('order_items')) {
@@ -67,6 +90,7 @@ class ProductController extends Controller
             'productsOnlineCount',
             'productsOfflineCount',
             'bestSellingProduct',
+            'filterMenus',
         ));
     }
 
@@ -91,26 +115,9 @@ class ProductController extends Controller
     {
         $data = $this->validateProduct($request);
         $data = $this->normalizeProductData($data);
-        $data = $this->handleProductUploads($request, $data);
 
-        $categoryIds = $request->input('category_ids', []);
-        $categoryIds = is_array($categoryIds) ? $categoryIds : [];
-        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
-
-        $categoryIds = Category::query()
-            ->whereNotNull('section_id')
-            ->whereIn('id', $categoryIds)
-            ->pluck('id')
-            ->map(fn($v) => (int) $v)
-            ->values()
-            ->all();
-
-        $product = DB::transaction(function () use ($data, $request) {
-            $product = Product::create($data);
-            $this->syncVariants($request, $product);
-
-            return $product;
-        });
+        $categoryIds = $this->sectionCategoryIds($request);
+        $menuIds = $this->menuIds($request);
 
         if (!empty($categoryIds) && !Schema::hasTable('category_product')) {
             throw ValidationException::withMessages([
@@ -118,22 +125,21 @@ class ProductController extends Controller
             ]);
         }
 
-        if (Schema::hasTable('category_product')) {
-            $product->categories()->sync($categoryIds);
-        }
-
-        $menuIds = $request->input('menu_ids', []);
-        $menuIds = is_array($menuIds) ? $menuIds : [];
-
         if (!empty($menuIds) && !Schema::hasTable('menu_product')) {
             throw ValidationException::withMessages([
                 'menu_ids' => "La table pivot 'menu_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → menus.",
             ]);
         }
 
-        if (Schema::hasTable('menu_product')) {
-            $product->menus()->sync($menuIds);
-        }
+        $data = $this->handleProductUploads($request, $data);
+
+        $product = DB::transaction(function () use ($data, $request, $categoryIds, $menuIds) {
+            $product = Product::create($data);
+            $this->syncVariants($request, $product);
+            $this->syncRelations($product, $categoryIds, $menuIds);
+
+            return $product;
+        });
 
         return redirect()->route('admin.products.index')->with('status', 'Produit créé avec succès.');
     }
@@ -143,6 +149,7 @@ class ProductController extends Controller
         $product->load([
             'variants' => fn($q) => $q->orderBy('thickness_cm')->orderBy('places'),
             'categories',
+            'menus',
         ]);
 
         $homeSectionCategories = Category::query()
@@ -157,7 +164,7 @@ class ProductController extends Controller
             ->orderBy('name')
             ->get();
 
-        $selectedMenuIds = $product->menus()->pluck('menus.id')->all();
+        $selectedMenuIds = $product->menus->pluck('id')->all();
         $selectedCategoryIds = $product->categories
             ->whereNotNull('section_id')
             ->pluck('id')
@@ -170,24 +177,9 @@ class ProductController extends Controller
     {
         $data = $this->validateProduct($request, $product);
         $data = $this->normalizeProductData($data);
-        $data = $this->handleProductUploads($request, $data, $product);
 
-        $categoryIds = $request->input('category_ids', []);
-        $categoryIds = is_array($categoryIds) ? $categoryIds : [];
-        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
-
-        $categoryIds = Category::query()
-            ->whereNotNull('section_id')
-            ->whereIn('id', $categoryIds)
-            ->pluck('id')
-            ->map(fn($v) => (int) $v)
-            ->values()
-            ->all();
-
-        DB::transaction(function () use ($data, $request, $product) {
-            $product->update($data);
-            $this->syncVariants($request, $product);
-        });
+        $categoryIds = $this->sectionCategoryIds($request);
+        $menuIds = $this->menuIds($request);
 
         if (!empty($categoryIds) && !Schema::hasTable('category_product')) {
             throw ValidationException::withMessages([
@@ -195,24 +187,59 @@ class ProductController extends Controller
             ]);
         }
 
-        if (Schema::hasTable('category_product')) {
-            $product->categories()->sync($categoryIds);
-        }
-
-        $menuIds = $request->input('menu_ids', []);
-        $menuIds = is_array($menuIds) ? $menuIds : [];
-
         if (!empty($menuIds) && !Schema::hasTable('menu_product')) {
             throw ValidationException::withMessages([
                 'menu_ids' => "La table pivot 'menu_product' n'existe pas encore en base. Lancez la migration pour activer le rattachement produit → menus.",
             ]);
         }
 
+        $data = $this->handleProductUploads($request, $data, $product);
+
+        DB::transaction(function () use ($data, $request, $product, $categoryIds, $menuIds) {
+            $product->update($data);
+            $this->syncVariants($request, $product);
+            $this->syncRelations($product, $categoryIds, $menuIds);
+        });
+
+        return redirect()->route('admin.products.index')->with('status', 'Produit mis à jour.');
+    }
+
+    private function sectionCategoryIds(Request $request): array
+    {
+        $ids = $request->input('category_ids', []);
+        $ids = is_array($ids) ? $ids : [];
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return Category::query()
+            ->whereNotNull('section_id')
+            ->whereIn('id', $ids)
+            ->pluck('id')
+            ->map(fn($v) => (int) $v)
+            ->values()
+            ->all();
+    }
+
+    private function menuIds(Request $request): array
+    {
+        $ids = $request->input('menu_ids', []);
+        $ids = is_array($ids) ? $ids : [];
+
+        return array_values(array_unique(array_filter(array_map('intval', $ids))));
+    }
+
+    private function syncRelations(Product $product, array $categoryIds, array $menuIds): void
+    {
+        if (Schema::hasTable('category_product')) {
+            $product->categories()->sync($categoryIds);
+        }
+
         if (Schema::hasTable('menu_product')) {
             $product->menus()->sync($menuIds);
         }
-
-        return redirect()->route('admin.products.index')->with('status', 'Produit mis à jour.');
     }
 
     public function destroy(Product $product)
@@ -381,8 +408,8 @@ class ProductController extends Controller
             'variants.*.id' => ['nullable', 'integer', 'exists:product_variants,id'],
             'variants.*.variant_type' => ['nullable', 'string', 'max:100'],
             'variants.*.thickness_cm' => ['nullable', 'integer', 'min:0', 'max:200'],
-            'variants.*.places' => ['required_with:variants.*.price', 'numeric', 'min:1', 'max:10', 'multiple_of:0.5'],
-            'variants.*.price' => ['required_with:variants.*.places', 'numeric', 'min:0'],
+            'variants.*.places' => ['nullable', 'numeric', 'min:1', 'max:10', 'multiple_of:0.5'],
+            'variants.*.price' => ['nullable', 'numeric', 'min:0'],
             'variants.*.stock' => ['nullable', 'integer', 'min:0'],
             'variants.*.is_active' => ['nullable', 'boolean'],
         ]);
@@ -572,10 +599,6 @@ class ProductController extends Controller
     private function handleProductUploads(Request $request, array $data, ?Product $product = null): array
     {
         if ($request->hasFile('image')) {
-            $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
-        }
-
-        if (!$product && empty($data['image'])) {
             $data['image'] = $this->storeUploadedImage($request->file('image'), 'products');
         }
 

@@ -61,7 +61,10 @@
 
             <div class="col-12 col-lg-6">
                 <label class="form-label">Image{{ $isEdit ? ' (laisser vide pour conserver)' : '' }}</label>
-                <input type="file" name="image" class="form-control" {{ $isEdit ? '' : 'required' }}>
+                <input type="file" name="image" class="form-control" accept="image/*" {{ $isEdit ? '' : 'required' }} data-role="image-input" data-preview="mainImagePreview">
+                <div class="mt-2 rounded-3 overflow-hidden d-none" style="width:120px;height:120px;border:1px solid var(--admin-border);" id="mainImagePreview">
+                    <img src="" alt="" style="width:100%;height:100%;object-fit:cover;">
+                </div>
                 @if($isEdit)
                     <div class="mt-2 d-flex align-items-end gap-2" data-image-block>
                         <div class="rounded-3 overflow-hidden" style="width:120px;height:120px;border:1px solid var(--admin-border);">
@@ -241,7 +244,8 @@
 
             <div class="col-12 col-lg-6">
                 <label class="form-label">Images (plusieurs)</label>
-                <input type="file" name="gallery[]" class="form-control" multiple>
+                <input type="file" name="gallery[]" class="form-control" accept="image/*" multiple data-role="gallery-input">
+                <div class="d-flex flex-wrap gap-2 mt-2" data-role="gallery-preview"></div>
                 @if($isEdit && !empty($product->gallery))
                     <div class="d-flex flex-wrap gap-2 mt-2">
                         @foreach($product->gallery as $i => $img)
@@ -262,6 +266,28 @@
                         @endforeach
                     </div>
                 @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card p-3">
+        <div class="fw-semibold mb-2">Caractéristiques</div>
+        <div class="row g-3">
+            <div class="col-12 col-lg-3">
+                <label class="form-label">SKU (référence)</label>
+                <input type="text" name="sku" value="{{ old('sku', $isEdit ? $product->sku : null) }}" class="form-control" placeholder="Ex: MAT-001">
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label">Dimensions</label>
+                <input type="text" name="dimensions" value="{{ old('dimensions', $isEdit ? $product->dimensions : null) }}" class="form-control" placeholder="Ex: 190 x 140 cm">
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label">Matière</label>
+                <input type="text" name="material" value="{{ old('material', $isEdit ? $product->material : null) }}" class="form-control" placeholder="Ex: Bois massif">
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label">Couleur principale</label>
+                <input type="text" name="color" value="{{ old('color', $isEdit ? $product->color : null) }}" class="form-control" placeholder="Ex: Bleu nuit">
             </div>
         </div>
     </div>
@@ -312,6 +338,40 @@
                     }
                 });
             });
+
+            const imageInput = document.querySelector('[data-role="image-input"]');
+            if (imageInput) {
+                imageInput.addEventListener('change', function () {
+                    const file = this.files && this.files[0];
+                    const preview = document.getElementById(this.getAttribute('data-preview'));
+                    if (!preview) return;
+                    if (file && file.type.startsWith('image/')) {
+                        preview.querySelector('img').src = URL.createObjectURL(file);
+                        preview.classList.remove('d-none');
+                    } else {
+                        preview.classList.add('d-none');
+                    }
+                });
+            }
+
+            const galleryInput = document.querySelector('[data-role="gallery-input"]');
+            const galleryPreview = document.querySelector('[data-role="gallery-preview"]');
+            if (galleryInput && galleryPreview) {
+                galleryInput.addEventListener('change', function () {
+                    galleryPreview.innerHTML = '';
+                    Array.from(this.files || []).slice(0, 12).forEach(function (file) {
+                        if (!file.type.startsWith('image/')) return;
+                        const wrap = document.createElement('div');
+                        wrap.className = 'rounded-3 overflow-hidden';
+                        wrap.style.cssText = 'width:56px;height:56px;border:1px solid var(--admin-border);';
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(file);
+                        img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+                        wrap.appendChild(img);
+                        galleryPreview.appendChild(wrap);
+                    });
+                });
+            }
         });
     </script>
 
@@ -589,13 +649,14 @@
         <div class="row g-3">
             <div class="col-12 col-lg-6">
                 <label class="form-label">Catégories Section Home (plusieurs)</label>
-                <select name="category_ids[]" class="form-select" multiple>
+                <select name="category_ids[]" class="form-select" multiple size="8">
                     @foreach(($homeSectionCategories ?? collect()) as $category)
                         <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategoryIds))>
                             {{ $category->name }}
                         </option>
                     @endforeach
                 </select>
+                <div class="small mt-1" style="color: var(--admin-muted);">Ctrl/Cmd + clic pour sélection multiple.</div>
             </div>
 
             <div class="col-12 col-lg-6">
@@ -605,13 +666,14 @@
                     $selected = old('menu_ids', $defaultSelected);
                     $selected = is_array($selected) ? $selected : [];
                 @endphp
-                <select name="menu_ids[]" class="form-select" multiple>
+                <select name="menu_ids[]" class="form-select" multiple size="8">
                     @foreach(($menus ?? collect()) as $menu)
                         <option value="{{ $menu->id }}" @selected(in_array($menu->id, $selected))>
                             {{ $menu->name }}
                         </option>
                     @endforeach
                 </select>
+                <div class="small mt-1" style="color: var(--admin-muted);">Ctrl/Cmd + clic pour sélection multiple.</div>
             </div>
 
             <div class="col-12 col-lg-4">
@@ -644,6 +706,22 @@
                     @php $activeValue = old('is_active', $isEdit ? ($product->is_active ? 1 : 0) : 1); @endphp
                     <option value="1" @selected($activeValue == 1)>En ligne</option>
                     <option value="0" @selected($activeValue == 0)>Hors ligne</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-3">
+                <label class="form-label">Badge</label>
+                <input type="text" name="badge" value="{{ old('badge', $isEdit ? $product->badge : null) }}" class="form-control" placeholder="Ex: -20%, Promo">
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label">Type de badge</label>
+                @php $badgeType = old('badge_type', $isEdit ? $product->badge_type : null); @endphp
+                <select name="badge_type" class="form-select">
+                    <option value="">—</option>
+                    <option value="new" @selected($badgeType === 'new')>Nouveau</option>
+                    <option value="hot" @selected($badgeType === 'hot')>Tendance</option>
+                    <option value="sale" @selected($badgeType === 'sale')>Promotion</option>
+                    <option value="custom" @selected($badgeType === 'custom')>Personnalisé</option>
                 </select>
             </div>
 

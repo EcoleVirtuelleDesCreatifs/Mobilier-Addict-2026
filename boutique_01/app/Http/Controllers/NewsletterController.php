@@ -9,8 +9,11 @@ class NewsletterController extends Controller
 {
     public function subscribe(Request $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email:rfc,dns', 'max:255'],
+        $validated = $request->validateWithBag('newsletter', [
+            'email' => ['required', 'email:rfc', 'max:255'],
+        ], [
+            'email.required' => 'Indiquez votre adresse e-mail.',
+            'email.email' => 'Cette adresse e-mail ne semble pas valide.',
         ]);
 
         $email = mb_strtolower(trim($validated['email']));
@@ -19,7 +22,9 @@ class NewsletterController extends Controller
 
         if ($subscription) {
             if ($subscription->is_active) {
-                return back()->with('success', 'Vous êtes déjà inscrit(e) à la newsletter.');
+                return back()
+                    ->with('newsletter_success', 'Vous êtes déjà inscrit(e) à la newsletter.')
+                    ->withInput();
             }
 
             $subscription->fill([
@@ -28,7 +33,7 @@ class NewsletterController extends Controller
                 'unsubscribed_at' => null,
             ])->save();
 
-            return back()->with('success', 'Votre inscription à la newsletter a été réactivée.');
+            return back()->with('newsletter_success', 'Votre inscription à la newsletter a été réactivée.');
         }
 
         NewsletterSubscription::query()->create([
@@ -37,6 +42,6 @@ class NewsletterController extends Controller
             'subscribed_at' => now(),
         ]);
 
-        return back()->with('success', 'Merci ! Votre inscription à la newsletter est confirmée.');
+        return back()->with('newsletter_success', 'Merci ! Votre inscription à la newsletter est confirmée.');
     }
 }

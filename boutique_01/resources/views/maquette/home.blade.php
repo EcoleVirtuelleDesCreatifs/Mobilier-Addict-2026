@@ -731,39 +731,87 @@
 
         <!-- video start -->
         <div class="video-section mt-100 overflow-hidden">
-          <div
-            class="overlay-furniture section-spacing"
-            style="
-              background: url('assets/img/video/video-furniture.jpg')
-                no-repeat fixed bottom center/cover;
-            "
-          >
-            <div class="container video-container">
-              <div class="row">
-                <div class="col-12">
-                  <div
-                    class="video-tools d-flex align-items-center justify-content-center"
-                  >
-                    <div class="video-button-area">
-                      <a
-                        class="video-button"
-                        href="{{ route('home') }}#video-modal"
-                        data-bs-toggle="modal"
-                      >
-                        <svg
-                          width="22"
-                          height="26"
-                          viewBox="0 0 22 26"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M21.5 12.134C22.1667 12.5189 22.1667 13.4811 21.5 13.866L2 25.1244C1.33333 25.5093 0.499999 25.0281 0.499999 24.2583L0.5 1.74167C0.5 0.971867 1.33333 0.490743 2 0.875643L21.5 12.134Z"
-                            fill="#FEFEFE"
-                          />
-                        </svg>
-                      </a>
-                    </div>
+          <style>
+            .video-hero{position:relative;background:url('{{ asset('assets/maquette/img/video/video-furniture.jpg') }}') no-repeat center/cover;padding:90px 0 110px;}
+            .video-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,35,77,.82) 0%,rgba(0,35,77,.45) 45%,rgba(0,35,77,.15) 100%);}
+            .video-hero .container{position:relative;z-index:1;}
+            .video-hero-eyebrow{display:flex;align-items:center;gap:12px;color:#fff;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
+            .video-hero-eyebrow::before{content:'';width:38px;height:2px;background:#ec4899;}
+            .video-hero-title{color:#fff;font-size:clamp(30px,4.5vw,54px);font-weight:800;line-height:1.15;margin:16px 0 14px;max-width:560px;}
+            .video-hero-title .pink{color:#ec4899;}
+            .video-hero-text{color:rgba(255,255,255,.82);font-size:15px;line-height:1.75;max-width:440px;margin-bottom:30px;}
+            .video-hero-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;}
+            .video-hero-btn:hover{transform:translateY(-2px);}
+            .video-hero-btn-pink{background:#ec4899;color:#fff;box-shadow:0 10px 26px rgba(236,72,153,.4);}
+            .video-hero-btn-pink:hover{color:#fff;}
+            .video-hero-btn-ghost{border:1px solid rgba(255,255,255,.5);color:#fff;}
+            .video-hero-btn-ghost:hover{color:#ec4899;border-color:#ec4899;}
+            .video-hero-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:86px;height:86px;border-radius:50%;background:rgba(255,255,255,.28);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s ease,transform .2s ease;}
+            .video-hero-play:hover{background:#ec4899;transform:translate(-50%,-50%) scale(1.06);}
+            .video-hero-play svg{margin-left:5px;}
+            .video-hero-features{position:absolute;left:0;right:0;bottom:0;z-index:1;background:rgba(0,35,77,.45);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.14);}
+            .video-hero-feature{display:flex;align-items:center;gap:14px;padding:20px 18px;color:#fff;}
+            .video-hero-feature+.video-hero-feature{border-left:1px solid rgba(255,255,255,.14);}
+            .video-hero-feature-icon{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:#ec4899;display:flex;align-items:center;justify-content:center;}
+            .video-hero-feature-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.6;}
+            .video-hero-feature b{display:block;font-size:14px;font-weight:600;}
+            .video-hero-feature span{font-size:12px;color:rgba(255,255,255,.7);}
+            @media (max-width:991.98px){
+              .video-hero{padding:70px 0 160px;}
+              .video-hero-play{position:static;transform:none;margin:26px 0 0;}
+              .video-hero-play:hover{transform:scale(1.06);}
+              .video-hero-features{position:static;margin-top:34px;}
+              .video-hero-feature+.video-hero-feature{border-left:none;border-top:1px solid rgba(255,255,255,.14);}
+            }
+          </style>
+
+          <div class="video-hero">
+            <div class="container">
+              <div class="video-hero-eyebrow">Le confort en images</div>
+              <h2 class="video-hero-title">Découvrez l'univers Mobilier <span class="pink">Addict.</span></h2>
+              <p class="video-hero-text">Du matelas au linge de lit, découvrez comment nous transformons chaque chambre en véritable espace de confort.</p>
+              <div class="d-flex flex-wrap gap-3">
+                <a href="#video-modal" class="video-hero-btn video-hero-btn-pink" data-bs-toggle="modal">
+                  <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 6.134C12.1667 6.5189 12.1667 7.48113 11.5 7.86603L1.75 13.0622C1.08333 13.4471 0.25 12.9658 0.25 12.1962L0.25 1.80385C0.25 1.03425 1.08333 0.552998 1.75 0.937898L11.5 6.134Z" fill="currentColor"/></svg>
+                  Voir notre univers
+                </a>
+                <a href="{{ url('/collection') }}" class="video-hero-btn video-hero-btn-ghost">
+                  Découvrir nos produits
+                  <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 6h12M8 1.5 13 6l-5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <a href="#video-modal" class="video-hero-play" data-bs-toggle="modal" aria-label="Lire la vidéo">
+              <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.5 12.134C22.1667 12.5189 22.1667 13.4811 21.5 13.866L2 25.1244C1.33333 25.5093 0.499999 25.0281 0.499999 24.2583L0.5 1.74167C0.5 0.971867 1.33333 0.490743 2 0.875643L21.5 12.134Z" fill="#FEFEFE"/></svg>
+            </a>
+          </div>
+
+          <div class="video-hero-features">
+            <div class="container">
+              <div class="row g-0">
+                <div class="col-lg-3 col-sm-6">
+                  <div class="video-hero-feature">
+                    <span class="video-hero-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M6 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div><b>Matelas confort</b><span>Des nuits de qualité</span></div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                  <div class="video-hero-feature">
+                    <span class="video-hero-feature-icon"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="10" rx="4" /><path d="M4 10c2 1 14 1 16 0M4 14c2-1 14-1 16 0" stroke-linecap="round"/></svg></span>
+                    <div><b>Oreillers &amp; taies</b><span>Un confort au quotidien</span></div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                  <div class="video-hero-feature">
+                    <span class="video-hero-feature-icon"><svg viewBox="0 0 24 24"><path d="M4 8h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8ZM4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2M8 12h8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div><b>Draps &amp; couettes</b><span>Douceur et élégance</span></div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                  <div class="video-hero-feature">
+                    <span class="video-hero-feature-icon"><svg viewBox="0 0 24 24"><path d="M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M3 15a2 2 0 0 1 4 0v1h10v-1a2 2 0 0 1 4 0v3H3v-3ZM7 18v1m10-1v1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div><b>Solutions sur mesure</b><span>Pour tous vos espaces</span></div>
                   </div>
                 </div>
               </div>
@@ -774,25 +822,30 @@
             <div class="modal-dialog modal-dialog-centered modal-xl">
               <div class="modal-content">
                 <div class="modal-header border-0">
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Fermer"
-                  ></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
-                <div class="modal-body">
-                  <iframe
-                    height="600"
-                    src="https://www.youtube.com/embed/tvPnrfQCiCo"
-                    title="Lecteur vidéo YouTube"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
+                <div class="modal-body p-0">
+                  <div class="ratio ratio-16x9">
+                    <iframe data-src="https://www.youtube.com/embed/tvPnrfQCiCo?autoplay=1" title="Lecteur vidéo YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const modal = document.getElementById('video-modal');
+              if (!modal) return;
+              const iframe = modal.querySelector('iframe');
+              modal.addEventListener('shown.bs.modal', () => {
+                if (iframe && !iframe.src) iframe.src = iframe.dataset.src;
+              });
+              modal.addEventListener('hidden.bs.modal', () => {
+                if (iframe) iframe.src = '';
+              });
+            });
+          </script>
         </div>
         <!-- video end -->
 

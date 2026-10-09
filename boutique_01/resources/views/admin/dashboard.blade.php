@@ -177,6 +177,122 @@
             </div>
         </div>
 
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="dash-section-title mb-3">Trafic</h3>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-success card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700" data-stat="realtime">{{ number_format($visitors['realtime']) }}</h2>
+                                <span class="fs-14">En ligne maintenant <span class="badge bg-success ms-1" style="font-size:.6rem;">5 min</span> <span class="badge bg-light text-dark ms-1" data-live-dot style="font-size:.6rem;">● live</span></span>
+                            </div>
+                            <i class="fas fa-bolt text-success" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-primary card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700" data-stat="today">{{ number_format($visitors['today']) }}</h2>
+                                <span class="fs-14">Visiteurs aujourd'hui</span>
+                            </div>
+                            <i class="fas fa-user-clock text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-info card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700" data-stat="week">{{ number_format($visitors['week']) }}</h2>
+                                <span class="fs-14">Visiteurs cette semaine</span>
+                            </div>
+                            <i class="fas fa-calendar-week text-info" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-secondary card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700" data-stat="month">{{ number_format($visitors['month']) }}</h2>
+                                <span class="fs-14">Visiteurs ce mois</span>
+                            </div>
+                            <i class="fas fa-calendar-alt text-secondary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="card card-bd">
+                    <div class="bg-danger card-border"></div>
+                    <div class="card-body box-style">
+                        <div class="media align-items-center">
+                            <div class="media-body me-3">
+                                <h2 class="num-text text-black font-w700" data-stat="abandoned">{{ number_format($abandonedCarts) }}</h2>
+                                <span class="fs-14">Paniers abandonnés <span class="text-muted fs-12">(30 j)</span></span>
+                            </div>
+                            <i class="fas fa-cart-arrow-down text-danger" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Produits les plus vus</h4>
+                    </div>
+                    <div class="card-body">
+                        @if(!$hasPageViews)
+                            <div class="alert alert-warning mb-0">La table <code>page_views</code> n'existe pas encore. Les statistiques de vues seront disponibles après migration.</div>
+                        @else
+                            <div class="row g-4">
+                                @foreach(['day' => "Aujourd'hui", 'week' => 'Cette semaine', 'month' => 'Ce mois'] as $period => $periodLabel)
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="fw-semibold mb-2">{{ $periodLabel }}</div>
+                                        @forelse($topProducts[$period] as $item)
+                                            <div class="d-flex align-items-center gap-2 py-1" style="border-bottom:1px solid #f1f1f4;">
+                                                @if($item['product'] && $item['product']->image)
+                                                    <img src="@image_url($item['product']->image)" class="rounded" width="36" height="36" style="object-fit:cover" alt="">
+                                                @else
+                                                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+                                                        <i class="fas fa-box text-white" style="font-size:.8rem;"></i>
+                                                    </div>
+                                                @endif
+                                                <div class="flex-grow-1" style="min-width:0;">
+                                                    <div class="font-w600 fs-13 text-truncate">{{ $item['product']->name ?? $item['path'] }}</div>
+                                                </div>
+                                                <span class="badge badge-admin-pink">{{ number_format($item['views']) }} <i class="fas fa-eye ms-1"></i></span>
+                                            </div>
+                                        @empty
+                                            <div class="text-muted fs-13">Aucune vue pour cette période.</div>
+                                        @endforelse
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-xl-6 col-lg-12">
                 <div class="card">
@@ -296,3 +412,38 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const url = @json(route('admin.dashboard.realtime'));
+        const fmt = new Intl.NumberFormat('fr-FR');
+        const dot = document.querySelector('[data-live-dot]');
+
+        const refresh = async () => {
+            try {
+                const res = await fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!res.ok) return;
+                const data = await res.json();
+                const map = {
+                    realtime: data.visitors?.realtime,
+                    today: data.visitors?.today,
+                    week: data.visitors?.week,
+                    month: data.visitors?.month,
+                    abandoned: data.abandonedCarts,
+                };
+                Object.entries(map).forEach(([key, val]) => {
+                    const el = document.querySelector(`[data-stat="${key}"]`);
+                    if (el && val !== undefined) el.textContent = fmt.format(val);
+                });
+                if (dot) dot.style.color = '#16a34a';
+            } catch (e) {
+                if (dot) dot.style.color = '#dc2626';
+            }
+        };
+
+        refresh();
+        setInterval(refresh, 15000);
+    });
+</script>
+@endpush

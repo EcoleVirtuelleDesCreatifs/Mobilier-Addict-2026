@@ -8137,6 +8137,16 @@ blockquote {
   .footer-ma .footer-newsletter-btn:hover {
     background: #b92467; }
 
+.footer-ma .footer-newsletter-feedback {
+  font-size: 14px;
+  margin: 0 0 10px; }
+
+.footer-ma .footer-newsletter-success {
+  color: #4ade80; }
+
+.footer-ma .footer-newsletter-error {
+  color: #fca5a5; }
+
 .footer-ma .footer-social-item a {
   width: 42px;
   height: 42px;

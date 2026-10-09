@@ -21,50 +21,44 @@ class CategoryController extends Controller
             ->orderBy('name')
             ->get();
 
-        $categoriesByMenu = [];
-
-        foreach ($menus as $menu) {
-            $query = Category::query()
-                ->with(['parent', 'section'])
-                ->whereHas('menus', function ($q) use ($menu) {
-                    $q->where('menus.id', $menu->id);
-                });
-
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
+        $categories = Category::query()
+            ->with(['menus', 'parent', 'section'])
+            ->withCount('productsMany')
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
                         ->orWhere('slug', 'like', "%{$search}%");
                 });
-            }
-
-            $categoriesByMenu[$menu->id] = $query
-                ->orderBy('order')
-                ->orderBy('name')
-                ->get();
-        }
-
-        // Categories without menu
-        $unassignedCategories = Category::query()
-            ->with(['parent', 'section'])
-            ->whereDoesntHave('menus')
+            })
             ->orderBy('order')
             ->orderBy('name')
             ->get();
 
-        return view('admin.categories.index', compact('menus', 'categoriesByMenu', 'unassignedCategories'));
+        $categoriesByMenu = $menus->mapWithKeys(fn ($menu) => [$menu->id => collect()])->all();
+        $unassignedCategories = collect();
+
+        foreach ($categories as $category) {
+            if ($category->menus->isEmpty()) {
+                $unassignedCategories->push($category);
+                continue;
+            }
+            foreach ($category->menus as $menu) {
+                if (isset($categoriesByMenu[$menu->id])) {
+                    $categoriesByMenu[$menu->id]->push($category);
+                }
+            }
+        }
+
+        return view('admin.categories.index', compact('menus', 'categoriesByMenu', 'unassignedCategories', 'search'));
     }
 
     public function create()
     {
-        $parents = Category::query()->orderBy('name')->get();
-
-        $menus = Menu::query()
-            ->orderBy('position')
-            ->orderBy('order')
-            ->orderBy('name')
-            ->get();
-
-        return view('admin.categories.create', compact('parents', 'menus'));
+        return view('admin.categories.create', [
+            'parents' => Category::query()->orderBy('name')->get(),
+            'menus' => $this->menuList(),
+            'products' => $this->productList(),
+        ]);
     }
 
     public function store(Request $request)
@@ -75,6 +69,7 @@ class CategoryController extends Controller
             'description' => ['nullable', 'string'],
             'image' => ['required', 'image', 'max:4096'],
             'image_alt' => ['nullable', 'string', 'max:255'],
+            'color' => ['nullable', 'string', 'max:20'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
             'size' => ['nullable', 'in:small,medium,large'],
             'order' => ['nullable', 'integer'],
@@ -108,17 +103,16 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $parents = Category::query()->whereKeyNot($category->id)->orderBy('name')->get();
+        $category->load(['menus', 'productsMany']);
 
-        $menus = Menu::query()
-            ->orderBy('position')
-            ->orderBy('order')
-            ->orderBy('name')
-            ->get();
-
-        $selectedMenuIds = $category->menus()->pluck('menus.id')->map(fn ($v) => (int) $v)->values()->all();
-
-        return view('admin.categories.edit', compact('category', 'parents', 'menus', 'selectedMenuIds'));
+        return view('admin.categories.edit', [
+            'category' => $category,
+            'parents' => Category::query()->whereKeyNot($category->id)->orderBy('name')->get(),
+            'menus' => $this->menuList(),
+            'products' => $this->productList(),
+            'selectedMenuIds' => $category->menus->pluck('id')->map(fn ($v) => (int) $v)->values()->all(),
+            'selectedProductIds' => $category->productsMany->pluck('id')->map(fn ($v) => (int) $v)->values()->all(),
+        ]);
     }
 
     public function update(Request $request, Category $category)
@@ -129,6 +123,7 @@ class CategoryController extends Controller
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:4096'],
             'image_alt' => ['nullable', 'string', 'max:255'],
+            'color' => ['nullable', 'string', 'max:20'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
             'size' => ['nullable', 'in:small,medium,large'],
             'order' => ['nullable', 'integer'],
@@ -171,6 +166,16 @@ class CategoryController extends Controller
     private function storeUploadedImage($file, string $folder): string
     {
         return ImageOptimizer::storePublicUpload($file, 'uploads/' . $folder, 800, 80);
+    }
+
+    private function menuList()
+    {
+        return Menu::query()->orderBy('position')->orderBy('order')->orderBy('name')->get();
+    }
+
+    private function productList()
+    {
+        return \App\Models\Product::query()->orderBy('name')->get(['id', 'name', 'price']);
     }
 
     private function makeUniqueSlug(string $baseSlug, ?int $ignoreId = null): string

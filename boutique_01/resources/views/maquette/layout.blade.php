@@ -287,16 +287,30 @@
                       <p class="footer-text mb-3">
                         Restez informé de toutes les nouveautés.
                       </p>
-                      <div class="newsletter-wrapper">
+                      <div class="newsletter-wrapper" id="footer-newsletter">
+                        @if(session('newsletter_success'))
+                          <p class="footer-newsletter-feedback footer-newsletter-success mb-2">
+                            {{ session('newsletter_success') }}
+                          </p>
+                        @endif
+                        @if($errors->newsletter->has('email'))
+                          <p class="footer-newsletter-feedback footer-newsletter-error mb-2">
+                            {{ $errors->newsletter->first('email') }}
+                          </p>
+                        @endif
                         <form
-                          action="index.php#"
+                          action="{{ route('newsletter.subscribe') }}"
+                          method="POST"
                           class="footer-newsletter-form d-flex align-items-center"
                         >
+                          @csrf
                           <input
                             class="footer-newsletter-input bg-transparent"
                             type="email"
+                            name="email"
                             placeholder="Votre e-mail"
-                            autocomplete="off"
+                            value="{{ old('email') }}"
+                            required
                           />
                           <button class="footer-newsletter-btn" type="submit">
                             S'INSCRIRE
@@ -621,6 +635,15 @@
       <!-- drawer cart end -->
 
       {{-- Quickview factice supprimé : non branché sur des produits réels --}}
+
+      @if(session('newsletter_success') || $errors->newsletter->has('email'))
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var el = document.getElementById('footer-newsletter');
+          if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        });
+      </script>
+      @endif
 
       @include('maquette.includes.flash-toast')
 

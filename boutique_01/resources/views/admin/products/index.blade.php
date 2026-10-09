@@ -51,12 +51,33 @@
 
             <div class="admin-card p-3 p-md-4 mb-3">
                 <form method="GET" action="{{ route('admin.products.index') }}" class="row g-2 align-items-end">
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-4">
                         <label class="form-label small" style="color: var(--admin-muted);">Recherche</label>
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Nom, SKU, slug">
                     </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label small" style="color: var(--admin-muted);">Statut</label>
+                        <select name="status" class="form-select">
+                            <option value="">Tous</option>
+                            <option value="online" @selected(request('status') === 'online')>En ligne</option>
+                            <option value="offline" @selected(request('status') === 'offline')>Hors ligne</option>
+                            <option value="low_stock" @selected(request('status') === 'low_stock')>Stock faible (≤ 5)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label small" style="color: var(--admin-muted);">Menu</label>
+                        <select name="menu_id" class="form-select">
+                            <option value="">Tous</option>
+                            @foreach($filterMenus as $menu)
+                                <option value="{{ $menu->id }}" @selected((int) request('menu_id') === $menu->id)>{{ $menu->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="col-12 col-md-auto">
                         <button type="submit" class="btn btn-admin-ghost">Filtrer</button>
+                        @if(request()->hasAny(['q', 'status', 'menu_id']))
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-admin-ghost">Réinitialiser</a>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -66,11 +87,22 @@
                     <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
                         <thead style="color: var(--admin-muted);">
                             <tr>
+                                @php
+                                    $sortLink = function (string $key) {
+                                        $dir = request('sort') === $key && request('dir') === 'desc' ? 'asc' : 'desc';
+                                        return route('admin.products.index', array_merge(request()->except(['sort', 'dir', 'page']), ['sort' => $key, 'dir' => $dir]));
+                                    };
+                                    $sortIcon = function (string $key) {
+                                        if (request('sort') !== $key) return '';
+                                        return request('dir') === 'asc' ? ' ↑' : ' ↓';
+                                    };
+                                @endphp
                                 <th style="width:72px;">Image</th>
-                                <th>Produit</th>
+                                <th><a href="{{ $sortLink('name') }}" class="text-reset text-decoration-none">Produit{{ $sortIcon('name') }}</a></th>
                                 <th>Catégorie</th>
                                 <th>Menus</th>
-                                <th class="text-end">Prix</th>
+                                <th class="text-center"><a href="{{ $sortLink('stock') }}" class="text-reset text-decoration-none">Stock{{ $sortIcon('stock') }}</a></th>
+                                <th class="text-end"><a href="{{ $sortLink('price') }}" class="text-reset text-decoration-none">Prix{{ $sortIcon('price') }}</a></th>
                                 <th class="text-center">Actif</th>
                                 <th style="width:160px;"></th>
                             </tr>
@@ -100,6 +132,10 @@
                                         @else
                                             <div class="small" style="color: var(--admin-muted);">—</div>
                                         @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @php $stock = (int) ($product->stock ?? 0); @endphp
+                                        <span class="badge {{ $stock <= 0 ? 'bg-danger' : ($stock <= 5 ? 'bg-warning text-dark' : 'bg-success') }}">{{ $stock }}</span>
                                     </td>
                                     <td class="text-end">
                                         <div class="fw-semibold">{{ $product->formatted_price }}</div>
@@ -132,7 +168,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-5" style="color: var(--admin-muted);">Aucun produit.</td>
+                                    <td colspan="8" class="text-center py-5" style="color: var(--admin-muted);">Aucun produit.</td>
                                 </tr>
                             @endforelse
                         </tbody>
