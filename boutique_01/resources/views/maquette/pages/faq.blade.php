@@ -6,20 +6,25 @@
 @php
     $faqGroups = [
         ['id' => 'commandes', 'title' => 'Choisir & commander', 'description' => 'Produits, dimensions et disponibilité', 'items' => [
-            ['Comment commander chez Mobilier Addict ?', 'Repérez votre article dans le catalogue, puis contactez la boutique pour confirmer le stock, le prix et les modalités avant tout règlement.'],
+            ['Comment commander chez Mobilier Addict ?', 'Repérez votre article dans le catalogue, ajoutez-le au panier et validez votre commande en ligne. Vous pouvez aussi contacter la boutique sur WhatsApp pour confirmer le stock, le prix et les modalités avant tout règlement.'],
             ['Comment savoir si un article est disponible ?', 'La présence d’un produit sur le site ne garantit pas son stock. Faites confirmer la disponibilité du modèle et du coloris choisis.'],
+            ['Puis-je commander un meuble sur mesure ?', 'Oui. Remplissez le formulaire « Devis sur-mesure » en décrivant votre besoin (dimensions, quantités, usage) : notre équipe vous répond avec une proposition chiffrée.'],
+            ['Comment participer au Grand Jeu Mobilier Addict ?', 'Rendez-vous sur la page Jeu, créez votre badge personnalisé et partagez-le avec #MobilierAddict #MatelasAddict : les proches qui vous soutiennent font grimper votre score.'],
         ]],
         ['id' => 'paiements', 'title' => 'Prix & paiements', 'description' => 'FCFA et règlement', 'items' => [
-            ['Comment connaître le montant total à payer ?', 'Demandez un récapitulatif en FCFA comprenant les articles, la livraison, le montage éventuel et le total à régler.'],
-            ['Quels moyens de paiement sont acceptés ?', 'Faites confirmer les moyens acceptés et le bénéficiaire auprès de la boutique avant tout transfert. Ne communiquez jamais votre code secret.'],
+            ['Comment connaître le montant total à payer ?', 'Le récapitulatif de votre commande affiche les articles, la livraison, le montage éventuel et le total en FCFA avant validation.'],
+            ['Quels moyens de paiement sont acceptés ?', 'Faites confirmer les moyens acceptés (espèces, mobile money, virement) et le bénéficiaire auprès de la boutique avant tout transfert. Ne communiquez jamais votre code secret.'],
+            ['Puis-je payer à la livraison ?', 'Selon les articles et la destination, un acompte peut être demandé à la commande. Les modalités exactes vous sont confirmées avant l’expédition.'],
         ]],
         ['id' => 'livraison', 'title' => 'Livraison & installation', 'description' => 'Abidjan et intérieur du pays', 'items' => [
             ['Comment organiser une livraison ?', 'Indiquez votre commune, votre quartier, un repère, l’étage et les conditions d’accès. Les frais et le créneau doivent être confirmés.'],
+            ['Livrez-vous en dehors d’Abidjan ?', 'Oui, les livraisons sont possibles dans l’intérieur du pays. Les délais et frais dépendent de la destination : précisez votre ville lors de la commande.'],
             ['Le montage est-il compris ?', 'Précisez le type de meuble et les accès, puis demandez si le montage et la manutention sont proposés et à quel prix.'],
         ]],
         ['id' => 'apres-vente', 'title' => 'Suivi & après-vente', 'description' => 'Réception, entretien et assistance', 'items' => [
             ['Que vérifier à la réception ?', 'Contrôlez le modèle, le coloris, les dimensions, la quantité et l’état des articles avec le livreur lorsque cela est possible.'],
             ['Que faire si un article est abîmé ?', 'Prenez des photos, conservez les emballages et contactez rapidement la boutique avec votre référence de commande.'],
+            ['Comment entretenir mes meubles et mon matelas ?', 'Dépoussiérez régulièrement, utilisez un protège-matelas, évitez l’humidité et retournez votre matelas tous les 3 à 6 mois pour prolonger sa durée de vie.'],
         ]],
     ];
     $faqCount = collect($faqGroups)->sum(fn ($g) => count($g['items']));
@@ -43,6 +48,85 @@
     <style>
         .faq-topic.is-hidden { display: none; }
         .faq-question[hidden], .faq-group[hidden] { display: none; }
+
+        /* Hero */
+        .faq-hero{background:#00234D;padding:70px 0;color:#fff;position:relative;overflow:hidden;}
+        .faq-hero::before,.faq-hero::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(236,72,153,.35);pointer-events:none;}
+        .faq-hero::before{width:420px;height:420px;top:-160px;right:-120px;}
+        .faq-hero::after{width:260px;height:260px;bottom:-140px;left:-80px;border-color:rgba(255,255,255,.08);}
+        .faq-hero-layout{display:grid;grid-template-columns:1.4fr .9fr;gap:44px;align-items:center;position:relative;z-index:1;}
+        .faq-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ec4899;margin-bottom:14px;}
+        .faq-hero h1{font-size:clamp(30px,4vw,46px);font-weight:800;line-height:1.15;margin-bottom:16px;}
+        .faq-hero h1 span{color:#ec4899;}
+        .faq-intro{color:rgba(255,255,255,.75);font-size:15.5px;line-height:1.7;max-width:520px;margin-bottom:28px;}
+        .faq-search label{display:block;font-weight:700;font-size:14px;margin-bottom:10px;color:#fff;}
+        .faq-search-field{display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:6px 8px 6px 20px;color:#00234D;}
+        .faq-search-field input{flex:1;border:none;outline:none;font-size:15px;padding:10px 0;background:transparent;color:#00234D;min-width:0;}
+        .faq-search-status{font-size:12.5px;color:rgba(255,255,255,.6);margin:10px 4px 0;}
+
+        .faq-contact-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:32px;backdrop-filter:blur(6px);}
+        .faq-card-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ec4899;display:block;margin-bottom:12px;}
+        .faq-contact-card h2{font-size:24px;font-weight:800;margin-bottom:12px;color:#fff;}
+        .faq-contact-card p{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.65;margin-bottom:20px;}
+        .faq-call{display:inline-flex;align-items:center;gap:8px;background:#ec4899;color:#fff;font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px;text-decoration:none;transition:.15s;}
+        .faq-call:hover{background:#d1357f;color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(236,72,153,.4);}
+        .faq-contact-note{display:block;font-size:12px;color:rgba(255,255,255,.55);margin-top:14px;}
+
+        /* Rubriques */
+        .faq-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:44px 0;}
+        .faq-topic{background:#fff;border:1px solid #f0e8ee;border-radius:18px;padding:20px;text-decoration:none;transition:.15s;display:block;}
+        .faq-topic:hover{border-color:#ec4899;transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,35,77,.08);}
+        .faq-topic-number{display:block;font-size:12px;font-weight:800;color:#ec4899;letter-spacing:.1em;margin-bottom:8px;}
+        .faq-topic strong{display:block;color:#00234D;font-size:15px;margin-bottom:4px;}
+        .faq-topic span:last-child{font-size:12.5px;color:#888;}
+
+        /* Contenu */
+        .faq-content-layout{display:grid;grid-template-columns:300px 1fr;gap:36px;align-items:start;margin-bottom:44px;}
+        .faq-guide{position:sticky;top:110px;background:#fff;border:1px solid #f0e8ee;border-radius:20px;padding:28px;}
+        .faq-guide h2{color:#00234D;font-size:20px;font-weight:800;margin-bottom:16px;}
+        .faq-guide ul{padding-left:0;list-style:none;margin-bottom:16px;}
+        .faq-guide li{font-size:13.5px;color:#555;padding:8px 0 8px 24px;position:relative;border-bottom:1px dashed #f0e8ee;}
+        .faq-guide li:last-child{border-bottom:none;}
+        .faq-guide li::before{content:'✓';position:absolute;left:0;color:#ec4899;font-weight:800;}
+        .faq-guide-note{font-size:12px;color:#999;line-height:1.6;margin-bottom:16px;}
+        .faq-guide a{color:#ec4899;font-weight:700;font-size:13.5px;text-decoration:none;}
+        .faq-guide a:hover{text-decoration:underline;}
+
+        .faq-group{margin-bottom:34px;scroll-margin-top:100px;}
+        .faq-group-heading{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+        .faq-group-heading span{font-size:13px;font-weight:800;color:#ec4899;letter-spacing:.1em;}
+        .faq-group-heading h2{color:#00234D;font-size:20px;font-weight:800;margin:0;}
+        .faq-question{background:#fff;border:1px solid #f0e8ee;border-radius:16px;margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
+        .faq-question[open]{border-color:#ec4899;}
+        .faq-question summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:600;font-size:15px;color:#00234D;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+        .faq-question summary::-webkit-details-marker{display:none;}
+        .faq-toggle{flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:rgba(236,72,153,.1);position:relative;transition:.2s;}
+        .faq-toggle::before,.faq-toggle::after{content:'';position:absolute;background:#ec4899;border-radius:2px;top:50%;left:50%;transform:translate(-50%,-50%);}
+        .faq-toggle::before{width:10px;height:2px;}
+        .faq-toggle::after{width:2px;height:10px;transition:.2s;}
+        .faq-question[open] .faq-toggle{background:#ec4899;}
+        .faq-question[open] .faq-toggle::before,.faq-question[open] .faq-toggle::after{background:#fff;}
+        .faq-question[open] .faq-toggle::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0;}
+        .faq-answer{padding:0 22px 20px;font-size:14px;color:#666;line-height:1.7;}
+        .faq-answer p{margin:0;}
+
+        .faq-empty{text-align:center;padding:44px 20px;background:#fff;border:1px dashed #ec4899;border-radius:20px;}
+        .faq-empty h2{color:#00234D;font-size:20px;font-weight:800;}
+        .faq-empty p{color:#777;font-size:14px;margin:8px 0 18px;}
+
+        .faq-bottom{background:#00234D;border-radius:24px;padding:40px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-bottom:60px;}
+        .faq-bottom h2{font-size:24px;font-weight:800;margin-bottom:8px;}
+        .faq-bottom p{color:rgba(255,255,255,.7);font-size:14px;max-width:520px;margin:0;}
+        .faq-action{display:inline-flex;align-items:center;gap:8px;background:#ec4899;color:#fff;font-weight:700;font-size:14px;padding:13px 26px;border-radius:999px;text-decoration:none;border:none;cursor:pointer;transition:.15s;}
+        .faq-action:hover{background:#d1357f;color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(236,72,153,.35);}
+        .faq-bottom .faq-action:last-child{background:transparent;border:1px solid rgba(255,255,255,.4);}
+        .faq-bottom .faq-action:last-child:hover{border-color:#ec4899;background:rgba(236,72,153,.15);}
+
+        @media (max-width:991.98px){
+            .faq-hero-layout{grid-template-columns:1fr;}
+            .faq-content-layout{grid-template-columns:1fr;}
+            .faq-guide{position:static;}
+        }
     </style>
 @endpush
 

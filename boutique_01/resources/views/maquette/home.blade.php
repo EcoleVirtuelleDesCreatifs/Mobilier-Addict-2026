@@ -98,6 +98,79 @@
         </div>
         <!-- slideshow end -->
 
+        <!-- game space start -->
+        @php $gameEndsAt = \App\Http\Controllers\GameController::endsAt(); @endphp
+        @if(!\App\Http\Controllers\GameController::isClosed())
+        <div class="game-section mt-4 overflow-hidden">
+          <style>
+            .game-strip{position:relative;overflow:hidden;background:linear-gradient(120deg,#00234D 55%,#0a3a75);border-radius:26px;color:#fff;padding:44px 42px;display:flex;align-items:center;gap:34px;}
+            .game-strip::after{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(236,72,153,.28),transparent 65%);top:-120px;right:-60px;}
+            .game-strip-icon{flex:0 0 74px;width:74px;height:74px;border-radius:22px;background:#ec4899;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(236,72,153,.4);}
+            .game-strip-icon svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:1.7;}
+            .game-strip-body{flex:1;min-width:0;position:relative;z-index:1;}
+            .game-strip-kicker{display:inline-flex;align-items:center;gap:10px;color:#ec4899;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;}
+            .game-strip-kicker::before{content:'';width:28px;height:2px;background:#ec4899;}
+            .game-strip-title{font-size:clamp(22px,3vw,32px);font-weight:800;margin:8px 0 8px;color:#fff;}
+            .game-strip-title .pink{color:#ec4899;}
+            .game-strip-text{color:rgba(255,255,255,.78);font-size:14.5px;line-height:1.7;max-width:600px;margin:0;}
+            .game-strip-cta{position:relative;z-index:1;flex:0 0 auto;display:inline-flex;align-items:center;gap:10px;background:#ec4899;color:#fff;font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;padding:16px 32px;border-radius:999px;text-decoration:none;box-shadow:0 12px 30px rgba(236,72,153,.4);transition:transform .15s ease;}
+            .game-strip-cta:hover{transform:translateY(-2px);color:#fff;}
+            .game-cd{display:flex;gap:10px;margin-top:16px;}
+            .game-cd-box{background:rgba(0,0,0,.38);border:1px solid rgba(236,72,153,.55);border-radius:14px;min-width:74px;padding:10px 8px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.25);}
+            .game-cd-box b{display:block;font-size:clamp(22px,2.6vw,32px);font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums;}
+            .game-cd-box span{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#ec4899;margin-top:5px;}
+            .game-cd-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);display:block;margin-bottom:6px;}
+            @media (max-width:767.98px){.game-strip{flex-direction:column;text-align:center;padding:34px 22px;}.game-strip-kicker{justify-content:center;}.game-cd{justify-content:center;}}
+          </style>
+          <div class="container">
+            <div class="game-strip" data-aos="fade-up" data-aos-duration="700">
+              <div class="game-strip-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" stroke-linecap="round" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="game-strip-body">
+                <span class="game-strip-kicker">Grand jeu</span>
+                <h2 class="game-strip-title">Crée ton badge, partage-le, <span class="pink">gagne ton cadeau.</span></h2>
+                <p class="game-strip-text">Génère ton badge personnalisé, partage-le avec #MobilierAddict #MatelasAddict et fais voter tes proches.</p>
+                @if($gameEndsAt)
+                  <div class="mt-3">
+                    <span class="game-cd-label">⏳ Fin du jeu dans</span>
+                    <div class="game-cd" data-game-ends="{{ $gameEndsAt->toIso8601String() }}">
+                      <div class="game-cd-box"><b data-cd="d">0</b><span>jours</span></div>
+                      <div class="game-cd-box"><b data-cd="h">0</b><span>heures</span></div>
+                      <div class="game-cd-box"><b data-cd="m">0</b><span>min</span></div>
+                      <div class="game-cd-box"><b data-cd="s">0</b><span>sec</span></div>
+                    </div>
+                  </div>
+                @endif
+              </div>
+              <a href="{{ route('game.index') }}" class="game-strip-cta">
+                Je participe
+                <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 6h12M8 1.5 13 6l-5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const cd = document.querySelector('[data-game-ends]');
+              if (!cd) return;
+              const end = new Date(cd.dataset.gameEnds).getTime();
+              const set = (k, v) => { const el = cd.querySelector(`[data-cd="${k}"]`); if (el) el.textContent = String(v).padStart(2, '0'); };
+              const tick = () => {
+                const diff = end - Date.now();
+                if (diff <= 0) { location.reload(); return; }
+                set('d', Math.floor(diff / 86400000));
+                set('h', Math.floor(diff % 86400000 / 3600000));
+                set('m', Math.floor(diff % 3600000 / 60000));
+                set('s', Math.floor(diff % 60000 / 1000));
+              };
+              tick();
+              setInterval(tick, 1000);
+            });
+          </script>
+        @endif
+        <!-- game space end -->
+
         <!-- trusted badge start -->
         <div class="trusted-section mt-100 overflow-hidden">
           <div class="container">

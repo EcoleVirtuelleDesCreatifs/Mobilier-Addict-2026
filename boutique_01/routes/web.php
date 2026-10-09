@@ -10,8 +10,6 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\B2BCategoryController;
-use App\Http\Controllers\Admin\FeaturedCategoryController;
-use App\Http\Controllers\Admin\SaveTheDateController;
 use App\Http\Controllers\B2BController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\NewsletterSubscriptionController;
@@ -43,6 +41,12 @@ use Illuminate\Support\Facades\Schema;
 
 Route::middleware(TrackPageView::class)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/jeu', [\App\Http\Controllers\GameController::class, 'index'])->name('game.index');
+    Route::post('/jeu', [\App\Http\Controllers\GameController::class, 'store'])->name('game.store');
+    Route::get('/jeu/{participant}', [\App\Http\Controllers\GameController::class, 'show'])->name('game.show');
+    Route::post('/jeu/{participant}/soutien', [\App\Http\Controllers\GameController::class, 'support'])->name('game.support');
+    Route::get('/jeu/{participant}/badge', [\App\Http\Controllers\GameController::class, 'badge'])->name('game.badge');
 
 Route::get('/sitemap.xml', function () {
     $urls = [];
@@ -439,15 +443,6 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.articles.destroy');
     Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage'])->middleware('permission:articles.manage')->name('admin.articles.upload-image');
 
-    Route::get('/person-week', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.index');
-    Route::get('/person-week/create', fn () => redirect()->route('admin.dashboard'))->name('admin.person-week.create');
-
-    Route::get('/jobs', fn () => redirect()->route('admin.dashboard'))->name('admin.jobs.index');
-    Route::get('/jobs/create', fn () => redirect()->route('admin.dashboard'))->name('admin.jobs.create');
-
-    Route::get('/flash-news', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.index');
-    Route::get('/flash-news/create', fn () => redirect()->route('admin.dashboard'))->name('admin.flash-news.create');
-
     Route::resource('menus', MenuController::class)->middleware('permission:menus.manage')->names('admin.menus');
 
     Route::resource('users', AdminUserController::class)->middleware('permission:users.manage')->names('admin.users');
@@ -466,12 +461,6 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
 
     Route::resource('b2b', B2BCategoryController::class)->names('admin.b2b');
-    Route::resource('featured-categories', FeaturedCategoryController::class)->names('admin.featured_categories');
-
-    Route::get('/save-the-date', [SaveTheDateController::class, 'index'])->middleware('permission:articles.manage')->name('admin.save-the-date.index');
-    Route::get('/save-the-date/create', [SaveTheDateController::class, 'create'])->middleware('permission:articles.manage')->name('admin.save-the-date.create');
-    Route::post('/save-the-date', [SaveTheDateController::class, 'store'])->middleware('permission:articles.manage')->name('admin.save-the-date.store');
-    Route::delete('/save-the-date/{saveTheDate}', [SaveTheDateController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.save-the-date.destroy');
 
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
     Route::delete('/products/{product}/image', [AdminProductController::class, 'destroyImage'])->middleware('permission:products.manage')->name('admin.products.image.destroy');
@@ -491,7 +480,15 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/quotes', [\App\Http\Controllers\Admin\QuoteController::class, 'index'])->middleware('permission:orders.view')->name('admin.quotes.index');
     Route::get('/quotes/{quote}', [\App\Http\Controllers\Admin\QuoteController::class, 'show'])->middleware('permission:orders.view')->name('admin.quotes.show');
     Route::post('/quotes/{quote}/status', [\App\Http\Controllers\Admin\QuoteController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.quotes.status');
+    Route::post('/quotes/{quote}/update', [\App\Http\Controllers\Admin\QuoteController::class, 'update'])->middleware('permission:orders.update_status')->name('admin.quotes.update');
+    Route::post('/quotes/{quote}/items', [\App\Http\Controllers\Admin\QuoteController::class, 'addItem'])->middleware('permission:orders.update_status')->name('admin.quotes.items.store');
+    Route::delete('/quotes/{quote}/items/{item}', [\App\Http\Controllers\Admin\QuoteController::class, 'removeItem'])->middleware('permission:orders.update_status')->name('admin.quotes.items.destroy');
+    Route::delete('/quotes/{quote}', [\App\Http\Controllers\Admin\QuoteController::class, 'destroy'])->middleware('permission:orders.update_status')->name('admin.quotes.destroy');
     Route::post('/orders/{order}/quotes', [\App\Http\Controllers\Admin\QuoteController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.quotes.store');
+
+    Route::get('/jeu', [\App\Http\Controllers\Admin\GameParticipantController::class, 'index'])->name('admin.game.index');
+    Route::post('/jeu/reglages', [\App\Http\Controllers\Admin\GameParticipantController::class, 'updateSettings'])->name('admin.game.settings');
+    Route::delete('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'destroy'])->name('admin.game.destroy');
 
     Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
     Route::get('/home-sections/create', [HomeSectionController::class, 'create'])->name('admin.home_sections.create');

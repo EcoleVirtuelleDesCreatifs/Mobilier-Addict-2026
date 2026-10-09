@@ -439,7 +439,24 @@
           >
             <nav class="site-navigation">
               @include('maquette.includes.menu', ['menu_mobile' => true])
+              <ul class="main-menu list-unstyled">
+                @if(!\App\Http\Controllers\GameController::isClosed())
+                  <li class="menu-list-item nav-item{{ request()->routeIs('game.*') ? ' active' : '' }}">
+                    <a class="nav-link{{ request()->routeIs('game.*') ? ' active' : '' }}" href="{{ route('game.index') }}"><span class="nav-icon" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>Grand Jeu</a>
+                  </li>
+                @endif
+                <li class="menu-list-item nav-item{{ request()->routeIs('devis.*') ? ' active' : '' }}">
+                  <a class="nav-link{{ request()->routeIs('devis.*') ? ' active' : '' }}" href="{{ route('devis.create') }}"><span class="nav-icon" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6"/><path d="M9 11h2"/></svg></span>Devis sur-mesure</a>
+                </li>
+              </ul>
             </nav>
+            <div class="px-4 py-3">
+              <a href="{{ route('devis.create') }}" class="header-ma-cta d-inline-flex w-100 justify-content-center">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6"/><path d="M9 11h2"/></svg>
+                Devis sur-mesure
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </a>
+            </div>
             <ul class="utility-menu list-unstyled">
               <li class="utilty-menu-item">
                 <a class="announcement-text" href="tel:+2250799140356">
@@ -646,6 +663,101 @@
       @endif
 
       @include('maquette.includes.flash-toast')
+
+      <!-- modal ajout panier start -->
+      <div class="modal fade" id="cartAddedModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="border:none;border-radius:26px;overflow:hidden;">
+            <div class="modal-body p-0">
+              <div style="background:#00234D;padding:28px 32px 22px;text-align:center;color:#fff;">
+                <div style="width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:#ec4899;display:flex;align-items:center;justify-content:center;">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+                </div>
+                <h5 class="mb-1" style="font-weight:800;">Ajouté au panier !</h5>
+                <div id="camCount" style="font-size:13px;color:rgba(255,255,255,.7);"></div>
+              </div>
+              <div class="p-4 text-center" style="background:#fff;">
+                <div class="d-flex align-items-center gap-3 text-start mb-3">
+                  <img id="camImage" src="" alt="" width="86" height="86" style="border-radius:14px;object-fit:cover;border:1px solid #f0e8ee;display:none;">
+                  <div class="flex-grow-1" style="min-width:0;">
+                    <div id="camName" class="fw-bold" style="color:#00234D;"></div>
+                    <div id="camQtyPrice" class="small" style="color:#888;"></div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4 px-1">
+                  <span class="small" style="color:#888;">Sous-total panier</span>
+                  <span id="camSubtotal" class="fw-bold" style="color:#00234D;font-size:18px;"></span>
+                </div>
+                <div class="d-grid gap-2">
+                  <a href="#" id="camCheckout" class="btn" style="background:#ec4899;color:#fff;border-radius:999px;padding:14px;font-weight:700;">Passer la commande</a>
+                  <a href="#" id="camCart" class="btn" style="background:#00234D;color:#fff;border-radius:999px;padding:12px;font-weight:600;">Voir mon panier</a>
+                  <button type="button" class="btn btn-link" data-bs-dismiss="modal" style="color:#888;font-size:13px;text-decoration:none;">Continuer mes achats</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal ajout panier end -->
+
+      <script>
+        document.addEventListener('submit', function (e) {
+          var form = e.target;
+          if (!(form instanceof HTMLFormElement) || !/panier\/ajouter/.test(form.action)) return;
+          var redirectField = form.querySelector('[name="redirect_to"]');
+          if (redirectField && redirectField.value === 'shipping') return; // "Commander directement" garde le flux normal
+
+          e.preventDefault();
+          var btn = form.querySelector('.mp-add, [type="submit"]');
+          if (btn) btn.disabled = true;
+
+          fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+            credentials: 'same-origin'
+          }).then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
+            .then(function (res) {
+              if (btn) btn.disabled = false;
+              if (!res.data || !res.data.ok) {
+                window.location.href = form.action.replace('/ajouter', '');
+                return;
+              }
+              var d = res.data, i = d.item || {};
+              var fmt = function (n) { return new Intl.NumberFormat('fr-FR').format(n) + ' FCFA'; };
+
+              var img = document.getElementById('camImage');
+              if (img) {
+                if (i.image) { img.src = i.image; img.style.display = 'block'; }
+                else img.style.display = 'none';
+              }
+              var name = document.getElementById('camName');
+              if (name) name.textContent = i.name || '';
+              var qp = document.getElementById('camQtyPrice');
+              if (qp) qp.textContent = 'Qté ' + (i.quantity || 1) + ' — ' + fmt(i.price || 0);
+              var count = document.getElementById('camCount');
+              if (count) count.textContent = d.cart_count + ' article' + (d.cart_count > 1 ? 's' : '') + ' dans votre panier';
+              var sub = document.getElementById('camSubtotal');
+              if (sub) sub.textContent = fmt(d.cart_subtotal || 0);
+              var cart = document.getElementById('camCart');
+              if (cart && d.cart_url) cart.href = d.cart_url;
+              var checkout = document.getElementById('camCheckout');
+              if (checkout && d.checkout_url) checkout.href = d.checkout_url;
+
+              document.querySelectorAll('.header-cart-count').forEach(function (el) { el.textContent = d.cart_count; });
+
+              if (window.bootstrap && bootstrap.Modal) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('cartAddedModal')).show();
+              } else {
+                window.location.href = d.cart_url;
+              }
+            })
+            .catch(function () {
+              if (btn) btn.disabled = false;
+              form.submit();
+            });
+        });
+      </script>
 
       <!-- all js -->
       <script src="{{ asset('assets/maquette/') }}/js/vendor.js" defer></script>

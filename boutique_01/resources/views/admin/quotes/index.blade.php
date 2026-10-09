@@ -6,9 +6,23 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
                 <div>
                     <h1 class="h3 fw-bold mb-1">Devis</h1>
-                    <div class="small" style="color: var(--admin-muted);">Liste des devis générés depuis les commandes.</div>
+                    <div class="small" style="color: var(--admin-muted);">Demandes de devis des clients et devis générés depuis les commandes.</div>
                 </div>
             </div>
+
+            <form method="GET" class="admin-card p-3 mb-4 d-flex flex-wrap gap-2 align-items-center">
+                <input type="text" name="q" value="{{ request('q') }}" class="form-control" style="max-width:280px;" placeholder="N°, client, structure, WhatsApp…">
+                <select name="status" class="form-select" style="max-width:200px;">
+                    <option value="">Tous les statuts</option>
+                    @foreach(['pending' => 'En attente', 'draft' => 'Brouillon', 'sent' => 'Envoyé', 'accepted' => 'Accepté', 'rejected' => 'Refusé'] as $v => $l)
+                        <option value="{{ $v }}" @selected(request('status') === $v)>{{ $l }}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="btn btn-admin-primary">Filtrer</button>
+                @if(request('q') || request('status'))
+                    <a href="{{ route('admin.quotes.index') }}" class="btn btn-admin-ghost">Réinitialiser</a>
+                @endif
+            </form>
 
             @if (session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>
@@ -46,7 +60,12 @@
                                         <div class="small" style="color: var(--admin-muted);">{{ $quote->whatsapp ?: ($quote->phone ?: '—') }}</div>
                                     </td>
                                     <td>
-                                        <span class="badge text-bg-secondary">{{ $quote->status }}</span>
+                                        @php
+                                            $statusMap = ['pending' => ['warning', 'En attente'], 'draft' => ['secondary', 'Brouillon'], 'sent' => ['info', 'Envoyé'], 'accepted' => ['success', 'Accepté'], 'rejected' => ['danger', 'Refusé']];
+                                            [$badge, $label] = $statusMap[$quote->status] ?? ['secondary', $quote->status];
+                                        @endphp
+                                        <span class="badge text-bg-{{ $badge }}">{{ $label }}</span>
+                                        <div class="small mt-1" style="color: var(--admin-muted);">{{ $quote->items_count }} article(s)</div>
                                     </td>
                                     <td class="text-end fw-semibold">{{ number_format((float) $quote->total, 0, ',', '.') }}F</td>
                                     <td class="text-end">

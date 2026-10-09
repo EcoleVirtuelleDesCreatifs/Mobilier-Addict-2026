@@ -243,32 +243,17 @@
 				@php
 					$userRole = auth()->user()->role;
 					$isAdmin = in_array($userRole, ['admin', 'super_admin']);
-					$isEditor = $userRole === 'editor';
-					$isWriter = in_array($userRole, ['writer', 'author']);
+					$canManage = in_array($userRole, ['editor', 'admin', 'super_admin']);
+
 					$openAdminHome = request()->routeIs('admin.dashboard');
-					$openFacebookPixel = request()->routeIs('admin.settings.facebook-pixel.*');
 					$openStats = request()->routeIs('admin.stats.*');
-					$openNewsletter = request()->routeIs('admin.newsletter.*');
 					$openArticles = request()->routeIs('admin.articles.*');
-					$openCategories = request()->routeIs('admin.categories.*');
-					$openProducts = request()->routeIs('admin.products.*');
-					$openOrders = request()->routeIs('admin.orders.*');
-					$openInvoices = request()->routeIs('admin.invoices.*');
-					$openQuotes = request()->routeIs('admin.quotes.*');
-					$openHome = request()->routeIs('admin.home_sections.*');
-					$openPersonWeek = request()->routeIs('admin.person-week.*');
-					$openJobs = request()->routeIs('admin.jobs.*');
-					$openFlashNews = request()->routeIs('admin.flash-news.*');
-					$openMenus = request()->routeIs('admin.menus.*');
-					$openUsers = request()->routeIs('admin.users.*');
-					$openRoles = request()->routeIs('admin.roles.*');
-					$openSlider = request()->routeIs('admin.slider.*');
-					$openB2B = request()->routeIs('admin.b2b.*');
-					$openSaveTheDate = request()->routeIs('admin.save-the-date.*');
-					$openUsersGroup = $openUsers || $openRoles;
-					$openHomeGroup = $openHome || $openSlider || $openB2B;
-					$openCatalogueGroup = $openCategories || $openProducts || $openMenus;
-					$openOrdersGroup = $openOrders || $openInvoices || $openQuotes;
+
+					$openCatalogueGroup = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.menus.*');
+					$openSalesGroup = request()->routeIs('admin.orders.*', 'admin.invoices.*', 'admin.quotes.*');
+					$openHomeGroup = request()->routeIs('admin.home_sections.*', 'admin.slider.*', 'admin.b2b.*', 'admin.space_sections.*');
+					$openMarketingGroup = request()->routeIs('admin.newsletter.*', 'admin.settings.facebook-pixel.*', 'admin.game.*');
+					$openUsersGroup = request()->routeIs('admin.users.*', 'admin.roles.*');
 				@endphp
 
 				<ul class="metismenu" id="menu">
@@ -279,57 +264,68 @@
 						</a>
 					</li>
 
-                    {{-- Catégories - lecture pour tous, gestion pour editors/admins --}}
 					<li class="{{ $openCatalogueGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openCatalogueGroup ? 'true' : 'false' }}">
                         <i class="flaticon-381-folder"></i>
 						<span class="nav-text">Catalogue</span>
                     </a>
 					<ul aria-expanded="false" class="{{ $openCatalogueGroup ? 'mm-show' : '' }}">
+						<li><a href="{{ route('admin.products.index') }}">Produits</a></li>
+						@if($canManage)
+							<li><a href="{{ route('admin.products.create') }}">Créer un produit</a></li>
+						@endif
 						<li><a href="{{ route('admin.categories.index') }}">Catégories</a></li>
-						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
+						@if($canManage)
 							<li><a href="{{ route('admin.categories.create') }}">Créer une catégorie</a></li>
 						@endif
-						<li><a href="{{ route('admin.products.index') }}">Produits</a></li>
-						<li><a href="{{ route('admin.products.create') }}">Créer un produit</a></li>
 						<li><a href="{{ route('admin.menus.index') }}">Menus</a></li>
 					</ul>
                     </li>
 
-					<li class="{{ $openOrdersGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openOrdersGroup ? 'true' : 'false' }}">
+					<li class="{{ $openSalesGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openSalesGroup ? 'true' : 'false' }}">
                         <i class="flaticon-381-list"></i>
-                        <span class="nav-text">Commandes</span>
+                        <span class="nav-text">Ventes</span>
                     </a>
-					<ul aria-expanded="false" class="{{ $openOrdersGroup ? 'mm-show' : '' }}">
+					<ul aria-expanded="false" class="{{ $openSalesGroup ? 'mm-show' : '' }}">
 						<li><a href="{{ route('admin.orders.index') }}">Commandes</a></li>
+						<li><a href="{{ route('admin.quotes.index') }}">Devis sur mesure</a></li>
 						<li><a href="{{ route('admin.invoices.index') }}">Factures</a></li>
 					</ul>
                     </li>
 
 					<li class="{{ $openHomeGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openHomeGroup ? 'true' : 'false' }}">
                         <i class="flaticon-381-settings"></i>
-                        <span class="nav-text">Home</span>
+                        <span class="nav-text">Page d'accueil</span>
                     </a>
 					<ul aria-expanded="false" class="{{ $openHomeGroup ? 'mm-show' : '' }}">
                         <li><a href="{{ route('admin.home_sections.index') }}">Sections</a></li>
-						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
+						@if($canManage)
 							<li><a href="{{ route('admin.slider.index') }}">Sliders</a></li>
-						@endif
-						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
+							<li><a href="{{ route('admin.space_sections.index') }}">Espaces</a></li>
 							<li><a href="{{ route('admin.b2b.index') }}">B2B</a></li>
-						@endif
-						@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-							<li><a href="{{ route('admin.featured_categories.index') }}">Catégories Phares</a></li>
 						@endif
                     </ul>
                     </li>
 
-					<li class="{{ ($openNewsletter || $openFacebookPixel) ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ ($openNewsletter || $openFacebookPixel) ? 'true' : 'false' }}">
+					<li class="{{ $openMarketingGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openMarketingGroup ? 'true' : 'false' }}">
 						<i class="flaticon-newsletter"></i>
 						<span class="nav-text">Marketing</span>
 					</a>
-						<ul aria-expanded="false" class="{{ ($openNewsletter || $openFacebookPixel) ? 'mm-show' : '' }}">
+						<ul aria-expanded="false" class="{{ $openMarketingGroup ? 'mm-show' : '' }}">
 							<li><a href="{{ route('admin.newsletter.index') }}">Newsletter</a></li>
 							<li><a href="{{ route('admin.settings.facebook-pixel.edit') }}">Facebook Pixel</a></li>
+							<li><a href="{{ route('admin.game.index') }}">Grand Jeu</a></li>
+						</ul>
+					</li>
+
+					<li class="{{ $openArticles ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openArticles ? 'true' : 'false' }}">
+						<i class="flaticon-monitor"></i>
+						<span class="nav-text">Contenus</span>
+					</a>
+						<ul aria-expanded="false" class="{{ $openArticles ? 'mm-show' : '' }}">
+							<li><a href="{{ route('admin.articles.index') }}">Articles</a></li>
+							@if($canManage)
+								<li><a href="{{ route('admin.articles.create') }}">Créer un article</a></li>
+							@endif
 						</ul>
 					</li>
 
@@ -343,125 +339,17 @@
 					@if($isAdmin)
 						<li class="{{ $openUsersGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsersGroup ? 'true' : 'false' }}">
 							<i class="flaticon-user"></i>
-							<span class="nav-text">Gestion Admin</span>
+							<span class="nav-text">Administration</span>
 						</a>
 							<ul aria-expanded="false" class="{{ $openUsersGroup ? 'mm-show' : '' }}">
 								<li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
+								<li><a href="{{ route('admin.users.create') }}">Créer un utilisateur</a></li>
+								<li><a href="{{ route('admin.users.stats') }}">Statistiques utilisateurs</a></li>
 								<li><a href="{{ route('admin.roles.index') }}">Rôles</a></li>
 							</ul>
 						</li>
 					@endif
 
-					@php
-						$showLegacyModules = false;
-					@endphp
-					@if($showLegacyModules)
-
-                    {{-- Person Week - accessible aux editors et admins --}}
-					@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li class="{{ $openPersonWeek ? 'mm-active' : '' }}"><a class="has-arrow" href="javascript:void()" aria-expanded="{{ $openPersonWeek ? 'true' : 'false' }}">
-                            <i class="fa fa-user-circle-o"></i>
-                            <span class="nav-text">Person Week</span>
-                        </a>
-						<ul aria-expanded="false" class="{{ $openPersonWeek ? 'mm-show' : '' }}">
-                            <li><a href="{{ route('admin.person-week.index') }}">Voir toutes</a></li>
-                            <li><a href="{{ route('admin.person-week.create') }}">Créer</a></li>
-                        </ul>
-                        </li>
-                    @endif
-
-                    {{-- Jobs - accessible aux editors et admins --}}
-					@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li class="{{ $openJobs ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openJobs ? 'true' : 'false' }}">
-							    <i class="flaticon-contract"></i>
-							    <span class="nav-text">Jobs</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openJobs ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.jobs.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.jobs.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
-                    {{-- Flash News - accessible aux editors et admins --}}
-					@if(in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li class="{{ $openFlashNews ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openFlashNews ? 'true' : 'false' }}">
-							    <i class="flaticon-plugin"></i>
-							    <span class="nav-text">Flash News</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openFlashNews ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.flash-news.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.flash-news.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
-                    {{-- MENUS RÉSERVÉS AUX ADMINISTRATEURS UNIQUEMENT --}}
-					@if(in_array(auth()->user()->role, ['admin', 'super_admin']))
-                        <li class="{{ $openMenus ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openMenus ? 'true' : 'false' }}">
-							    <i class="flaticon-web"></i>
-							    <span class="nav-text">Gestion Menus</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openMenus ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.menus.index') }}">Menus</a></li>
-                            </ul>
-                        </li>
-
-						<li class="{{ $openUsers ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsers ? 'true' : 'false' }}">
-							    <i class="flaticon-user"></i>
-							    <span class="nav-text">Gestion Admin</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openUsers ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.users.index') }}">Voir tous</a></li>
-                                <li><a href="{{ route('admin.users.create') }}">Créer</a></li>
-                                <li><a href="{{ route('admin.users.stats') }}">Statistiques</a></li>
-                            </ul>
-                        </li>
-
-						<li class="{{ $openRoles ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openRoles ? 'true' : 'false' }}">
-							    <i class="flaticon-user-tag"></i>
-							    <span class="nav-text">Gestion Rôles</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openRoles ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.roles.index') }}">Voir tous</a></li>
-                                <li><a href="{{ route('admin.roles.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-
-						<li class="{{ $openSlider ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openSlider ? 'true' : 'false' }}">
-							    <i class="flaticon-newsletter"></i>
-							    <span class="nav-text">Slider Articles</span>
-						    </a>
-							<ul aria-expanded="false" class="{{ $openSlider ? 'mm-show' : '' }}">
-                                <li><a href="{{ route('admin.slider.index') }}">Voir tous</a></li>
-                                <li><a href="{{ route('admin.slider.create') }}">Ajouter</a></li>
-                            </ul>
-                        </li>
-
-						<li class="{{ $openSaveTheDate ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openSaveTheDate ? 'true' : 'false' }}">
-                            <i class="flaticon-newsletter"></i>
-                            <span class="nav-text">Save Date</span>
-                        </a>
-						<ul aria-expanded="false" class="{{ $openSaveTheDate ? 'mm-show' : '' }}">
-                            <li><a href="{{ route('admin.save-the-date.index') }}">Voir toutes</a></li>
-                            <li><a href="{{ route('admin.save-the-date.create') }}">Créer</a></li>
-                        </ul>
-                        </li>
-                    @endif
-
-					@endif
-
-					<li class="{{ $openArticles ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openArticles ? 'true' : 'false' }}">
-						<i class="flaticon-monitor"></i>
-						<span class="nav-text">Contenus</span>
-					</a>
-						<ul aria-expanded="false" class="{{ $openArticles ? 'mm-show' : '' }}">
-							<li><a href="{{ route('admin.articles.index') }}">Articles</a></li>
-							<li><a href="{{ route('admin.articles.create') }}">Créer un article</a></li>
-						</ul>
-					</li>
-
-                    {{-- Profil - accessible à tous --}}
                     <li>
 						<a class="ai-icon" href="{{ route('admin.profile') }}" aria-expanded="false">
 						    <i class="flaticon-user"></i>

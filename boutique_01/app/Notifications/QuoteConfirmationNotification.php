@@ -11,9 +11,7 @@ class QuoteConfirmationNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(private readonly Quote $quote)
-    {
-    }
+    public function __construct(private readonly Quote $quote) {}
 
     public function via(object $notifiable): array
     {
@@ -35,11 +33,11 @@ class QuoteConfirmationNotification extends Notification
             ->line('**Type de structure** : ' . (self::organizationLabel($quote->organization_type) ?? '—'))
             ->line('**Contact** : ' . ($contact !== '' ? $contact : '—'))
             ->line('**WhatsApp** : ' . ($quote->whatsapp ?? '—'))
-            ->when($quote->phone, fn (MailMessage $m) => $m->line('**Téléphone** : ' . $quote->phone))
-            ->when($quote->email, fn (MailMessage $m) => $m->line('**E-mail** : ' . $quote->email))
-            ->when($quote->delivery_place, fn (MailMessage $m) => $m->line('**Lieu de livraison** : ' . $quote->delivery_place))
-            ->when($quote->delivery_day, fn (MailMessage $m) => $m->line('**Date de livraison souhaitée** : ' . $quote->delivery_day->format('d/m/Y')))
-            ->when($quote->budget_range, fn (MailMessage $m) => $m->line('**Budget indicatif** : ' . (self::budgetLabel($quote->budget_range) ?? '—')))
+            ->when($quote->phone, fn(MailMessage $m) => $m->line('**Téléphone** : ' . $quote->phone))
+            ->when($quote->email, fn(MailMessage $m) => $m->line('**E-mail** : ' . $quote->email))
+            ->when($quote->delivery_place, fn(MailMessage $m) => $m->line('**Lieu de livraison** : ' . $quote->delivery_place))
+            ->when($quote->delivery_day, fn(MailMessage $m) => $m->line('**Date de livraison souhaitée** : ' . $quote->delivery_day->format('d/m/Y')))
+            ->when($quote->budget_range, fn(MailMessage $m) => $m->line('**Budget indicatif** : ' . (self::budgetLabel($quote->budget_range) ?? '—')))
             ->line('')
             ->line('**Détail de votre besoin** :')
             ->line($quote->details)

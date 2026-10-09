@@ -68,7 +68,7 @@ class CartController extends Controller
                 ->first();
 
             if (!$variant) {
-                return redirect()->back()->with('error', 'Variante invalide.');
+                return $this->addResponse($request, null, 'Variante invalide.', 422);
             }
         }
 
@@ -80,11 +80,11 @@ class CartController extends Controller
             $available = is_array($available) ? $available : [];
 
             if (!$selectedColor) {
-                return redirect()->back()->with('error', 'Veuillez choisir une couleur.');
+                return $this->addResponse($request, null, 'Veuillez choisir une couleur.', 422);
             }
 
             if (!empty($available) && !in_array($selectedColor, $available, true)) {
-                return redirect()->back()->with('error', 'Couleur invalide.');
+                return $this->addResponse($request, null, 'Couleur invalide.', 422);
             }
         }
         $qty = (int) ($validated['quantity'] ?? 1);
@@ -125,7 +125,52 @@ class CartController extends Controller
             return redirect()->route('cart.shipping')->with('success', 'Produit ajouté au panier.');
         }
 
-        return redirect()->route('cart.index')->with('success', 'Produit ajouté au panier.');
+        return $this->addResponse($request, [
+            'product_id' => $product->id,
+            'name' => $product->name,
+            'image' => image_url($product->image),
+            'price' => (float) ($variant?->price ?? $product->price),
+            'quantity' => (int) $cart[$cartKey]['quantity'],
+        ], 'Produit ajouté au panier.');
+    }
+
+    private function addResponse(Request $request, ?array $item, string $message, int $status = 200)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            if ($status >= 400) {
+                return response()->json(['ok' => false, 'message' => $message], $status);
+            }
+
+            $cart = $this->getCart();
+            $count = 0;
+            $subtotal = 0.0;
+            $ids = collect($cart)->pluck('product_id')->filter();
+            $variantIds = collect($cart)->pluck('product_variant_id')->filter();
+            $products = Product::query()->whereIn('id', $ids)->get()->keyBy('id');
+            $variants = ProductVariant::query()->whereIn('id', $variantIds)->get()->keyBy('id');
+            foreach ($cart as $row) {
+                $p = $products->get((int) ($row['product_id'] ?? 0));
+                if (!$p) {
+                    continue;
+                }
+                $v = isset($row['product_variant_id']) ? $variants->get((int) $row['product_variant_id']) : null;
+                $qty = max(1, (int) ($row['quantity'] ?? 1));
+                $count += $qty;
+                $subtotal += $qty * (float) ($v?->price ?? $p->price);
+            }
+
+            return response()->json([
+                'ok' => true,
+                'message' => $message,
+                'item' => $item,
+                'cart_count' => $count,
+                'cart_subtotal' => $subtotal,
+                'cart_url' => route('cart.index'),
+                'checkout_url' => route('cart.shipping'),
+            ]);
+        }
+
+        return redirect()->route('cart.index')->with('success', $message);
     }
 
     public function update(Request $request)
