@@ -235,9 +235,11 @@
                     <div class="invoice-date">
                         Émise le {{ \Carbon\Carbon::parse($invoice->issued_at)->format('d/m/Y') }}
                     </div>
-                    <div style="text-align: right; margin-top: 6px;">
-                        <span class="status-badge status-{{ $statusClass }}">{{ $statusLabel }}</span>
-                    </div>
+                    @if($statusKey !== 'draft')
+                        <div style="text-align: right; margin-top: 6px;">
+                            <span class="status-badge status-{{ $statusClass }}">{{ $statusLabel }}</span>
+                        </div>
+                    @endif
                 </td>
             </tr>
         </table>

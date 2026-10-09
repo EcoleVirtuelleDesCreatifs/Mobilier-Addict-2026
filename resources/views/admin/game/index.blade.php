@@ -99,7 +99,7 @@
                                     <td>
                                         <div class="rounded-3 overflow-hidden" style="width:48px;height:60px;border:1px solid var(--admin-border);">
                                             @if($p->badge_path)
-                                                <img src="{{ asset($p->badge_path) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                                <img src="{{ image_url($p->badge_path) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
                                             @endif
                                         </div>
                                     </td>

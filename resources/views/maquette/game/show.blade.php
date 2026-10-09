@@ -3,7 +3,7 @@
 @section('title', $participant->public_name . ' participe au Grand Jeu — Mobilier Addict')
 @section('meta_description', 'Soutiens ' . $participant->public_name . ' au Grand Jeu Mobilier Addict et découvre la collection.')
 @if($participant->badge_path)
-    @section('meta_image', asset($participant->badge_path))
+    @section('meta_image', image_url($participant->badge_path))
 @endif
 
 @section('content')
@@ -39,7 +39,7 @@
         <div class="gshow-grid">
             <div>
                 @if($participant->badge_path)
-                    <img src="{{ asset($participant->badge_path) }}" alt="Badge de {{ $participant->public_name }}" class="gshow-badge">
+                    <img src="{{ image_url($participant->badge_path) }}" alt="Badge de {{ $participant->public_name }}" class="gshow-badge">
                 @endif
             </div>
             <div>

@@ -60,7 +60,9 @@ class GameController extends Controller
         $participants = GameParticipant::query()
             ->orderByDesc('supports_count')
             ->orderByDesc('created_at')
-            ->get(['id', 'public_name', 'slug', 'supports_count', 'badge_path', 'prize']);
+            ->get(['id', 'public_name', 'slug', 'supports_count', 'badge_path', 'prize', 'photo']);
+
+        $participants->each(fn (GameParticipant $participant) => $this->ensureBadge($participant));
 
         return view('maquette.game.index', [
             'prizes' => self::PRIZES,
@@ -123,6 +125,8 @@ class GameController extends Controller
             return $r;
         }
 
+        $this->ensureBadge($participant);
+
         $products = Product::query()
             ->active()
             ->ordered()
@@ -156,8 +160,28 @@ class GameController extends Controller
             ->with('status', 'Merci pour ton soutien à ' . $participant->public_name . ' !');
     }
 
+    private function ensureBadge(GameParticipant $participant): void
+    {
+        $path = trim((string) $participant->badge_path);
+        $exists = $path !== '' && (
+            (Str::startsWith($path, 'storage/') && is_file(storage_path('app/public/' . Str::after($path, 'storage/'))))
+            || (Str::startsWith($path, 'uploads/') && is_file(public_path($path)))
+        );
+
+        if ($exists) {
+            return;
+        }
+
+        $badgePath = GameBadge::generate($participant);
+        if ($badgePath) {
+            $participant->update(['badge_path' => $badgePath]);
+        }
+    }
+
     public function badge(GameParticipant $participant)
     {
+        $this->ensureBadge($participant);
+        $participant->refresh();
         $path = trim((string) $participant->badge_path);
         $local = Str::startsWith($path, 'storage/')
             ? storage_path('app/public/' . preg_replace('#^storage/#', '', $path))

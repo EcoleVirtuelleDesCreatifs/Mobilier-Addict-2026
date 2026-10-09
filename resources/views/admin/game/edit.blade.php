@@ -69,7 +69,7 @@
                             <div class="d-flex flex-column flex-md-row align-items-md-center gap-4">
                                 <div style="width:140px;height:140px;border-radius:50%;overflow:hidden;background:#00234D;border:4px solid #ec4899;flex:0 0 140px;">
                                     @if($participant->photo)
-                                        <img id="participantPhotoPreview" src="{{ asset($participant->photo) }}" alt="Photo de {{ $participant->public_name }}" style="width:100%;height:100%;object-fit:cover;">
+                                        <img id="participantPhotoPreview" src="{{ image_url($participant->photo) }}" alt="Photo de {{ $participant->public_name }}" style="width:100%;height:100%;object-fit:cover;">
                                     @else
                                         <div id="participantPhotoFallback" class="w-100 h-100 d-flex align-items-center justify-content-center" style="font-size:48px;font-weight:800;color:#fff;">{{ mb_strtoupper(mb_substr($participant->public_name, 0, 1)) }}</div>
                                         <img id="participantPhotoPreview" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
@@ -95,7 +95,7 @@
                         <div class="admin-card p-4 position-sticky" style="top:100px;">
                             <div class="fw-bold mb-3">Badge actuel</div>
                             @if($participant->badge_path)
-                                <img src="{{ asset($participant->badge_path) }}" alt="Badge de {{ $participant->public_name }}" class="w-100 rounded-3 mb-3" style="border:1px solid var(--admin-border);">
+                                <img src="{{ image_url($participant->badge_path) }}" alt="Badge de {{ $participant->public_name }}" class="w-100 rounded-3 mb-3" style="border:1px solid var(--admin-border);">
                             @else
                                 <div class="rounded-3 p-5 text-center mb-3" style="background:#00234D;color:#fff;">Aucun badge</div>
                             @endif

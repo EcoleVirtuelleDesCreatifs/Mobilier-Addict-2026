@@ -88,7 +88,7 @@
                 <a href="{{ route('game.show', $tp->slug) }}" class="game-podium-card position-relative">
                     <span class="game-podium-rank">{{ $loop->iteration }}</span>
                     @if($tp->badge_path)
-                        <img src="{{ asset($tp->badge_path) }}" alt="Badge de {{ $tp->public_name }}" class="game-podium-img" loading="lazy">
+                        <img src="{{ image_url($tp->badge_path) }}" alt="Badge de {{ $tp->public_name }}" class="game-podium-img" loading="lazy">
                     @else
                         <div class="game-podium-img d-flex align-items-center justify-content-center" style="color:#ec4899;font-weight:800;font-size:22px;">{{ mb_strtoupper(mb_substr($tp->public_name, 0, 1)) }}</div>
                     @endif
@@ -167,7 +167,7 @@
             @foreach($participants as $p)
                 <a href="{{ route('game.show', $p->slug) }}" class="game-card">
                     @if($p->badge_path)
-                        <img src="{{ asset($p->badge_path) }}" alt="Badge de {{ $p->public_name }}" class="game-card-img" loading="lazy">
+                        <img src="{{ image_url($p->badge_path) }}" alt="Badge de {{ $p->public_name }}" class="game-card-img" loading="lazy">
                     @else
                         <div class="game-card-img">{{ mb_strtoupper(mb_substr($p->public_name, 0, 1)) }}</div>
                     @endif

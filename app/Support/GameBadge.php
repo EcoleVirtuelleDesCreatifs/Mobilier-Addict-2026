@@ -100,8 +100,8 @@ class GameBadge
         self::dash($im, $cx - 40, 1235, 80, $pink);
         self::text($im, $font, 24, $cx, 1290, 'Soutenez-moi sur mobilier-addict.com', $muted);
 
-        $filename = 'badges/' . $participant->slug . '-' . Str::random(6) . '.png';
-        $fullPath = storage_path('app/public/' . $filename);
+        $filename = 'uploads/game/badges/' . $participant->slug . '-' . Str::random(6) . '.png';
+        $fullPath = public_path($filename);
 
         if (!is_dir(dirname($fullPath))) {
             mkdir(dirname($fullPath), 0775, true);
@@ -110,7 +110,7 @@ class GameBadge
         $ok = imagepng($im, $fullPath, 6);
         imagedestroy($im);
 
-        return $ok ? 'storage/' . $filename : null;
+        return $ok ? $filename : null;
     }
 
     private static function loadPhoto(GameParticipant $participant)
