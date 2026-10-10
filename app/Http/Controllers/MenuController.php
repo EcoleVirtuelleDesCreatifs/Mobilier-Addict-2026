@@ -350,7 +350,7 @@ class MenuController extends Controller
                     'type' => 'rooms',
                     'title' => 'Par pièce',
                     'items' => [
-                        ['name' => 'Salon', 'image' => 'assets/maquette/img/video-furniture.jpg', 'slug' => 'salon'],
+                        ['name' => 'Salon', 'image' => 'assets/maquette/img/video/video-furniture.jpg', 'slug' => 'salon'],
                         ['name' => 'Chambre', 'image' => $img . '1770689632_0OTK5fkOpt.jpg', 'slug' => 'chambre'],
                         ['name' => 'Bureau', 'image' => $img . '1769999657_1CIVZl8UG6.jpg', 'slug' => 'bureau'],
                         ['name' => 'Salle à manger', 'image' => 'assets/maquette/img/banner/single-banner-2.jpg', 'slug' => 'salle-a-manger'],
