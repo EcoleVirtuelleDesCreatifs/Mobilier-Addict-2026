@@ -585,7 +585,7 @@
               </div>
               <div class="row featured-grid">
                 @forelse($matelasProducts as $product)
-                  <div class="col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-duration="700">
+                  <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-duration="700">
                     @include('maquette.includes.shop-card')
                   </div>
                 @empty
