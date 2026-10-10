@@ -163,7 +163,7 @@ class GameController extends Controller
     private function ensureBadge(GameParticipant $participant): void
     {
         $path = trim((string) $participant->badge_path);
-        $exists = $path !== '' && (
+        $exists = $path !== '' && Str::contains($path, '/v2-') && (
             (Str::startsWith($path, 'storage/') && is_file(storage_path('app/public/' . Str::after($path, 'storage/'))))
             || (Str::startsWith($path, 'uploads/') && is_file(public_path($path)))
         );
