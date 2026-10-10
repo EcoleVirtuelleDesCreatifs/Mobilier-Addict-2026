@@ -46,7 +46,23 @@ class ImageUrl
             }
         }
 
-        if (is_file(storage_path('app/public/' . $relative))) {
+        $source = storage_path('app/public/' . $relative);
+        if (is_file($source)) {
+            $mirror = 'uploads/media/' . $relative;
+            $dest = public_path($mirror);
+
+            if (!is_file($dest)) {
+                $dir = dirname($dest);
+                if (!is_dir($dir)) {
+                    @mkdir($dir, 0775, true);
+                }
+                @copy($source, $dest);
+            }
+
+            if (is_file($dest)) {
+                return asset($mirror);
+            }
+
             $encoded = implode('/', array_map('rawurlencode', explode('/', $relative)));
 
             return url('media/' . $encoded);
