@@ -446,8 +446,8 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('menus', MenuController::class)->middleware('permission:menus.manage')->names('admin.menus');
 
-    Route::resource('users', AdminUserController::class)->middleware('permission:users.manage')->names('admin.users');
     Route::get('/users/stats', [AdminUserController::class, 'stats'])->middleware('permission:users.manage')->name('admin.users.stats');
+    Route::resource('users', AdminUserController::class)->middleware('permission:users.manage')->names('admin.users');
     Route::post('/users/{user}/role', [AdminUserController::class, 'changeRole'])->middleware('permission:users.manage')->name('admin.users.role');
     Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->middleware('permission:users.manage')->name('admin.users.toggle-status');
 
