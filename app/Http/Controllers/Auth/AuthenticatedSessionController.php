@@ -31,6 +31,8 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
         if ($user && $user->is_admin) {
+            $request->session()->flash('show_admin_preloader', true);
+
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
 

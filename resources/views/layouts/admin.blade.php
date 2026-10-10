@@ -37,18 +37,21 @@
     <!-- CKEditor 5 -->
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 </head>
+@php($showAdminPreloader = session('show_admin_preloader') && request()->routeIs('admin.dashboard'))
 <body>
 
     <!--*******************
         Preloader start
     ********************-->
-    <div id="preloader">
-        <div class="sk-three-bounce">
-            <div class="sk-child sk-bounce1"></div>
-            <div class="sk-child sk-bounce2"></div>
-            <div class="sk-child sk-bounce3"></div>
+    @if($showAdminPreloader)
+        <div id="preloader">
+            <div class="sk-three-bounce">
+                <div class="sk-child sk-bounce1"></div>
+                <div class="sk-child sk-bounce2"></div>
+                <div class="sk-child sk-bounce3"></div>
+            </div>
         </div>
-    </div>
+    @endif
     <!--*******************
         Preloader end
     ********************-->
@@ -59,7 +62,7 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper">
+    <div id="main-wrapper" class="{{ $showAdminPreloader ? '' : 'show' }}">
 
 
 
