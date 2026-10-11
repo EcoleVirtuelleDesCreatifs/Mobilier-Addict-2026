@@ -276,45 +276,6 @@
                         </ul>
                     </li>
 
-                    {{-- Person Week - accessible aux editors et admins --}}
-                    @if (in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                                <i class="fa fa-user-circle-o"></i>
-                                <span class="nav-text">Person Week</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('admin.person-week.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.person-week.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
-                    {{-- Jobs - accessible aux editors et admins --}}
-                    @if (in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                                <i class="flaticon-contract"></i>
-                                <span class="nav-text">Jobs</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('admin.jobs.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.jobs.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
-                    {{-- Flash News - accessible aux editors et admins --}}
-                    @if (in_array(auth()->user()->role, ['editor', 'admin', 'super_admin']))
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                                <i class="flaticon-plugin"></i>
-                                <span class="nav-text">Flash News</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('admin.flash-news.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.flash-news.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
                     {{-- MENUS RÉSERVÉS AUX ADMINISTRATEURS UNIQUEMENT --}}
                     @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                         <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -338,32 +299,12 @@
                         </li>
 
                         <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                                <i class="flaticon-user-tag"></i>
-                                <span class="nav-text">Gestion Rôles</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('admin.roles.index') }}">Voir tous</a></li>
-                                <li><a href="{{ route('admin.roles.create') }}">Créer</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                                 <i class="flaticon-newsletter"></i>
                                 <span class="nav-text">Slider Articles</span>
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="{{ route('admin.slider.index') }}">Voir tous</a></li>
                                 <li><a href="{{ route('admin.slider.create') }}">Ajouter</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                                <i class="flaticon-newsletter"></i>
-                                <span class="nav-text">Save Date</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('admin.save-the-date.index') }}">Voir toutes</a></li>
-                                <li><a href="{{ route('admin.save-the-date.create') }}">Créer</a></li>
                             </ul>
                         </li>
                     @endif
