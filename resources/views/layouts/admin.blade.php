@@ -122,8 +122,9 @@
 										<path d="M9.98193 24.5C10.3863 25.2088 10.971 25.7981 11.6767 26.2079C12.3823 26.6178 13.1839 26.8337 13.9999 26.8337C14.816 26.8337 15.6175 26.6178 16.3232 26.2079C17.0289 25.7981 17.6136 25.2088 18.0179 24.5H9.98193Z" fill="#67636D"/>
 								</svg>
 									@php
-										$unreadCount = auth()->user()?->unreadNotifications()->count() ?? 0;
-										$notifications = auth()->user()?->notifications()->latest()->limit(10)->get() ?? collect();
+										$authUser = auth()->user();
+										$unreadCount = $authUser ? $authUser->unreadNotifications()->count() : 0;
+										$notifications = $authUser ? $authUser->notifications()->latest()->limit(10)->get() : collect();
 									@endphp
 								@if($unreadCount > 0)
 									<span class="badge light text-white bg-primary rounded-circle">{{ $unreadCount }}</span>
@@ -163,7 +164,7 @@
 															@if($message)
 																<small class="d-block">{{ $message }}</small>
 															@endif
-															<small class="d-block">{{ $notification->created_at?->format('d/m/Y H:i') }}</small>
+															<small class="d-block">{{ $notification->created_at ? $notification->created_at->format('d/m/Y H:i') : '' }}</small>
 															@if(is_null($notification->read_at))
 																<form method="POST" action="{{ route('admin.notifications.read', $notification->id) }}" class="mt-1">
 																	@csrf

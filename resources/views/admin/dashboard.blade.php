@@ -73,13 +73,13 @@
                             @php($product = $row['product'])
                             <div class="ma-top-row">
                                 <span class="ma-rank">{{ $loop->iteration }}</span>
-                                @if($product?->image)
+                                @if($product && $product->image)
                                     <img src="@image_url($product->image)" alt="" loading="lazy">
                                 @else
                                     <span class="ma-product-placeholder"><i class="fas fa-box"></i></span>
                                 @endif
                                 <div class="ma-top-name">
-                                    <strong>{{ $product?->name ?? Str::afterLast($row['path'], '/') }}</strong>
+                                    <strong>{{ ($product && $product->name) ? $product->name : Str::afterLast($row['path'], '/') }}</strong>
                                     <small>{{ number_format($row['views'], 0, ',', ' ') }} vue{{ $row['views'] > 1 ? 's' : '' }}</small>
                                 </div>
                                 @if($product)
