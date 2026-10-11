@@ -94,7 +94,7 @@
                             @foreach(['day', 'week', 'month'] as $period)
                                 <div class="top-panel {{ $period !== 'day' ? 'd-none' : '' }}" data-panel="{{ $period }}">
                                     @forelse($topProducts[$period] as $row)
-                                        @php($product = $row['product'])
+                                        @php $product = $row['product']; @endphp
                                         <div class="d-flex align-items-center py-2" style="border-bottom:1px solid #f4f4f6;">
                                             <span class="mr-3 font-w700" style="color:#ec4899;width:22px;">{{ $loop->iteration }}</span>
                                             @if($product && $product->image)

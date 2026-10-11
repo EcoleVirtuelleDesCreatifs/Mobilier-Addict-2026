@@ -37,7 +37,9 @@
     <!-- CKEditor 5 -->
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 </head>
-@php($showAdminPreloader = session('show_admin_preloader') && request()->routeIs('admin.dashboard'))
+@php
+    $showAdminPreloader = session('show_admin_preloader') && request()->routeIs('admin.dashboard');
+@endphp
 <body>
 
     <!--*******************

@@ -63,7 +63,7 @@
                 </div>
                 <div class="user-role-list">
                     @forelse($roleCounts as $role)
-                        @php($percentage = $totalUsers ? round(((int) $role->total / $totalUsers) * 100) : 0)
+                        @php $percentage = $totalUsers ? round(((int) $role->total / $totalUsers) * 100) : 0; @endphp
                         <div class="user-role-row">
                             <div><strong>{{ $roleLabels[$role->role_name] ?? ucfirst(str_replace('_', ' ', $role->role_name)) }}</strong><span>{{ $role->total }} compte{{ $role->total > 1 ? 's' : '' }}</span></div>
                             <div class="user-role-progress"><span style="width:{{ $percentage }}%"></span></div>
