@@ -411,6 +411,21 @@ Route::get('/admin/login', function () {
 });
 
 Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/diag', function () {
+        $views = glob(storage_path('framework/views/*.php')) ?: [];
+
+        return response()->json([
+            'php_version' => PHP_VERSION,
+            'laravel_version' => app()->version(),
+            'environment' => app()->environment(),
+            'compiled_views_count' => count($views),
+            'oldest_compiled_view' => $views ? date('Y-m-d H:i:s', min(array_map('filemtime', $views))) : null,
+            'newest_compiled_view' => $views ? date('Y-m-d H:i:s', max(array_map('filemtime', $views))) : null,
+            'views_writable' => is_writable(storage_path('framework/views')),
+            'dashboard_md5' => md5_file(resource_path('views/admin/dashboard.blade.php')),
+        ]);
+    })->name('admin.diag');
+
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/realtime-stats', [DashboardController::class, 'realtimeStats'])->name('admin.dashboard.realtime');
 
