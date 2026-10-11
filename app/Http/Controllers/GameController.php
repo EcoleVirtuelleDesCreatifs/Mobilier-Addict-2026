@@ -130,7 +130,7 @@ class GameController extends Controller
         $products = Product::query()
             ->active()
             ->ordered()
-            ->take(4)
+            ->take(6)
             ->get(['id', 'name', 'slug', 'image', 'price', 'old_price']);
 
         $rank = GameParticipant::query()
@@ -163,7 +163,7 @@ class GameController extends Controller
     private function ensureBadge(GameParticipant $participant): void
     {
         $path = trim((string) $participant->badge_path);
-        $exists = $path !== '' && Str::contains($path, '/v2-') && (
+        $exists = $path !== '' && Str::contains($path, '/v3-') && (
             (Str::startsWith($path, 'storage/') && is_file(storage_path('app/public/' . Str::after($path, 'storage/'))))
             || (Str::startsWith($path, 'uploads/') && is_file(public_path($path)))
         );

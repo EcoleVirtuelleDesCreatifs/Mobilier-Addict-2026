@@ -12,7 +12,9 @@
     .game-hero h1{font-size:clamp(28px,4vw,46px);font-weight:800;margin:14px 0 12px;color:#fff;}
     .game-hero h1 .pink{color:#ec4899;}
     .game-hero p{color:rgba(255,255,255,.78);max-width:560px;line-height:1.75;}
-    .game-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:44px 0;}
+    .game-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:44px 0;}
+    @media (max-width: 991.98px){.game-steps{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width: 575.98px){.game-steps{grid-template-columns:1fr;}}
     .game-step{background:#fff;border:1px solid #f0e8ee;border-radius:18px;padding:26px 22px;position:relative;transition:transform .15s ease,box-shadow .15s ease;}
     .game-step:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(0,35,77,.10);}
     .game-step-num{position:absolute;top:-14px;left:20px;background:#ec4899;color:#fff;font-weight:700;font-size:13px;padding:4px 14px;border-radius:999px;}
@@ -35,10 +37,11 @@
     .game-podium-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,35,77,.12);}
     .game-podium-img{width:76px;height:92px;border-radius:14px;object-fit:cover;background:#00234D;flex:0 0 76px;}
     .game-podium-rank{position:absolute;top:-10px;left:-10px;width:32px;height:32px;border-radius:50%;background:#ec4899;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(236,72,153,.4);}
-    .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-bottom:44px;}
+    .game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:44px;}
+    @media (max-width: 767.98px){.game-grid{grid-template-columns:repeat(2,1fr);gap:12px;}}
     .game-card{background:#fff;border:1px solid #f0e8ee;border-radius:20px;overflow:hidden;text-decoration:none;transition:.15s;display:block;}
     .game-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,35,77,.12);}
-    .game-card-img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#00234D;display:flex;align-items:center;justify-content:center;color:#ec4899;font-weight:800;font-size:52px;}
+    .game-card-img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#00234D;display:flex;align-items:center;justify-content:center;color:#ec4899;font-weight:800;font-size:52px;}
     .game-card-body{padding:16px 18px 18px;}
     .game-card-name{font-weight:800;color:#00234D;font-size:16px;}
     .game-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:13px;}

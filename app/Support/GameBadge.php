@@ -44,7 +44,10 @@ class GameBadge
         imagefilledellipse($im, 985, 1050, 345, 345, $pink);
 
         $font = public_path('assets/admin/icons/helveticaNeue/fonts/HelveticaNeue.ttf');
-        $fontBold = public_path('assets/admin/icons/helveticaNeue/fonts/HelveticaNeueMed.ttf');
+        $fontBold = public_path('assets/fonts/DejaVuSans-Bold.ttf');
+        if (!is_file($fontBold)) {
+            $fontBold = public_path('assets/admin/icons/helveticaNeue/fonts/HelveticaNeueMed.ttf');
+        }
         $font = is_file($font) ? $font : null;
         $fontBold = is_file($fontBold) ? $fontBold : $font;
 
@@ -111,7 +114,7 @@ class GameBadge
         self::circle($im, $siteX + 48, $siteY + $siteH / 2, 20, $pink);
         self::text($im, $fontBold, 30, $cx + 16, $siteY + 42, 'www.mobilier-addict.com', $navy);
 
-        $filename = 'uploads/game/badges/v2-' . $participant->slug . '-' . Str::random(6) . '.png';
+        $filename = 'uploads/game/badges/v3-' . $participant->slug . '-' . Str::random(6) . '.png';
         $fullPath = public_path($filename);
 
         if (!is_dir(dirname($fullPath))) {

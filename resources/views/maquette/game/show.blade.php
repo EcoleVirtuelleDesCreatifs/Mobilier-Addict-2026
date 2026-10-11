@@ -85,7 +85,7 @@
             <h3 class="fw-bold mb-4" style="color:#00234D;">Découvre nos produits</h3>
             <div class="row g-4">
                 @foreach($products as $product)
-                    <div class="col-6 col-md-3">
+                    <div class="col-6 col-md-4">
                         <a href="{{ route('product.show', $product->slug) }}" class="text-decoration-none">
                             <div class="rounded-4 overflow-hidden mb-2" style="aspect-ratio:1;background:#f6f3f7;">
                                 <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
