@@ -58,7 +58,7 @@ class DashboardController extends Controller
 
         }
 
-        return view('admin.dashboard', [
+        return view('admin.home', [
             'stats' => [
                 'products' => Product::count(),
                 'categories' => Category::count(),
