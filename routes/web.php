@@ -524,7 +524,13 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+
+    if ($user && in_array($user->role, ['admin', 'super_admin', 'editor', 'writer'], true)) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
