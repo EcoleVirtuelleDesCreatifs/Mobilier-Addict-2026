@@ -159,8 +159,8 @@
                     </div>
 
                     @if(method_exists($products, 'links'))
-                        <div class="pagination justify-content-center mt-100">
-                            {{ $products->links() }}
+                        <div class="mt-5 mb-4">
+                            {{ $products->links('pagination.maquette') }}
                         </div>
                     @endif
                 </div>

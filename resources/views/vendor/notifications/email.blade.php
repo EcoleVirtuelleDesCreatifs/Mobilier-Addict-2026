@@ -35,7 +35,9 @@ $buttonColor = ($level ?? 'primary') === 'error' ? '#dc2626' : $pink;
                         @endif
 
                         @foreach($introLines as $line)
-                            <div style="margin:0 0 14px;color:{{ $text }};font-size:15px;line-height:1.7;">{{ $line }}</div>
+                            <div style="margin:0 0 12px;padding:{{ str_starts_with((string) $line, '**') ? '10px 14px' : '0' }};background:{{ str_starts_with((string) $line, '**') ? '#f7f9fc' : 'transparent' }};border-left:{{ str_starts_with((string) $line, '**') ? '3px solid ' . $pink : '0' }};border-radius:{{ str_starts_with((string) $line, '**') ? '0 10px 10px 0' : '0' }};color:{{ $text }};font-size:15px;line-height:1.65;">
+                                {!! \Illuminate\Support\Str::inlineMarkdown((string) $line, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
+                            </div>
                         @endforeach
 
                         @isset($actionText)
@@ -49,7 +51,9 @@ $buttonColor = ($level ?? 'primary') === 'error' ? '#dc2626' : $pink;
                         @endisset
 
                         @foreach($outroLines as $line)
-                            <div style="margin:14px 0 0;color:{{ $text }};font-size:15px;line-height:1.7;">{{ $line }}</div>
+                            <div style="margin:14px 0 0;color:{{ $text }};font-size:15px;line-height:1.7;">
+                                {!! \Illuminate\Support\Str::inlineMarkdown((string) $line, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
+                            </div>
                         @endforeach
 
                         @if(!empty($salutation))

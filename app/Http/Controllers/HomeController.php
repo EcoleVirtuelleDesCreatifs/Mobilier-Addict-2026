@@ -178,7 +178,7 @@ class HomeController extends Controller
             ->ordered()
             ->get()
             ->unique(fn($p) => preg_replace('/\s*[-–]\s*\d+\s*(cm)?\s*[x×]\s*\d+\s*cm.*$/i', '', (string) $p->name))
-            ->take(8)
+            ->take(9)
             ->values();
 
         if ($matelasProducts->isEmpty()) {
@@ -186,7 +186,7 @@ class HomeController extends Controller
                 ->active()
                 ->featured()
                 ->ordered()
-                ->take(8)
+                ->take(9)
                 ->get();
         }
 

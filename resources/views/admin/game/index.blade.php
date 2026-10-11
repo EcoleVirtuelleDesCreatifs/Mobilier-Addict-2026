@@ -115,7 +115,9 @@
                                     <td class="text-end">
                                         <div class="d-flex justify-content-end gap-2">
                                             <a href="{{ route('game.show', $p->slug) }}" target="_blank" class="btn btn-sm btn-admin-ghost">Voir</a>
-                                            <a href="{{ route('admin.game.edit', $p) }}" class="btn btn-sm btn-admin-primary">Modifier</a>
+                                            @if(Route::has('admin.game.edit'))
+                                                <a href="{{ route('admin.game.edit', $p) }}" class="btn btn-sm btn-admin-primary">Modifier</a>
+                                            @endif
                                             <form method="POST" action="{{ route('admin.game.destroy', $p) }}" onsubmit="return confirm('Supprimer ce participant et ses fichiers ?');">
                                                 @csrf
                                                 @method('DELETE')

@@ -1,7 +1,13 @@
 @extends('maquette.layout')
 
-@section('title', 'Commande confirmée')
-@section('meta_description', 'Votre commande a été confirmée. Merci pour votre achat sur Mobilier Addict.')
+@section('title', 'Commande enregistrée — Mobilier Addict')
+@section('meta_description', 'Votre commande Mobilier Addict a bien été enregistrée. Consultez son récapitulatif et les prochaines étapes.')
+
+@php
+    $orderReference = 'CMD-' . str_pad($order->id, 6, '0', STR_PAD_LEFT);
+    $customerName = trim(($order->firstnames ?? '') . ' ' . ($order->lastname ?? ''));
+    $whatsappMessage = rawurlencode('Bonjour Mobilier Addict, je souhaite suivre ma commande #' . $orderReference . '.');
+@endphp
 
 @section('content')
 <div class="cart-page">
@@ -13,12 +19,13 @@
                     <svg viewBox="0 0 24 24" width="34" height="34"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>
                 </div>
                 <div class="confirmation-hero__text">
-                    <h1 class="confirmation-hero__title">Commande confirmée</h1>
-                    <p class="confirmation-hero__subtitle">Merci pour votre commande. Notre équipe vous contactera sur WhatsApp pour la livraison.</p>
+                    <div class="confirmation-status">Demande reçue</div>
+                    <h1 class="confirmation-hero__title">Votre commande est bien enregistrée</h1>
+                    <p class="confirmation-hero__subtitle">Merci {{ $customerName ?: '' }}. Un conseiller vérifiera la disponibilité de vos articles et vous contactera sur WhatsApp avant toute préparation ou livraison.</p>
                     <div class="confirmation-hero__meta">
                         <div class="confirmation-meta">
                             <span>Numéro de commande</span>
-                            <strong>#CMD-{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</strong>
+                            <strong>#{{ $orderReference }}</strong>
                         </div>
                         <div class="confirmation-meta">
                             <span>Total</span>
@@ -34,8 +41,8 @@
                             Continuer mes achats
                             <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
                         </a>
-                        <a href="{{ route('cart.index') }}" class="confirmation-action confirmation-action--secondary">
-                            Retour au panier
+                        <a href="https://wa.me/{{ config('app.whatsapp_number', '2250799140356') }}?text={{ $whatsappMessage }}" target="_blank" rel="noopener" class="confirmation-action confirmation-action--secondary">
+                            Suivre sur WhatsApp
                         </a>
                     </div>
                 </div>
@@ -111,8 +118,8 @@
                                 <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/></svg>
                             </div>
                             <div class="confirmation-step__content">
-                                <strong>Email de confirmation</strong>
-                                <span>Vous recevrez un email avec les détails de votre commande</span>
+                                <strong>Validation par WhatsApp</strong>
+                                <span>Un conseiller confirme avec vous les articles, les disponibilités et le montant.</span>
                             </div>
                         </div>
                         <div class="confirmation-step">
@@ -120,8 +127,8 @@
                                 <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="currentColor"/></svg>
                             </div>
                             <div class="confirmation-step__content">
-                                <strong>Préparation de votre commande</strong>
-                                <span>Notre équipe prépare soigneusement vos articles</span>
+                                <strong>Préparation après validation</strong>
+                                <span>Votre commande est préparée dès que les modalités sont confirmées avec vous.</span>
                             </div>
                         </div>
                         <div class="confirmation-step">
@@ -129,13 +136,46 @@
                                 <svg viewBox="0 0 24 24" width="24" height="24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.96 2.5H17V9.5h2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 8l3 4v5h-2c0 1.66-1.34 3-3 3s-3-1.34-3-3H9c0 1.66-1.34 3-3 3s-3-1.34-3-3H1V6c0-1.11.89-2 2-2h14v4h3z" fill="currentColor"/></svg>
                             </div>
                             <div class="confirmation-step__content">
-                                <strong>Expédition</strong>
-                                <span>Vous recevrez un SMS avec le lien de suivi</span>
+                                <strong>Livraison coordonnée</strong>
+                                <span>L’équipe convient avec vous du jour, du créneau et des conditions de réception.</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <aside class="confirmation-sidebar">
+                <div class="confirmation-summary">
+                    <div class="confirmation-summary__head">
+                        <span>Récapitulatif</span>
+                        <strong>#{{ $orderReference }}</strong>
+                    </div>
+                    <div class="confirmation-summary__row">
+                        <span>Sous-total</span>
+                        <strong>{{ number_format($subtotal, 0, ',', '.') }} FCFA</strong>
+                    </div>
+                    <div class="confirmation-summary__row">
+                        <span>Livraison</span>
+                        <strong>{{ $shipping > 0 ? number_format($shipping, 0, ',', '.') . ' FCFA' : 'Gratuite' }}</strong>
+                    </div>
+                    <div class="confirmation-summary__total">
+                        <span>Total</span>
+                        <strong>{{ number_format($total, 0, ',', '.') }} FCFA</strong>
+                    </div>
+                    <div class="confirmation-summary__note">Aucun paiement supplémentaire ne doit être effectué sans confirmation préalable de notre équipe.</div>
+                </div>
+
+                <div class="confirmation-contact">
+                    <div class="confirmation-contact__icon">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15.46v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.11.54h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.45a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 15.46Z"/></svg>
+                    </div>
+                    <div>
+                        <strong>Une question ?</strong>
+                        <p>Notre équipe vous répond avec votre référence de commande.</p>
+                        <a href="https://wa.me/{{ config('app.whatsapp_number', '2250799140356') }}?text={{ $whatsappMessage }}" target="_blank" rel="noopener">Contacter sur WhatsApp</a>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 </div>
@@ -150,8 +190,9 @@
 .confirmation-hero__badge{width:74px;height:74px;border-radius:20px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 20px 50px rgba(16,185,129,.28);position:relative}
 .confirmation-hero__badge::after{content:'';position:absolute;inset:-10px;background:radial-gradient(circle, rgba(16,185,129,.26), transparent 60%);filter:blur(6px);opacity:.9;z-index:-1}
 .confirmation-hero__text{flex:1;min-width:0}
+.confirmation-status{display:inline-flex;background:rgba(236,72,153,.1);color:#be185d;border:1px solid rgba(236,72,153,.22);border-radius:999px;padding:5px 10px;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 .confirmation-hero__title{font-size:26px;font-weight:900;color:#0b1220;margin:2px 0 6px}
-.confirmation-hero__subtitle{margin:0 0 14px;color:#5b6b82;font-size:13px;line-height:1.45}
+.confirmation-hero__subtitle{margin:0 0 14px;color:#5b6b82;font-size:13px;line-height:1.55;max-width:760px}
 .confirmation-hero__meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .confirmation-meta{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.82);border:1px solid rgba(15,23,42,.10);box-shadow:0 10px 22px rgba(2,6,23,.06);position:relative;overflow:hidden}
 .confirmation-meta::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#ec4899,#be185d)}
@@ -168,7 +209,22 @@
 .confirmation-action--secondary:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(2,6,23,.10)}
 
 /* Confirmation Layout */
-.confirmation-layout{display:grid;grid-template-columns:1fr;gap:24px;align-items:start}
+.confirmation-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.confirmation-sidebar{position:sticky;top:100px;display:flex;flex-direction:column;gap:16px}
+.confirmation-summary{background:#00234D;color:#fff;border-radius:20px;padding:24px;box-shadow:0 18px 42px rgba(0,35,77,.18)}
+.confirmation-summary__head{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.14);font-size:13px}
+.confirmation-summary__head strong{color:#ec4899}
+.confirmation-summary__row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0;font-size:13px;color:rgba(255,255,255,.72)}
+.confirmation-summary__row strong{color:#fff;white-space:nowrap}
+.confirmation-summary__total{display:flex;align-items:end;justify-content:space-between;gap:16px;border-top:1px solid rgba(255,255,255,.14);margin-top:12px;padding-top:16px}
+.confirmation-summary__total span{font-weight:800}
+.confirmation-summary__total strong{font-size:21px;color:#ec4899;white-space:nowrap}
+.confirmation-summary__note{font-size:11px;line-height:1.55;color:rgba(255,255,255,.58);margin-top:16px}
+.confirmation-contact{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid rgba(15,23,42,.1);border-radius:18px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,.06)}
+.confirmation-contact__icon{width:44px;height:44px;border-radius:12px;background:rgba(236,72,153,.1);color:#ec4899;display:flex;align-items:center;justify-content:center;flex:0 0 44px}
+.confirmation-contact strong{display:block;color:#00234D;font-size:14px;margin-bottom:3px}
+.confirmation-contact p{font-size:12px;line-height:1.5;color:#64748b;margin:0 0 8px}
+.confirmation-contact a{font-size:12px;font-weight:800;color:#ec4899;text-decoration:none}
 
 /* Confirmation Section */
 .confirmation-section{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid rgba(15,23,42,.10);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 16px 40px rgba(2,6,23,.06)}
@@ -213,11 +269,19 @@
 .cart-support__content p{font-size:12px;opacity:.8;margin:0 0 8px}
 .cart-support__phone{color:#ec4899;font-size:15px;font-weight:600;text-decoration:none}
 
+@media(max-width:991.98px){
+    .confirmation-layout{grid-template-columns:1fr}
+    .confirmation-sidebar{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:768px){
     .confirmation-info-grid{grid-template-columns:1fr}
     .confirmation-hero__content{flex-direction:column}
     .confirmation-hero__meta{grid-template-columns:1fr}
     .confirmation-hero__title{font-size:22px}
+    .confirmation-sidebar{display:flex}
+    .confirmation-item{align-items:flex-start;flex-wrap:wrap}
+    .confirmation-item__details{min-width:calc(100% - 90px)}
+    .confirmation-item__price{width:100%;text-align:right}
 }
 </style>
 @endpush

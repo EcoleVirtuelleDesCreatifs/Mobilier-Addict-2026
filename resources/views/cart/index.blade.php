@@ -102,36 +102,58 @@
                     </div>
 
                     <div class="col-lg-4 col-12">
-                        <aside class="mp-panel mp-summary" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
-                            <h3 class="mp-panel-title mp-summary-title">Récapitulatif</h3>
-                            <div class="mp-summary-rows">
-                                <div class="mp-summary-row">
+                        <aside class="mp-panel mp-summary cart-recap" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
+                            <div class="cart-recap__head">
+                                <div>
+                                    <span>Votre sélection</span>
+                                    <h3>Récapitulatif</h3>
+                                </div>
+                                <div class="cart-recap__count">
+                                    <strong>{{ number_format($cartItems->sum('quantity'), 0, ',', ' ') }}</strong>
+                                    <span>article{{ $cartItems->sum('quantity') > 1 ? 's' : '' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="cart-recap__body">
+                                <div class="cart-recap__row">
                                     <span>Sous-total</span>
                                     <strong>{{ number_format($subtotal, 0, ',', ' ') }} FCFA</strong>
                                 </div>
                                 @if($savings > 0)
-                                    <div class="mp-summary-row">
-                                        <span>Économies</span>
-                                        <strong class="text-success">-{{ number_format($savings, 0, ',', ' ') }} FCFA</strong>
+                                    <div class="cart-recap__saving">
+                                        <span>Votre économie</span>
+                                        <strong>-{{ number_format($savings, 0, ',', ' ') }} FCFA</strong>
                                     </div>
                                 @endif
-                                <div class="mp-summary-row">
+                                <div class="cart-recap__row">
                                     <span>Livraison</span>
-                                    <strong>{{ $shipping > 0 ? number_format($shipping, 0, ',', ' ') . ' FCFA' : 'À calculer' }}</strong>
+                                    <strong>{{ $shipping > 0 ? number_format($shipping, 0, ',', ' ') . ' FCFA' : 'À confirmer' }}</strong>
                                 </div>
-                                <div class="mp-summary-row mp-summary-total">
-                                    <span>Total</span>
+                                <div class="cart-recap__total">
+                                    <span>Total estimé</span>
                                     <strong>{{ number_format($total, 0, ',', ' ') }} FCFA</strong>
                                 </div>
-                            </div>
-                            <p class="mp-summary-hint">Livraison et taxes calculées à l'étape suivante.</p>
-                            <a href="{{ route('cart.shipping') }}" class="mp-buy mp-cart-cta">
-                                Commander
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                            </a>
-                            <div class="mp-summary-note">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-                                Paiement sécurisé — vous confirmez à l'étape livraison.
+                                <p class="cart-recap__hint">Le montant final et les disponibilités sont confirmés par notre équipe avant la préparation.</p>
+
+                                <a href="{{ route('cart.shipping') }}" class="cart-recap__cta">
+                                    Continuer vers la livraison
+                                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                                </a>
+
+                                <div class="cart-recap__trust">
+                                    <div>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+                                        <span>Données protégées</span>
+                                    </div>
+                                    <div>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15.46v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.11.54h3a2 2 0 0 1 2 1.72"/><path d="M7 8.5a16 16 0 0 0 8.5 8.5"/></svg>
+                                        <span>Validation WhatsApp</span>
+                                    </div>
+                                    <div>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+                                        <span>Aucun paiement sans confirmation</span>
+                                    </div>
+                                </div>
                             </div>
                         </aside>
                     </div>
@@ -140,3 +162,23 @@
         </div>
     </div>
 @endsection
+
+@push('styles')
+<style>
+.cart-recap{padding:0!important;overflow:hidden;border:1px solid rgba(0,35,77,.1);box-shadow:0 22px 52px rgba(0,35,77,.12)}
+.cart-recap__head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px;background:#00234D;color:#fff}
+.cart-recap__head>div:first-child>span{display:block;color:#ec4899;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.cart-recap__head h3{font-size:21px;line-height:1.2;font-weight:800;color:#fff;margin:0}
+.cart-recap__count{min-width:68px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:14px;padding:8px 12px;text-align:center}
+.cart-recap__count strong{display:block;color:#fff;font-size:17px;line-height:1}.cart-recap__count span{display:block;color:rgba(255,255,255,.6);font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.cart-recap__body{padding:22px}
+.cart-recap__row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0;color:#64748b;font-size:13px}.cart-recap__row strong{color:#00234D;white-space:nowrap}
+.cart-recap__saving{display:flex;align-items:center;justify-content:space-between;gap:14px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.16);border-radius:11px;padding:10px 12px;margin:8px 0;color:#15803d;font-size:12px;font-weight:700}.cart-recap__saving strong{white-space:nowrap}
+.cart-recap__total{display:flex;align-items:end;justify-content:space-between;gap:16px;border-top:1px solid #e8edf2;margin-top:12px;padding-top:17px;color:#00234D;font-size:14px;font-weight:800}.cart-recap__total strong{font-size:21px;color:#ec4899;white-space:nowrap}
+.cart-recap__hint{font-size:10.5px;line-height:1.55;color:#7b8798;background:#f7f9fc;border-radius:10px;padding:10px 12px;margin:15px 0}
+.cart-recap__cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border-radius:999px;background:#ec4899;color:#fff;text-decoration:none;padding:15px 18px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 13px 30px rgba(236,72,153,.3);transition:.2s}.cart-recap__cta:hover{background:#d1357f;color:#fff;transform:translateY(-2px);box-shadow:0 17px 38px rgba(236,72,153,.38)}
+.cart-recap__trust{display:flex;flex-direction:column;gap:9px;margin-top:18px;padding-top:17px;border-top:1px solid #edf0f4}.cart-recap__trust>div{display:flex;align-items:center;gap:8px;color:#596579;font-size:10.5px}.cart-recap__trust svg{width:17px;height:17px;color:#16a34a;flex:0 0 17px}
+@media(max-width:991.98px){.cart-recap{position:static;margin-top:8px}.mp-checkout-grid>.col-lg-4{order:2}}
+@media(max-width:575.98px){.cart-recap__head{padding:19px}.cart-recap__body{padding:18px}.cart-recap__total{align-items:center}.cart-recap__total strong{font-size:18px}.cart-recap__cta{font-size:11px;padding:14px}}
+</style>
+@endpush

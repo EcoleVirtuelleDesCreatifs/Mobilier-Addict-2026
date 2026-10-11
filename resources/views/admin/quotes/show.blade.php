@@ -87,7 +87,8 @@
                         </div>
 
                         {{-- Ajout rapide d'une ligne --}}
-                        <form method="POST" action="{{ route('admin.quotes.items.store', $quote) }}" class="px-4 pt-4">
+                        <form method="POST" action="{{ route('admin.quotes.items.store', $quote) }}" class="px-4 pt-4" id="quoteItemForm">
+                            <div id="quoteItemFeedback" class="alert d-none mb-3" role="status" aria-live="polite"></div>
                             @csrf
                             <div class="row g-2 align-items-end">
                                 <div class="col-12 col-md-5">
@@ -95,7 +96,7 @@
                                     <input type="text" name="custom_name" class="form-control" list="quoteProducts" value="{{ old('custom_name') }}" placeholder="Ex : 10 matelas 160×200…" autocomplete="off">
                                     <datalist id="quoteProducts">
                                         @foreach($products as $product)
-                                            <option value="{{ $product->name }}" data-price="{{ (float) $product->price }}">{{ number_format((float) $product->price, 0, ',', '.') }}F</option>
+                                            <option value="{{ $product->name }}" data-id="{{ $product->id }}" data-price="{{ (float) $product->price }}">{{ number_format((float) $product->price, 0, ',', '.') }}F</option>
                                         @endforeach
                                     </datalist>
                                     <input type="hidden" name="product_id" id="quoteProductId">
@@ -117,15 +118,15 @@
                         {{-- Lignes du devis --}}
                         <div class="table-responsive mt-3">
                             <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
-                                <tbody>
+                                <tbody id="quoteItemsBody">
                                     @forelse($quote->items as $item)
-                                        <tr style="border-top: 1px solid var(--admin-border);">
+                                        <tr style="border-top: 1px solid var(--admin-border);" data-quote-item="{{ $item->id }}">
                                             <td class="fw-semibold">{{ $item->product_name }}</td>
                                             <td class="text-end text-nowrap">{{ number_format((float) $item->unit_price, 0, ',', '.') }}F</td>
                                             <td class="text-center">× {{ $item->quantity }}</td>
                                             <td class="text-end fw-semibold text-nowrap">{{ number_format((float) $item->line_total, 0, ',', '.') }}F</td>
                                             <td class="text-end" style="width:44px;">
-                                                <form method="POST" action="{{ route('admin.quotes.items.destroy', [$quote, $item]) }}" onsubmit="return confirm('Retirer cette ligne ?');">
+                                                <form method="POST" action="{{ route('admin.quotes.items.destroy', [$quote, $item]) }}" class="quote-remove-item">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-admin-ghost text-danger" title="Retirer">✕</button>
@@ -133,7 +134,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
+                                        <tr id="quoteItemsEmpty">
                                             <td colspan="5" class="text-center py-4" style="color: var(--admin-muted);">Aucune ligne pour l'instant.</td>
                                         </tr>
                                     @endforelse
@@ -167,8 +168,8 @@
                                 </div>
                                 <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-3">
                                     <div style="min-width:220px;">
-                                        <span style="color: var(--admin-muted); font-size:13px;">Sous-total {{ number_format((float) $quote->subtotal, 0, ',', '.') }}F + livraison =</span>
-                                        <span class="fw-bold ms-1" style="font-size:18px;">{{ number_format((float) $quote->total, 0, ',', '.') }}F</span>
+                                        <span style="color: var(--admin-muted); font-size:13px;">Sous-total <strong id="quoteSubtotal">{{ number_format((float) $quote->subtotal, 0, ',', '.') }}F</strong> + livraison =</span>
+                                        <span class="fw-bold ms-1" id="quoteTotal" style="font-size:18px;">{{ number_format((float) $quote->total, 0, ',', '.') }}F</span>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-admin-primary">Enregistrer le devis</button>
@@ -185,19 +186,121 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const nameInput = document.querySelector('input[name="custom_name"]');
+            const form = document.getElementById('quoteItemForm');
+            const body = document.getElementById('quoteItemsBody');
+            const feedback = document.getElementById('quoteItemFeedback');
+            const nameInput = form?.querySelector('input[name="custom_name"]');
+            const qtyInput = form?.querySelector('input[name="quantity"]');
             const priceInput = document.getElementById('quoteUnitPrice');
             const idInput = document.getElementById('quoteProductId');
             const options = document.querySelectorAll('#quoteProducts option');
-            if (!nameInput) return;
-            nameInput.addEventListener('input', function () {
+            const csrf = form?.querySelector('input[name="_token"]')?.value;
+            const money = value => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(Number(value) || 0) + 'F';
+            const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
+
+            const showFeedback = (message, type = 'success') => {
+                if (!feedback) return;
+                feedback.className = `alert alert-${type} mb-3`;
+                feedback.textContent = message;
+            };
+
+            const updateTotals = data => {
+                const subtotal = document.getElementById('quoteSubtotal');
+                const total = document.getElementById('quoteTotal');
+                if (subtotal) subtotal.textContent = money(data.subtotal);
+                if (total) total.textContent = money(data.total);
+            };
+
+            const rowHtml = item => `
+                <tr style="border-top:1px solid var(--admin-border);" data-quote-item="${item.id}">
+                    <td class="fw-semibold">${escapeHtml(item.name)}</td>
+                    <td class="text-end text-nowrap">${money(item.unit_price)}</td>
+                    <td class="text-center">× ${item.quantity}</td>
+                    <td class="text-end fw-semibold text-nowrap">${money(item.line_total)}</td>
+                    <td class="text-end" style="width:44px;">
+                        <form method="POST" action="${escapeHtml(item.destroy_url)}" class="quote-remove-item">
+                            <input type="hidden" name="_token" value="${escapeHtml(csrf)}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-sm btn-admin-ghost text-danger" title="Retirer">✕</button>
+                        </form>
+                    </td>
+                </tr>`;
+
+            nameInput?.addEventListener('input', function () {
                 idInput.value = '';
-                options.forEach(function (o) {
-                    if (o.value === nameInput.value) {
-                        const p = o.dataset.price;
-                        if (p && (!priceInput.value || priceInput.value === '0')) priceInput.value = p;
+                options.forEach(function (option) {
+                    if (option.value === nameInput.value) {
+                        idInput.value = option.dataset.id || '';
+                        priceInput.value = option.dataset.price || '';
                     }
                 });
+            });
+
+            form?.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const button = form.querySelector('button[type="submit"]');
+                const initialText = button.textContent;
+                button.disabled = true;
+                button.textContent = 'Ajout…';
+                feedback?.classList.add('d-none');
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                        credentials: 'same-origin'
+                    });
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const errors = data.errors ? Object.values(data.errors).flat().join(' ') : data.message;
+                        throw new Error(errors || 'Impossible d’ajouter cette ligne.');
+                    }
+
+                    document.getElementById('quoteItemsEmpty')?.remove();
+                    body.insertAdjacentHTML('beforeend', rowHtml(data.item));
+                    updateTotals(data);
+                    nameInput.value = '';
+                    idInput.value = '';
+                    qtyInput.value = '1';
+                    priceInput.value = '';
+                    nameInput.focus();
+                    showFeedback(data.message);
+                } catch (error) {
+                    showFeedback(error.message, 'danger');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = initialText;
+                }
+            });
+
+            body?.addEventListener('submit', async function (event) {
+                const removeForm = event.target.closest('.quote-remove-item');
+                if (!removeForm) return;
+                event.preventDefault();
+                if (!confirm('Retirer cette ligne du devis ?')) return;
+                const row = removeForm.closest('[data-quote-item]');
+                const button = removeForm.querySelector('button');
+                button.disabled = true;
+
+                try {
+                    const response = await fetch(removeForm.action, {
+                        method: 'DELETE',
+                        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrf },
+                        credentials: 'same-origin'
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.message || 'Suppression impossible.');
+                    row.remove();
+                    updateTotals(data);
+                    if (data.items_count === 0) {
+                        body.innerHTML = '<tr id="quoteItemsEmpty"><td colspan="5" class="text-center py-4" style="color:var(--admin-muted);">Aucune ligne pour l’instant.</td></tr>';
+                    }
+                    showFeedback(data.message);
+                } catch (error) {
+                    button.disabled = false;
+                    showFeedback(error.message, 'danger');
+                }
             });
         });
     </script>

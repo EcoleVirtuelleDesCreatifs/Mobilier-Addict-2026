@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
 
 class CartController extends Controller
 {
@@ -314,8 +315,13 @@ class CartController extends Controller
 
         session()->forget('cart');
         session()->forget('checkout.shipping');
+        session()->put('checkout.confirmed_orders.' . $order->id, true);
 
-        return redirect()->route('cart.confirmation', $order)->with('success', 'Commande enregistrée avec succès.');
+        return redirect(URL::temporarySignedRoute(
+            'cart.confirmation',
+            now()->addDays(7),
+            ['order' => $order]
+        ))->with('success', 'Commande enregistrée avec succès.');
     }
 
     public function payment()
@@ -328,8 +334,16 @@ class CartController extends Controller
         return redirect()->route('cart.shipping');
     }
 
-    public function confirmation(Order $order)
+    public function confirmation(Request $request, Order $order)
     {
+        $user = $request->user();
+        $canView = $request->hasValidSignature()
+            || $request->session()->has('checkout.confirmed_orders.' . $order->id)
+            || ($user && (int) $order->user_id === (int) $user->id)
+            || ($user && ((bool) $user->is_admin || in_array($user->role, ['admin', 'super_admin'], true)));
+
+        abort_unless($canView, 403);
+
         $items = $order->items()->get();
 
         $productIds = $items

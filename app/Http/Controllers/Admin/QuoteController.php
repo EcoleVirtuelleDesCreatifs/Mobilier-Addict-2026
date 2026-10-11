@@ -83,7 +83,7 @@ class QuoteController extends Controller
             ? (float) $data['unit_price']
             : (float) ($product->price ?? 0);
 
-        QuoteItem::create([
+        $item = QuoteItem::create([
             'quote_id' => $quote->id,
             'product_id' => $product?->id,
             'product_name' => $product?->name ?? trim((string) $data['custom_name']),
@@ -95,16 +95,44 @@ class QuoteController extends Controller
         $this->recalcTotals($quote);
         $quote->save();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Ligne ajoutée au devis.',
+                'item' => [
+                    'id' => $item->id,
+                    'name' => $item->product_name,
+                    'unit_price' => (float) $item->unit_price,
+                    'quantity' => (int) $item->quantity,
+                    'line_total' => (float) $item->line_total,
+                    'destroy_url' => route('admin.quotes.items.destroy', [$quote, $item]),
+                ],
+                'subtotal' => (float) $quote->subtotal,
+                'shipping' => (float) $quote->shipping_amount,
+                'total' => (float) $quote->total,
+                'items_count' => $quote->items()->count(),
+            ], 201);
+        }
+
         return back()->with('status', 'Article ajouté au devis.');
     }
 
-    public function removeItem(Quote $quote, QuoteItem $item)
+    public function removeItem(Request $request, Quote $quote, QuoteItem $item)
     {
         abort_unless((int) $item->quote_id === (int) $quote->id, 404);
         $item->delete();
 
         $this->recalcTotals($quote);
         $quote->save();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Ligne retirée du devis.',
+                'subtotal' => (float) $quote->subtotal,
+                'shipping' => (float) $quote->shipping_amount,
+                'total' => (float) $quote->total,
+                'items_count' => $quote->items()->count(),
+            ]);
+        }
 
         return back()->with('status', 'Article retiré du devis.');
     }

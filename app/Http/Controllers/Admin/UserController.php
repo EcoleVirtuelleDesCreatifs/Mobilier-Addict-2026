@@ -156,13 +156,45 @@ class UserController extends Controller
 
     public function stats()
     {
-        $totalUsers = User::query()->count();
-        $adminCount = User::query()->where('role', 'admin')->count();
-        $editorCount = User::query()->where('role', 'editor')->count();
-        $writerCount = User::query()->where('role', 'writer')->count();
-        $recentUsers = User::query()->orderByDesc('created_at')->limit(8)->get();
+        $now = now();
+        $summary = User::query()->selectRaw(
+            'COUNT(*) as total,
+            SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active,
+            SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) as inactive,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_this_month,
+            SUM(CASE WHEN last_login_at >= ? THEN 1 ELSE 0 END) as recently_active,
+            SUM(CASE WHEN last_login_at IS NULL THEN 1 ELSE 0 END) as never_logged_in',
+            [$now->copy()->startOfMonth(), $now->copy()->subDays(30)]
+        )->first();
 
-        return view('admin.users.stats', compact('totalUsers', 'adminCount', 'editorCount', 'writerCount', 'recentUsers'));
+        $roleCounts = User::query()
+            ->selectRaw("COALESCE(NULLIF(role, ''), 'sans_role') as role_name, COUNT(*) as total")
+            ->groupBy('role_name')
+            ->orderByDesc('total')
+            ->get();
+
+        $start = $now->copy()->subMonths(5)->startOfMonth();
+        $registrations = User::query()
+            ->where('created_at', '>=', $start)
+            ->get(['created_at'])
+            ->groupBy(fn (User $user) => $user->created_at->format('Y-m'));
+
+        $monthlyGrowth = collect(range(0, 5))->map(function (int $offset) use ($start, $registrations) {
+            $month = $start->copy()->addMonths($offset);
+
+            return [
+                'key' => $month->format('Y-m'),
+                'label' => $month->translatedFormat('M'),
+                'total' => $registrations->get($month->format('Y-m'), collect())->count(),
+            ];
+        });
+
+        $recentUsers = User::query()
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get(['id', 'name', 'email', 'role', 'is_active', 'last_login_at', 'created_at', 'profile_picture']);
+
+        return view('admin.users.stats', compact('summary', 'roleCounts', 'monthlyGrowth', 'recentUsers'));
     }
 
     public function changeRole(Request $request, User $user): JsonResponse
