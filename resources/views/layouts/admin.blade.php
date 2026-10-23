@@ -26,16 +26,10 @@
     <title>{{ $pageTitle }} | Mobilier Addict</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/imgs/logo-2.png") }}">
-	<link rel="stylesheet" href="{{ asset("assets/admin/vendor/chartist/css/chartist.min.css") }}">
-    <link href="{{ asset("assets/admin/vendor/bootstrap-select/dist/css/bootstrap-select.min.css") }}" rel="stylesheet">
-    <link href="{{ asset("assets/admin/css/style.css") }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
+	<link rel="stylesheet" href="{{ asset("assets/admin/vendor/bootstrap/css/bootstrap.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/admin/icons/font-awesome/css/all.min.css") }}">
+    <link href="{{ asset("assets/admin-lite/admin.css") }}" rel="stylesheet">
     @stack('styles')
-
-
-
-    <!-- CKEditor 5 -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 </head>
 @php
     $showAdminPreloader = session('show_admin_preloader') && request()->routeIs('admin.dashboard');
@@ -111,7 +105,7 @@
 							<li class="nav-item">
 								<div class="input-group search-area d-lg-inline-flex d-none">
 									<div class="input-group-append">
-										<span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
+										<span class="input-group-text"><a href="javascript:void(0)"><i class="fas fa-search"></i></a></span>
 									</div>
 									<input type="text" class="form-control" placeholder="Search here...">
 								</div>
@@ -265,13 +259,13 @@
 				<ul class="metismenu" id="menu">
 					<li class="{{ $openAdminHome ? 'mm-active' : '' }}">
 						<a class="ai-icon" href="{{ route('admin.dashboard') }}" aria-expanded="false">
-							<i class="flaticon-layout"></i>
+							<i class="fas fa-th-large"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
 					<li class="{{ $openCatalogueGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openCatalogueGroup ? 'true' : 'false' }}">
-                        <i class="flaticon-381-folder"></i>
+                        <i class="fas fa-box-open"></i>
 						<span class="nav-text">Catalogue</span>
                     </a>
 					<ul aria-expanded="false" class="{{ $openCatalogueGroup ? 'mm-show' : '' }}">
@@ -288,7 +282,7 @@
                     </li>
 
 					<li class="{{ $openSalesGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openSalesGroup ? 'true' : 'false' }}">
-                        <i class="flaticon-381-list"></i>
+                        <i class="fas fa-receipt"></i>
                         <span class="nav-text">Ventes</span>
                     </a>
 					<ul aria-expanded="false" class="{{ $openSalesGroup ? 'mm-show' : '' }}">
@@ -299,7 +293,7 @@
                     </li>
 
 					<li class="{{ $openHomeGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openHomeGroup ? 'true' : 'false' }}">
-                        <i class="flaticon-381-settings"></i>
+                        <i class="fas fa-home"></i>
                         <span class="nav-text">Page d'accueil</span>
                     </a>
 					<ul aria-expanded="false" class="{{ $openHomeGroup ? 'mm-show' : '' }}">
@@ -313,7 +307,7 @@
                     </li>
 
 					<li class="{{ $openMarketingGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openMarketingGroup ? 'true' : 'false' }}">
-						<i class="flaticon-newsletter"></i>
+						<i class="fas fa-bullhorn"></i>
 						<span class="nav-text">Marketing</span>
 					</a>
 						<ul aria-expanded="false" class="{{ $openMarketingGroup ? 'mm-show' : '' }}">
@@ -324,7 +318,7 @@
 					</li>
 
 					<li class="{{ $openArticles ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openArticles ? 'true' : 'false' }}">
-						<i class="flaticon-monitor"></i>
+						<i class="fas fa-newspaper"></i>
 						<span class="nav-text">Contenus</span>
 					</a>
 						<ul aria-expanded="false" class="{{ $openArticles ? 'mm-show' : '' }}">
@@ -337,14 +331,14 @@
 
 					<li class="{{ $openStats ? 'mm-active' : '' }}">
 						<a class="ai-icon" href="{{ route('admin.stats.index') }}" aria-expanded="false">
-							<i class="flaticon-381-pie-chart"></i>
+							<i class="fas fa-chart-pie"></i>
 							<span class="nav-text">Statistiques</span>
 						</a>
 					</li>
 
 					@if($isAdmin)
 						<li class="{{ $openUsersGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsersGroup ? 'true' : 'false' }}">
-							<i class="flaticon-user"></i>
+							<i class="fas fa-user"></i>
 							<span class="nav-text">Administration</span>
 						</a>
 							<ul aria-expanded="false" class="{{ $openUsersGroup ? 'mm-show' : '' }}">
@@ -358,7 +352,7 @@
 
                     <li>
 						<a class="ai-icon" href="{{ route('admin.profile') }}" aria-expanded="false">
-						    <i class="flaticon-user"></i>
+						    <i class="fas fa-user"></i>
 						    <span class="nav-text">Mon Profil</span>
 					    </a>
                     </li>
@@ -410,32 +404,8 @@
     <!--**********************************
         Scripts
     ***********************************-->
-    <!-- Required vendors -->
-	<script src="{{ asset("assets/admin/vendor/global/global.min.js") }}"></script>
-	<script src="{{ asset("assets/admin/vendor/bootstrap-select/dist/js/bootstrap-select.min.js") }}"></script>
-	<script src="{{ asset("assets/admin/vendor/chart.js/Chart.bundle.min.js") }}"></script>
-
-	<!-- Chart piety plugin files -->
-    <script src="{{ asset("assets/admin/vendor/peity/jquery.peity.min.js") }}"></script>
-
-	<!-- Apex Chart -->
-	<script src="{{ asset("assets/admin/vendor/apexchart/apexchart.js") }}"></script>
-
-	<!-- Dashboard 1 -->
-	<script src="{{ asset("assets/admin/js/dashboard/dashboard-1.js") }}"></script>
-
-    <script src="{{ asset("assets/admin/js/custom.min.js") }}"></script>
-	<script src="{{ asset("assets/admin/js/deznav-init.js") }}"></script>
-
-
-	<script>
-		jQuery(document).ready(function(){
-			setTimeout(function() {
-				dezSettingsOptions.version = 'dark';
-				new dezSettings(dezSettingsOptions);
-			},1500)
-		});
-	</script>
+	<script src="{{ asset("assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
+	<script src="{{ asset("assets/admin-lite/admin.js") }}"></script>
 
 
 
