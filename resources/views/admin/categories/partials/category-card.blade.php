@@ -31,7 +31,7 @@
         <div class="col-12 col-md-2 text-end">
             <div class="d-flex justify-content-end gap-2">
                 <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-admin-ghost">Modifier</a>
-                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Supprimer cette catégorie ?');">
+                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" data-confirm="Supprimer cette catégorie ?">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>

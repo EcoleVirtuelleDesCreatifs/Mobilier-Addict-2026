@@ -62,7 +62,7 @@
                                                 <a href="{{ route('admin.b2b.edit', $category) }}" class="btn btn-sm btn-primary">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('admin.b2b.destroy', $category) }}" method="POST" onsubmit="return confirm('Supprimer cette catégorie ?')" class="d-inline">
+                                                <form action="{{ route('admin.b2b.destroy', $category) }}" method="POST" data-confirm="Supprimer cette catégorie ?" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">

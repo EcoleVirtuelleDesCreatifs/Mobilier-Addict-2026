@@ -24,7 +24,7 @@
                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="btn btn-admin-primary">Répondre sur WhatsApp</a>
                     @endif
                     <a href="{{ route('admin.quotes.index') }}" class="btn btn-admin-ghost">Retour</a>
-                    <form method="POST" action="{{ route('admin.quotes.destroy', $quote) }}" onsubmit="return confirm('Supprimer définitivement ce devis ?');">
+                    <form method="POST" action="{{ route('admin.quotes.destroy', $quote) }}" data-confirm="Supprimer définitivement ce devis ?">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-admin-ghost text-danger">Supprimer</button>
@@ -117,7 +117,7 @@
 
                         {{-- Lignes du devis --}}
                         <div class="table-responsive mt-3">
-                            <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
+                            <table class="table ad-table align-middle mb-0">
                                 <tbody id="quoteItemsBody">
                                     @forelse($quote->items as $item)
                                         <tr style="border-top: 1px solid var(--admin-border);" data-quote-item="{{ $item->id }}">

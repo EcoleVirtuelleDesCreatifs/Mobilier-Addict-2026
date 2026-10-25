@@ -154,7 +154,7 @@
                                                         <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-primary btn-sm me-2">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" onsubmit="return confirm('Supprimer cet article ?')">
+                                                        <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" data-confirm="Supprimer cet article ?">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button class="btn btn-danger btn-sm">

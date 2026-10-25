@@ -92,7 +92,7 @@
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         @if($category->articles_count == 0)
-                                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Supprimer cette catégorie ?')">
+                                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" data-confirm="Supprimer cette catégorie ?">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button class="btn btn-danger btn-sm">

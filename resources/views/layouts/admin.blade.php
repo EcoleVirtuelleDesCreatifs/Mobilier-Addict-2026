@@ -1,441 +1,51 @@
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="keywords" content="" />
-	<meta name="author" content="" />
-	<meta name="robots" content="index, follow" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="" />
-	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<meta property="og:title" content="" />
-	<meta property="og:description" content="" />
-	<meta property="og:image" content=""/>
-	<meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
-        $routeName = \Illuminate\Support\Facades\Route::currentRouteName();
-        $routeTitle = $routeName
-            ? ucwords(str_replace(['.', '-', '_'], ' ', $routeName))
-            : 'Administration';
-        $pageTitle = trim($__env->yieldContent('title')) !== '' ? trim($__env->yieldContent('title')) : $routeTitle;
+        $shell = \App\Support\AdminShell::payload();
+        $pageTitle = trim($__env->yieldContent('title')) ?: $shell['title'];
+        $shell['title'] = $pageTitle;
     @endphp
-
     <title>{{ $pageTitle }} | Mobilier Addict</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/imgs/logo-2.png") }}">
-	<link rel="stylesheet" href="{{ asset("assets/admin/vendor/bootstrap/css/bootstrap.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("assets/admin/icons/font-awesome/css/all.min.css") }}">
-    <link href="{{ asset("assets/admin-lite/admin.css") }}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}">
+
+    <link rel="stylesheet" href="{{ \App\Support\AdminShell::asset('assets/admin-app/vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ \App\Support\AdminShell::asset('assets/admin-app/vendor/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ \App\Support\AdminShell::asset('assets/admin-app/css/admin.css') }}">
     @stack('styles')
 </head>
-@php
-    $showAdminPreloader = session('show_admin_preloader') && request()->routeIs('admin.dashboard');
-@endphp
-<body>
+<body class="ad-body">
+    <script>if (localStorage.getItem('ma-admin-sidebar-mini') === '1') document.body.classList.add('ad-mini');</script>
 
-    <!--*******************
-        Preloader start
-    ********************-->
-    @if($showAdminPreloader)
-        <div id="preloader">
-            <div class="sk-three-bounce">
-                <div class="sk-child sk-bounce1"></div>
-                <div class="sk-child sk-bounce2"></div>
-                <div class="sk-child sk-bounce3"></div>
-            </div>
-        </div>
-    @endif
-    <!--*******************
-        Preloader end
-    ********************-->
+    <script type="application/json" id="ad-shell-data">{!! \App\Support\AdminShell::json($shell) !!}</script>
+    <div class="ad-shell-root" data-vue="shell" data-source="ad-shell-data"></div>
 
-
-
-
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper" class="{{ $showAdminPreloader ? '' : 'show' }}">
-
-
-
-        <!--**********************************
-            Nav header start
-        ***********************************-->
-        <div class="nav-header">
-            <a href="{{ route('admin.dashboard') }}" class="brand-logo">
-                <img class="logo-abbr" src="{{ asset('assets/logo/mobile/logo.png') }}" width="52" height="52" alt="Mobilier Addict" />
-                <span class="brand-title" style="display:inline-block; color: #ffffff; font-weight: 700; font-size: 1.35rem; line-height: 1;">Mobilier Addict</span>
-            </a>
-
-            <div class="nav-control">
-                <div class="hamburger">
-                    <span class="line"></span><span class="line"></span><span class="line"></span>
-                </div>
-            </div>
-        </div>
-        <!--**********************************
-            Nav header end
-        ***********************************-->
-
-
-
-
-
-
-
-
-
-		<!--**********************************
-            Header start
-        ***********************************-->
-        <div class="header">
-            <div class="header-content">
-                <nav class="navbar navbar-expand">
-                    <div class="collapse navbar-collapse justify-content-between">
-                        <div class="header-left">
-                            <div class="dashboard_bar">
-                                Dashboard
-                            </div>
-                        </div>
-                        <ul class="navbar-nav header-right">
-							<li class="nav-item">
-								<div class="input-group search-area d-lg-inline-flex d-none">
-									<div class="input-group-append">
-										<span class="input-group-text"><a href="javascript:void(0)"><i class="fas fa-search"></i></a></span>
-									</div>
-									<input type="text" class="form-control" placeholder="Search here...">
-								</div>
-							</li>
-
-							<li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
-                                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M23.3333 19.8333H23.1187C23.2568 19.4597 23.3295 19.065 23.3333 18.6666V12.8333C23.3294 10.7663 22.6402 8.75902 21.3735 7.12565C20.1068 5.49228 18.3343 4.32508 16.3333 3.80679V3.49996C16.3333 2.88112 16.0875 2.28763 15.6499 1.85004C15.2123 1.41246 14.6188 1.16663 14 1.16663C13.3812 1.16663 12.7877 1.41246 12.3501 1.85004C11.9125 2.28763 11.6667 2.88112 11.6667 3.49996V3.80679C9.66574 4.32508 7.89317 5.49228 6.6265 7.12565C5.35983 8.75902 4.67058 10.7663 4.66667 12.8333V18.6666C4.67053 19.065 4.74316 19.4597 4.88133 19.8333H4.66667C4.35725 19.8333 4.0605 19.9562 3.84171 20.175C3.62292 20.3938 3.5 20.6905 3.5 21C3.5 21.3094 3.62292 21.6061 3.84171 21.8249C4.0605 22.0437 4.35725 22.1666 4.66667 22.1666H23.3333C23.6428 22.1666 23.9395 22.0437 24.1583 21.8249C24.3771 21.6061 24.5 21.3094 24.5 21C24.5 20.6905 24.3771 20.3938 24.1583 20.175C23.9395 19.9562 23.6428 19.8333 23.3333 19.8333Z" fill="#67636D"/>
-										<path d="M9.98193 24.5C10.3863 25.2088 10.971 25.7981 11.6767 26.2079C12.3823 26.6178 13.1839 26.8337 13.9999 26.8337C14.816 26.8337 15.6175 26.6178 16.3232 26.2079C17.0289 25.7981 17.6136 25.2088 18.0179 24.5H9.98193Z" fill="#67636D"/>
-								</svg>
-									@php
-										$authUser = auth()->user();
-										$unreadCount = $authUser ? $authUser->unreadNotifications()->count() : 0;
-										$notifications = $authUser ? $authUser->notifications()->latest()->limit(10)->get() : collect();
-									@endphp
-								@if($unreadCount > 0)
-									<span class="badge light text-white bg-primary rounded-circle">{{ $unreadCount }}</span>
-								@endif
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <div id="dlab_W_Notification1" class="widget-media dz-scroll p-3 height380">
-									<ul class="timeline">
-										@if($notifications->count() === 0)
-											<li>
-												<div class="timeline-panel">
-													<div class="media-body">
-														<small class="d-block">Aucune notification</small>
-													</div>
-												</div>
-											</li>
-										@else
-											@foreach($notifications as $notification)
-												@php
-													$data = is_array($notification->data) ? $notification->data : [];
-													$title = $data['title'] ?? 'Notification';
-													$message = $data['message'] ?? '';
-													$url = $data['url'] ?? null;
-												@endphp
-												<li>
-													<div class="timeline-panel">
-														<div class="media-body">
-															<h6 class="mb-1">
-																@if($url)
-																	<a href="{{ $url }}" style="color: inherit;">
-																		{{ $title }}
-																	</a>
-																@else
-																	{{ $title }}
-																@endif
-															</h6>
-															@if($message)
-																<small class="d-block">{{ $message }}</small>
-															@endif
-															<small class="d-block">{{ $notification->created_at ? $notification->created_at->format('d/m/Y H:i') : '' }}</small>
-															@if(is_null($notification->read_at))
-																<form method="POST" action="{{ route('admin.notifications.read', $notification->id) }}" class="mt-1">
-																	@csrf
-																	<input type="hidden" name="redirect_to" value="{{ $url ?? url()->current() }}">
-																	<button type="submit" class="btn btn-link p-0" style="font-size: 12px;">Marquer comme lu</button>
-																</form>
-															@endif
-														</div>
-													</div>
-												</li>
-											@endforeach
-										@endif
-
-
-										</ul>
-							</div>
-							<div class="px-3 pb-2">
-								<a href="{{ route('admin.notifications.index') }}" class="btn btn-admin-pink-outline w-100">Voir toutes les notifications</a>
-							</div>
-							@if($unreadCount > 0)
-								<form method="POST" action="{{ route('admin.notifications.read-all') }}" class="px-3 pb-3">
-									@csrf
-									<button type="submit" class="btn btn-admin-pink w-100">Tout marquer comme lu</button>
-								</form>
-							@endif
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown header-profile">
-                                <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-                                    @if(auth()->user()->profile_picture)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" width="20" height="20" class="rounded-circle" alt="{{ auth()->user()->name }}"/>
-                                    @else
-                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 10px;">
-                                            <i class="fas fa-user text-white"></i>
-                                        </div>
-                                    @endif
-									<div class="header-info">
-										<span>{{ auth()->user()->name }}</span>
-										<small>{{ ucfirst(auth()->user()->role) }}</small>
-									</div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="{{ route('admin.profile') }}" class="dropdown-item ai-icon">
-                                        <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                        <span class="ms-2">Profil </span>
-                                    </a>
-
-                                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item ai-icon" style="border: none; background: none; width: 100%; text-align: left;">
-                                            <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                            <span class="ms-2">Se déconnecter </span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
-
-
-
-
-
-
-
-
-
-        		<!--**********************************
-            Sidebar start
-        ***********************************-->
-        <div class="deznav">
-            <div class="deznav-scroll">
-
-				@php
-					$userRole = auth()->user()->role;
-					$isAdmin = in_array($userRole, ['admin', 'super_admin']);
-					$canManage = in_array($userRole, ['editor', 'admin', 'super_admin']);
-
-					$openAdminHome = request()->routeIs('admin.dashboard');
-					$openStats = request()->routeIs('admin.stats.*');
-					$openArticles = request()->routeIs('admin.articles.*');
-
-					$openCatalogueGroup = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.menus.*');
-					$openSalesGroup = request()->routeIs('admin.orders.*', 'admin.invoices.*', 'admin.quotes.*');
-					$openHomeGroup = request()->routeIs('admin.home_sections.*', 'admin.slider.*', 'admin.b2b.*', 'admin.space_sections.*');
-					$openMarketingGroup = request()->routeIs('admin.newsletter.*', 'admin.settings.facebook-pixel.*', 'admin.game.*');
-					$openUsersGroup = request()->routeIs('admin.users.*', 'admin.roles.*');
-				@endphp
-
-				<ul class="metismenu" id="menu">
-					<li class="{{ $openAdminHome ? 'mm-active' : '' }}">
-						<a class="ai-icon" href="{{ route('admin.dashboard') }}" aria-expanded="false">
-							<i class="fas fa-th-large"></i>
-							<span class="nav-text">Dashboard</span>
-						</a>
-					</li>
-
-					<li class="{{ $openCatalogueGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openCatalogueGroup ? 'true' : 'false' }}">
-                        <i class="fas fa-box-open"></i>
-						<span class="nav-text">Catalogue</span>
-                    </a>
-					<ul aria-expanded="false" class="{{ $openCatalogueGroup ? 'mm-show' : '' }}">
-						<li><a href="{{ route('admin.products.index') }}">Produits</a></li>
-						@if($canManage)
-							<li><a href="{{ route('admin.products.create') }}">Créer un produit</a></li>
-						@endif
-						<li><a href="{{ route('admin.categories.index') }}">Catégories</a></li>
-						@if($canManage)
-							<li><a href="{{ route('admin.categories.create') }}">Créer une catégorie</a></li>
-						@endif
-						<li><a href="{{ route('admin.menus.index') }}">Menus</a></li>
-					</ul>
-                    </li>
-
-					<li class="{{ $openSalesGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openSalesGroup ? 'true' : 'false' }}">
-                        <i class="fas fa-receipt"></i>
-                        <span class="nav-text">Ventes</span>
-                    </a>
-					<ul aria-expanded="false" class="{{ $openSalesGroup ? 'mm-show' : '' }}">
-						<li><a href="{{ route('admin.orders.index') }}">Commandes</a></li>
-						<li><a href="{{ route('admin.quotes.index') }}">Devis sur mesure</a></li>
-						<li><a href="{{ route('admin.invoices.index') }}">Factures</a></li>
-					</ul>
-                    </li>
-
-					<li class="{{ $openHomeGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openHomeGroup ? 'true' : 'false' }}">
-                        <i class="fas fa-home"></i>
-                        <span class="nav-text">Page d'accueil</span>
-                    </a>
-					<ul aria-expanded="false" class="{{ $openHomeGroup ? 'mm-show' : '' }}">
-                        <li><a href="{{ route('admin.home_sections.index') }}">Sections</a></li>
-						@if($canManage)
-							<li><a href="{{ route('admin.slider.index') }}">Sliders</a></li>
-							<li><a href="{{ route('admin.space_sections.index') }}">Espaces</a></li>
-							<li><a href="{{ route('admin.b2b.index') }}">B2B</a></li>
-						@endif
-                    </ul>
-                    </li>
-
-					<li class="{{ $openMarketingGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openMarketingGroup ? 'true' : 'false' }}">
-						<i class="fas fa-bullhorn"></i>
-						<span class="nav-text">Marketing</span>
-					</a>
-						<ul aria-expanded="false" class="{{ $openMarketingGroup ? 'mm-show' : '' }}">
-							<li><a href="{{ route('admin.newsletter.index') }}">Newsletter</a></li>
-							<li><a href="{{ route('admin.settings.facebook-pixel.edit') }}">Facebook Pixel</a></li>
-							<li><a href="{{ route('admin.game.index') }}">Grand Jeu</a></li>
-						</ul>
-					</li>
-
-					<li class="{{ $openArticles ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openArticles ? 'true' : 'false' }}">
-						<i class="fas fa-newspaper"></i>
-						<span class="nav-text">Contenus</span>
-					</a>
-						<ul aria-expanded="false" class="{{ $openArticles ? 'mm-show' : '' }}">
-							<li><a href="{{ route('admin.articles.index') }}">Articles</a></li>
-							@if($canManage)
-								<li><a href="{{ route('admin.articles.create') }}">Créer un article</a></li>
-							@endif
-						</ul>
-					</li>
-
-					<li class="{{ $openStats ? 'mm-active' : '' }}">
-						<a class="ai-icon" href="{{ route('admin.stats.index') }}" aria-expanded="false">
-							<i class="fas fa-chart-pie"></i>
-							<span class="nav-text">Statistiques</span>
-						</a>
-					</li>
-
-					@if($isAdmin)
-						<li class="{{ $openUsersGroup ? 'mm-active' : '' }}"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="{{ $openUsersGroup ? 'true' : 'false' }}">
-							<i class="fas fa-user"></i>
-							<span class="nav-text">Administration</span>
-						</a>
-							<ul aria-expanded="false" class="{{ $openUsersGroup ? 'mm-show' : '' }}">
-								<li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
-								<li><a href="{{ route('admin.users.create') }}">Créer un utilisateur</a></li>
-								<li><a href="{{ route('admin.users.stats') }}">Statistiques utilisateurs</a></li>
-								<li><a href="{{ route('admin.roles.index') }}">Rôles</a></li>
-							</ul>
-						</li>
-					@endif
-
-                    <li>
-						<a class="ai-icon" href="{{ route('admin.profile') }}" aria-expanded="false">
-						    <i class="fas fa-user"></i>
-						    <span class="nav-text">Mon Profil</span>
-					    </a>
-                    </li>
-                </ul>
-
-			</div>
-        </div>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
-
-
-
-
-
+    <main class="ad-main" id="main-wrapper">
         @yield('content')
 
+        <footer class="ad-footer">
+            <span>© {{ date('Y') }} Mobilier Addict</span>
+            <a href="{{ url('/') }}" target="_blank" rel="noopener">mobilier-addict.com</a>
+        </footer>
+    </main>
 
+    <div class="ad-shell-root" data-vue="feedback"></div>
 
+    <noscript>
+        <div class="alert alert-warning m-3">JavaScript est requis pour la navigation de l'administration.</div>
+    </noscript>
 
-
-
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-                 <p>Copyright © <a href="" target="_blank">Mobilier Addict</a> 2026</p>
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
-
-		<!--**********************************
-           Support ticket button start
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button end
-        ***********************************-->
-
-
-	</div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
-
-    <!--**********************************
-        Scripts
-    ***********************************-->
-	<script src="{{ asset("assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
-	<script src="{{ asset("assets/admin-lite/admin.js") }}"></script>
-
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const contentElement = document.getElementById('content');
-            if (contentElement) {
-                ClassicEditor
-                    .create(contentElement, {
-                        ckfinder: {
-                            uploadUrl: '{{ route("admin.articles.upload-image") . "?_token=" . csrf_token() }}'
-                        }
-                    })
-                    .then(editor => {
-                        const form = contentElement.closest('form');
-                        if (form) {
-                            form.addEventListener('submit', function(e) {
-                                contentElement.value = editor.getData();
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There was a problem initializing the editor:', error);
-                    });
-            }
-        });
-    </script>
-
-    {{-- Section pour les scripts personnalisés des vues --}}
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/vendor/vue.global.prod.js') }}"></script>
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/core.js') }}"></script>
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/components/shell.js') }}"></script>
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/components/feedback.js') }}"></script>
+    @stack('admin-components')
+    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/app.js') }}"></script>
     @stack('scripts')
-
 </body>
 </html>

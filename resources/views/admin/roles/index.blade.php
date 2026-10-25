@@ -113,7 +113,7 @@
                                                 <form action="{{ route('admin.roles.destroy', $role) }}"
                                                       method="POST"
                                                       class="d-inline"
-                                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rôle ?')">
+                                                      data-confirm="Êtes-vous sûr de vouloir supprimer ce rôle ?">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

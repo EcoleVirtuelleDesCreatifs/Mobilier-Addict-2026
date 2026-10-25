@@ -113,7 +113,7 @@
                                                     <a href="{{ route('admin.slider.edit', $slider) }}" class="btn btn-primary btn-sm me-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.slider.destroy', $slider) }}" method="POST" onsubmit="return confirm('Supprimer ce slide ?')">
+                                                    <form action="{{ route('admin.slider.destroy', $slider) }}" method="POST" data-confirm="Supprimer ce slide ?">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-danger btn-sm">

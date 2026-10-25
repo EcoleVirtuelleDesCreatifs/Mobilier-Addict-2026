@@ -32,7 +32,7 @@
 
             <div class="admin-card p-0 overflow-hidden">
                 <div class="table-responsive">
-                    <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
+                    <table class="table ad-table align-middle mb-0">
                         <thead style="color: var(--admin-muted);">
                             <tr>
                                 <th>Email</th>

@@ -1,155 +1,112 @@
 @extends('layouts.admin')
 
+@section('title', 'Commandes')
+
 @section('content')
+    @php
+        $statusMap = [
+            'pending' => ['En attente', 'is-amber'],
+            'confirmed' => ['Confirmée', 'is-blue'],
+            'shipping' => ['En livraison', 'is-violet'],
+            'delivered' => ['Livrée', 'is-green'],
+            'canceled' => ['Annulée', 'is-red'],
+        ];
+    @endphp
+
     <div class="content-body">
         <div class="container-fluid">
-            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
-                <div>
-                    <h1 class="h3 fw-bold mb-1">Commandes</h1>
-                    <div class="small" style="color: var(--admin-muted);">Suivi et gestion des commandes.</div>
-                </div>
-            </div>
+            <x-admin.page-header title="Commandes" subtitle="Suivi et gestion des commandes clients." />
 
-            @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
-            @endif
-
-            @if(!empty($ordersMissing))
-                <div class="admin-card p-4">
-                    <div class="alert alert-info mb-0">
-                        Pour activer la gestion des commandes, il faut créer:
-                        <div class="mt-2">
-                            <div class="small">- une migration <code>orders</code> + éventuellement <code>order_items</code></div>
-                            <div class="small">- un modèle <code>Order</code></div>
-                            <div class="small">- et brancher le checkout côté site</div>
-                        </div>
-                    </div>
-                </div>
+            @if (!empty($ordersMissing))
+                <div class="alert alert-info">La table des commandes n'existe pas encore : exécute les migrations pour activer ce module.</div>
             @else
                 <div class="row g-3 mb-3">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="admin-card stat-card stat-card--primary p-3">
-                            <div class="small" style="color: var(--admin-muted);">Commandes</div>
-                            <div class="h4 fw-bold mb-0">{{ number_format((int) ($ordersTotalCount ?? 0), 0, ',', '.') }}</div>
-                        </div>
+                    <div class="col-6 col-xl-3">
+                        <x-admin.stat label="Commandes" :value="number_format((int) ($ordersTotalCount ?? 0), 0, ',', ' ')" icon="fa-solid fa-bag-shopping" tone="navy" :href="route('admin.orders.index')" />
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="admin-card stat-card stat-card--success p-3">
-                            <div class="small" style="color: var(--admin-muted);">Livrées</div>
-                            <div class="h4 fw-bold mb-0">{{ number_format((int) ($ordersDeliveredCount ?? 0), 0, ',', '.') }}</div>
-                        </div>
+                    <div class="col-6 col-xl-3">
+                        <x-admin.stat label="Aujourd'hui" :value="number_format((int) ($ordersTodayCount ?? 0), 0, ',', ' ')" icon="fa-solid fa-calendar-day" tone="pink" />
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="admin-card stat-card stat-card--info p-3">
-                            <div class="small" style="color: var(--admin-muted);">En livraison</div>
-                            <div class="h4 fw-bold mb-0">{{ number_format((int) ($ordersShippingCount ?? 0), 0, ',', '.') }}</div>
-                        </div>
+                    <div class="col-6 col-xl-3">
+                        <x-admin.stat label="En livraison" :value="number_format((int) ($ordersShippingCount ?? 0), 0, ',', ' ')" icon="fa-solid fa-truck" tone="blue" :href="route('admin.orders.index', ['status' => 'shipping'])" />
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="admin-card stat-card stat-card--warning p-3">
-                            <div class="small" style="color: var(--admin-muted);">Commandes du jour</div>
-                            <div class="h4 fw-bold mb-0">{{ number_format((int) ($ordersTodayCount ?? 0), 0, ',', '.') }}</div>
-                        </div>
+                    <div class="col-6 col-xl-3">
+                        <x-admin.stat label="Livrées" :value="number_format((int) ($ordersDeliveredCount ?? 0), 0, ',', ' ')" icon="fa-solid fa-circle-check" tone="green" :href="route('admin.orders.index', ['status' => 'delivered'])" />
                     </div>
                 </div>
 
-                <div class="admin-card p-3 p-md-4 mb-3">
-                    <form method="GET" action="{{ route('admin.orders.index') }}" class="row g-2 align-items-end">
-                        @php
-                            $statusLabels = [
-                                'pending' => 'En attente',
-                                'confirmed' => 'Confirmée',
-                                'shipping' => 'En cours de livraison',
-                                'delivered' => 'Livrée',
-                                'canceled' => 'Annulée',
-                            ];
-                        @endphp
-                        <div class="col-12 col-md-5">
-                            <label class="form-label small" style="color: var(--admin-muted);">Recherche</label>
-                            <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Nom, WhatsApp, téléphone, id">
+                <div class="ad-card mb-3">
+                    <form method="GET" action="{{ route('admin.orders.index') }}" class="ad-filters" data-auto-submit>
+                        <div class="ad-filter-grow">
+                            <label class="form-label">Recherche</label>
+                            <div class="ad-input-icon">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Nom, WhatsApp, téléphone, n°">
+                            </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <label class="form-label small" style="color: var(--admin-muted);">Statut</label>
+                        <div class="ad-filter">
+                            <label class="form-label">Statut</label>
                             <select name="status" class="form-select">
                                 <option value="">Tous</option>
-                                @foreach(($allowedStatuses ?? []) as $s)
-                                    <option value="{{ $s }}" @selected(request('status') === $s)>{{ $statusLabels[$s] ?? $s }}</option>
+                                @foreach (($allowedStatuses ?? []) as $s)
+                                    <option value="{{ $s }}" @selected(request('status') === $s)>{{ $statusMap[$s][0] ?? $s }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-12 col-md-auto">
-                            <button type="submit" class="btn btn-admin-ghost">Filtrer</button>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-admin-primary">Filtrer</button>
+                            @if (request()->hasAny(['q', 'status']))
+                                <a href="{{ route('admin.orders.index') }}" class="btn btn-admin-ghost">Réinitialiser</a>
+                            @endif
                         </div>
                     </form>
                 </div>
 
-                <div class="admin-card p-0 overflow-hidden">
+                <div class="ad-card overflow-hidden">
                     <div class="table-responsive">
-                        <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent;">
-                            <thead style="color: var(--admin-muted);">
+                        <table class="table ad-table align-middle">
+                            <thead>
                                 <tr>
                                     <th>Commande</th>
                                     <th>Client</th>
-                                    <th>WhatsApp</th>
                                     <th>Statut</th>
-                                    <th class="text-end">Total</th>
                                     <th class="text-center">Articles</th>
-                                    <th>Date</th>
-                                    <th style="width: 240px;"></th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($orders as $order)
+                                @forelse ($orders as $order)
                                     @php
-                                        $orderNumber = 'CMD-' . str_pad((string) $order->id, 6, '0', STR_PAD_LEFT);
                                         $status = (string) $order->status;
-                                        $badgeClass = match ($status) {
-                                            'pending' => 'status-pill status-pending',
-                                            'confirmed' => 'status-pill status-confirmed',
-                                            'shipping' => 'status-pill status-shipping',
-                                            'delivered' => 'status-pill status-delivered',
-                                            'canceled' => 'status-pill status-canceled',
-                                            default => 'status-pill',
-                                        };
-                                        $statusLabel = match ($status) {
-                                            'pending' => 'En attente',
-                                            'confirmed' => 'Confirmée',
-                                            'shipping' => 'En cours de livraison',
-                                            'delivered' => 'Livrée',
-                                            'canceled' => 'Annulée',
-                                            default => $status,
-                                        };
+                                        $statusInfo = $statusMap[$status] ?? [$status, 'is-gray'];
                                     @endphp
-                                    <tr style="border-top: 1px solid var(--admin-border);">
+                                    <tr>
                                         <td>
-                                            <div class="fw-semibold">{{ $orderNumber }}</div>
-                                            <div class="small" style="color: var(--admin-muted);">#{{ $order->id }}</div>
+                                            <a href="{{ route('admin.orders.show', $order) }}" class="ad-strong">CMD-{{ str_pad((string) $order->id, 6, '0', STR_PAD_LEFT) }}</a>
+                                            <div class="ad-sub">{{ optional($order->created_at)->format('d/m/Y H:i') }}</div>
                                         </td>
                                         <td>
-                                            <div class="fw-semibold">{{ $order->lastname }} {{ $order->firstnames }}</div>
-                                            @if($order->user)
-                                                <div class="small" style="color: var(--admin-muted);">{{ $order->user->email }}</div>
-                                            @endif
+                                            <div class="ad-strong">{{ trim($order->lastname . ' ' . $order->firstnames) ?: '—' }}</div>
+                                            <div class="ad-sub">
+                                                @if ($order->whatsapp)
+                                                    <i class="fa-brands fa-whatsapp me-1"></i>{{ $order->whatsapp }}
+                                                @elseif ($order->user)
+                                                    {{ $order->user->email }}
+                                                @endif
+                                            </div>
                                         </td>
-                                        <td>{{ $order->whatsapp }}</td>
-                                        <td>
-                                            <span class="{{ $badgeClass }}"><span class="status-dot"></span>{{ $statusLabel }}</span>
-                                        </td>
-                                        <td class="text-end fw-semibold">{{ number_format((float) $order->total, 0, ',', '.') }}F</td>
+                                        <td><span class="ad-badge {{ $statusInfo[1] }}">{{ $statusInfo[0] }}</span></td>
                                         <td class="text-center">{{ $order->items_count }}</td>
+                                        <td class="text-end ad-strong text-nowrap">{{ number_format((float) $order->total, 0, ',', ' ') }} F</td>
                                         <td>
-                                            <div class="small" style="color: var(--admin-muted);">{{ optional($order->created_at)->format('d/m/Y H:i') }}</div>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-2 flex-wrap">
-                                                <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-admin-ghost">Voir</a>
-
+                                            <div class="ad-actions">
+                                                <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-admin-ghost ad-btn-icon" title="Voir"><i class="fa-solid fa-eye"></i></a>
                                                 <form method="POST" action="{{ route('admin.orders.invoices.store', $order) }}">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-admin-primary">Facture</button>
+                                                    <button type="submit" class="btn btn-sm btn-admin-ghost ad-btn-icon" title="Générer la facture"><i class="fa-solid fa-file-invoice"></i></button>
                                                 </form>
-
-                                                @if($status === 'pending')
+                                                @if ($status === 'pending')
                                                     <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                                                         @csrf
                                                         @method('PUT')
@@ -157,22 +114,20 @@
                                                         <button type="submit" class="btn btn-sm btn-admin-primary">Confirmer</button>
                                                     </form>
                                                 @endif
-
-                                                @if(in_array($status, ['pending', 'confirmed'], true))
+                                                @if (in_array($status, ['pending', 'confirmed'], true))
                                                     <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                                                         @csrf
                                                         @method('PUT')
                                                         <input type="hidden" name="status" value="shipping">
-                                                        <button type="submit" class="btn btn-sm btn-admin-ghost">En livraison</button>
+                                                        <button type="submit" class="btn btn-sm btn-admin-ghost" title="Passer en livraison"><i class="fa-solid fa-truck"></i></button>
                                                     </form>
                                                 @endif
-
-                                                @if($status !== 'delivered')
+                                                @if (!in_array($status, ['delivered', 'canceled'], true))
                                                     <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                                                         @csrf
                                                         @method('PUT')
                                                         <input type="hidden" name="status" value="delivered">
-                                                        <button type="submit" class="btn btn-sm btn-success">Livrée</button>
+                                                        <button type="submit" class="btn btn-sm btn-success" title="Marquer livrée"><i class="fa-solid fa-check"></i></button>
                                                     </form>
                                                 @endif
                                             </div>
@@ -180,7 +135,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center py-5" style="color: var(--admin-muted);">Aucune commande.</td>
+                                        <td colspan="6"><div class="ad-empty"><i class="fa-solid fa-bag-shopping"></i>Aucune commande.</div></td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -188,10 +143,8 @@
                     </div>
                 </div>
 
-                @if(method_exists($orders, 'links'))
-                    <div class="mt-3">
-                        {{ $orders->links('pagination::bootstrap-5') }}
-                    </div>
+                @if (method_exists($orders, 'links'))
+                    <div class="mt-3">{{ $orders->links('pagination::bootstrap-5') }}</div>
                 @endif
             @endif
         </div>

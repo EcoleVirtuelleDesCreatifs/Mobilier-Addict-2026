@@ -389,7 +389,7 @@
         <div class="small mb-3" style="color: var(--admin-muted);" id="variantHelpText">Pour les matelas: renseigne Épaisseur + Places. Pour les couettes: renseigne Type + Places (Épaisseur = 0).</div>
 
         <div class="table-responsive">
-            <table class="table table-dark table-borderless align-middle mb-0" style="--bs-table-bg: transparent; min-width: 760px;">
+            <table class="table table-borderless align-middle mb-0" style="--bs-table-bg: transparent; min-width: 760px;">
                 <thead style="color: var(--admin-muted);">
                     <tr>
                         <th style="width:220px;" data-variant-col="type">Type (Couette)</th>

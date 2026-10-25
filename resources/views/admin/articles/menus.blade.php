@@ -113,7 +113,7 @@
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         @if($menu->children->count() == 0)
-                                                            <form action="{{ route('admin.menus.destroy', $menu) }}" method="POST" onsubmit="return confirm('Supprimer ce menu ?')" class="d-inline">
+                                                            <form action="{{ route('admin.menus.destroy', $menu) }}" method="POST" data-confirm="Supprimer ce menu ?" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button class="btn btn-danger btn-sm">
@@ -184,7 +184,7 @@
                                                             <a href="{{ route('admin.menus.edit', $submenu) }}" class="btn btn-primary btn-sm me-2">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <form action="{{ route('admin.menus.destroy', $submenu) }}" method="POST" onsubmit="return confirm('Supprimer ce sous-menu ?')" class="d-inline">
+                                                            <form action="{{ route('admin.menus.destroy', $submenu) }}" method="POST" data-confirm="Supprimer ce sous-menu ?" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button class="btn btn-danger btn-sm">
