@@ -797,106 +797,66 @@
         <!-- sur-mesure end -->
 
         <!-- all products start -->
-        <div class="pc-band mt-100 overflow-hidden">
+        @push('styles')
+          <link rel="stylesheet" href="{{ asset('assets/maquette/css/home-catalogue.css') }}?v={{ @filemtime(public_path('assets/maquette/css/home-catalogue.css')) }}">
+        @endpush
+        <section class="pcx mt-100" aria-labelledby="pcx-title">
           <div class="container">
-            <div class="pc-head" data-aos="fade-up" data-aos-duration="700">
-              <span class="pc-kicker">Catalogue complet</span>
-              <div class="pc-head-row">
-                <h2 class="section-heading pc-title">Tous nos produits</h2>
-                <p class="pc-sub">
-                  De la literie à l'électroménager, tout l'équipement de
-                  votre intérieur réuni au même endroit.
-                </p>
+            <div class="pcx-head" data-aos="fade-up" data-aos-duration="700">
+              <div>
+                <span class="pcx-kicker">Catalogue complet</span>
+                <h2 id="pcx-title" class="pcx-title">Tous nos <span>produits</span></h2>
+                <p class="pcx-sub">De la literie à l'électroménager, tout l'équipement de votre intérieur réuni au même endroit.</p>
               </div>
-            </div>
-            <div class="pc-grid">
-              <a class="pc-card" href="{{ route('category.show', 'matelas') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_1CIVZl8UG6.jpg" alt="Matelas" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Matelas</h3>
-                    <p class="pc-card-text">Ressorts, mousse et mémoire de forme, toutes tailles</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
-              <a class="pc-card" href="{{ route('category.show', 'oreillers-et-taies') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_xCatLOv9hZ.jpg" alt="Oreillers et taies" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Oreillers &amp; taies</h3>
-                    <p class="pc-card-text">Moelleux ou ferme, pour toutes les positions de sommeil</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
-              <a class="pc-card" href="{{ route('category.show', 'drap-et-couettes') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.jpg" alt="Draps et couettes" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Draps &amp; couettes</h3>
-                    <p class="pc-card-text">Linge de lit doux et respirant, adapté au climat</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
-              <a class="pc-card" href="{{ route('category.show', 'mobilier-accessoire') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1770689632_0OTK5fkOpt.jpg" alt="Lits et mobilier de chambre" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Lits &amp; chambre</h3>
-                    <p class="pc-card-text">Cadres de lit, commodes et rangements pour la chambre</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
-              <a class="pc-card" href="{{ route('category.show', 'mobilier-accessoire') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1770738680_Z9FYQSbomB.jpg" alt="Mobilier et accessoires" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Mobilier &amp; accessoires</h3>
-                    <p class="pc-card-text">Canapés, fauteuils, tables et meubles du quotidien</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
-              <a class="pc-card" href="{{ route('category.show', 'electromenager') }}" data-aos="fade-up" data-aos-duration="700">
-                <div class="pc-card-media">
-                  <img class="pc-card-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_1CIVZl8UG6.jpg" alt="Électroménager" loading="lazy" decoding="async">
-                </div>
-                <div class="pc-card-body">
-                  <div>
-                    <h3 class="pc-card-title">Électroménager</h3>
-                    <p class="pc-card-text">Les essentiels de la maison, de la cuisine à la buanderie</p>
-                  </div>
-                  <span class="pc-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
-                </div>
+              <a href="{{ route('collection.index') }}" class="pcx-cta">
+                Voir tout le catalogue
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
               </a>
             </div>
+
+            <div class="pcx-grid">
+              @foreach ($catalogueCards ?? [] as $card)
+                <a href="{{ $card['url'] }}" class="pcx-card {{ $loop->first ? 'is-feature' : '' }}" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ min($loop->index * 80, 320) }}">
+                  @if ($card['image_url'])
+                    <img class="pcx-img" src="{{ $card['image_url'] }}" alt="{{ $card['title'] }}" loading="lazy" decoding="async">
+                  @else
+                    <span class="pcx-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M5 9h14"/><path d="M8 5.5v1"/><path d="M8 12v3"/></svg>
+                    </span>
+                  @endif
+                  <span class="pcx-shade" aria-hidden="true"></span>
+                  @if ($card['count'] > 0)
+                    <span class="pcx-count">{{ $card['count'] }} produit{{ $card['count'] > 1 ? 's' : '' }}</span>
+                  @endif
+                  <span class="pcx-body">
+                    <span class="pcx-text-wrap">
+                      <span class="pcx-card-title">{{ $card['title'] }}</span>
+                      <span class="pcx-card-text">{{ $card['text'] }}</span>
+                    </span>
+                    <span class="pcx-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </span>
+                  </span>
+                </a>
+              @endforeach
+            </div>
+
+            <ul class="pcx-perks" data-aos="fade-up" data-aos-duration="700">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+                <span><b>Livraison rapide</b> partout à Abidjan</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span><b>Qualité garantie</b> sur toute la gamme</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5A8.5 8.5 0 1 1 21 11.5z"/></svg>
+                <span><b>Conseil WhatsApp</b> pour bien choisir</span>
+              </li>
+            </ul>
           </div>
-        </div>
+        </section>
         <!-- all products end -->
 
         <!-- video start -->

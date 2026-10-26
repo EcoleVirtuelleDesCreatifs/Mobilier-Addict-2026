@@ -233,7 +233,10 @@ class HomeController extends Controller
             ->where('slug', 'explore-categories')
             ->first();
 
+        $catalogueCards = $this->catalogueCards();
+
         return view('maquette.home', compact(
+            'catalogueCards',
             'heroSlides',
             'spaceSection',
             'exploreCategoriesSection',
@@ -245,6 +248,60 @@ class HomeController extends Controller
             'blogFeaturedPost',
             'blogPosts'
         ));
+    }
+
+    /**
+     * Cartes « Tous nos produits » : nombre de produits actifs et visuel réel par univers.
+     */
+    private function catalogueCards(): array
+    {
+        $cards = [
+            ['slug' => 'matelas', 'title' => 'Matelas', 'text' => 'Ressorts, mousse et mémoire de forme, dans toutes les tailles.', 'image' => 'assets/maquette/img/products/real/1770738680_Z9FYQSbomB.jpg', 'icon' => 'bed'],
+            ['slug' => 'oreillers-et-taies', 'title' => 'Oreillers & taies', 'text' => 'Moelleux ou fermes, pour toutes les positions.', 'image' => 'assets/maquette/img/products/real/1769651796_8nTO7f2rrg.jpg', 'icon' => 'pillow'],
+            ['slug' => 'drap-et-couettes', 'title' => 'Draps & couettes', 'text' => 'Linge de lit doux et respirant.', 'image' => 'assets/maquette/img/products/real/1769999657_kRzaynhx3X.jpg', 'icon' => 'sheet'],
+            ['slug' => 'mobilier-accessoire', 'title' => 'Mobilier & chambre', 'text' => 'Lits, rangements et meubles du quotidien.', 'image' => 'assets/maquette/img/products/real/1770689632_0OTK5fkOpt.jpg', 'icon' => 'sofa'],
+            ['slug' => 'electromenager', 'title' => 'Électroménager', 'text' => 'Les essentiels, de la cuisine à la buanderie.', 'image' => null, 'icon' => 'appliance'],
+        ];
+
+        try {
+            $stats = \Illuminate\Support\Facades\Cache::remember('home.catalogue.cards.v1', now()->addMinutes(10), function () use ($cards) {
+                $result = [];
+                foreach ($cards as $card) {
+                    $query = null;
+                    if ($menu = \App\Models\Menu::query()->where('slug', $card['slug'])->where('is_active', true)->first()) {
+                        $query = $menu->products();
+                    } elseif ($category = \App\Models\Category::query()->where('slug', $card['slug'])->first()) {
+                        $query = $category->productsMany();
+                    }
+
+                    if (! $query) {
+                        $result[$card['slug']] = ['count' => 0, 'image' => null];
+                        continue;
+                    }
+
+                    $active = (clone $query)->where('products.is_active', true);
+                    $result[$card['slug']] = [
+                        'count' => (clone $active)->count(),
+                        'image' => (clone $active)->whereNotNull('products.image')->where('products.image', '<>', '')->latest('products.updated_at')->value('products.image'),
+                    ];
+                }
+
+                return $result;
+            });
+        } catch (\Throwable $e) {
+            $stats = [];
+        }
+
+        return array_map(function ($card) use ($stats) {
+            $stat = $stats[$card['slug']] ?? ['count' => 0, 'image' => null];
+            $card['count'] = (int) $stat['count'];
+            $card['url'] = route('category.show', $card['slug']);
+            $card['image_url'] = $card['image']
+                ? asset($card['image'])
+                : ($stat['image'] ? image_thumb($stat['image'], 640) : null);
+
+            return $card;
+        }, $cards);
     }
 
     private function slideImageExists(?string $path): bool
