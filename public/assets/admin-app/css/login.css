@@ -1,0 +1,60 @@
+/* Page de connexion admin */
+body.ad-login { min-height: 100vh; background: var(--ad-bg); }
+
+.ad-login-shell { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+
+/* Panneau marque */
+.ad-login-brand {
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 32px;
+    padding: 48px 56px; color: #fff;
+    background:
+        radial-gradient(600px 400px at 0% 0%, rgba(236, 72, 153, .35), transparent 60%),
+        radial-gradient(500px 400px at 100% 100%, rgba(236, 72, 153, .2), transparent 60%),
+        linear-gradient(160deg, var(--ad-navy) 0%, #0b3b75 100%);
+}
+.ad-login-brand::after {
+    content: ""; position: absolute; right: -120px; top: 50%; width: 360px; height: 360px; border-radius: 50%;
+    border: 48px solid rgba(255, 255, 255, .05); transform: translateY(-50%);
+}
+.ad-login-logo { height: 64px; width: auto; align-self: flex-start; }
+.ad-login-pitch { position: relative; z-index: 1; max-width: 440px; }
+.ad-login-pitch h2 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 28px; }
+.ad-login-pitch ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.ad-login-pitch li { display: flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, .85); font-size: 15px; }
+.ad-login-pitch li i {
+    width: 36px; height: 36px; border-radius: 10px; flex: 0 0 auto;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(255, 255, 255, .1); color: #f9a8d4;
+}
+.ad-login-brand small { color: rgba(255, 255, 255, .5); position: relative; z-index: 1; }
+
+/* Formulaire */
+.ad-login-panel { display: flex; align-items: center; justify-content: center; padding: 32px 20px; }
+.ad-login-card { width: min(400px, 100%); }
+.ad-login-logo-mobile { display: none; height: 52px; margin: 0 auto 24px; background: var(--ad-navy); padding: 8px 14px; border-radius: 14px; }
+.ad-login-card h1 { font-size: 1.75rem; font-weight: 800; color: var(--ad-navy); margin: 0 0 4px; letter-spacing: -.02em; }
+.ad-login-sub { color: var(--ad-muted); margin-bottom: 28px; }
+.ad-login-card .form-control { height: 46px; background: #fff; }
+.ad-login-card .form-control.is-invalid { border-color: #ef4444; background-image: none; }
+.ad-login-password { padding-right: 44px; }
+.ad-login-toggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border: 0; border-radius: 8px; background: transparent; color: var(--ad-muted);
+}
+.ad-login-toggle:hover { background: var(--ad-bg); color: var(--ad-navy); }
+.ad-login-link { font-size: 12px; font-weight: 600; color: var(--ad-pink); margin-bottom: 6px; }
+.ad-login-link:hover { color: var(--ad-pink-2); text-decoration: underline; }
+.ad-login-caps { margin-top: 6px; font-size: 12px; color: #b45309; }
+.ad-login-submit { height: 48px; font-size: 15px; border-radius: 12px; box-shadow: 0 10px 24px rgba(236, 72, 153, .3); }
+.ad-login-submit:disabled { opacity: .85; }
+.ad-login-back { display: block; text-align: center; margin-top: 28px; color: var(--ad-muted); font-size: 13px; }
+.ad-login-back:hover { color: var(--ad-navy); }
+
+@media (max-width: 991.98px) {
+    .ad-login-shell { grid-template-columns: 1fr; }
+    .ad-login-brand { display: none; }
+    .ad-login-logo-mobile { display: block; }
+    .ad-login-card { text-align: left; }
+    .ad-login-card h1, .ad-login-sub { text-align: center; }
+}
