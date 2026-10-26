@@ -91,7 +91,7 @@
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
                                             @if ($p->badge_path)
-                                                <img src="{{ image_url($p->badge_path) }}" alt="" class="ad-thumb" loading="lazy">
+                                                <img src="{{ image_thumb($p->badge_path) }}" alt="" class="ad-thumb" width="48" height="48" loading="lazy" decoding="async">
                                             @else
                                                 <span class="ad-thumb ad-thumb-placeholder"><i class="fa-solid fa-id-badge"></i></span>
                                             @endif

@@ -100,7 +100,7 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <img src="{{ image_url($product->image) }}" alt="" class="ad-thumb" loading="lazy">
+                                            <img src="{{ image_thumb($product->image) }}" alt="" class="ad-thumb" width="48" height="48" loading="lazy" decoding="async">
                                             <div style="min-width:0">
                                                 <a href="{{ route('admin.products.edit', $product) }}" class="ad-strong d-block text-truncate" style="max-width:280px">{{ $product->name }}</a>
                                                 <div class="ad-sub">{{ $product->sku ?: $product->slug }}</div>

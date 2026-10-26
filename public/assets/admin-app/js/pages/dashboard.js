@@ -84,6 +84,7 @@
             this._tick = setInterval(function () { self.now = Date.now(); }, 1000);
             if (this.traffic && this.urls.realtime) {
                 this._poll = setInterval(this.refresh, REFRESH_MS);
+                this.refresh();
             }
         },
 

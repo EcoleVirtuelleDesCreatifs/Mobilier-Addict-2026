@@ -9,6 +9,13 @@ if (!function_exists('image_url')) {
     }
 }
 
+if (!function_exists('image_thumb')) {
+    function image_thumb(?string $path, int $size = 96): string
+    {
+        return ImageUrl::thumb($path, $size);
+    }
+}
+
 if (!function_exists('whatsapp_number')) {
     function whatsapp_number(): string
     {

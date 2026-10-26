@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Slide;
 use App\Models\User;
 use App\Support\TrafficSource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -19,6 +20,17 @@ use Illuminate\Support\Str;
 class DashboardController extends Controller
 {
     public function index()
+    {
+        try {
+            $dashboard = Cache::remember('admin.dashboard.payload', now()->addSeconds(60), fn () => $this->buildDashboard());
+        } catch (\Throwable $e) {
+            $dashboard = $this->buildDashboard();
+        }
+
+        return view('admin.home', ['dashboard' => $dashboard]);
+    }
+
+    private function buildDashboard(): array
     {
         $hasPageViews = Schema::hasTable('page_views');
         $now = now();
@@ -92,7 +104,7 @@ class DashboardController extends Controller
 
                 return [
                     'name' => $product ? $product->name : Str::afterLast($row['path'], '/'),
-                    'image' => ($product && $product->image) ? image_url($product->image) : null,
+                    'image' => ($product && $product->image) ? image_thumb($product->image) : null,
                     'url' => $product ? route('admin.products.edit', $product->id) : url($row['path']),
                     'views' => $row['views'],
                 ];
@@ -132,7 +144,7 @@ class DashboardController extends Controller
             ],
         ];
 
-        return view('admin.home', ['dashboard' => $dashboard]);
+        return $dashboard;
     }
 
     public function realtimeStats()
@@ -144,7 +156,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        [$visitors, $abandonedCarts] = $this->trafficStats(now());
+        [$visitors, $abandonedCarts] = Cache::remember('admin.dashboard.realtime', now()->addSeconds(10), fn () => $this->trafficStats(now()));
 
         return response()->json([
             'visitors' => $visitors,

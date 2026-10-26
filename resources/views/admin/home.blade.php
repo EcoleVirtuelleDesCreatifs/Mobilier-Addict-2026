@@ -19,5 +19,5 @@
 @endsection
 
 @push('admin-components')
-    <script src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/pages/dashboard.js') }}"></script>
+    <script defer src="{{ \App\Support\AdminShell::asset('assets/admin-app/js/pages/dashboard.js') }}"></script>
 @endpush

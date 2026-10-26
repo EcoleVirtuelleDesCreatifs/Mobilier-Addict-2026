@@ -2,7 +2,7 @@
     <div class="row align-items-center">
         <div class="col-12 col-md-2">
             <div class="rounded-3 overflow-hidden" style="width:80px;height:80px;border:1px solid var(--admin-border);">
-                <img src="@image_url($category->image)" alt="" style="width:100%;height:100%;object-fit:cover;">
+                <img src="{{ image_thumb($category->image, 240) }}" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
             </div>
         </div>
         <div class="col-12 col-md-3">
