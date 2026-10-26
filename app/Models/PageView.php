@@ -13,7 +13,14 @@ class PageView extends Model
         'path',
         'full_url',
         'referer',
+        'source',
+        'medium',
+        'campaign',
         'ip',
+        'country',
+        'country_code',
+        'region',
+        'city',
         'user_agent',
     ];
 }

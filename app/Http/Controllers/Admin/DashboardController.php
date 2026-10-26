@@ -11,6 +11,7 @@ use App\Models\PageView;
 use App\Models\Product;
 use App\Models\Slide;
 use App\Models\User;
+use App\Support\TrafficSource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class DashboardController extends Controller
             ];
 
             $slugs = collect($topRows)->flatten(1)
-                ->map(fn ($r) => Str::after($r->path, '/produit/'))
+                ->map(fn ($r) => Str::afterLast($r->path, 'produit/'))
                 ->filter()->unique()->all();
 
             $productsBySlug = empty($slugs)
@@ -52,7 +53,7 @@ class DashboardController extends Controller
                 $topProducts[$period] = $rows->map(fn ($r) => [
                     'views' => (int) $r->views,
                     'path' => $r->path,
-                    'product' => $productsBySlug->get(Str::after($r->path, '/produit/')),
+                    'product' => $productsBySlug->get(Str::afterLast($r->path, 'produit/')),
                 ]);
             }
 
@@ -107,6 +108,7 @@ class DashboardController extends Controller
                 ['label' => 'Stock faible', 'value' => Product::where('stock', '<=', 5)->count(), 'hint' => '≤ 5 unités', 'icon' => 'fa-solid fa-triangle-exclamation', 'tone' => 'red', 'url' => route('admin.products.index', ['status' => 'low_stock'])],
             ],
             'traffic' => $hasPageViews ? $visitors : null,
+            'origins' => $this->origins($now, $hasOrders),
             'abandonedCarts' => $abandonedCarts,
             'topProducts' => $top,
             'latestOrders' => $latestOrders,
@@ -180,6 +182,80 @@ class DashboardController extends Controller
             ->where('created_at', '>=', $since)
             ->distinct()
             ->count('visitor_id');
+    }
+
+    private function origins($now, bool $hasOrders): ?array
+    {
+        $hasOrigin = Schema::hasTable('page_views') && Schema::hasColumn('page_views', 'source');
+        $hasDeliveryPlace = $hasOrders && Schema::hasColumn('orders', 'delivery_place');
+
+        if (! $hasOrigin && ! $hasDeliveryPlace) {
+            return null;
+        }
+
+        $periods = [
+            'day' => $now->copy()->startOfDay(),
+            'week' => $now->copy()->startOfWeek(),
+            'month' => $now->copy()->startOfMonth(),
+        ];
+
+        $result = ['enabled' => $hasOrigin, 'sources' => [], 'cities' => [], 'communes' => []];
+
+        foreach ($periods as $period => $since) {
+            $result['sources'][$period] = $hasOrigin
+                ? PageView::query()
+                    ->select('source', 'medium', DB::raw('COUNT(DISTINCT visitor_id) as visitors'))
+                    ->where('created_at', '>=', $since)
+                    ->whereNotNull('source')
+                    ->where('medium', '<>', 'internal')
+                    ->groupBy('source', 'medium')
+                    ->orderByDesc('visitors')
+                    ->limit(8)
+                    ->get()
+                    ->map(fn ($r) => [
+                        'label' => $r->source,
+                        'medium' => TrafficSource::MEDIUM_LABELS[$r->medium] ?? $r->medium,
+                        'key' => Str::slug($r->source),
+                        'visitors' => (int) $r->visitors,
+                    ])->values()
+                : [];
+
+            $result['cities'][$period] = $hasOrigin
+                ? PageView::query()
+                    ->select('city', 'region', 'country', 'country_code', DB::raw('COUNT(DISTINCT visitor_id) as visitors'))
+                    ->where('created_at', '>=', $since)
+                    ->whereNotNull('country')
+                    ->groupBy('city', 'region', 'country', 'country_code')
+                    ->orderByDesc('visitors')
+                    ->limit(8)
+                    ->get()
+                    ->map(fn ($r) => [
+                        'label' => $r->city ?: ($r->region ?: $r->country),
+                        'detail' => collect([$r->city ? $r->region : null, $r->country])->filter()->unique()->implode(', '),
+                        'flag' => $r->country_code ? Str::lower($r->country_code) : null,
+                        'visitors' => (int) $r->visitors,
+                    ])->values()
+                : [];
+
+            $result['communes'][$period] = $hasDeliveryPlace
+                ? Order::query()
+                    ->select('delivery_place', DB::raw('COUNT(*) as total'))
+                    ->where('created_at', '>=', $since)
+                    ->whereNotNull('delivery_place')
+                    ->where('delivery_place', '<>', '')
+                    ->groupBy('delivery_place')
+                    ->orderByDesc('total')
+                    ->limit(50)
+                    ->get()
+                    ->groupBy(fn ($r) => Str::title(Str::lower(trim($r->delivery_place))))
+                    ->map(fn ($rows, $label) => ['label' => $label, 'total' => (int) $rows->sum('total')])
+                    ->sortByDesc('total')
+                    ->take(8)
+                    ->values()
+                : [];
+        }
+
+        return $result;
     }
 
     private function topViewedPaths($since, int $limit = 5)

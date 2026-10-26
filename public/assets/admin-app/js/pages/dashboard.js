@@ -4,6 +4,25 @@
 
     var REFRESH_MS = 15000;
 
+    var SOURCE_ICONS = {
+        facebook: ['fa-brands fa-facebook', '#1877f2'],
+        instagram: ['fa-brands fa-instagram', '#e1306c'],
+        tiktok: ['fa-brands fa-tiktok', '#111827'],
+        whatsapp: ['fa-brands fa-whatsapp', '#22c55e'],
+        google: ['fa-brands fa-google', '#ea4335'],
+        youtube: ['fa-brands fa-youtube', '#ff0000'],
+        linkedin: ['fa-brands fa-linkedin', '#0a66c2'],
+        'x-twitter': ['fa-brands fa-x-twitter', '#111827'],
+        pinterest: ['fa-brands fa-pinterest', '#e60023'],
+        snapchat: ['fa-brands fa-snapchat', '#eab308'],
+        telegram: ['fa-brands fa-telegram', '#229ed9'],
+        bing: ['fa-brands fa-microsoft', '#0078d4'],
+        direct: ['fa-solid fa-arrow-right-to-bracket', '#00234D'],
+        'e-mail': ['fa-solid fa-envelope', '#7c3aed'],
+        newsletter: ['fa-solid fa-envelope', '#7c3aed'],
+        sms: ['fa-solid fa-comment-sms', '#0ea5e9']
+    };
+
     AdminApp.register('dashboard', {
         props: { initial: { type: Object, default: function () { return {}; } } },
 
@@ -17,6 +36,8 @@
                 topProducts: d.topProducts || { day: [], week: [], month: [] },
                 latestOrders: d.latestOrders || [],
                 overview: d.overview || [],
+                origins: d.origins || null,
+                originPeriod: 'week',
                 quickLinks: d.quickLinks || [],
                 urls: d.urls || {},
                 period: 'day',
@@ -33,6 +54,24 @@
             },
             maxViews: function () {
                 return this.currentTop.reduce(function (max, p) { return Math.max(max, p.views); }, 1);
+            },
+            originSources: function () {
+                return this.origins ? (this.origins.sources[this.originPeriod] || []) : [];
+            },
+            originCities: function () {
+                return this.origins ? (this.origins.cities[this.originPeriod] || []) : [];
+            },
+            originCommunes: function () {
+                return this.origins ? (this.origins.communes[this.originPeriod] || []) : [];
+            },
+            sourcesTotal: function () {
+                return this.originSources.reduce(function (sum, s) { return sum + s.visitors; }, 0) || 1;
+            },
+            citiesTotal: function () {
+                return this.originCities.reduce(function (sum, c) { return sum + c.visitors; }, 0) || 1;
+            },
+            communesMax: function () {
+                return this.originCommunes.reduce(function (max, c) { return Math.max(max, c.total); }, 1);
             },
             updatedLabel: function () {
                 var s = Math.max(0, Math.round((this.now - this.updatedAt) / 1000));
@@ -56,6 +95,19 @@
         methods: {
             number: AdminApp.number,
             money: AdminApp.money,
+            sourceIcon: function (key) {
+                return (SOURCE_ICONS[key] || ['fa-solid fa-globe', '#6b7280'])[0];
+            },
+            sourceColor: function (key) {
+                return (SOURCE_ICONS[key] || ['fa-solid fa-globe', '#6b7280'])[1];
+            },
+            percent: function (value, total) {
+                return Math.round(value / total * 100);
+            },
+            flag: function (code) {
+                if (!code || code.length !== 2) return '🌍';
+                return String.fromCodePoint.apply(null, code.toUpperCase().split('').map(function (c) { return 127397 + c.charCodeAt(0); }));
+            },
             refresh: function () {
                 if (document.hidden) return;
                 var self = this;
@@ -106,6 +158,59 @@
         <div class="ad-live-item"><small>Aujourd'hui</small><strong>{{ number(traffic.today) }}</strong></div>
         <div class="ad-live-item"><small>Ce mois</small><strong>{{ number(traffic.month) }}</strong></div>
         <div class="ad-live-item"><small>Paniers abandonnés (30 j)</small><strong class="text-warning">{{ number(abandonedCarts) }}</strong></div>
+    </div>
+</div>
+
+<div v-if="origins" class="ad-card mb-3">
+    <div class="ad-card-head">
+        <h2 class="ad-card-title"><i class="fa-solid fa-earth-africa me-1" style="color:var(--ad-pink)"></i> Origine des visiteurs</h2>
+        <div class="ad-tabs">
+            <button v-for="p in periods" :key="p.key" type="button" :class="{ 'is-active': originPeriod === p.key }" @click="originPeriod = p.key">{{ p.label }}</button>
+        </div>
+    </div>
+    <div class="row g-0">
+        <div class="col-12 col-lg-4 ad-origin-col">
+            <div class="ad-origin-title">Sources de trafic</div>
+            <div v-for="s in originSources" :key="s.label + s.medium" class="ad-origin-row">
+                <span class="ad-origin-icon" :style="{ color: sourceColor(s.key) }"><i :class="sourceIcon(s.key)"></i></span>
+                <span class="flex-grow-1" style="min-width:0">
+                    <span class="d-flex justify-content-between gap-2">
+                        <span class="ad-strong text-truncate">{{ s.label }} <small class="ad-sub fw-normal">· {{ s.medium }}</small></span>
+                        <span class="ad-sub text-nowrap">{{ number(s.visitors) }} · {{ percent(s.visitors, sourcesTotal) }} %</span>
+                    </span>
+                    <span class="ad-bar"><span :style="{ width: percent(s.visitors, sourcesTotal) + '%', background: sourceColor(s.key) }"></span></span>
+                </span>
+            </div>
+            <div v-if="!originSources.length" class="ad-empty py-4"><i class="fa-solid fa-route"></i>{{ origins.enabled ? 'Aucune visite sur cette période' : 'Suivi des sources non activé' }}</div>
+        </div>
+        <div class="col-12 col-lg-4 ad-origin-col">
+            <div class="ad-origin-title">Villes de connexion</div>
+            <div v-for="c in originCities" :key="c.label + c.detail" class="ad-origin-row">
+                <span class="ad-origin-icon ad-origin-flag">{{ flag(c.flag) }}</span>
+                <span class="flex-grow-1" style="min-width:0">
+                    <span class="d-flex justify-content-between gap-2">
+                        <span class="ad-strong text-truncate">{{ c.label }}</span>
+                        <span class="ad-sub text-nowrap">{{ number(c.visitors) }} · {{ percent(c.visitors, citiesTotal) }} %</span>
+                    </span>
+                    <span class="ad-sub d-block text-truncate">{{ c.detail }}</span>
+                </span>
+            </div>
+            <div v-if="!originCities.length" class="ad-empty py-4"><i class="fa-solid fa-location-dot"></i>{{ origins.enabled ? 'Localisation en cours de collecte' : 'Suivi des villes non activé' }}</div>
+        </div>
+        <div class="col-12 col-lg-4 ad-origin-col">
+            <div class="ad-origin-title">Communes de livraison <small class="ad-sub fw-normal">(commandes)</small></div>
+            <div v-for="c in originCommunes" :key="c.label" class="ad-origin-row">
+                <span class="ad-origin-icon" style="color:var(--ad-pink)"><i class="fa-solid fa-location-dot"></i></span>
+                <span class="flex-grow-1" style="min-width:0">
+                    <span class="d-flex justify-content-between gap-2">
+                        <span class="ad-strong text-truncate">{{ c.label }}</span>
+                        <span class="ad-sub text-nowrap">{{ number(c.total) }} cmd</span>
+                    </span>
+                    <span class="ad-bar"><span :style="{ width: (c.total / communesMax * 100) + '%' }"></span></span>
+                </span>
+            </div>
+            <div v-if="!originCommunes.length" class="ad-empty py-4"><i class="fa-solid fa-truck"></i>Aucune commande sur cette période</div>
+        </div>
     </div>
 </div>
 
