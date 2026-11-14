@@ -56,7 +56,7 @@ return [
         'modeles' => [
             ['name' => 'Studio Étudiant', 'desc' => "L'essentiel malin : matelas 1 place, oreiller confort, parure facile d'entretien.", 'img' => 'assets/img/blog/furniture-1.jpg'],
             ['name' => 'Studio Actif', 'desc' => "Pour les jeunes professionnels : literie 2 places, coin bureau, rangement optimisé.", 'img' => 'assets/maquette/img/blog/studio-actif.webp'],
-            ['name' => 'Pied-à-terre', 'desc' => "Le confort d'un second chez-soi : literie douillette, textile doux, petit électroménager.", 'img' => 'assets/img/blog/furniture-5.jpg'],
+            ['name' => 'Pied-à-terre', 'desc' => "Le confort d'un second chez-soi : literie douillette, textile doux, petit électroménager.", 'img' => 'assets/maquette/img/blog/studio-piedaterre.webp'],
         ],
         'equipement' => [
             ['Matelas compacts', 'matelas.php', '1 ou 2 places, confort ferme ou moelleux.'],
