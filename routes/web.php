@@ -14,11 +14,9 @@ use App\Http\Controllers\B2BController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\NewsletterSubscriptionController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\HomeSectionController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\FacebookPixelController;
-use App\Http\Controllers\Admin\NewProductsButtonController;
 use App\Http\Controllers\Admin\SpaceSectionController;
 use App\Http\Controllers\Admin\SpaceCardController;
 use App\Http\Controllers\HomeController;
@@ -450,9 +448,6 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->name('admin.settings.facebook-pixel.edit');
     Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->name('admin.settings.facebook-pixel.update');
 
-    Route::get('/settings/new-products-button', [NewProductsButtonController::class, 'edit'])->name('admin.settings.new-products-button.edit');
-    Route::post('/settings/new-products-button', [NewProductsButtonController::class, 'update'])->name('admin.settings.new-products-button.update');
-
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
     Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
@@ -525,12 +520,6 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/jeu/{participant}/modifier', [\App\Http\Controllers\Admin\GameParticipantController::class, 'edit'])->name('admin.game.edit');
     Route::put('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'update'])->name('admin.game.update');
     Route::delete('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'destroy'])->name('admin.game.destroy');
-
-    Route::get('/home-sections', [HomeSectionController::class, 'index'])->name('admin.home_sections.index');
-    Route::get('/home-sections/create', [HomeSectionController::class, 'create'])->name('admin.home_sections.create');
-    Route::post('/home-sections', [HomeSectionController::class, 'store'])->name('admin.home_sections.store');
-    Route::get('/home-sections/{home_section}/edit', [HomeSectionController::class, 'edit'])->name('admin.home_sections.edit');
-    Route::put('/home-sections/{home_section}', [HomeSectionController::class, 'update'])->name('admin.home_sections.update');
 
     Route::get('/space-sections', [SpaceSectionController::class, 'index'])->name('admin.space_sections.index');
     Route::get('/space-sections/{space_section}/edit', [SpaceSectionController::class, 'edit'])->name('admin.space_sections.edit');
