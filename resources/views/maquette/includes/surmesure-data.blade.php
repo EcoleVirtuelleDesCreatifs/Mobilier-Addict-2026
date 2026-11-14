@@ -5,8 +5,8 @@ return [
         'title' => 'Hôtellerie',
         'kicker' => 'Sur-mesure · Hôtels & résidences',
         'lead' => "Une chambre d'hôtel réussie se juge à une chose : la qualité du sommeil qu'elle offre. Nous équipons les hôtels, chambres d'hôtes et résidences de tourisme de Côte d'Ivoire avec du mobilier et de la literie pensés pour durer et faire revenir les clients.",
-        'image' => 'assets/img/blog/furniture-4.jpg',
-        'image_alt' => 'Matelas Mobilier Addict pour chambre d’hôtel',
+        'image' => 'assets/maquette/img/blog/hotellerie-cover.webp',
+        'image_alt' => 'Chambre d’hôtel premium équipée par Mobilier Addict : lit king size, literie blanche et accents orangés',
         'story_title' => "L'expérience commence au premier regard",
         'story' => "Quand votre client pousse la porte de sa chambre, il juge en quelques secondes : la netteté du linge, la fermeté du matelas, la sensation des oreillers. Chaque détail compte. Mobilier Addict vous accompagne de la chambre standard à la suite premium, avec des gammes cohérentes qui donnent une identité à votre établissement — sans exploser votre budget.",
         'modeles' => [
