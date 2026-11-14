@@ -49,8 +49,8 @@ return [
         'title' => 'Studio',
         'kicker' => 'Sur-mesure · Studios & petits espaces',
         'lead' => "Un studio se joue au centimètre près. Nous composons des ensembles compacts et malins — bonne literie, rangement utile, petit électroménager — pour que le premier logement soit déjà un vrai chez-soi.",
-        'image' => 'assets/img/blog/furniture-5.jpg',
-        'image_alt' => 'Oreiller confort pour studio',
+        'image' => 'assets/maquette/img/blog/studio-cover.webp',
+        'image_alt' => 'Studio meublé par Mobilier Addict : lit, coin repas et kitchenette équipée',
         'story_title' => "Petit espace, grand confort",
         'story' => "Premier appartement, résidence étudiante ou pied-à-terre : le studio exige des choix justes. Un bon matelas reste la priorité — c'est lui qui transforme 20 m² en lieu de repos réel. Nous privilégions le malin : literie 1 ou 2 places, mobilier compact, électroménager de petite dimension.",
         'modeles' => [
