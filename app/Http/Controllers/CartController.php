@@ -263,7 +263,7 @@ class CartController extends Controller
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'status' => 'pending',
-                'payment_method' => null,
+                'payment_method' => 'Paiement à la livraison',
                 'shipping_method' => $shippingData['shipping_method'] ?? null,
                 'lastname' => $shippingData['lastname'],
                 'firstnames' => $shippingData['firstnames'],

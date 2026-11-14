@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    // Mesure & tracking (audit SEO)
+    'gtm_id' => env('GTM_ID'),
+    'ga4_id' => env('GA4_ID'),
+    'meta_pixel_id' => env('META_PIXEL_ID'),
+
+    // Bouton WhatsApp (commandes & conseil)
+    'whatsapp_number' => env('WHATSAPP_NUMBER', '2250799140356'),
+    'whatsapp_message' => env('WHATSAPP_MESSAGE', 'Bonjour Mobilier Addict, je souhaite un conseil.'),
+
 ];

@@ -51,10 +51,11 @@ Route::group([], function () {
 Route::get('/sitemap.xml', function () {
     $urls = [];
 
-    $add = function (string $loc, ?string $lastmod = null) use (&$urls) {
+    $add = function (string $loc, ?string $lastmod = null, ?string $image = null) use (&$urls) {
         $urls[] = [
             'loc' => $loc,
             'lastmod' => $lastmod,
+            'image' => $image,
         ];
     };
 
@@ -79,7 +80,10 @@ Route::get('/sitemap.xml', function () {
     $add(route('devis.create'));
 
     if (Schema::hasTable('categories')) {
-        Category::query()->select(['slug', 'updated_at'])->whereNotNull('slug')->get()->each(function ($category) use ($add) {
+        // Audit : ne référencer que les catégories contenant des produits actifs.
+        Category::query()->select(['slug', 'updated_at'])->whereNotNull('slug')
+            ->whereHas('productsMany', fn ($q) => $q->where('products.is_active', true))
+            ->get()->each(function ($category) use ($add) {
             $add(route('univers.show', $category->slug), optional($category->updated_at)->toDateString());
         });
     }
@@ -89,6 +93,7 @@ Route::get('/sitemap.xml', function () {
             ->select(['slug', 'updated_at', 'is_active'])
             ->where('is_active', true)
             ->whereNotNull('slug')
+            ->whereHas('products', fn ($q) => $q->where('products.is_active', true))
             ->get()
             ->each(function ($menu) use ($add) {
                 $slug = strtolower((string) $menu->slug);
@@ -100,25 +105,37 @@ Route::get('/sitemap.xml', function () {
     }
 
     if (Schema::hasTable('products')) {
-        Product::query()->select(['slug', 'updated_at', 'is_active'])->where('is_active', true)->whereNotNull('slug')->get()->each(function ($product) use ($add) {
-            $add(route('product.show', $product->slug), optional($product->updated_at)->toDateString());
+        $allProducts = Product::query()->select(['id', 'name', 'slug', 'updated_at', 'is_active', 'image'])->where('is_active', true)->whereNotNull('slug')->get();
+        $allProducts->each(function ($product) use ($add, $allProducts) {
+            // Exclure du sitemap les fiches déclinées par taille : leur canonical pointe vers la fiche mère.
+            $base = preg_replace('/\s*[-–—]\s*\d+\s*(cm)?\s*x\s*\d+\s*(cm)?\s*$/iu', '', (string) $product->name);
+            if ($base !== '' && $base !== $product->name) {
+                $canonical = $allProducts->filter(fn ($p) => str_starts_with((string) $p->name, $base))->sortBy('id')->first();
+                if ($canonical && $canonical->id !== $product->id) {
+                    return;
+                }
+            }
+            $add(route('product.show', $product->slug), optional($product->updated_at)->toDateString(), $product->image ? image_url($product->image) : null);
         });
     }
 
     if (Schema::hasTable('blog_posts')) {
-        BlogPost::query()->select(['slug', 'updated_at'])->whereNotNull('slug')->get()->each(function ($post) use ($add) {
-            $add(route('blog.show', $post->slug), optional($post->updated_at)->toDateString());
+        BlogPost::query()->select(['slug', 'updated_at', 'image'])->whereNotNull('slug')->get()->each(function ($post) use ($add) {
+            $add(route('blog.show', $post->slug), optional($post->updated_at)->toDateString(), $post->image ? image_url($post->image) : null);
         });
     }
 
     $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' . "\n";
 
     foreach ($urls as $row) {
         $xml .= "  <url>\n";
         $xml .= '    <loc>' . htmlspecialchars($row['loc'], ENT_XML1) . "</loc>\n";
         if (!empty($row['lastmod'])) {
             $xml .= '    <lastmod>' . htmlspecialchars($row['lastmod'], ENT_XML1) . "</lastmod>\n";
+        }
+        if (!empty($row['image'])) {
+            $xml .= '    <image:image><image:loc>' . htmlspecialchars($row['image'], ENT_XML1) . "</image:loc></image:image>\n";
         }
         $xml .= "  </url>\n";
     }
@@ -173,7 +190,7 @@ Route::get('/collection', function () {
 Route::get('/categories/{slug}', function ($slug) {
     // If the slug matches an active menu, redirect to the menu page
     if ($menu = Menu::where('slug', $slug)->where('is_active', true)->first()) {
-        return redirect()->route('menu.show', $slug);
+        return redirect()->route('menu.show', $slug, 301);
     }
 
     // Try to get category from database
@@ -322,12 +339,14 @@ Route::get('/categories/{slug}', function ($slug) {
 Route::get('/nouveautes', function () {
     $products = Product::query()
         ->active()
+        ->where('price', '>', 0)
         ->orderByDesc('created_at')
         ->take(48)
         ->get();
 
     if ($products->isEmpty()) {
         $products = Product::query()
+            ->where('price', '>', 0)
             ->orderByDesc('created_at')
             ->take(48)
             ->get();

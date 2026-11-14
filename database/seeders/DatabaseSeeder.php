@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             MatelasDemoSeeder::class,
             MenuOrderSeeder::class,
             B2BCategorySeeder::class,
+            BlogPostSeeder::class,
         ]);
     }
 }

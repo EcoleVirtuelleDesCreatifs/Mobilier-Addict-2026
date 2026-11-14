@@ -1,14 +1,14 @@
 @extends('maquette.layout')
 
-@section('title', "Votre Sommeil Parfait")
-@section('meta_description', "Découvrez nos offres et trouvez votre sommeil parfait, à votre prix.")
+@section('title', "Nos prix matelas & literie à Abidjan | Mobilier Addict")
+@section('meta_description', "Trouvez votre matelas à votre prix : gammes par budget, garantie 10 ans, livraison 48h à Abidjan et partout en Côte d'Ivoire.")
 
 @section('content')
 <section class="pricing" aria-label="Trouvez votre matelas">
     <div class="container">
         <div class="pricing__header">
             <span class="pricing__badge">💰 Adapté à votre budget</span>
-            <h2 class="pricing__title">Votre Sommeil Parfait,<br>À Votre Prix</h2>
+            <h1 class="pricing__title">Votre Sommeil Parfait,<br>À Votre Prix</h1>
             <p class="pricing__subtitle">Peu importe votre budget, nous avons le matelas qui transformera vos nuits</p>
         </div>
 
@@ -73,7 +73,7 @@
         </div>
 
         <div class="pricing__footer">
-            <p class="pricing__guarantee">✓ Livraison gratuite &nbsp; ✓ 100 nuits d'essai &nbsp; ✓ Garantie 10 ans</p>
+            <p class="pricing__guarantee">✓ Livraison gratuite dès 50 000 F &nbsp; ✓ Garantie 10 ans</p>
         </div>
     </div>
 </section>

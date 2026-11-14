@@ -121,6 +121,19 @@
                 <!-- sidebar end -->
             @endif
         </div>
+
+        @if(empty($hideSeoText) && $productCount > 0)
+            <section class="seo-text mt-5 mb-4" style="max-width:860px;color:#4b5563;font-size:15px;line-height:1.7;">
+                <h2 class="heading_24 mb-3">{{ $collectionTitle }} à Abidjan — Mobilier Addict</h2>
+                <p>Parcourez notre sélection {{ $collectionTitle }} disponible à Abidjan et livrable
+                    partout en Côte d'Ivoire. Chaque article indique son prix exact, ses
+                    caractéristiques et sa disponibilité en temps réel. Nous livrons en 48&nbsp;h sur
+                    Abidjan (Cocody, Plateau, Yopougon, Marcory, Abobo…) et expédions vers l'intérieur
+                    du pays. La livraison est gratuite dès 50&nbsp;000&nbsp;F d'achat. Une question sur un produit, une taille ou un
+                    délai&nbsp;? Notre équipe répond rapidement sur WhatsApp, par téléphone ou via le
+                    formulaire de contact.</p>
+            </section>
+        @endif
     </div>
 </div>
 @include('maquette.includes.seo-schema')

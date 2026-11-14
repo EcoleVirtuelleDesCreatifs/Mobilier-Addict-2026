@@ -3288,7 +3288,7 @@ img.single-banner-img {
   padding-bottom: 60px; }
 
 .promotinal-product-section {
-  background: url("../img/banner/tools-bg.jpg") no-repeat center center/cover; }
+  background: url("../img/banner/tools-bg.webp") no-repeat center center/cover; }
 
 .promotinal-product-section > div {
   position: relative;
@@ -6292,7 +6292,7 @@ blockquote {
   border-radius: 4px; }
 
 .about-banner {
-  background-image: url("../img/about/banner.jpg");
+  background-image: url("../img/about/banner.webp");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center; }

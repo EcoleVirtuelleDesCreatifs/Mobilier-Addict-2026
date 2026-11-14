@@ -2,6 +2,7 @@
 
 @section('title', $participant->public_name . ' participe au Grand Jeu — Mobilier Addict')
 @section('meta_description', 'Soutiens ' . $participant->public_name . ' au Grand Jeu Mobilier Addict et découvre la collection.')
+@section('robots', 'noindex, nofollow')
 @if($participant->badge_path)
     @section('meta_image', image_url($participant->badge_path))
 @endif
@@ -76,7 +77,7 @@
 
     <div class="text-center mb-4">
         <h2 class="fw-bold" style="color:#00234D;">Participe toi aussi</h2>
-        <p class="text-muted">Crée ton badge en 2 minutes et tente de gagner un cadeau Mobilier Addict.</p>
+        <p class="text-muted">Créez votre badge en 2 minutes et tentez de gagner un cadeau Mobilier Addict.</p>
         <a href="{{ route('game.index') }}" class="gshow-btn gshow-btn-pink">Je participe</a>
     </div>
 

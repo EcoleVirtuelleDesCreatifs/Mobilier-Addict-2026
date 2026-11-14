@@ -286,7 +286,7 @@
                                                 <a class="hover-switch" href="{{ route('collection.index') }}">
                                                     <img loading="lazy" decoding="async" class="secondary-img"
                                                         src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_xCatLOv9hZ.jpg" alt="product-img">
-                                                    <img loading="lazy" decoding="async" class="primary-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.jpg"
+                                                    <img loading="lazy" decoding="async" class="primary-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.webp"
                                                         alt="product-img">
                                                 </a>
 
@@ -671,7 +671,7 @@
                                                 <a class="hover-switch" href="{{ route('collection.index') }}">
                                                     <img loading="lazy" decoding="async" class="secondary-img"
                                                         src="{{ asset('assets/maquette/') }}/img/products/real/1769999657_xCatLOv9hZ.jpg" alt="product-img">
-                                                    <img loading="lazy" decoding="async" class="primary-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.jpg"
+                                                    <img loading="lazy" decoding="async" class="primary-img" src="{{ asset('assets/maquette/') }}/img/products/real/1769993520_r5wT4mQ4N8.webp"
                                                         alt="product-img">
                                                 </a>
 

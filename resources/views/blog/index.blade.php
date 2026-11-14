@@ -1,7 +1,7 @@
 @extends('maquette.layout')
 
-@section('title', 'Magazine Mobilier Addict — Conseils déco & maison à Abidjan')
-@section('meta_description', 'Conseils pratiques pour aménager et équiper votre maison à Abidjan et en Côte d\'Ivoire : salon, literie, mobilier, livraison et entretien.')
+@section('title', 'Le Magazine — articles literie, mobilier & maison | Mobilier Addict')
+@section('meta_description', 'Articles et conseils du magazine Mobilier Addict : bien choisir son matelas, sa literie et son mobilier à Abidjan et en Côte d\'Ivoire.')
 
 @push('meta')
     <meta property="og:image" content="{{ $blogFeaturedPost?->image_url ?? asset('assets/maquette/img/blog/furniture-2.jpg') }}" />

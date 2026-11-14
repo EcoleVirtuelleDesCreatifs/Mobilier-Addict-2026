@@ -48,12 +48,24 @@ class AppServiceProvider extends ServiceProvider
                 ->whereNull('parent_id')
                 ->with(['children'])
                 ->orderBy('order')
-                ->get();
+                ->get()
+                // Audit : masquer les univers vides (sans produit actif,
+                // sauf s'ils ont un lien personnalisé ou des sous-menus).
+                ->filter(function ($menu) {
+                    if (trim((string) $menu->url) !== '' || $menu->children->isNotEmpty()) {
+                        return true;
+                    }
+
+                    return $menu->products()->where('products.is_active', true)->exists();
+                })
+                ->values();
 
             $view->with('headerMenus', $headerMenus);
         };
 
         View::composer('partials.header', $headerMenusComposer);
         View::composer('maquette.includes.header', $headerMenusComposer);
+        // Le menu mobile est inclus directement dans le layout.
+        View::composer('maquette.layout', $headerMenusComposer);
     }
 }

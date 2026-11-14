@@ -1,6 +1,7 @@
 @extends('maquette.layout')
 
 @section('title', 'Commande enregistrée — Mobilier Addict')
+@section('robots', 'noindex, nofollow')
 @section('meta_description', 'Votre commande Mobilier Addict a bien été enregistrée. Consultez son récapitulatif et les prochaines étapes.')
 
 @php

@@ -10,7 +10,7 @@
     $variantLabel = null;
     if ($defaultVariant) {
         $parts = array_filter([
-            $defaultVariant->places ? str_pad((string) $defaultVariant->places, 2, '0', STR_PAD_LEFT) . ' Places' : null,
+            $defaultVariant->places ? ((int) $defaultVariant->places) . ' places' : null,
             $defaultVariant->size ?? null,
             $defaultVariant->dimensions ?? null,
         ]);
@@ -42,12 +42,25 @@
             <p class="mp-card-variant">{{ $variantLabel }}</p>
         @endif
         <div class="mp-card-price-row">
-            <span class="mp-price">{{ number_format((float) $displayPrice, 0, ',', ' ') }} FCFA</span>
-            @if($discount)
-                <span class="mp-price-compare">{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</span>
+            @if((float) $displayPrice > 0)
+                <span class="mp-price">{{ number_format((float) $displayPrice, 0, ',', ' ') }} FCFA</span>
+                @if($discount)
+                    <span class="mp-price-compare">{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</span>
+                @endif
+                <span class="mp-stock {{ $inStock ? 'is-in' : 'is-out' }}">{{ $inStock ? 'En stock' : 'Rupture' }}</span>
+            @else
+                <span class="mp-price">Prix sur demande</span>
+                <span class="mp-stock is-out">Sur commande</span>
             @endif
-            <span class="mp-stock {{ $inStock ? 'is-in' : 'is-out' }}">{{ $inStock ? 'En stock' : 'Rupture' }}</span>
         </div>
+        @if((float) $displayPrice <= 0)
+            @php
+                $waNumber = preg_replace('/\D+/', '', (string) config('services.whatsapp_number'));
+            @endphp
+            @if($waNumber)
+                <a class="mp-buy" href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode('Bonjour Mobilier Addict, quel est le prix de « ' . $product->name . ' » ?') }}" target="_blank" rel="noopener">Demander le prix</a>
+            @endif
+        @else
         <form class="mp-form" action="{{ route('cart.add') }}" method="POST">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -65,6 +78,7 @@
             </div>
             <button type="submit" class="mp-buy" data-redirect="shipping">Commander directement</button>
         </form>
+        @endif
     </div>
 </div>
 @once

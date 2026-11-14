@@ -1,7 +1,7 @@
 @extends('maquette.layout')
 
-@section('title', 'Grand Jeu Mobilier Addict — Crée ton badge')
-@section('meta_description', 'Participe au Grand Jeu Mobilier Addict : crée ton badge personnalisé, partage-le et tente de gagner un cadeau.')
+@section('title', 'Grand Jeu Mobilier Addict — Créez votre badge')
+@section('meta_description', 'Participez au Grand Jeu Mobilier Addict : créez votre badge personnalisé, partagez-le et tentez de gagner un cadeau.')
 
 @section('content')
 <style>
@@ -59,8 +59,8 @@
 <div class="container py-5">
     <div class="game-hero mb-4">
         <span class="game-kicker">Grand jeu</span>
-        <h1>Crée ton badge, partage-le, <span class="pink">gagne ton cadeau.</span></h1>
-        <p>Participe au jeu Mobilier Addict : génère ton badge personnalisé, partage-le sur tes réseaux avec <strong>#MobilierAddict #MatelasAddict</strong> en identifiant la page Facebook Mobilier Addict, et fais voter tes proches.</p>
+        <h1>Créez votre badge, partagez-le, <span class="pink">gagnez votre cadeau.</span></h1>
+        <p>Participez au jeu Mobilier Addict : générez votre badge personnalisé, partagez-le sur vos réseaux avec <strong>#MobilierAddict #MatelasAddict</strong> en identifiant la page Facebook Mobilier Addict, et faites voter vos proches.</p>
         <div class="mt-4">
             <a href="#participer" class="game-btn text-decoration-none d-inline-block">Je participe</a>
         </div>
@@ -191,8 +191,8 @@
     <div class="game-steps">
         <div class="game-step"><span class="game-step-num">Étape 1</span><h3>Découverte</h3><p>Découvre le jeu via une publication, une publicité, une story ou le badge partagé par un participant.</p></div>
         <div class="game-step"><span class="game-step-num">Étape 2</span><h3>Inscription</h3><p>Renseigne ton nom, ton WhatsApp, ta ville, ton nom public, ta photo et le cadeau souhaité.</p></div>
-        <div class="game-step"><span class="game-step-num">Étape 3</span><h3>Création du badge</h3><p>Le système génère ton badge personnalisé : ta photo, ton nom public et le logo Mobilier Addict.</p></div>
-        <div class="game-step"><span class="game-step-num">Étape 4</span><h3>Partage</h3><p>Télécharge ton badge et partage-le avec les hashtags #MobilierAddict #MatelasAddict en identifiant la page Facebook.</p></div>
+        <div class="game-step"><span class="game-step-num">Étape 3</span><h3>Création du badge</h3><p>Le système génère votre badge personnalisé : votre photo, votre nom public et le logo Mobilier Addict.</p></div>
+        <div class="game-step"><span class="game-step-num">Étape 4</span><h3>Partage</h3><p>Téléchargez votre badge et partagez-le avec les hashtags #MobilierAddict #MatelasAddict en identifiant la page Facebook.</p></div>
         <div class="game-step"><span class="game-step-num">Étape 5</span><h3>Soutien</h3><p>Tes proches cliquent sur ton lien, te soutiennent sur ta page publique et découvrent nos produits.</p></div>
         <div class="game-step"><span class="game-step-num">Étape 6</span><h3>Nouvelle participation</h3><p>Après t'avoir soutenu, chaque visiteur est invité à créer son propre badge et à participer.</p></div>
     </div>

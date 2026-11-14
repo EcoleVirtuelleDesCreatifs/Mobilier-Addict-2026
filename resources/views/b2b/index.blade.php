@@ -1,6 +1,7 @@
 @extends('maquette.layout')
 
-@section('title', 'B2B - Achats en Gros')
+@section('title', 'Achats en gros mobilier & literie — B2B | Mobilier Addict')
+@section('meta_description', 'Hôtels, entreprises et revendeurs : commandez mobilier, matelas, literie et électroménager en gros à Abidjan. Devis personnalisé et livraison en Côte d\'Ivoire.')
 
 @section('content')
     <style>

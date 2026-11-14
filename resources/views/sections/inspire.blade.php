@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="pricing__footer">
-                    <p class="pricing__guarantee">✓ Livraison gratuite &nbsp; ✓ 100 nuits d'essai &nbsp; ✓ Garantie 10 ans</p>
+                    <p class="pricing__guarantee">✓ Livraison gratuite dès 50 000 F &nbsp; ✓ Garantie 10 ans</p>
                 </div>
             </div>
         </section>

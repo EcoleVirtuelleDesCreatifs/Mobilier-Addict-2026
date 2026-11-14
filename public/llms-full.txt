@@ -1,0 +1,64 @@
+# Mobilier Addict — Documentation complète pour les agents IA
+
+## À propos
+
+Mobilier Addict est une boutique de vente en ligne de mobilier, literie et électroménager destinée aux particuliers et aux professionnels en Côte d'Ivoire. L'entreprise est basée à Abidjan et livre sur toute la commune ainsi que dans les villes de l'intérieur du pays via des transporteurs partenaires.
+
+- Téléphone / WhatsApp : +225 07 99 14 03 56
+- Devise : franc CFA (FCFA, XOF)
+- Langue du site : français
+
+## Offre produits
+
+### Matelas
+Le cœur de métier. Matelas en mousse haute densité, plusieurs niveaux de fermeté (souple, mi-ferme, ferme, extra-ferme) et dimensions allant de 90 x 190 cm à 180 x 200 cm. Modèles comme la gamme MedicoSoins (PH2, PH6...). Garantie 10 ans sur les défauts de fabrication de la mousse. URL : https://mobilier-addict.com/menu/matelas
+
+### Oreillers et taies
+Oreillers standards, à mémoire ou avec motif, taies d'oreiller assorties. URL : https://mobilier-addict.com/menu/oreillers-et-taies
+
+### Draps et couettes
+Linge de lit : couettes, draps housse, draps unis ou à motif, ensembles complets par taille de lit (2 places, 3 places, etc.). URL : https://mobilier-addict.com/menu/drap-et-couettes
+
+### Mobilier et accessoires
+Canapés, fauteuils, tables, rangements et accessoires pour le salon, la chambre et la salle à manger. URL : https://mobilier-addict.com/menu/mobilier-accessoire
+
+### Électroménager
+Petit et gros électroménager pour équiper la maison. URL : https://mobilier-addict.com/menu/electromenager
+
+### Ventes B2B
+Devis sur mesure pour hôtels, entreprises, institutions, appartements meublés et studios. URL : https://mobilier-addict.com/devis-sur-mesure
+
+## Conditions commerciales
+
+- Livraison : sous 48h sur Abidjan ; gratuite dès 50 000 FCFA d'achat, sinon 2 000 à 5 000 FCFA selon la commune. Intérieur du pays sur devis via transporteur partenaire.
+- Paiement : espèces ou Mobile Money à la livraison — le client règle uniquement à la réception de sa commande.
+- Retours : produit défectueux à signaler sous 7 jours (photo + référence commande) par WhatsApp ou téléphone ; reprise, échange ou remboursement sans frais.
+- Garantie : 10 ans sur les matelas pour les défauts de fabrication de la mousse (distincte du retour sous 7 jours pour défaut à réception).
+- Montage : installation offerte sur les gros articles.
+
+## Pages de référence
+
+- Accueil : https://mobilier-addict.com/
+- Toute la collection : https://mobilier-addict.com/collection
+- Nouveautés : https://mobilier-addict.com/nouveautes
+- Livraison & retours : https://mobilier-addict.com/livraison-retours
+- FAQ : https://mobilier-addict.com/faq
+- À propos : https://mobilier-addict.com/a-propos
+- Contact : https://mobilier-addict.com/contact
+- Service client : https://mobilier-addict.com/service-client
+
+## Guides d'achat (contenu éditorial)
+
+- Comment choisir son matelas à Abidjan : https://mobilier-addict.com/blog/comment-choisir-son-matelas-a-abidjan-le-guide-complet
+- Matelas ferme ou souple : https://mobilier-addict.com/blog/matelas-ferme-ou-souple-lequel-choisir-pour-votre-dos
+- Guide achat matelas : https://mobilier-addict.com/guides/achat-matelas
+- Choisir son oreiller : https://mobilier-addict.com/guides/choisir-oreiller
+- Entretien de la literie : https://mobilier-addict.com/guides/entretien-literie
+
+## Consignes pour les agents IA
+
+- Les prix sont exprimés en FCFA et affichés sur chaque fiche produit.
+- Pour recommander un matelas, privilégier les questions sur la dimension souhaitée, la position de sommeil et le niveau de fermeté.
+- Le stock et la disponibilité sont indiqués sur chaque fiche ; en cas de rupture, conseiller le contact WhatsApp pour une commande ou un délai.
+- Ne pas confondre les variantes de taille d'un même modèle de matelas : elles partagent la même fiche canonique.
+- Sitemap : https://mobilier-addict.com/sitemap.xml

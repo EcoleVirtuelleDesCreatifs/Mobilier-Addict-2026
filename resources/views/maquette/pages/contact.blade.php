@@ -34,7 +34,13 @@
                                         </div>
                                         <div class="contact-details">
                                             <h2 class="contact-title">Adresse</h2>
-                                            <p class="contact-info">Abidjan, Côte d'Ivoire</p>
+                                            <p class="contact-info">{{ config('maquette.contact.address') ?: 'Abidjan, Côte d\'Ivoire' }}</p>
+                                            @if(config('maquette.contact.hours'))
+                                                <p class="contact-info">{{ config('maquette.contact.hours') }}</p>
+                                            @endif
+                                            @if(config('maquette.contact.maps_url'))
+                                                <a class="contact-info" href="{{ config('maquette.contact.maps_url') }}" target="_blank" rel="noopener">Voir sur Google Maps</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

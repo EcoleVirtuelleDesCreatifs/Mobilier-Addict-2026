@@ -1,7 +1,8 @@
 @extends('maquette.layout')
 
-@section('title', 'Paiement')
-@section('meta_description', 'Finalisez votre paiement en toute sécurité sur Mobilier Addict.')
+@section('title', 'Paiement à la livraison — Mobilier Addict')
+@section('robots', 'noindex, nofollow')
+@section('meta_description', 'Confirmez votre commande Mobilier Addict : le paiement se fait à la livraison, en espèces ou Mobile Money.')
 
 @section('content')
 <div class="cart-page">

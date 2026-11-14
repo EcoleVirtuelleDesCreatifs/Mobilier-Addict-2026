@@ -33,13 +33,13 @@
                                 @endforeach
                             @else
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="{{ asset('assets/slider/slide-1.jpg') }}" alt="Slide 1" loading="eager" decoding="async" fetchpriority="high" />
+                                    <img src="{{ asset('assets/slider/slide-1.jpg') }}" alt="Matelas Mobilier Addict" loading="eager" decoding="async" fetchpriority="high" />
                                 </div>
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="{{ asset('assets/slider/slide-2.jpg') }}" alt="Slide 2" loading="lazy" decoding="async" />
+                                    <img src="{{ asset('assets/slider/slide-2.jpg') }}" alt="Literie Mobilier Addict" loading="lazy" decoding="async" />
                                 </div>
                                 <div class="hero__card-slide" data-slide>
-                                    <img src="{{ asset('assets/slider/slide-3.jpg') }}" alt="Slide 3" loading="lazy" decoding="async" />
+                                    <img src="{{ asset('assets/slider/slide-3.jpg') }}" alt="Mobilier Mobilier Addict" loading="lazy" decoding="async" />
                                 </div>
                             @endif
                         </div>

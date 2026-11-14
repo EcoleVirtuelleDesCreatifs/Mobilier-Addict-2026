@@ -25,6 +25,13 @@
         <FilesMatch "\.(css|js|mjs|map|jpg|jpeg|png|gif|webp|svg|ico|woff|woff2)$">
             Header set Cache-Control "public, max-age=604800, immutable"
         </FilesMatch>
+
+        # En-têtes de sécurité (audit)
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-Frame-Options "SAMEORIGIN"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+        Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Header always set X-XSS-Protection "0"
     </IfModule>
 
     <IfModule mod_deflate.c>
@@ -43,9 +50,9 @@
 
     RewriteEngine On
 
-    # Force HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Force HTTPS (désactivé en local)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

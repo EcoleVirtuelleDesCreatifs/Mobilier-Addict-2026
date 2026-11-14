@@ -7,9 +7,11 @@
                 <div class="header-logo">
                   <a href="{{ route('home') }}" class="logo-main">
                     <img
-                      src="{{ asset('assets/logo/desktop/logo.png') }}"
+                      src="{{ asset('assets/logo/desktop/logo-480.webp') }}"
                       alt="Mobilier Addict"
                       class="header-logo-img"
+                      width="480"
+                      height="186"
                     />
                   </a>
                 </div>

@@ -138,6 +138,7 @@ class HomeController extends Controller
         $favoriteProducts = Product::query()
             ->active()
             ->bestsellers()
+            ->orderByRaw('(stock > 0) DESC')
             ->ordered()
             ->take(4)
             ->get();
@@ -146,6 +147,7 @@ class HomeController extends Controller
             $featured = Product::query()
                 ->active()
                 ->featured()
+                ->orderByRaw('(stock > 0) DESC')
                 ->ordered()
                 ->take(4)
                 ->get();
@@ -175,6 +177,7 @@ class HomeController extends Controller
                     ->orWhereHas('category', fn($qq) => $qq->where('slug', 'like', '%matelas%'))
                     ->orWhere('name', 'like', '%matelas%');
             })
+            ->orderByRaw('(stock > 0) DESC')
             ->ordered()
             ->get()
             ->unique(fn($p) => preg_replace('/\s*[-–]\s*\d+\s*(cm)?\s*[x×]\s*\d+\s*cm.*$/i', '', (string) $p->name))
@@ -190,14 +193,18 @@ class HomeController extends Controller
                 ->get();
         }
 
+        // Audit : masquer les produits sans prix (affichés « 0 FCFA »).
         $newProducts = Product::query()
             ->active()
+            ->where('price', '>', 0)
+            ->orderByRaw('(stock > 0) DESC')
             ->orderByDesc('created_at')
             ->take(6)
             ->get();
 
         if ($newProducts->isEmpty()) {
             $newProducts = Product::query()
+                ->where('price', '>', 0)
                 ->orderByDesc('created_at')
                 ->take(6)
                 ->get();
@@ -295,7 +302,10 @@ class HomeController extends Controller
         return array_map(function ($card) use ($stats) {
             $stat = $stats[$card['slug']] ?? ['count' => 0, 'image' => null];
             $card['count'] = (int) $stat['count'];
-            $card['url'] = route('category.show', $card['slug']);
+            // Audit : lier vers l'URL canonique du menu quand elle existe.
+            $card['url'] = \App\Models\Menu::query()->where('slug', $card['slug'])->where('is_active', true)->exists()
+                ? route('menu.show', $card['slug'])
+                : route('category.show', $card['slug']);
             $card['image_url'] = $card['image']
                 ? asset($card['image'])
                 : ($stat['image'] ? image_thumb($stat['image'], 640) : null);

@@ -1,7 +1,7 @@
 @extends('maquette.layout')
 
 @section('title', $pageTitle . ' — Mobilier Addict')
-@section('meta_description', 'Découvrez nos matelas sur Mobilier Addict : mémoire de forme, ressorts ensachés, latex. Livraison offerte.')
+@section('meta_description', 'Matelas en mousse haute densité, fermes ou moelleux, livrés sous 48h à Abidjan et partout en Côte d\'Ivoire.')
 
 @section('content')
     @php
@@ -57,22 +57,22 @@
                                 </svg>
                                 Univers chambre
                             </span>
-                            <h2 class="sleep-hero-title">{{ $pageTitle }}</h2>
-                            <p class="sleep-hero-sub">Mémoire de forme, ressorts ensachés ou latex :
+                            <h1 class="sleep-hero-title">{{ $pageTitle }} à Abidjan</h1>
+                            <p class="sleep-hero-sub">Mousse haute densité, ferme ou moelleux :
                                 trouvez le soutien qui vous ressemble et dormez enfin sur vos deux
                                 oreilles.</p>
                             <div class="sleep-hero-stats">
                                 <div class="sleep-stat">
-                                    <strong>100</strong>
-                                    <span>nuits d'essai</span>
+                                    <strong>48h</strong>
+                                    <span>livraison express</span>
                                 </div>
                                 <div class="sleep-stat">
                                     <strong>10 ans</strong>
                                     <span>de garantie</span>
                                 </div>
                                 <div class="sleep-stat">
-                                    <strong>0 F</strong>
-                                    <span>livraison offerte</span>
+                                    <strong>48h</strong>
+                                    <span>livraison Abidjan</span>
                                 </div>
                             </div>
                         </div>
@@ -173,6 +173,25 @@
                 <!-- sidebar end -->
             </div>
         </div>
+    </div>
+
+    <div class="container mb-100">
+        <section class="seo-text" style="max-width:860px;margin:0 auto;color:#4b5563;font-size:15px;line-height:1.7;">
+            <h2 class="heading_24 mb-3">Acheter un matelas à Abidjan, en toute confiance</h2>
+            <p>Vous cherchez un <strong>matelas à Abidjan</strong> adapté à votre dos et à votre budget&nbsp;?
+                Mobilier Addict sélectionne des matelas en mousse haute densité — souple, équilibré, ferme
+                ou très ferme — dans toutes les tailles courantes&nbsp;: 90×190, 120×190, 140×190,
+                160×190 et 180×200&nbsp;cm. Chaque fiche indique l'épaisseur, le confort et le prix exact,
+                sans surprise à la commande.</p>
+            <p>Commandez en ligne en quelques clics ou directement sur WhatsApp&nbsp;: nous livrons en
+                <strong>48&nbsp;h à Abidjan</strong> (Cocody, Plateau, Yopougon, Marcory, Treichville,
+                Abobo…) et partout en Côte d'Ivoire. La livraison est <strong>gratuite dès
+                50&nbsp;000&nbsp;F</strong> d'achat.</p>
+            <p>La mousse haute densité offre un soutien durable qui ne s'affaisse pas, idéale pour les
+                climats chauds. Que vous équipiez votre chambre, un studio ou un appartement meublé,
+                notre équipe vous conseille le confort qu'il vous faut — et chaque matelas est couvert
+                par notre <strong>garantie 10 ans</strong> sur la mousse.</p>
+        </section>
     </div>
     @include('maquette.includes.seo-schema', ['collectionProducts' => $products, 'collectionTitle' => $pageTitle])
 @endsection

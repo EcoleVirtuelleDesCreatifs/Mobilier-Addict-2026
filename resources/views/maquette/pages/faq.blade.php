@@ -150,7 +150,7 @@
                     <div class="faq-hero-layout">
                         <div>
                             <p class="faq-eyebrow">Mobilier Addict · Côte d’Ivoire</p>
-                            <h1 id="faq-title">Bien choisir.<br><span>Acheter sereinement.</span></h1>
+                            <h1 id="faq-title">Bien choisir, <br><span>acheter sereinement.</span></h1>
                             <p class="faq-intro">Du choix de votre matelas à la réception de vos meubles, retrouvez les réponses utiles pour aménager votre chez-vous.</p>
                             <div class="faq-search" id="faq-search-box">
                                 <label for="faq-search-input">Quelle est votre question ?</label>

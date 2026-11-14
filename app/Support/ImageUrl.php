@@ -68,7 +68,10 @@ class ImageUrl
             return url('media/' . $encoded);
         }
 
-        return asset('storage/' . $relative);
+        // Le fichier est absent du stockage local (ex : import d'une base de
+        // production sans les uploads) : on sert le placeholder plutôt qu'une
+        // URL cassée.
+        return asset('assets/maquette/img/product.jpg');
     }
 
     /**

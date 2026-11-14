@@ -3,21 +3,27 @@
   <head>
 @php
     $defaultTitle = 'Mobilier Addict — Mobilier, literie et électroménager à Abidjan';
-    $defaultDesc = 'Mobilier Addict : mobilier, literie et électroménager pour la maison en Côte d\'Ivoire. Livraison à Abidjan et intérieur du pays, devis personnalisé et accompagnement dédié.';
+    $defaultDesc = 'Mobilier Addict : mobilier, literie et électroménager pour la maison en Côte d\'Ivoire. Livraison à Abidjan et devis sur mesure.';
+    // Échappe le HTML sans encoder les apostrophes ni ré-encoder les entités existantes
+    $esc = fn ($v) => htmlspecialchars(html_entity_decode((string) $v, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_NOQUOTES, 'UTF-8');
     $seoTitle = trim($__env->yieldContent('title')) !== '' ? trim($__env->yieldContent('title')) : $defaultTitle;
     $seoDesc = trim($__env->yieldContent('meta_description')) !== '' ? trim($__env->yieldContent('meta_description')) : $defaultDesc;
+    $seoDesc = \Illuminate\Support\Str::limit(html_entity_decode($seoDesc, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 155, '');
     $seoCanonical = trim($__env->yieldContent('canonical')) !== '' ? trim($__env->yieldContent('canonical')) : url()->current();
-    $seoImage = trim($__env->yieldContent('meta_image')) !== '' ? trim($__env->yieldContent('meta_image')) : asset('assets/logo/desktop/logo.png');
+    $seoImage = trim($__env->yieldContent('meta_image')) !== '' ? trim($__env->yieldContent('meta_image')) : asset('assets/og/og-image.jpg');
     $seoType = trim($__env->yieldContent('og_type')) !== '' ? trim($__env->yieldContent('og_type')) : 'website';
+    $gtmId = config('services.gtm_id');
+    $ga4Id = config('services.ga4_id');
+    $metaPixelId = config('services.meta_pixel_id');
 @endphp
 
-    <title>{{ $seoTitle }}</title>
+    <title>{!! $esc($seoTitle) !!}</title>
     <!-- meta tags -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="{{ $seoDesc }}" />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="description" content="{!! $esc($seoDesc) !!}" />
+    <meta name="robots" content="@yield('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')" />
     <meta name="author" content="Mobilier Addict" />
     <meta name="geo.region" content="CI-AB" />
     <meta name="geo.placename" content="Abidjan, Côte d'Ivoire" />
@@ -26,14 +32,16 @@
     <link rel="canonical" href="{{ $seoCanonical }}" />
     <meta property="og:type" content="{{ $seoType }}" />
     <meta property="og:site_name" content="Mobilier Addict" />
-    <meta property="og:title" content="{{ $seoTitle }}" />
-    <meta property="og:description" content="{{ $seoDesc }}" />
+    <meta property="og:title" content="{!! $esc($seoTitle) !!}" />
+    <meta property="og:description" content="{!! $esc($seoDesc) !!}" />
     <meta property="og:url" content="{{ $seoCanonical }}" />
     <meta property="og:image" content="{{ $seoImage }}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="fr_CI" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{ $seoTitle }}" />
-    <meta name="twitter:description" content="{{ $seoDesc }}" />
+    <meta name="twitter:title" content="{!! $esc($seoTitle) !!}" />
+    <meta name="twitter:description" content="{!! $esc($seoDesc) !!}" />
     <meta name="twitter:image" content="{{ $seoImage }}" />
     @stack('meta')
 
@@ -85,7 +93,7 @@
                     ],
                 ],
             ],
-            [
+            array_filter([
                 '@type' => 'LocalBusiness',
                 '@id' => route('home') . '#localbusiness',
                 'name' => 'Mobilier Addict',
@@ -99,13 +107,15 @@
                     'latitude' => '5.3599517',
                     'longitude' => '-4.0082561',
                 ],
-                'address' => [
+                'openingHours' => config('maquette.contact.hours'),
+                'address' => array_filter([
                     '@type' => 'PostalAddress',
+                    'streetAddress' => config('maquette.contact.address'),
                     'addressCountry' => 'CI',
                     'addressLocality' => 'Abidjan',
                     'addressRegion' => 'Abidjan',
-                ],
-            ],
+                ]),
+            ]),
         ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
@@ -114,6 +124,12 @@
       href="{{ asset('assets/logo/favicon.png') }}"
       type="image/x-icon"
     />
+      <link rel="manifest" href="{{ asset('manifest.webmanifest') }}" />
+      <meta name="theme-color" content="#00234D" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-title" content="Mobilier Addict" />
+      <link rel="apple-touch-icon" href="{{ asset('assets/logo/icon-192.png') }}" />
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -174,9 +190,44 @@
     <link rel="stylesheet" href="{{ asset('assets/maquette/') }}/css/vendor.css" />
     <link rel="stylesheet" href="{{ asset('assets/maquette/') }}/css/style.min.css" />
     @stack('styles')
+
+    @if($gtmId)
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
+    @elseif($ga4Id)
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga4Id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ $ga4Id }}');
+    </script>
+    @endif
+    @if($metaPixelId)
+    <!-- Meta Pixel -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '{{ $metaPixelId }}');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={{ $metaPixelId }}&ev=PageView&noscript=1" alt="" /></noscript>
+    @endif
   </head>
 
   <body>
+    @if($gtmId)
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    @endif
     <a class="editorial-skip" href="#MainContent">Aller au contenu</a>
     <div class="body-wrapper">@include('maquette.includes.announcement')
 @include('maquette.includes.header')
@@ -278,9 +329,11 @@
                     <h4 class="footer-logo">
                       <a href="{{ route('home') }}"
                         ><img
-                          src="{{ asset('assets/logo/mobile/logo.png') }}"
+                          src="{{ asset('assets/logo/mobile/logo-360.webp') }}"
                           alt="Mobilier Addict"
                           class="footer-logo-img"
+                          width="360"
+                          height="139"
                         /></a>
                     </h4>
                     <div class="footer-newsletter">
@@ -391,6 +444,13 @@
               >
                 @include('maquette.includes.footer-links', ['footerGroup' => 'legal'])
               </ul>
+              <p class="footer-address footer-text mb-0 me-md-3">
+                {{ config('maquette.contact.address') ?: 'Abidjan, Côte d\'Ivoire' }}
+                @if(config('maquette.contact.hours')) · {{ config('maquette.contact.hours') }} @endif
+                @if(config('maquette.legal.rccm')) · RCCM {{ config('maquette.legal.rccm') }} @endif
+                · {{ config('maquette.site_phone') }}
+                · Paiement : Mobile Money ou espèces à la livraison
+              </p>
               <p class="copyright footer-text">
                 ©<span class="current-year"></span> Mobilier Addict.
               </p>
@@ -401,7 +461,7 @@
       <!-- footer end -->
 
       <!-- scrollup start -->
-      <button id="scrollup">
+      <button id="scrollup" aria-label="Retour en haut de page">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -664,6 +724,23 @@
 
       @include('maquette.includes.flash-toast')
 
+      @php
+        $waNumber = preg_replace('/\D+/', '', (string) config('services.whatsapp_number'));
+      @endphp
+      @if($waNumber)
+      <!-- Bouton WhatsApp flottant -->
+      <style>
+        .wa-float{position:fixed;right:18px;bottom:18px;z-index:1055;display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;border-radius:999px;padding:12px 18px 12px 14px;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 10px 28px rgba(37,211,102,.45);transition:transform .15s ease,box-shadow .15s ease;}
+        .wa-float:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(37,211,102,.55);color:#fff;}
+        .wa-float svg{width:26px;height:26px;fill:currentColor;flex:0 0 auto;}
+        @media (max-width:575.98px){.wa-float{left:14px;right:auto;bottom:14px;padding:12px;}.wa-float span{display:none;}}
+      </style>
+      <a class="wa-float" href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode(config('services.whatsapp_message')) }}" target="_blank" rel="noopener" aria-label="Discuter avec Mobilier Addict sur WhatsApp">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 .8C7.6.8.8 7.6.8 16c0 2.7.7 5.3 2 7.6L.8 31.2l7.8-2c2.2 1.2 4.7 1.9 7.4 1.9 8.4 0 15.2-6.8 15.2-15.2S24.4.8 16 .8zm0 27.7c-2.3 0-4.6-.6-6.5-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5C4 20.5 3.3 18.3 3.3 16 3.3 9 9 3.3 16 3.3S28.7 9 28.7 16 23 28.5 16 28.5zm7-9.5c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7-.1-.2-.8-2-1.1-2.8-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.9c.2.3 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z"/></svg>
+        <span>Conseil WhatsApp</span>
+      </a>
+      @endif
+
       <!-- modal ajout panier start -->
       <div class="modal fade" id="cartAddedModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -678,7 +755,7 @@
               </div>
               <div class="p-4 text-center" style="background:#fff;">
                 <div class="d-flex align-items-center gap-3 text-start mb-3">
-                  <img id="camImage" src="" alt="" width="86" height="86" style="border-radius:14px;object-fit:cover;border:1px solid #f0e8ee;display:none;">
+                  <img id="camImage" alt="" width="86" height="86" style="border-radius:14px;object-fit:cover;border:1px solid #f0e8ee;display:none;">
                   <div class="flex-grow-1" style="min-width:0;">
                     <div id="camName" class="fw-bold" style="color:#00234D;"></div>
                     <div id="camQtyPrice" class="small" style="color:#888;"></div>
@@ -689,8 +766,8 @@
                   <span id="camSubtotal" class="fw-bold" style="color:#00234D;font-size:18px;"></span>
                 </div>
                 <div class="d-grid gap-2">
-                  <a href="#" id="camCheckout" class="btn" style="background:#ec4899;color:#fff;border-radius:999px;padding:14px;font-weight:700;">Passer la commande</a>
-                  <a href="#" id="camCart" class="btn" style="background:#00234D;color:#fff;border-radius:999px;padding:12px;font-weight:600;">Voir mon panier</a>
+                  <a href="{{ route('cart.payment') }}" id="camCheckout" class="btn" style="background:#ec4899;color:#fff;border-radius:999px;padding:14px;font-weight:700;">Passer la commande</a>
+                  <a href="{{ route('cart.index') }}" id="camCart" class="btn" style="background:#00234D;color:#fff;border-radius:999px;padding:12px;font-weight:600;">Voir mon panier</a>
                   <button type="button" class="btn btn-link" data-bs-dismiss="modal" style="color:#888;font-size:13px;text-decoration:none;">Continuer mes achats</button>
                 </div>
               </div>

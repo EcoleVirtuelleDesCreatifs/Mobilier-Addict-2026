@@ -1,0 +1,40 @@
+# Mobilier Addict
+
+> Mobilier Addict est une boutique de mobilier, literie et électroménager pour la maison, basée à Abidjan, Côte d'Ivoire. Elle vend en ligne des matelas en mousse haute densité (garantis 10 ans), oreillers, couettes, draps, mobilier et électroménager, avec livraison sous 48h à Abidjan et dans tout le pays. La livraison est gratuite à Abidjan dès 50 000 FCFA d'achat. Paiement à la livraison : Mobile Money ou espèces. Contact : +225 07 99 14 03 56.
+
+## Catalogues principaux
+
+- [Matelas](https://mobilier-addict.com/menu/matelas) : matelas mousse haute densité, fermes, mi-fermes et souples, toutes dimensions (90 à 200 cm)
+- [Oreillers et taies](https://mobilier-addict.com/menu/oreillers-et-taies) : oreillers et taies d'oreiller
+- [Draps et couettes](https://mobilier-addict.com/menu/drap-et-couettes) : linge de lit, couettes, draps housse
+- [Mobilier et accessoires](https://mobilier-addict.com/menu/mobilier-accessoire) : canapés, tables et accessoires
+- [Électroménager](https://mobilier-addict.com/menu/electromenager) : petit et gros électroménager
+- [Nouveautés](https://mobilier-addict.com/nouveautes) : derniers produits ajoutés au catalogue
+- [Toute la collection](https://mobilier-addict.com/collection)
+
+## Services et informations
+
+- [Livraison et retours](https://mobilier-addict.com/livraison-retours) : délais, tarifs par zone, procédure de retour
+- [FAQ](https://mobilier-addict.com/faq) : questions fréquentes sur les commandes et paiements
+- [Devis sur mesure](https://mobilier-addict.com/devis-sur-mesure) : projets hôtels, entreprises, appartements meublés
+- [Service client](https://mobilier-addict.com/service-client)
+- [Contact](https://mobilier-addict.com/contact)
+
+## Magazine (conseils)
+
+- [Le magazine](https://mobilier-addict.com/blog) : guides pratiques maison et literie
+- [Comment choisir son matelas à Abidjan](https://mobilier-addict.com/blog/comment-choisir-son-matelas-a-abidjan-le-guide-complet)
+- [Matelas ferme ou souple : lequel choisir pour votre dos](https://mobilier-addict.com/blog/matelas-ferme-ou-souple-lequel-choisir-pour-votre-dos)
+- [Guide achat matelas](https://mobilier-addict.com/guides/achat-matelas)
+- [Guide choisir son oreiller](https://mobilier-addict.com/guides/choisir-oreiller)
+- [Entretien de la literie](https://mobilier-addict.com/guides/entretien-literie)
+
+## Légal
+
+- [Mentions légales](https://mobilier-addict.com/mentions-legales)
+- [Politique de confidentialité](https://mobilier-addict.com/politique-de-confidentialite)
+- [CGV](https://mobilier-addict.com/cgv)
+
+## Optional
+
+- [Sitemap XML](https://mobilier-addict.com/sitemap.xml)

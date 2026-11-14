@@ -2,6 +2,25 @@
 
 @section('title', $product->name . ' à Abidjan — Mobilier Addict Côte d\'Ivoire')
 @section('meta_description', Str::limit(strip_tags($product->short_description ?: $product->description ?: 'Achetez ' . $product->name . ' à Abidjan chez Mobilier Addict.'), 155))
+@php
+    // Canonical : les fiches déclinées par taille (90, 120, 140, 160, 180…)
+    // pointent vers la première fiche du même modèle pour éviter le contenu dupliqué.
+    $baseName = preg_replace('/\s*[-–—]\s*\d+\s*(cm)?\s*x\s*\d+\s*(cm)?\s*$/iu', '', (string) $product->name);
+    $canonicalProduct = null;
+    if ($baseName !== '' && $baseName !== $product->name) {
+        $canonicalProduct = \App\Models\Product::where('is_active', 1)
+            ->where('name', 'like', $baseName . '%')
+            ->orderBy('id')
+            ->first();
+    }
+    if (!$canonicalProduct) {
+        $canonicalProduct = $product;
+    }
+@endphp
+@section('canonical', route('product.show', $canonicalProduct->slug))
+@if(request()->routeIs('demo.product'))
+@section('robots', 'noindex, nofollow')
+@endif
 
 @section('content')
     @php
@@ -106,20 +125,23 @@
                             @if($product->size || $product->dimensions || $product->thickness)
                                 <p class="pdp-subline">{{ collect([$product->size, $product->dimensions, $product->thickness ? 'Ép. '.$product->thickness : null])->filter()->join(' · ') }}</p>
                             @endif
-                            <div class="pdp-rating">
-                                <span class="pdp-stars">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <svg viewBox="0 0 24 24" fill="{{ $i <= round($rating) ? '#f5a623' : 'none' }}" stroke="{{ $i <= round($rating) ? '#f5a623' : '#d5dbe4' }}" stroke-width="1.6"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-                                    @endfor
-                                </span>
-                                <span class="pdp-reviews">({{ $reviews }} avis clients)</span>
-                            </div>
+                            @if($reviews > 0 && false)
+                                {{-- Étoiles masquées : aucun avis client lisible pour l'instant. --}}
+                            @endif
                             <div class="pdp-price-row">
-                                <span class="pdp-price" id="pdpPrice">{{ number_format((float) $product->price, 0, ',', ' ') }} FCFA</span>
+                                @if((float) $product->price > 0)
+                                    <span class="pdp-price" id="pdpPrice">{{ number_format((float) $product->price, 0, ',', ' ') }} FCFA</span>
+                                @else
+                                    <span class="pdp-price" id="pdpPrice">Prix sur demande</span>
+                                @endif
                                 @if($product->old_price && $product->old_price > $product->price)
                                     <del class="pdp-price-old">{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</del>
                                 @endif
-                                <span class="pdp-stock {{ $inStock ? 'is-in' : 'is-out' }}">{{ $inStock ? 'En stock' : 'Rupture' }}</span>
+                                @if((float) $product->price > 0)
+                                    <span class="pdp-stock {{ $inStock ? 'is-in' : 'is-out' }}">{{ $inStock ? 'En stock' : 'Rupture' }}</span>
+                                @else
+                                    <span class="pdp-stock is-out">Sur commande</span>
+                                @endif
                             </div>
                             @if($product->short_description)
                                 <p class="pdp-desc">{{ Str::limit(strip_tags($product->short_description), 140) }}</p>
@@ -138,7 +160,7 @@
                                                 @php
                                                     $vLabel = collect([
                                                         $variant->dimensions,
-                                                        $variant->places ? str_pad((string) $variant->places, 2, '0', STR_PAD_LEFT).' Places' : null,
+                                                        $variant->places ? ((int) $variant->places) . ' places' : null,
                                                         $variant->thickness_cm ? $variant->thickness_cm.' cm' : null,
                                                         $variant->variant_type,
                                                     ])->filter()->join(' · ') ?: 'Option '.$loop->iteration;
@@ -177,15 +199,40 @@
                                 </div>
 
                                 <div class="pdp-ctas">
+                                    @if((float) $product->price > 0)
+                                    <button type="submit" class="pdp-buy" data-redirect="shipping" {{ !$inStock ? 'disabled' : '' }}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                                        Commander
+                                    </button>
                                     <button type="submit" class="pdp-atc" {{ !$inStock ? 'disabled' : '' }}>
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H6"/></svg>
                                         Ajouter au panier
                                     </button>
-                                    <button type="submit" class="pdp-buy" data-redirect="shipping" {{ !$inStock ? 'disabled' : '' }}>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-                                        Commander directement
-                                    </button>
+                                    @endif
+                                    @php
+                                        $waNumber = preg_replace('/\D+/', '', (string) config('services.whatsapp_number'));
+                                        $waText = 'Bonjour Mobilier Addict, je suis intéressé(e) par « ' . $product->name . ' »' . ((float) $product->price > 0 ? ' (' . number_format((float) $product->price, 0, ',', ' ') . ' FCFA)' : '') . ' : ' . route('product.show', $product->slug);
+                                    @endphp
+                                    @if($waNumber)
+                                        <a class="pdp-wa-link" href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode($waText) }}" target="_blank" rel="noopener">
+                                            <svg viewBox="0 0 32 32" fill="currentColor" stroke="none" width="18" height="18" aria-hidden="true"><path d="M16 .8C7.6.8.8 7.6.8 16c0 2.7.7 5.3 2 7.6L.8 31.2l7.8-2c2.2 1.2 4.7 1.9 7.4 1.9 8.4 0 15.2-6.8 15.2-15.2S24.4.8 16 .8zm0 27.7c-2.3 0-4.6-.6-6.5-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5C4 20.5 3.3 18.3 3.3 16 3.3 9 9 3.3 16 3.3S28.7 9 28.7 16 23 28.5 16 28.5zm7-9.5c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7-.1-.2-.8-2-1.1-2.8-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.9c.2.3 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z"/></svg>
+                                            Ou commander sur WhatsApp
+                                        </a>
+                                    @endif
                                 </div>
+                                <style>
+                                    .pdp-wa-link{display:inline-flex;align-items:center;gap:8px;color:#128c4a;font-weight:600;font-size:14px;text-decoration:none;margin-top:6px}
+                                    .pdp-wa-link:hover{text-decoration:underline;color:#0d6e3a}
+                                    .pdp-info-strip{margin-top:18px;padding:14px 16px;border:1px solid #e6eaf0;border-radius:12px;background:#f8fafc;font-size:13.5px;color:#4b5563;line-height:1.6}
+                                    .pdp-info-strip strong{color:#0f2c59}
+                                </style>
+                                @if((float) $product->price > 0)
+                                    <div class="pdp-info-strip">
+                                        <strong>Livraison</strong> : Abidjan sous 48&nbsp;h (gratuite dès 50&nbsp;000&nbsp;F
+                                        d'achat, sinon 2&nbsp;000–5&nbsp;000&nbsp;F selon la commune) ; intérieur du pays
+                                        sur devis via transporteur partenaire.
+                                    </div>
+                                @endif
                             </form>
                         </div>
                     </div>
@@ -211,9 +258,11 @@
                 <div class="pdp-tabs" data-aos="fade-up" data-aos-duration="700">
                     <nav class="pdp-tab-nav" id="pdpTabs">
                         <a class="pdp-tab-link active" href="#pdp-desc" data-bs-toggle="tab">Description</a>
-                        <a class="pdp-tab-link" href="#pdp-specs" data-bs-toggle="tab">Caractéristiques</a>
+                        @if($features->isNotEmpty())
+                            <a class="pdp-tab-link" href="#pdp-specs" data-bs-toggle="tab">Caractéristiques</a>
+                        @endif
                         <a class="pdp-tab-link" href="#pdp-ship" data-bs-toggle="tab">Livraison &amp; retour</a>
-                        <a class="pdp-tab-link" href="#pdp-reviews" data-bs-toggle="tab">Avis clients ({{ $reviews }})</a>
+                        <a class="pdp-tab-link" href="#pdp-reviews" data-bs-toggle="tab">Avis clients</a>
                     </nav>
                     <div class="tab-content pdp-tab-content">
                         <div id="pdp-desc" class="tab-pane fade show active">
@@ -241,40 +290,33 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="pdp-specs" class="tab-pane fade">
-                            <div class="pdp-specs-card">
-                                @if($features->isNotEmpty())
+                        @if($features->isNotEmpty())
+                            <div id="pdp-specs" class="tab-pane fade">
+                                <div class="pdp-specs-card">
                                     <ul class="pdp-specs-list list-unstyled m-0">
                                         @foreach($features as $label => $value)
                                             <li><strong>{{ $label }}</strong><span>{{ $value }}</span></li>
                                         @endforeach
                                     </ul>
-                                @else
-                                    <p class="m-0">Aucune caractéristique renseignée pour ce produit.</p>
-                                @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
                         <div id="pdp-ship" class="tab-pane fade">
                             <div class="pdp-specs-card">
                                 <ul class="pdp-specs-list list-unstyled m-0">
-                                    <li><strong>Livraison</strong><span>Partout en Côte d'Ivoire, sous 24 à 72h</span></li>
+                                    <li><strong>Livraison Abidjan</strong><span>Sous 48h — gratuite dès 50 000 F d'achat, sinon 2 000–5 000 F selon la commune</span></li>
+                                    <li><strong>Livraison intérieur</strong><span>Partout en Côte d'Ivoire via transporteur partenaire, tarif sur devis</span></li>
                                     <li><strong>Montage</strong><span>Installation offerte sur les gros articles</span></li>
-                                    <li><strong>Retour</strong><span>Produit défectueux échangé sous 7 jours</span></li>
+                                    <li><strong>Paiement</strong><span>Espèces ou Mobile Money à la livraison</span></li>
+                                    <li><strong>Retour</strong><span>Produit défectueux : signalez-le sous 7 jours (photo + référence commande) par WhatsApp ou téléphone ; nous récupérons l'article et l'échangeons ou le remboursons, sans frais.</span></li>
                                     <li><strong>Contact</strong><span><a href="{{ route('pages.contact') }}">Notre service client</a></span></li>
                                 </ul>
                             </div>
                         </div>
                         <div id="pdp-reviews" class="tab-pane fade">
                             <div class="pdp-specs-card">
-                                <div class="pdp-rating mb-3">
-                                    <span class="pdp-stars">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <svg viewBox="0 0 24 24" fill="{{ $i <= round($rating) ? '#f5a623' : 'none' }}" stroke="{{ $i <= round($rating) ? '#f5a623' : '#d5dbe4' }}" stroke-width="1.6"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-                                        @endfor
-                                    </span>
-                                    <span class="pdp-reviews">{{ $reviews }} avis clients</span>
-                                </div>
-                                <p class="m-0">Les avis détaillés seront bientôt disponibles. Vous avez acheté ce produit ? <a href="{{ route('pages.contact') }}">Partagez votre expérience</a>.</p>
+                                <p class="m-0">Aucun avis pour le moment. Vous avez acheté ce produit ?
+                                    <a href="{{ route('pages.contact') }}">Partagez votre expérience</a> — votre retour aide les autres clients.</p>
                             </div>
                         </div>
                     </div>
@@ -362,11 +404,7 @@
                 'returnFees' => 'https://schema.org/FreeReturn',
             ],
         ],
-        'aggregateRating' => $reviews > 0 ? [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $rating,
-            'reviewCount' => $reviews,
-        ] : null,
+        'aggregateRating' => null,
     ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
     @endpush

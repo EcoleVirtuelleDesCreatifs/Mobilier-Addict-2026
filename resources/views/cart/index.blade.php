@@ -1,5 +1,8 @@
 @extends('maquette.layout')
 
+@section('title', 'Votre panier — Mobilier Addict')
+@section('robots', 'noindex, nofollow')
+@section('meta_description', 'Consultez votre panier Mobilier Addict et passez commande : livraison sous 48h à Abidjan et partout en Côte d\'Ivoire.')
 @section('content')
     <div class="breadcrumb">
         <div class="container">

@@ -10,7 +10,7 @@
                         </div>
                         <div class="guarantee__content">
                             <h3 class="guarantee__title">Livraison Express</h3>
-                            <p class="guarantee__text">Gratuite dès 50.000F • Sous 48h partout</p>
+                            <p class="guarantee__text">Gratuite dès 50 000 F • Abidjan sous 48 h</p>
                         </div>
                     </div>
                     <div class="guarantee__divider"></div>
@@ -20,7 +20,7 @@
                         </div>
                         <div class="guarantee__content">
                             <h3 class="guarantee__title">Paiement Flexible</h3>
-                            <p class="guarantee__text">À la livraison ou en 3x sans frais</p>
+                            <p class="guarantee__text">À la livraison, espèces ou Mobile Money</p>
                         </div>
                     </div>
                     <div class="guarantee__divider"></div>
@@ -39,8 +39,8 @@
                             <svg viewBox="0 0 24 24" width="32" height="32"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                         </div>
                         <div class="guarantee__content">
-                            <h3 class="guarantee__title">Support 24/7</h3>
-                            <p class="guarantee__text">Experts disponibles à tout moment</p>
+                            <h3 class="guarantee__title">Conseil WhatsApp</h3>
+                            <p class="guarantee__text">Notre équipe vous répond 7j/7</p>
                         </div>
                     </div>
                 </div>

@@ -23,7 +23,7 @@
 <div class="mp-sidebar collection-filter filter-drawer">
     <div class="filter-widget d-lg-none d-flex align-items-center justify-content-between">
         <h5 class="heading_24">Filtrer par</h5>
-        <button type="button" class="btn-close text-reset filter-drawer-trigger d-lg-none"></button>
+        <button type="button" class="btn-close text-reset filter-drawer-trigger d-lg-none" aria-label="Fermer les filtres"></button>
     </div>
 
     <div class="mp-filter-card d-lg-none">

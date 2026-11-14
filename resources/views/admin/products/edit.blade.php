@@ -42,7 +42,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             if (window.ClassicEditor) {
-                ClassicEditor.create(document.querySelector('#product_description')).catch(function () {});
+                ClassicEditor.create(document.querySelector('#product_description'), { height: 420 }).catch(function () {});
             }
         });
     </script>

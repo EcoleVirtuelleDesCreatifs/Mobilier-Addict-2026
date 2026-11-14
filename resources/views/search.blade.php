@@ -1,6 +1,7 @@
 @extends('maquette.layout')
 
 @section('title', ($q ? 'Recherche : ' . $q : 'Recherche') . ' | Mobilier Addict')
+@section('robots', 'noindex, nofollow')
 @section('meta_description', 'Recherche produits sur Mobilier Addict')
 
 @section('content')

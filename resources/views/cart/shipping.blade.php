@@ -1,5 +1,8 @@
 @extends('maquette.layout')
 
+@section('title', 'Livraison — Votre commande | Mobilier Addict')
+@section('robots', 'noindex, nofollow')
+@section('meta_description', 'Renseignez vos informations de livraison : Abidjan sous 48h, intérieur de la Côte d\'Ivoire par transporteur. Paiement à la réception.')
 @section('content')
     <div class="checkout-page mt-100 mp-checkout">
         <div class="container">

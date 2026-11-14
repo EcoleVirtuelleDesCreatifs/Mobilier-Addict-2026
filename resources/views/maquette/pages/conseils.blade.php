@@ -1,7 +1,7 @@
 @extends('maquette.layout')
 
-@section('title', 'Les guides maison — Conseils | Mobilier Addict')
-@section('meta_description', 'Des conseils concrets pour aménager un intérieur confortable en Côte d’Ivoire, préparer vos achats et prendre soin de votre mobilier.')
+@section('title', 'Guides pratiques maison & literie | Mobilier Addict')
+@section('meta_description', 'Guides pratiques pas à pas : aménager un petit salon, choisir sa literie en climat chaud, préparer une livraison et entretenir ses meubles en Côte d\'Ivoire.')
 
 @section('content')
 @php

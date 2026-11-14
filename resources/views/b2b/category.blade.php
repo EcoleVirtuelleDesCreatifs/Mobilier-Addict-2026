@@ -1,6 +1,7 @@
 @extends('maquette.layout')
 
-@section('title', 'B2B - ' . $category->name)
+@section('title', 'B2B — ' . $category->name . ' en gros | Mobilier Addict')
+@section('meta_description', 'Achetez ' . $category->name . ' en gros pour votre hôtel, entreprise ou point de vente à Abidjan. Devis B2B et livraison en Côte d\'Ivoire.')
 
 @section('content')
     <style>

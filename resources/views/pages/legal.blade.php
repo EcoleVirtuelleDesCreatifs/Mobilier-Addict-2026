@@ -70,7 +70,15 @@
                     <p class="legal-card__subtitle">Informations relatives à l’éditeur du site.</p>
                 </div>
                 <div class="legal-card__body">
-                    <p>Mobilier Addict</p>
+                    @php $legal = config('maquette.legal', []); @endphp
+                    <p><strong>Raison sociale :</strong> {{ $legal['company_name'] ?? 'Mobilier Addict' }}</p>
+                    <p><strong>Forme juridique :</strong> {{ $legal['legal_form'] ?? 'À compléter' }}</p>
+                    <p><strong>RCCM :</strong> {{ $legal['rccm'] ?? 'À compléter' }}</p>
+                    <p><strong>Compte contribuable :</strong> {{ $legal['tax_id'] ?? 'À compléter' }}</p>
+                    <p><strong>Siège social :</strong> {{ $legal['address'] ?? 'Abidjan, Côte d\'Ivoire' }}</p>
+                    <p><strong>Téléphone :</strong> {{ $legal['phone'] ?? '+225 07 99 14 03 56' }}</p>
+                    <p><strong>Email :</strong> <a href="mailto:contact@mobilier-addict.com">contact@mobilier-addict.com</a></p>
+                    <p><strong>Hébergeur :</strong> {{ $legal['host'] ?? 'À compléter' }}</p>
                 </div>
             </div>
 

@@ -5,6 +5,18 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// Permet de servir l'app depuis un sous-dossier (ex. htdocs XAMPP)
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+$siteDir = dirname($scriptDir);
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+if ($scriptDir !== '/' && $siteDir !== $scriptDir
+    && str_starts_with($requestUri, $siteDir)
+    && !str_starts_with($requestUri, $scriptDir . '/')
+    && $requestUri !== $scriptDir
+) {
+    $_SERVER['REQUEST_URI'] = $scriptDir . substr($requestUri, strlen($siteDir));
+}
+
 // Static maintenance toggle (works even if Laravel cannot boot)
 if (file_exists(__DIR__ . '/.maintenance')) {
     require __DIR__ . '/maintenance.php';
