@@ -69,6 +69,58 @@
   .slide-promo-deadline strong{color:#ff3d8b;font-weight:800;}
   .slide-promo-visual{flex:0 1 560px;min-width:0;}
   .slide-promo-visual img{width:100%;height:auto;display:block;border-radius:14px;}
+
+  /* Hero maquette : photo à droite avec fondu, texte à gauche, 2 CTA */
+  .slide-hero{position:relative;background:#0A1730;height:clamp(460px,50vw,600px);overflow:hidden;color:#fff;}
+  .slide-hero-photo{position:absolute;top:0;right:0;bottom:0;left:40%;}
+  .slide-hero-photo img{width:100%;height:100%;object-fit:cover;object-position:60% 50%;display:block;}
+  .slide-hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0A1730 0%,rgba(10,23,48,.75) 18%,rgba(10,23,48,0) 48%);}
+  .slide-hero-inner{position:relative;z-index:1;height:100%;display:flex;align-items:center;max-width:1200px;margin:0 auto;padding:0 24px;}
+  .slide-hero-copy{max-width:520px;}
+  .slide-hero-eyebrow{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#FF7FAB;margin:0 0 16px;}
+  .slide-hero-title{font-size:clamp(34px,4.4vw,56px);font-weight:800;line-height:1.06;letter-spacing:-.025em;color:#fff;margin:0;}
+  .slide-hero-title em{display:block;font-style:normal;color:#FF7FAB;}
+  .slide-hero-sub{margin-top:20px;font-size:clamp(15px,1.5vw,18px);color:#C9D2E3;max-width:440px;}
+  .slide-hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
+  .slide-hero-btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;transition:background .25s ease,border-color .25s ease;}
+  .slide-hero-btn.primary{background:#F0286E;color:#fff !important;box-shadow:0 10px 28px -10px rgba(240,40,110,.7);}
+  .slide-hero-btn.primary:hover{background:#D4155A;}
+  .slide-hero-btn.ghost{border:1.5px solid rgba(255,255,255,.35);color:#fff !important;}
+  .slide-hero-btn.ghost:hover{border-color:#fff;background:rgba(255,255,255,.06);}
+  @media(max-width:991.98px){
+    .slide-hero{height:auto;min-height:0;}
+    .slide-hero-photo{position:relative;left:auto;height:240px;}
+    .slide-hero-photo::after{background:linear-gradient(0deg,#0A1730 0%,rgba(10,23,48,0) 55%);}
+    .slide-hero-inner{padding:8px 20px 96px;}
+    .slide-hero-copy{max-width:640px;margin:0 auto;text-align:center;}
+    .slide-hero-sub{margin-left:auto;margin-right:auto;}
+    .slide-hero-cta{justify-content:center;}
+  }
+  @media(max-width:575.98px){
+    .slide-hero-btn{width:100%;justify-content:center;}
+  }
+
+  /* Réassurance : carte blanche qui chevauche le hero */
+  .trusted-section{position:relative;z-index:5;margin-top:-56px;padding-bottom:56px;}
+  .trust-strip{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-radius:16px;box-shadow:0 18px 40px -24px rgba(10,23,48,.35),0 0 0 1px #E6E9EF;overflow:hidden;}
+  .trust-item{display:flex;align-items:flex-start;gap:14px;padding:26px 24px;}
+  .trust-item+.trust-item{border-left:1px solid #E6E9EF;}
+  .trust-item-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#FDE9F0;color:#D4155A;flex:none;}
+  .trust-item-icon svg{width:22px;height:22px;}
+  .trust-item-title{font-size:16px;font-weight:700;letter-spacing:-.01em;margin:0;}
+  .trust-item-text{font-size:14px;color:#5B6578;margin:2px 0 0;line-height:1.45;}
+  @media(max-width:991.98px){
+    .trust-strip{grid-template-columns:repeat(2,1fr);}
+    .trust-item+.trust-item{border-left:0;}
+    .trust-item:nth-child(even){border-left:1px solid #E6E9EF;}
+    .trust-item:nth-child(n+3){border-top:1px solid #E6E9EF;}
+  }
+  @media(max-width:575.98px){
+    .trusted-section{margin-top:-40px;}
+    .trust-strip{grid-template-columns:1fr;}
+    .trust-item:nth-child(even){border-left:0;}
+    .trust-item+.trust-item{border-top:1px solid #E6E9EF;}
+  }
   @media(max-width:991.98px){
     .slide-promo{min-height:0;}
     .slide-promo-inner{flex-direction:column;text-align:center;padding:40px 20px 34px;gap:26px;}
@@ -237,39 +289,28 @@
               </div>
             </div>
             @else
-            <div class="slide-item slide-item-bag position-relative">
-              <img loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" class="slide-img"
-                src="@image_url($s['img'])"
-                alt="{{ $s['alt'] }}"
-              />
-              <div class="content-absolute content-slide">
-                <div
-                  class="container height-inherit d-flex align-items-center justify-content-start"
-                >
-                  <div class="content-box slide-content slide-content-1 py-4">
-                    @if($s['badge'])
-                      <span class="slide-badge animate__animated animate__fadeInUp">{{ $s['badge'] }}</span>
-                    @endif
-                    <p
-                      class="slide-heading heading_72 animate__animated animate__fadeInUp"
-                      data-animation="animate__animated animate__fadeInUp"
-                    >
-                      {{ $s['title'] }}@if($s['highlight']) <span class="featured-title-accent">{{ $s['highlight'] }}</span>@endif
-                    </p>
-                    @if($s['desc'])
-                    <p
-                      class="slide-subheading heading_24 animate__animated animate__fadeInUp"
-                      data-animation="animate__animated animate__fadeInUp"
-                    >
-                      {{ $s['desc'] }}
-                    </p>
-                    @endif
-                    <a
-                      class="btn-primary slide-btn animate__animated animate__fadeInUp"
-                      href="{{ $s['url'] }}"
-                      data-animation="animate__animated animate__fadeInUp"
-                      >{{ $s['btn'] }}</a
-                    >
+            <div class="slide-item slide-hero position-relative">
+              <div class="slide-hero-photo">
+                <img loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async"
+                  src="@image_url($s['img'])"
+                  alt="{{ $s['alt'] }}"
+                />
+              </div>
+              <div class="slide-hero-inner">
+                <div class="slide-hero-copy animate__animated animate__fadeInUp">
+                  @if($s['badge'])
+                    <p class="slide-hero-eyebrow">{{ $s['badge'] }}</p>
+                  @endif
+                  <p class="slide-hero-title">{{ $s['title'] }}@if($s['highlight']) <em>{{ $s['highlight'] }}</em>@endif</p>
+                  @if($s['desc'])
+                  <p class="slide-hero-sub">{{ $s['desc'] }}</p>
+                  @endif
+                  <div class="slide-hero-cta">
+                    <a class="slide-hero-btn primary" href="{{ $s['url'] }}">
+                      {{ $s['btn'] }}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </a>
+                    <a class="slide-hero-btn ghost" href="https://wa.me/{{ whatsapp_number() }}?text={{ rawurlencode('Bonjour Mobilier Addict, je souhaite être conseillé.') }}" target="_blank" rel="noopener">Être conseillé sur WhatsApp</a>
                   </div>
                 </div>
               </div>
@@ -285,7 +326,7 @@
 
 
         <!-- trusted badge start -->
-        <div class="trusted-section mt-100 overflow-hidden">
+        <div class="trusted-section">
           <div class="container">
             <div
               class="trust-strip"

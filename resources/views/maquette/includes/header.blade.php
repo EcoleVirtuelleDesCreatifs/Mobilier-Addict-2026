@@ -193,16 +193,30 @@
           </div>
         </div>
         <style>
-          /* Barre de menu : plus de hauteur et d'air autour des textes */
+          /* Navigation façon maquette : texte simple, sans icônes, souligné rose */
+          .header-menubar .main-menu{gap:32px;}
           .header-menubar .main-menu .nav-link{
-            padding:22px 20px;
-            font-size:13px;
-            letter-spacing:1px;
+            padding:16px 0;
+            font-size:15px;
+            font-weight:500;
+            letter-spacing:0;
+            text-transform:none;
             line-height:1.4;
+            color:#33405A;
+            border-bottom:2px solid transparent;
           }
-          .header-menubar .main-menu .nav-link .nav-icon{margin-right:9px;vertical-align:-1px;}
-          .header-menubar .main-menu .nav-link::after{bottom:14px;}
-          .header-menubar .header-ma-cta{padding-top:12px;padding-bottom:12px;margin-left:28px;flex:0 0 auto;}
+          .header-menubar .main-menu .nav-link:hover{color:#131B2B;border-color:#F0286E;}
+          .header-menubar .main-menu .nav-link.active,
+          .header-menubar .main-menu .nav-link[aria-current="page"]{color:#131B2B;font-weight:600;border-color:#F0286E;}
+          .header-menubar .main-menu .nav-link .nav-icon{display:none;}
+          .header-menubar .main-menu .nav-link::after{display:none;}
+          .header-menubar .header-ma-cta{
+            margin-left:28px;flex:0 0 auto;
+            display:inline-flex;align-items:center;gap:8px;
+            background:none;border:none;padding:0;
+            font-size:14px;font-weight:600;color:#12305C;
+          }
+          .header-menubar .header-ma-cta:hover{color:#D4155A;}
         </style>
         <div class="header-menubar d-none d-lg-block">
           <div class="container d-flex align-items-center">
