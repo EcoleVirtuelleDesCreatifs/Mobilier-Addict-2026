@@ -730,10 +730,10 @@
       @if($waNumber)
       <!-- Bouton WhatsApp flottant -->
       <style>
-        .wa-float{position:fixed;right:18px;bottom:18px;z-index:1055;display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;border-radius:999px;padding:12px 18px 12px 14px;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 10px 28px rgba(37,211,102,.45);transition:transform .15s ease,box-shadow .15s ease;}
+        .wa-float{position:fixed;left:18px;bottom:18px;z-index:1055;display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;border-radius:999px;padding:12px 18px 12px 14px;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 10px 28px rgba(37,211,102,.45);transition:transform .15s ease,box-shadow .15s ease;}
         .wa-float:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(37,211,102,.55);color:#fff;}
         .wa-float svg{width:26px;height:26px;fill:currentColor;flex:0 0 auto;}
-        @media (max-width:575.98px){.wa-float{left:14px;right:auto;bottom:14px;padding:12px;}.wa-float span{display:none;}}
+        @media (max-width:575.98px){.wa-float{left:14px;bottom:14px;padding:12px;}.wa-float span{display:none;}}
       </style>
       <a class="wa-float" href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode(config('services.whatsapp_message')) }}" target="_blank" rel="noopener" aria-label="Discuter avec Mobilier Addict sur WhatsApp">
         <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 .8C7.6.8.8 7.6.8 16c0 2.7.7 5.3 2 7.6L.8 31.2l7.8-2c2.2 1.2 4.7 1.9 7.4 1.9 8.4 0 15.2-6.8 15.2-15.2S24.4.8 16 .8zm0 27.7c-2.3 0-4.6-.6-6.5-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5C4 20.5 3.3 18.3 3.3 16 3.3 9 9 3.3 16 3.3S28.7 9 28.7 16 23 28.5 16 28.5zm7-9.5c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7-.1-.2-.8-2-1.1-2.8-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.9c.2.3 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z"/></svg>
