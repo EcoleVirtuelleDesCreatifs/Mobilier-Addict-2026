@@ -23,6 +23,7 @@
                                 <select id="layout" name="layout" class="form-control">
                                     <option value="classic" {{ old('layout', 'classic') === 'classic' ? 'selected' : '' }}>Classique (image de fond + carte blanche)</option>
                                     <option value="promo" {{ old('layout') === 'promo' ? 'selected' : '' }}>Promo — bandeau sombre (type Black Friday)</option>
+                                    <option value="banner" {{ old('layout') === 'banner' ? 'selected' : '' }}>Bannière — plein écran, texte sur l'image</option>
                                 </select>
                                 @error('layout')
                                     <small class="text-danger">{{ $message }}</small>

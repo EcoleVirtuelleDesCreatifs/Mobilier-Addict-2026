@@ -63,6 +63,20 @@
     .slide-promo-copy{max-width:640px;}
     .slide-promo-visual{flex:none;width:100%;max-width:480px;}
   }
+
+  /* Slide bannière plein écran (texte sur zone sombre de l'image) */
+  .slide-banner{position:relative;overflow:hidden;aspect-ratio:3/1;max-height:560px;min-height:320px;}
+  .slide-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;}
+  .slide-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,25,.82) 0%,rgba(6,8,25,.5) 40%,rgba(6,8,25,.08) 68%,transparent 80%);}
+  .slide-banner-inner{position:relative;z-index:1;height:100%;display:flex;align-items:center;max-width:1200px;margin:0 auto;padding:0 24px;}
+  .slide-banner .slide-promo-copy{max-width:480px;}
+  .slide-banner .slide-promo-title{font-size:clamp(30px,4.6vw,56px);}
+  @media(max-width:991.98px){
+    .slide-banner{aspect-ratio:auto;min-height:420px;}
+    .slide-banner::before{background:linear-gradient(180deg,rgba(6,8,25,.35) 0%,rgba(6,8,25,.85) 100%);}
+    .slide-banner-inner{align-items:flex-end;padding:0 20px 30px;}
+    .slide-banner .slide-promo-copy{text-align:center;max-width:640px;margin:0 auto;}
+  }
 </style>
 @endpush
 
@@ -144,6 +158,28 @@
                 </div>
                 <div class="slide-promo-visual">
                   <img src="@image_url($s['img'])" alt="{{ $s['alt'] }}" loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" />
+                </div>
+              </div>
+            </div>
+            @elseif(($s['layout'] ?? 'classic') === 'banner')
+            <div class="slide-item slide-banner">
+              <img class="slide-banner-img" src="@image_url($s['img'])" alt="{{ $s['alt'] }}" loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" />
+              <div class="slide-banner-inner">
+                <div class="slide-promo-copy animate__animated animate__fadeInUp">
+                  <p class="slide-promo-title">{{ $s['title'] }}@if($s['highlight'])<span class="dot">{{ $s['highlight'] }}</span>@endif</p>
+                  @if($s['badge'] || $s['pill'] || $s['offer_end'])
+                  <p class="slide-promo-offer">@if($s['badge'])<span class="accent">{{ $s['badge'] }}</span><br>@endif @if($s['pill'])<span class="pill">{{ $s['pill'] }}</span>@endif @if($s['offer_end'])<span class="accent">{{ $s['offer_end'] }}</span>@endif</p>
+                  @endif
+                  @if($s['desc'])
+                  <p class="slide-promo-sub">{{ $s['desc'] }}</p>
+                  @endif
+                  <a class="slide-promo-cta" href="{{ $s['url'] }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    {{ $s['btn'] }}
+                  </a>
+                  @if($s['deadline_label'] || $s['deadline_value'])
+                  <p class="slide-promo-deadline">{{ $s['deadline_label'] }} <strong>{{ $s['deadline_value'] }}</strong></p>
+                  @endif
                 </div>
               </div>
             </div>
