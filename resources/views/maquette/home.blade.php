@@ -2,40 +2,49 @@
 
 @push('styles')
 <style>
-  .new-drop{margin-top:100px;padding:88px 0;background:#f7f4f6;position:relative;overflow:hidden;}
+  .new-drop{margin-top:100px;padding:88px 0;background:#f6edf7;position:relative;overflow:hidden;}
   .new-drop::before{content:"NOUVEAU";position:absolute;top:-38px;right:-18px;font-size:clamp(80px,15vw,210px);font-weight:900;letter-spacing:-.06em;color:rgba(0,35,77,.035);line-height:1;pointer-events:none;}
   .new-drop-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:34px;position:relative;z-index:1;}
   .new-drop-kicker{display:inline-flex;align-items:center;gap:10px;color:#ec4899;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;}
   .new-drop-kicker::before{content:"";width:38px;height:2px;background:#ec4899;}
   .new-drop-title{font-size:clamp(32px,4vw,56px);font-weight:800;color:#00234D;line-height:1.05;letter-spacing:-.04em;margin:0;}
-  .new-drop-title span{color:#ec4899;font-style:italic;}
-  .new-drop-all{display:inline-flex;align-items:center;gap:10px;color:#00234D;font-size:13px;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #ec4899;padding-bottom:5px;white-space:nowrap;}
-  .new-drop-all:hover{color:#ec4899;}
+  .new-drop-title span{color:#ec4899;}
+  .new-drop-all{display:inline-flex;align-items:center;gap:10px;background:#ec4899;color:#fff;font-size:13px;font-weight:700;text-decoration:none;letter-spacing:.02em;padding:14px 26px;border-radius:999px;white-space:nowrap;transition:background .2s ease,transform .2s ease;}
+  .new-drop-all:hover{background:#ff4da6;color:#fff;transform:translateY(-2px);}
   .new-drop-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;position:relative;z-index:1;}
-  .new-drop-main{position:relative;min-height:610px;border-radius:30px;overflow:hidden;background:#00234D;text-decoration:none;display:block;}
+  .new-drop-main{position:relative;min-height:610px;border-radius:30px;overflow:hidden;background:#00234D;display:block;}
   .new-drop-main img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transition:transform .6s ease;}
   .new-drop-main:hover img{transform:scale(1.04);}
   .new-drop-main::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,35,77,.05) 35%,rgba(0,35,77,.94) 100%);}
-  .new-drop-main-copy{position:absolute;z-index:2;left:36px;right:36px;bottom:34px;color:#fff;}
-  .new-drop-label{display:inline-block;background:#ec4899;color:#fff;border-radius:999px;padding:8px 15px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;}
-  .new-drop-main h3{font-size:clamp(25px,3vw,38px);font-weight:800;line-height:1.12;color:#fff;margin:0 0 10px;}
-  .new-drop-main-price{font-size:19px;font-weight:800;color:#fff;}
-  .new-drop-main-price del{font-size:13px;color:rgba(255,255,255,.55);font-weight:500;margin-left:8px;}
-  .new-drop-main-arrow{position:absolute;z-index:2;right:28px;top:28px;width:52px;height:52px;border-radius:50%;background:#fff;color:#00234D;display:flex;align-items:center;justify-content:center;transition:.2s;}
-  .new-drop-main:hover .new-drop-main-arrow{background:#ec4899;color:#fff;transform:rotate(-10deg);}
+  .new-drop-main-link{position:absolute;inset:0;z-index:2;}
+  .new-drop-main-copy{position:absolute;z-index:3;left:36px;right:36px;bottom:34px;color:#fff;pointer-events:none;}
+  .new-drop-label{position:absolute;z-index:3;top:26px;left:26px;display:inline-block;background:#ec4899;color:#fff;border-radius:999px;padding:9px 18px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;}
+  .new-drop-main h3{font-size:clamp(25px,3vw,38px);font-weight:800;line-height:1.12;color:#fff;margin:0 0 6px;}
+  .new-drop-main-size{font-size:16px;font-weight:700;color:rgba(255,255,255,.9);margin:0 0 14px;}
+  .new-drop-main-price{font-size:clamp(22px,2.4vw,30px);font-weight:800;color:#ff4da6;margin-bottom:20px;}
+  .new-drop-main-price del{font-size:14px;color:rgba(255,255,255,.55);font-weight:500;margin-left:8px;}
+  .new-drop-cart{pointer-events:auto;display:inline-block;}
+  .new-drop-cart-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#00234D;border:none;border-radius:999px;padding:14px 26px;font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+  .new-drop-cart-btn svg{width:18px;height:18px;color:#ec4899;}
+  .new-drop-cart-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.25);}
   .new-drop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;}
   .new-drop-card{background:#fff;border-radius:24px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease;}
   .new-drop-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(0,35,77,.11);}
-  .new-drop-card-media{aspect-ratio:1.28/1;overflow:hidden;background:#eee;}
+  .new-drop-card-media{aspect-ratio:1.28/1;overflow:hidden;background:#eee;position:relative;display:block;}
   .new-drop-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
-  .new-drop-card:hover img{transform:scale(1.06);}
+  .new-drop-card:hover .new-drop-card-media img{transform:scale(1.06);}
   .new-drop-card-num{position:absolute;top:12px;left:12px;width:32px;height:32px;border-radius:50%;background:#00234D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;z-index:1;}
-  .new-drop-card-body{padding:16px 18px 18px;}
-  .new-drop-card h3{font-size:15px;line-height:1.35;font-weight:800;color:#00234D;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-  .new-drop-card-price{color:#ec4899;font-size:14px;font-weight:800;}
+  .new-drop-card-body{padding:16px 18px 0;}
+  .new-drop-card h3{font-size:15px;line-height:1.35;font-weight:800;color:#00234D;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .new-drop-card h3 a{color:inherit;text-decoration:none;}
+  .new-drop-card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px 16px;}
+  .new-drop-card-price{color:#ec4899;font-size:16px;font-weight:800;}
   .new-drop-card-price del{color:#999;font-size:11px;font-weight:500;margin-left:5px;}
+  .new-drop-card-cart{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:#fdf2f8;border:1.5px solid #f3c6dd;color:#ec4899;cursor:pointer;transition:background .2s ease,border-color .2s ease;padding:0;}
+  .new-drop-card-cart svg{width:18px;height:18px;}
+  .new-drop-card-cart:hover{background:#ec4899;border-color:#ec4899;color:#fff;}
   @media(max-width:991.98px){.new-drop-layout{grid-template-columns:1fr}.new-drop-main{min-height:520px}.new-drop-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-  @media(max-width:575.98px){.new-drop{padding:62px 0}.new-drop-head{align-items:start;flex-direction:column}.new-drop-main{min-height:440px;border-radius:22px}.new-drop-main-copy{left:24px;right:24px;bottom:24px}.new-drop-grid{gap:12px}.new-drop-card{border-radius:18px}.new-drop-card-body{padding:13px}.new-drop-card h3{font-size:13px}.new-drop-card-num{width:28px;height:28px}.new-drop-all{font-size:11px}}
+  @media(max-width:575.98px){.new-drop{padding:62px 0}.new-drop-head{align-items:start;flex-direction:column}.new-drop-main{min-height:440px;border-radius:22px}.new-drop-main-copy{left:24px;right:24px;bottom:24px}.new-drop-label{top:18px;left:18px}.new-drop-grid{gap:12px}.new-drop-card{border-radius:18px}.new-drop-card-body{padding:13px 13px 0}.new-drop-card-foot{padding:10px 13px 13px}.new-drop-card h3{font-size:13px}.new-drop-card-num{width:28px;height:28px}.new-drop-all{font-size:11px;padding:12px 18px}}
   /* Lisibilité du texte du slider (audit UX) : carte presque opaque */
   .slide-content-1{background:rgba(255,255,255,.93);box-shadow:0 10px 34px rgba(0,35,77,.18);}
   .slide-content-1 .slide-subheading{color:#3d4a63;}
@@ -667,13 +676,11 @@
               </div>
 
               <div class="new-drop-layout">
-                <a href="{{ route('product.show', $newDropLead->slug) }}" class="new-drop-main" data-aos="fade-right" data-aos-duration="750">
-                  <img src="@image_url($newDropLead->image)" alt="{{ $newDropLead->name }}" alt="{{ $newDropLead->name }}" loading="lazy" decoding="async">
-                  <span class="new-drop-main-arrow" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                  </span>
+                <div class="new-drop-main" data-aos="fade-right" data-aos-duration="750">
+                  <img src="@image_url($newDropLead->image)" alt="{{ $newDropLead->name }}" loading="lazy" decoding="async">
+                  <a class="new-drop-main-link" href="{{ route('product.show', $newDropLead->slug) }}" aria-label="Voir {{ $newDropLead->name }}"></a>
+                  <span class="new-drop-label">Nouveau drop</span>
                   <div class="new-drop-main-copy">
-                    <span class="new-drop-label">Nouveau drop</span>
                     <h3>{{ $newDropLead->name }}</h3>
                     <div class="new-drop-main-price">
                       {{ number_format((float) $newDropLead->price, 0, ',', ' ') }} FCFA
@@ -681,26 +688,45 @@
                         <del>{{ number_format((float) $newDropLead->old_price, 0, ',', ' ') }} FCFA</del>
                       @endif
                     </div>
+                    <form class="new-drop-cart" action="{{ route('cart.add') }}" method="POST">
+                      @csrf
+                      <input type="hidden" name="product_id" value="{{ $newDropLead->id }}">
+                      <input type="hidden" name="quantity" value="1">
+                      <button type="submit" class="new-drop-cart-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2.5 3.5h2l2.6 11.4a1.6 1.6 0 0 0 1.6 1.3h7.9a1.6 1.6 0 0 0 1.6-1.3L20.5 7H5.2"/></svg>
+                        Ajouter au panier
+                      </button>
+                    </form>
                   </div>
-                </a>
+                </div>
 
                 <div class="new-drop-grid">
                   @foreach($newDropRest as $product)
-                    <a href="{{ route('product.show', $product->slug) }}" class="new-drop-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ min($loop->index * 80, 240) }}">
-                      <span class="new-drop-card-num">0{{ $loop->iteration + 1 }}</span>
-                      <div class="new-drop-card-media">
-                        <img src="@image_url($product->image)" alt="{{ $product->name }}" alt="{{ $product->name }}" loading="lazy" decoding="async">
-                      </div>
+                    <div class="new-drop-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ min($loop->index * 80, 240) }}">
+                      <a class="new-drop-card-media" href="{{ route('product.show', $product->slug) }}">
+                        <span class="new-drop-card-num">0{{ $loop->iteration + 1 }}</span>
+                        <img src="@image_url($product->image)" alt="{{ $product->name }}" loading="lazy" decoding="async">
+                      </a>
                       <div class="new-drop-card-body">
-                        <h3>{{ $product->name }}</h3>
+                        <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
+                      </div>
+                      <div class="new-drop-card-foot">
                         <div class="new-drop-card-price">
                           {{ number_format((float) $product->price, 0, ',', ' ') }} FCFA
                           @if($product->old_price && $product->old_price > $product->price)
                             <del>{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</del>
                           @endif
                         </div>
+                        <form action="{{ route('cart.add') }}" method="POST">
+                          @csrf
+                          <input type="hidden" name="product_id" value="{{ $product->id }}">
+                          <input type="hidden" name="quantity" value="1">
+                          <button type="submit" class="new-drop-card-cart" aria-label="Ajouter {{ $product->name }} au panier">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2.5 3.5h2l2.6 11.4a1.6 1.6 0 0 0 1.6 1.3h7.9a1.6 1.6 0 0 0 1.6-1.3L20.5 7H5.2"/></svg>
+                          </button>
+                        </form>
                       </div>
-                    </a>
+                    </div>
                   @endforeach
                 </div>
               </div>
