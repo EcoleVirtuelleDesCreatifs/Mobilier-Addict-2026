@@ -71,8 +71,8 @@ return [
         'title' => 'Famille',
         'kicker' => 'Sur-mesure · Maisons familiales',
         'lead' => "Une maison familiale, ce sont des matelas pour tous les âges, du linge qui survit aux dimanches et des meubles qui grandissent avec les enfants. Nous équipons toute la maison, de la chambre parentale à celle des petits.",
-        'image' => 'assets/img/slideshow/f3.jpg',
-        'image_alt' => 'Couette familiale Mobilier Addict',
+        'image' => 'assets/maquette/img/blog/famille-cover.webp',
+        'image_alt' => 'Chambre familiale équipée par Mobilier Addict : grands lits et literie coordonnée',
         'story_title' => "Des nuits tranquilles pour toute la maison",
         'story' => "Chaque membre de la famille dort différemment : soutien ferme pour les parents, confort douillet pour les enfants, literie pratique pour la chambre d'amis. Plutôt qu'un achat au coup par coup, nous composons un équipement harmonieux qui dure des années — et qui rend chaque chambre accueillante.",
         'modeles' => [
