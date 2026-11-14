@@ -9,7 +9,7 @@ define('LARAVEL_START', microtime(true));
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
 $siteDir = dirname($scriptDir);
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-if ($scriptDir !== '/' && $siteDir !== $scriptDir
+if ($siteDir !== '/' && $siteDir !== $scriptDir
     && str_starts_with($requestUri, $siteDir)
     && !str_starts_with($requestUri, $scriptDir . '/')
     && $requestUri !== $scriptDir
