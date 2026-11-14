@@ -202,7 +202,7 @@
           }
           .header-menubar .main-menu .nav-link .nav-icon{margin-right:9px;vertical-align:-1px;}
           .header-menubar .main-menu .nav-link::after{bottom:14px;}
-          .header-menubar .header-ma-cta{padding-top:12px;padding-bottom:12px;}
+          .header-menubar .header-ma-cta{padding-top:12px;padding-bottom:12px;margin-left:28px;flex:0 0 auto;}
         </style>
         <div class="header-menubar d-none d-lg-block">
           <div class="container d-flex align-items-center">
