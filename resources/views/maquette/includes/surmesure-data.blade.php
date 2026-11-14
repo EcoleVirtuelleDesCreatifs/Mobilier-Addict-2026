@@ -12,7 +12,7 @@ return [
         'modeles' => [
             ['name' => 'Chambre Essentielle', 'desc' => "Le duo gagnant des petites structures : matelas Addict ferme, oreillers confort, parures résistantes aux lavages fréquents.", 'img' => 'assets/maquette/img/blog/hotellerie-essentielle.webp'],
             ['name' => 'Chambre Signature', 'desc' => "L'équilibre hôtelier : matelas Luxury, double jeu d'oreillers, couettes gonflantes et finitions soignées.", 'img' => 'assets/maquette/img/blog/hotellerie-signature.webp'],
-            ['name' => 'Suite Premium', 'desc' => "L'expérience haut de gamme : grand confort, textile doux au toucher, accessoires de chambre assortis.", 'img' => 'assets/maquette/img/blog/hotellerie-essentielle.webp'],
+            ['name' => 'Suite Premium', 'desc' => "L'expérience haut de gamme : grand confort, textile doux au toucher, accessoires de chambre assortis.", 'img' => 'assets/maquette/img/blog/hotellerie-premium.webp'],
         ],
         'equipement' => [
             ['Matelas hôteliers', 'matelas.php', 'Matelas fermes et durables, dimensions standard ou king size.'],
