@@ -27,8 +27,8 @@ return [
         'title' => 'Appartement meublé',
         'kicker' => 'Sur-mesure · Bail & résidences meublées',
         'lead' => "Un appartement meublé prêt à louer doit séduire en une visite. Nous livrons des ensembles complets et cohérents — literie, mobilier, électroménager — pour que vos biens se louent vite et que vos locataires s'y sentent chez eux.",
-        'image' => 'assets/img/about/about-hero.jpg',
-        'image_alt' => 'Parure de lit dans un appartement meublé',
+        'image' => 'assets/maquette/img/blog/appartement-cover.webp',
+        'image_alt' => 'Appartement meublé clé en main par Mobilier Addict : salon, salle à manger et cuisine équipée',
         'story_title' => "La première visite décide de tout",
         'story' => "Un locataire potentiel ne calcule pas le prix du mobilier : il imagine sa vie. Une chambre lumineuse avec une literie neuve et une déco harmonieuse transforme une simple visite en signature. Nous constituons des packs « clé en main » adaptés à chaque budget, du studio étudiant au trois-pièces familial.",
         'modeles' => [
