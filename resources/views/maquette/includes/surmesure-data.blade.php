@@ -32,9 +32,9 @@ return [
         'story_title' => "La première visite décide de tout",
         'story' => "Un locataire potentiel ne calcule pas le prix du mobilier : il imagine sa vie. Une chambre lumineuse avec une literie neuve et une déco harmonieuse transforme une simple visite en signature. Nous constituons des packs « clé en main » adaptés à chaque budget, du studio étudiant au trois-pièces familial.",
         'modeles' => [
-            ['name' => 'Pack Locatif Essentiel', 'desc' => "Le nécessaire pour louer vite : lit, matelas, parure, rangement et petit électroménager.", 'img' => 'assets/img/blog/furniture-8.jpg'],
-            ['name' => 'Pack Standing', 'desc' => "Un niveau au-dessus pour la location meublée haut de gamme : literie confort, mobilier design.", 'img' => 'assets/img/blog/furniture-6.jpg'],
-            ['name' => 'Pack Résidence', 'desc' => "Pour les gérants de plusieurs appartements : gammes identiques, stocks de remplacement faciles.", 'img' => 'assets/img/blog/furniture-4.jpg'],
+            ['name' => 'Pack Locatif Essentiel', 'desc' => "Le nécessaire pour louer vite : lit, matelas, parure, rangement et petit électroménager.", 'img' => 'assets/maquette/img/blog/appart-essentiel.webp'],
+            ['name' => 'Pack Standing', 'desc' => "Un niveau au-dessus pour la location meublée haut de gamme : literie confort, mobilier design.", 'img' => 'assets/maquette/img/blog/appart-standing.webp'],
+            ['name' => 'Pack Résidence', 'desc' => "Pour les gérants de plusieurs appartements : gammes identiques, stocks de remplacement faciles.", 'img' => 'assets/maquette/img/blog/appart-residence.webp'],
         ],
         'equipement' => [
             ['Literie complète', 'matelas.php', 'Matelas, oreillers et parures coordonnées par chambre.'],
