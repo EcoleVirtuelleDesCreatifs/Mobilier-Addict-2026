@@ -75,9 +75,9 @@
           >
             @php
                 $defaultSlides = collect([
-                    ['img' => asset('assets/slider/slide-1.webp'), 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'Voir les matelas', 'url' => route('category.show', 'matelas')],
-                    ['img' => asset('assets/slider/slide-2.webp'), 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'Voir la literie', 'url' => route('category.show', 'oreillers-et-taies')],
-                    ['img' => asset('assets/slider/slide-3.webp'), 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'Voir le mobilier', 'url' => route('category.show', 'mobilier-accessoire')],
+                    ['img' => asset('assets/slider/slide-1.jpg'), 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'Voir les matelas', 'url' => route('category.show', 'matelas')],
+                    ['img' => asset('assets/slider/slide-2.jpg'), 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'Voir la literie', 'url' => route('category.show', 'oreillers-et-taies')],
+                    ['img' => asset('assets/slider/slide-3.jpg'), 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'Voir le mobilier', 'url' => route('category.show', 'mobilier-accessoire')],
                 ]);
 
                 $slides = ($heroSlides ?? collect())->isNotEmpty()
@@ -275,7 +275,7 @@
                   data-aos-duration="700"
                 >
                   <img loading="lazy" decoding="async"                     class="promo-card-img"
-                    src="{{ asset('assets/blo_01/matelas.webp') }}"
+                    src="{{ asset('assets/blo_01/matelas.png') }}"
                     alt="Nos matelas"
                   />
                                     <div class="promo-card-overlay">
@@ -304,7 +304,7 @@
                   data-aos-duration="700"
                 >
                   <img loading="lazy" decoding="async"                     class="promo-card-img"
-                    src="{{ asset('assets/blo_01/oreillers.webp') }}"
+                    src="{{ asset('assets/blo_01/oreillers.png') }}"
                     alt="Nos oreillers"
                   />
                   <div class="promo-card-overlay">
@@ -333,7 +333,7 @@
                   data-aos-duration="700"
                 >
                   <img loading="lazy" decoding="async"                     class="promo-card-img"
-                    src="{{ asset('assets/blo_01/couettes.webp') }}"
+                    src="{{ asset('assets/blo_01/couettes.png') }}"
                     alt="Nos couettes"
                   />
                   <div class="promo-card-overlay">
@@ -389,11 +389,11 @@
                     'electromenager' => 'Maison connectée',
                 ];
                 $catImages = [
-                    'matelas' => 'assets/bloc_02/matelas.webp',
-                    'oreillers-et-taies' => 'assets/bloc_02/oreiller-taies.webp',
-                    'drap-et-couettes' => 'assets/bloc_02/drap-couettes.webp',
-                    'mobilier-accessoire' => 'assets/bloc_02/mobilier-accessoires.webp',
-                    'electromenager' => 'assets/bloc_02/electromenager.webp',
+                    'matelas' => 'assets/bloc_02/matelas.png',
+                    'oreillers-et-taies' => 'assets/bloc_02/oreiller-taies.png',
+                    'drap-et-couettes' => 'assets/bloc_02/drap-couettes.png',
+                    'mobilier-accessoire' => 'assets/bloc_02/mobilier-accessoires.png',
+                    'electromenager' => 'assets/bloc_02/electromenager.png',
                 ];
               @endphp
               <div class="grid-container shop-category-inner">
@@ -405,7 +405,7 @@
                   data-aos-duration="700"
                 >
                   <img loading="lazy" decoding="async"                     class="cat-card-img"
-                    src="{{ $card['image_url'] ?? asset($catImages[$card['slug']] ?? 'assets/bloc_02/matelas.webp') }}"
+                    src="{{ $card['image_url'] ?? asset($catImages[$card['slug']] ?? 'assets/bloc_02/matelas.png') }}"
                     alt="{{ $card['title'] }} — Mobilier Addict"
                   />
                   <div class="cat-card-label">
@@ -645,7 +645,7 @@
                 data-aos-duration="700"
               >
                 <img loading="lazy" decoding="async"                   class="sm-card-img"
-                  src="{{ asset('assets/sur-mesure/hotellerie.webp') }}"
+                  src="{{ asset('assets/sur-mesure/hotellerie.png') }}"
                   alt="Hôtellerie"
                 />
                 <div class="sm-card-text">
@@ -670,7 +670,7 @@
                 data-aos-duration="700"
               >
                 <img loading="lazy" decoding="async"                   class="sm-card-img"
-                  src="{{ asset('assets/sur-mesure/appartement-meuble.webp') }}"
+                  src="{{ asset('assets/sur-mesure/appartement-meuble.png') }}"
                   alt="Appartement Meublé"
                 />
                 <div class="sm-card-text">
@@ -694,7 +694,7 @@
                 data-aos-duration="700"
               >
                 <img loading="lazy" decoding="async"                   class="sm-card-img"
-                  src="{{ asset('assets/sur-mesure/studio.webp') }}"
+                  src="{{ asset('assets/sur-mesure/studio.png') }}"
                   alt="Studio"
                 />
                 <div class="sm-card-text">
@@ -718,7 +718,7 @@
                 data-aos-duration="700"
               >
                 <img loading="lazy" decoding="async"                   class="sm-card-img"
-                  src="{{ asset('assets/sur-mesure/famille.webp') }}"
+                  src="{{ asset('assets/sur-mesure/famille.png') }}"
                   alt="Famille"
                 />
                 <div class="sm-card-text">
@@ -1137,7 +1137,7 @@
         <div class="single-banner-section mt-100 overflow-hidden">
           <div class="position-relative overlay">
             <img loading="lazy" decoding="async"               class="single-banner-img"
-              src="{{ asset('assets/bandeau/bandeau.webp') }}"
+              src="{{ asset('assets/bandeau/bandeau.png') }}"
               alt="Matelas sur mesure Mobilier Addict"
             />
 
