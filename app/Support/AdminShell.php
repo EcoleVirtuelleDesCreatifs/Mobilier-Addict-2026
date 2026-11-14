@@ -35,12 +35,10 @@ class AdminShell
             ]),
 
             ['section' => 'Site'],
-            self::group("Page d'accueil", 'fa-solid fa-house', ['admin.home_sections.*', 'admin.slider.*', 'admin.space_sections.*', 'admin.b2b.*', 'admin.settings.new-products-button.*'], [
-                self::child('Sections', 'admin.home_sections.index', ['admin.home_sections.*']),
+            self::group("Page d'accueil", 'fa-solid fa-house', ['admin.slider.*', 'admin.space_sections.*', 'admin.b2b.*'], [
                 $canManage ? self::child('Sliders', 'admin.slider.index', ['admin.slider.*']) : null,
                 $canManage ? self::child('Espaces', 'admin.space_sections.index', ['admin.space_sections.*']) : null,
                 $canManage ? self::child('B2B', 'admin.b2b.index', ['admin.b2b.*']) : null,
-                $canManage ? self::child('Bouton nouveautés', 'admin.settings.new-products-button.edit', ['admin.settings.new-products-button.*']) : null,
             ]),
             self::group('Contenus', 'fa-solid fa-newspaper', ['admin.articles.*'], [
                 self::child('Articles', 'admin.articles.index', ['admin.articles.index', 'admin.articles.edit', 'admin.articles.show']),
