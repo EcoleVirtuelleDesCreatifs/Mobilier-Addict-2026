@@ -10,9 +10,9 @@ return [
         'story_title' => "L'expérience commence au premier regard",
         'story' => "Quand votre client pousse la porte de sa chambre, il juge en quelques secondes : la netteté du linge, la fermeté du matelas, la sensation des oreillers. Chaque détail compte. Mobilier Addict vous accompagne de la chambre standard à la suite premium, avec des gammes cohérentes qui donnent une identité à votre établissement — sans exploser votre budget.",
         'modeles' => [
-            ['name' => 'Chambre Essentielle', 'desc' => "Le duo gagnant des petites structures : matelas Addict ferme, oreillers confort, parures résistantes aux lavages fréquents.", 'img' => 'assets/img/blog/furniture-1.jpg'],
-            ['name' => 'Chambre Signature', 'desc' => "L'équilibre hôtelier : matelas Luxury, double jeu d'oreillers, couettes gonflantes et finitions soignées.", 'img' => 'assets/img/blog/furniture-6.jpg'],
-            ['name' => 'Suite Premium', 'desc' => "L'expérience haut de gamme : grand confort, textile doux au toucher, accessoires de chambre assortis.", 'img' => 'assets/img/blog/furniture-8.jpg'],
+            ['name' => 'Chambre Essentielle', 'desc' => "Le duo gagnant des petites structures : matelas Addict ferme, oreillers confort, parures résistantes aux lavages fréquents.", 'img' => 'assets/maquette/img/blog/hotellerie-essentielle.webp'],
+            ['name' => 'Chambre Signature', 'desc' => "L'équilibre hôtelier : matelas Luxury, double jeu d'oreillers, couettes gonflantes et finitions soignées.", 'img' => 'assets/maquette/img/blog/hotellerie-signature.webp'],
+            ['name' => 'Suite Premium', 'desc' => "L'expérience haut de gamme : grand confort, textile doux au toucher, accessoires de chambre assortis.", 'img' => 'assets/maquette/img/blog/hotellerie-essentielle.webp'],
         ],
         'equipement' => [
             ['Matelas hôteliers', 'matelas.php', 'Matelas fermes et durables, dimensions standard ou king size.'],
