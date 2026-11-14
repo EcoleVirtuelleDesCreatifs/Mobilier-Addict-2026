@@ -52,6 +52,11 @@
                                     <td class="text-end">
                                         <a href="{{ route('admin.invoices.show', $invoice) }}" class="btn btn-sm btn-admin-ghost">Voir</a>
                                         <a href="{{ route('admin.invoices.pdf', $invoice) }}" class="btn btn-sm btn-admin-primary">PDF</a>
+                                        <form method="POST" action="{{ route('admin.invoices.destroy', $invoice) }}" class="d-inline" data-confirm="Supprimer définitivement la facture {{ $invoice->number }} ?">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-admin-ghost text-danger">Supprimer</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty

@@ -106,6 +106,14 @@ class InvoiceController extends Controller
         return $dompdf->stream('facture-' . $invoice->number . '.pdf');
     }
 
+    public function destroy(Invoice $invoice)
+    {
+        $invoice->items()->delete();
+        $invoice->delete();
+
+        return redirect()->route('admin.invoices.index')->with('status', 'Facture supprimée.');
+    }
+
     private function nextNumber(): string
     {
         $next = (int) (Invoice::query()->max('id') ?? 0) + 1;

@@ -505,6 +505,7 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->middleware('permission:orders.view')->name('admin.invoices.pdf');
     Route::post('/orders/{order}/invoices', [InvoiceController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.invoices.store');
     Route::post('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.invoices.status');
+    Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->middleware('permission:orders.update_status')->name('admin.invoices.destroy');
 
     Route::get('/quotes', [\App\Http\Controllers\Admin\QuoteController::class, 'index'])->middleware('permission:orders.view')->name('admin.quotes.index');
     Route::get('/quotes/{quote}', [\App\Http\Controllers\Admin\QuoteController::class, 'show'])->middleware('permission:orders.view')->name('admin.quotes.show');

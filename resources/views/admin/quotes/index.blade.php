@@ -83,6 +83,11 @@
                                     <td>
                                         <div class="ad-actions">
                                             <a href="{{ route('admin.quotes.show', $quote) }}" class="btn btn-sm btn-admin-ghost"><i class="fa-solid fa-eye me-1"></i> Voir</a>
+                                            <form method="POST" action="{{ route('admin.quotes.destroy', $quote) }}" class="d-inline" data-confirm="Supprimer définitivement le devis {{ $quote->number }} ?">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-admin-ghost text-danger"><i class="fa-solid fa-trash me-1"></i> Supprimer</button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
