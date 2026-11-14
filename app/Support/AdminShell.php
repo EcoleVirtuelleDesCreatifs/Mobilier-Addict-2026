@@ -13,41 +13,41 @@ class AdminShell
     {
         $user = auth()->user();
         $role = (string) ($user->role ?? '');
-        $canManage = in_array($role, ['editor', 'admin', 'super_admin'], true);
-        $isAdmin = in_array($role, ['admin', 'super_admin'], true);
+        $can = fn (string $permission): bool => $user && $user->hasPermission($permission);
+        $isAdmin = $can('users.manage') || $can('roles.manage');
 
         $menu = self::filter([
             ['section' => 'Général'],
             self::link('Tableau de bord', 'fa-solid fa-gauge-high', 'admin.dashboard', ['admin.dashboard']),
-            self::link('Statistiques', 'fa-solid fa-chart-pie', 'admin.stats.index', ['admin.stats.*']),
+            $can('stats.view') ? self::link('Statistiques', 'fa-solid fa-chart-pie', 'admin.stats.index', ['admin.stats.*']) : null,
 
             ['section' => 'Boutique'],
             self::group('Catalogue', 'fa-solid fa-couch', ['admin.products.*', 'admin.categories.*', 'admin.menus.*'], [
-                self::child('Produits', 'admin.products.index', ['admin.products.index', 'admin.products.edit']),
-                $canManage ? self::child('Nouveau produit', 'admin.products.create') : null,
-                self::child('Catégories', 'admin.categories.index', ['admin.categories.index', 'admin.categories.edit']),
-                self::child('Menus', 'admin.menus.index', ['admin.menus.*']),
+                $can('products.manage') ? self::child('Produits', 'admin.products.index', ['admin.products.index', 'admin.products.edit']) : null,
+                $can('products.manage') ? self::child('Nouveau produit', 'admin.products.create') : null,
+                $can('categories.manage') ? self::child('Catégories', 'admin.categories.index', ['admin.categories.index', 'admin.categories.edit']) : null,
+                $can('menus.manage') ? self::child('Menus', 'admin.menus.index', ['admin.menus.*']) : null,
             ]),
-            self::group('Ventes', 'fa-solid fa-bag-shopping', ['admin.orders.*', 'admin.quotes.*', 'admin.invoices.*'], [
+            $can('orders.view') ? self::group('Ventes', 'fa-solid fa-bag-shopping', ['admin.orders.*', 'admin.quotes.*', 'admin.invoices.*'], [
                 self::child('Commandes', 'admin.orders.index', ['admin.orders.*']),
                 self::child('Devis', 'admin.quotes.index', ['admin.quotes.*']),
                 self::child('Factures', 'admin.invoices.index', ['admin.invoices.*']),
-            ]),
+            ]) : null,
 
             ['section' => 'Site'],
             self::group("Page d'accueil", 'fa-solid fa-house', ['admin.slider.*', 'admin.space_sections.*', 'admin.b2b.*'], [
-                $canManage ? self::child('Sliders', 'admin.slider.index', ['admin.slider.*']) : null,
-                $canManage ? self::child('Espaces', 'admin.space_sections.index', ['admin.space_sections.*']) : null,
-                $canManage ? self::child('B2B', 'admin.b2b.index', ['admin.b2b.*']) : null,
+                $can('homepage.manage') ? self::child('Sliders', 'admin.slider.index', ['admin.slider.*']) : null,
+                $can('homepage.manage') ? self::child('Espaces', 'admin.space_sections.index', ['admin.space_sections.*']) : null,
+                $can('homepage.manage') ? self::child('B2B', 'admin.b2b.index', ['admin.b2b.*']) : null,
             ]),
             self::group('Contenus', 'fa-solid fa-newspaper', ['admin.articles.*'], [
-                self::child('Articles', 'admin.articles.index', ['admin.articles.index', 'admin.articles.edit', 'admin.articles.show']),
-                $canManage ? self::child('Nouvel article', 'admin.articles.create') : null,
+                $can('articles.manage') ? self::child('Articles', 'admin.articles.index', ['admin.articles.index', 'admin.articles.edit', 'admin.articles.show']) : null,
+                $can('articles.manage') ? self::child('Nouvel article', 'admin.articles.create') : null,
             ]),
             self::group('Marketing', 'fa-solid fa-bullhorn', ['admin.newsletter.*', 'admin.game.*', 'admin.settings.facebook-pixel.*'], [
-                self::child('Grand Jeu', 'admin.game.index', ['admin.game.*']),
-                self::child('Newsletter', 'admin.newsletter.index', ['admin.newsletter.*']),
-                self::child('Facebook Pixel', 'admin.settings.facebook-pixel.edit', ['admin.settings.facebook-pixel.*']),
+                $can('game.manage') ? self::child('Grand Jeu', 'admin.game.index', ['admin.game.*']) : null,
+                $can('newsletter.view') ? self::child('Newsletter', 'admin.newsletter.index', ['admin.newsletter.*']) : null,
+                $can('settings.manage') ? self::child('Facebook Pixel', 'admin.settings.facebook-pixel.edit', ['admin.settings.facebook-pixel.*']) : null,
             ]),
 
             $isAdmin ? ['section' => 'Administration'] : null,

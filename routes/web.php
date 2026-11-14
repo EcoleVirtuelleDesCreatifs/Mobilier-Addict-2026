@@ -440,13 +440,13 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
             'views_writable' => is_writable(storage_path('framework/views')),
             'dashboard_md5' => md5_file(resource_path('views/admin/dashboard.blade.php')),
         ]);
-    })->name('admin.diag');
+    })->middleware('permission:admin.diag')->name('admin.diag');
 
     Route::get('/home', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home/realtime-stats', [DashboardController::class, 'realtimeStats'])->name('admin.dashboard.realtime');
 
-    Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->name('admin.settings.facebook-pixel.edit');
-    Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->name('admin.settings.facebook-pixel.update');
+    Route::get('/settings/facebook-pixel', [FacebookPixelController::class, 'edit'])->middleware('permission:settings.manage')->name('admin.settings.facebook-pixel.edit');
+    Route::post('/settings/facebook-pixel', [FacebookPixelController::class, 'update'])->middleware('permission:settings.manage')->name('admin.settings.facebook-pixel.update');
 
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
@@ -482,14 +482,14 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/roles/{role}/toggle', [RoleController::class, 'toggle'])->middleware('permission:roles.manage')->name('admin.roles.toggle');
     Route::resource('roles', RoleController::class)->middleware('permission:roles.manage')->names('admin.roles');
 
-    Route::get('/slider', [SliderController::class, 'index'])->name('admin.slider.index');
-    Route::get('/slider/create', [SliderController::class, 'create'])->name('admin.slider.create');
-    Route::post('/slider', [SliderController::class, 'store'])->name('admin.slider.store');
-    Route::get('/slider/{slider}/edit', [SliderController::class, 'edit'])->name('admin.slider.edit');
-    Route::put('/slider/{slider}', [SliderController::class, 'update'])->name('admin.slider.update');
-    Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
+    Route::get('/slider', [SliderController::class, 'index'])->middleware('permission:homepage.manage')->name('admin.slider.index');
+    Route::get('/slider/create', [SliderController::class, 'create'])->middleware('permission:homepage.manage')->name('admin.slider.create');
+    Route::post('/slider', [SliderController::class, 'store'])->middleware('permission:homepage.manage')->name('admin.slider.store');
+    Route::get('/slider/{slider}/edit', [SliderController::class, 'edit'])->middleware('permission:homepage.manage')->name('admin.slider.edit');
+    Route::put('/slider/{slider}', [SliderController::class, 'update'])->middleware('permission:homepage.manage')->name('admin.slider.update');
+    Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->middleware('permission:homepage.manage')->name('admin.slider.destroy');
 
-    Route::resource('b2b', B2BCategoryController::class)->names('admin.b2b');
+    Route::resource('b2b', B2BCategoryController::class)->middleware('permission:homepage.manage')->names('admin.b2b');
 
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
     Route::delete('/products/{product}/image', [AdminProductController::class, 'destroyImage'])->middleware('permission:products.manage')->name('admin.products.image.destroy');
@@ -515,19 +515,19 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/quotes/{quote}', [\App\Http\Controllers\Admin\QuoteController::class, 'destroy'])->middleware('permission:orders.update_status')->name('admin.quotes.destroy');
     Route::post('/orders/{order}/quotes', [\App\Http\Controllers\Admin\QuoteController::class, 'storeFromOrder'])->middleware('permission:orders.update_status')->name('admin.orders.quotes.store');
 
-    Route::get('/jeu', [\App\Http\Controllers\Admin\GameParticipantController::class, 'index'])->name('admin.game.index');
-    Route::post('/jeu/reglages', [\App\Http\Controllers\Admin\GameParticipantController::class, 'updateSettings'])->name('admin.game.settings');
-    Route::get('/jeu/{participant}/modifier', [\App\Http\Controllers\Admin\GameParticipantController::class, 'edit'])->name('admin.game.edit');
-    Route::put('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'update'])->name('admin.game.update');
-    Route::delete('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'destroy'])->name('admin.game.destroy');
+    Route::get('/jeu', [\App\Http\Controllers\Admin\GameParticipantController::class, 'index'])->middleware('permission:game.manage')->name('admin.game.index');
+    Route::post('/jeu/reglages', [\App\Http\Controllers\Admin\GameParticipantController::class, 'updateSettings'])->middleware('permission:game.manage')->name('admin.game.settings');
+    Route::get('/jeu/{participant}/modifier', [\App\Http\Controllers\Admin\GameParticipantController::class, 'edit'])->middleware('permission:game.manage')->name('admin.game.edit');
+    Route::put('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'update'])->middleware('permission:game.manage')->name('admin.game.update');
+    Route::delete('/jeu/{participant}', [\App\Http\Controllers\Admin\GameParticipantController::class, 'destroy'])->middleware('permission:game.manage')->name('admin.game.destroy');
 
-    Route::get('/space-sections', [SpaceSectionController::class, 'index'])->name('admin.space_sections.index');
-    Route::get('/space-sections/{space_section}/edit', [SpaceSectionController::class, 'edit'])->name('admin.space_sections.edit');
-    Route::put('/space-sections/{space_section}', [SpaceSectionController::class, 'update'])->name('admin.space_sections.update');
+    Route::get('/space-sections', [SpaceSectionController::class, 'index'])->middleware('permission:homepage.manage')->name('admin.space_sections.index');
+    Route::get('/space-sections/{space_section}/edit', [SpaceSectionController::class, 'edit'])->middleware('permission:homepage.manage')->name('admin.space_sections.edit');
+    Route::put('/space-sections/{space_section}', [SpaceSectionController::class, 'update'])->middleware('permission:homepage.manage')->name('admin.space_sections.update');
 
-    Route::post('/space-sections/{space_section}/cards', [SpaceCardController::class, 'store'])->name('admin.space_sections.cards.store');
-    Route::put('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'update'])->name('admin.space_sections.cards.update');
-    Route::delete('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'destroy'])->name('admin.space_sections.cards.destroy');
+    Route::post('/space-sections/{space_section}/cards', [SpaceCardController::class, 'store'])->middleware('permission:homepage.manage')->name('admin.space_sections.cards.store');
+    Route::put('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'update'])->middleware('permission:homepage.manage')->name('admin.space_sections.cards.update');
+    Route::delete('/space-sections/{space_section}/cards/{space_card}', [SpaceCardController::class, 'destroy'])->middleware('permission:homepage.manage')->name('admin.space_sections.cards.destroy');
 });
 
 Route::get('/dashboard', function () {

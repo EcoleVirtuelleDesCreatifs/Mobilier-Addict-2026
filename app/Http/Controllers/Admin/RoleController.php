@@ -172,6 +172,16 @@ class RoleController extends Controller
             'newsletter' => [
                 'newsletter.view' => 'Voir la newsletter',
             ],
+            'homepage' => [
+                'homepage.manage' => "Gérer la page d'accueil (sliders, espaces, B2B)",
+            ],
+            'game' => [
+                'game.manage' => 'Gérer le grand jeu',
+            ],
+            'settings' => [
+                'settings.manage' => 'Gérer les réglages (pixel, tracking)',
+                'admin.diag' => 'Accéder au diagnostic technique',
+            ],
         ];
     }
 }
