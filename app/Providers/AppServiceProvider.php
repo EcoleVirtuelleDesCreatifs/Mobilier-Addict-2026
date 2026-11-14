@@ -49,15 +49,6 @@ class AppServiceProvider extends ServiceProvider
                 ->with(['children'])
                 ->orderBy('order')
                 ->get()
-                // Audit : masquer les univers vides (sans produit actif,
-                // sauf s'ils ont un lien personnalisé ou des sous-menus).
-                ->filter(function ($menu) {
-                    if (trim((string) $menu->url) !== '' || $menu->children->isNotEmpty()) {
-                        return true;
-                    }
-
-                    return $menu->products()->where('products.is_active', true)->exists();
-                })
                 ->values();
 
             $view->with('headerMenus', $headerMenus);
