@@ -77,6 +77,19 @@
     .slide-banner-inner{align-items:flex-end;padding:0 20px 30px;}
     .slide-banner .slide-promo-copy{text-align:center;max-width:640px;margin:0 auto;}
   }
+
+  /* Section "Acheter par catégorie" — maquette : titre centré, carte large a gauche, 2x2 a droite */
+  .cat-band .featured-head{text-align:center;}
+  .cat-band .featured-head-text{display:inline-block;}
+  .cat-band .featured-title{position:relative;display:inline-block;padding-bottom:16px;}
+  .cat-band .featured-title::after{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:70px;height:3px;border-radius:3px;background:#ff5fa8;}
+  .shop-category .grid-item.grid-item-4{grid-column:span 4;}
+  .shop-category .grid-item.grid-item-5{grid-column:span 4;}
+  .cat-band .cat-card{border-radius:18px;}
+  .cat-band .cat-card-label{left:0;right:0;bottom:0;border-radius:0;box-shadow:none;}
+  @media(max-width:575px){
+    .cat-band .cat-card-label{padding:12px 12px 12px 16px;}
+  }
 </style>
 @endpush
 
