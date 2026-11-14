@@ -74,17 +74,36 @@
   }
 
   /* Slide bannière plein écran (texte sur zone sombre de l'image) */
-  .slide-banner{position:relative;overflow:hidden;aspect-ratio:3/1;max-height:560px;min-height:320px;}
-  .slide-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;}
-  .slide-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,25,.82) 0%,rgba(6,8,25,.5) 40%,rgba(6,8,25,.08) 68%,transparent 80%);}
+  .slide-banner{position:relative;overflow:hidden;aspect-ratio:3/1;max-height:560px;min-height:340px;}
+  .slide-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;animation:slide-banner-zoom 14s ease-in-out infinite alternate;}
+  @keyframes slide-banner-zoom{from{transform:scale(1)}to{transform:scale(1.07)}}
+  .slide-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,22,.88) 0%,rgba(4,6,22,.62) 38%,rgba(4,6,22,.18) 62%,transparent 78%);}
+  .slide-banner::after{content:"";position:absolute;inset:0;background:radial-gradient(560px 300px at 18% 95%,rgba(255,45,120,.22),transparent 65%);pointer-events:none;}
   .slide-banner-inner{position:relative;z-index:1;height:100%;display:flex;align-items:center;max-width:1200px;margin:0 auto;padding:0 24px;}
-  .slide-banner .slide-promo-copy{max-width:480px;}
-  .slide-banner .slide-promo-title{font-size:clamp(30px,4.6vw,56px);}
+  .slide-banner-copy{max-width:540px;color:#fff;}
+  .slide-banner-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:8px 16px;margin-bottom:18px;}
+  .slide-banner-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff2d78;box-shadow:0 0 10px rgba(255,45,120,.9);}
+  .slide-banner-title{font-size:clamp(30px,4.8vw,58px);font-weight:800;line-height:1.04;letter-spacing:-.02em;color:#fff;margin:0 0 14px;text-transform:uppercase;}
+  .slide-banner-title .hl{color:#ff3d8b;}
+  .slide-banner-offer{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:clamp(17px,2.2vw,26px);font-weight:800;line-height:1.25;margin:0 0 12px;}
+  .slide-banner-offer .accent{color:#ff3d8b;}
+  .slide-banner-offer .pill{display:inline-block;background:#ff2d78;color:#fff;border-radius:8px;padding:2px 12px;transform:rotate(-1.5deg);box-shadow:0 8px 24px rgba(255,45,120,.4);}
+  .slide-banner-sub{font-size:clamp(13px,1.4vw,16px);color:#c9cdea;margin:0 0 24px;max-width:440px;}
+  .slide-banner-actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px;}
+  .slide-banner-cta{display:inline-flex;align-items:center;gap:10px;background:#ff2d78;color:#fff !important;font-weight:800;font-size:15px;letter-spacing:.04em;padding:15px 30px;border-radius:999px;text-decoration:none;box-shadow:0 12px 32px rgba(255,45,120,.45);transition:background .25s ease,transform .25s ease,box-shadow .25s ease;}
+  .slide-banner-cta:hover{background:#ff4a90;transform:translateY(-3px);box-shadow:0 18px 44px rgba(255,45,120,.55);}
+  .slide-banner-cta svg{width:19px;height:19px;flex:none;}
+  .slide-banner-deadline{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:11px 18px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#e8e9f5;}
+  .slide-banner-deadline svg{width:15px;height:15px;color:#ff3d8b;flex:none;}
+  .slide-banner-deadline strong{color:#ff3d8b;font-weight:800;margin-left:2px;}
   @media(max-width:991.98px){
-    .slide-banner{aspect-ratio:auto;min-height:420px;}
-    .slide-banner::before{background:linear-gradient(180deg,rgba(6,8,25,.35) 0%,rgba(6,8,25,.85) 100%);}
-    .slide-banner-inner{align-items:flex-end;padding:0 20px 30px;}
-    .slide-banner .slide-promo-copy{text-align:center;max-width:640px;margin:0 auto;}
+    .slide-banner{aspect-ratio:auto;min-height:460px;}
+    .slide-banner-img{animation:none;}
+    .slide-banner::before{background:linear-gradient(180deg,rgba(4,6,22,.4) 0%,rgba(4,6,22,.9) 100%);}
+    .slide-banner-inner{align-items:flex-end;padding:0 20px 34px;}
+    .slide-banner-copy{text-align:center;max-width:640px;margin:0 auto;}
+    .slide-banner-offer,.slide-banner-actions{justify-content:center;}
+    .slide-banner-sub{margin-left:auto;margin-right:auto;}
   }
 
   /* Section "Acheter par catégorie" — maquette : titre centré, carte large a gauche, 2x2 a droite */
@@ -187,21 +206,29 @@
             <div class="slide-item slide-banner">
               <img class="slide-banner-img" src="@image_url($s['img'])" alt="{{ $s['alt'] }}" loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" />
               <div class="slide-banner-inner">
-                <div class="slide-promo-copy animate__animated animate__fadeInUp">
-                  <p class="slide-promo-title">{{ $s['title'] }}@if($s['highlight'])<span class="dot">{{ $s['highlight'] }}</span>@endif</p>
-                  @if($s['badge'] || $s['pill'] || $s['offer_end'])
-                  <p class="slide-promo-offer">@if($s['badge'])<span class="accent">{{ $s['badge'] }}</span><br>@endif @if($s['pill'])<span class="pill">{{ $s['pill'] }}</span>@endif @if($s['offer_end'])<span class="accent">{{ $s['offer_end'] }}</span>@endif</p>
+                <div class="slide-banner-copy animate__animated animate__fadeInUp">
+                  @if($s['badge'])
+                  <span class="slide-banner-kicker">{{ $s['badge'] }}</span>
+                  @endif
+                  <p class="slide-banner-title">{{ $s['title'] }}@if($s['highlight']) <span class="hl">{{ $s['highlight'] }}</span>@endif</p>
+                  @if($s['pill'] || $s['offer_end'])
+                  <p class="slide-banner-offer">@if($s['pill'])<span class="pill">{{ $s['pill'] }}</span>@endif @if($s['offer_end'])<span class="accent">{{ $s['offer_end'] }}</span>@endif</p>
                   @endif
                   @if($s['desc'])
-                  <p class="slide-promo-sub">{{ $s['desc'] }}</p>
+                  <p class="slide-banner-sub">{{ $s['desc'] }}</p>
                   @endif
-                  <a class="slide-promo-cta" href="{{ $s['url'] }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                    {{ $s['btn'] }}
-                  </a>
-                  @if($s['deadline_label'] || $s['deadline_value'])
-                  <p class="slide-promo-deadline">{{ $s['deadline_label'] }} <strong>{{ $s['deadline_value'] }}</strong></p>
-                  @endif
+                  <div class="slide-banner-actions">
+                    <a class="slide-banner-cta" href="{{ $s['url'] }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      {{ $s['btn'] }}
+                    </a>
+                    @if($s['deadline_label'] || $s['deadline_value'])
+                    <span class="slide-banner-deadline">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {{ $s['deadline_label'] }} <strong>{{ $s['deadline_value'] }}</strong>
+                    </span>
+                    @endif
+                  </div>
                 </div>
               </div>
             </div>
