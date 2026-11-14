@@ -6,6 +6,9 @@
 @section('og_type', 'article')
 
 @push('meta')
+    <meta property="article:published_time" content="{{ optional($post->published_at ?? $post->created_at)->toISOString() }}" />
+    <meta property="article:modified_time" content="{{ optional($post->updated_at)->toISOString() }}" />
+    <meta property="article:section" content="{{ $post->category?->name ?? 'Magazine' }}" />
     <script type="application/ld+json">
     {!! json_encode([
         '@@context' => 'https://schema.org',
@@ -34,6 +37,17 @@
         ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Accueil', 'item' => route('home')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Magazine', 'item' => route('blog.index')],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $post->title, 'item' => route('blog.show', $post->slug)],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @section('content')
@@ -43,7 +57,7 @@
                 <div class="col-lg-12 col-md-12 col-12">
                     <div class="article-rte">
                         <div class="article-img">
-                            <img loading="lazy" decoding="async" src="{{ $post->image_url ?? asset('assets/maquette/img/blog/furniture-9.jpg') }}" alt="{{ $post->title }}">
+                            <img loading="eager" fetchpriority="high" decoding="async" src="{{ $post->image_url ?? asset('assets/maquette/img/blog/furniture-9.jpg') }}" alt="{{ $post->image_alt ?? $post->title }}" width="1200" height="675">
                         </div>
                         <div class="article-meta">
                             <p class="article-ma-kicker">{{ $post->category?->name ?? 'Blog' }} · Le magazine Mobilier Addict</p>
@@ -60,6 +74,14 @@
                                 <span class="article-date d-flex align-items-center">
                                     <span>{{ $post->published_at?->format('d/m/Y') ?? $post->created_at?->format('d/m/Y') }}</span>
                                 </span>
+                                <span class="article-separator mx-3">
+                                    <svg width="2" height="12" viewBox="0 0 2 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.4" d="M1.09761 0.5H0V11.5H1.09761V0.5Z" fill="black"/>
+                                    </svg>
+                                </span>
+                                <span class="article-date d-flex align-items-center">
+                                    <span>{{ $post->reading_time ?? 3 }} min de lecture</span>
+                                </span>
                             </div>
                         </div>
 
@@ -74,7 +96,7 @@
                                     @foreach($relatedPosts as $related)
                                         <div class="col-md-4 mb-4">
                                             <div class="magazine-card">
-                                                <img loading="lazy" decoding="async" src="{{ $related->image_url ?? asset('assets/maquette/img/blog/furniture-1.jpg') }}" alt="{{ $related->title }}" width="400" height="300">
+                                                <img loading="lazy" decoding="async" src="{{ $related->image_url ?? asset('assets/maquette/img/blog/furniture-1.jpg') }}" alt="{{ $related->image_alt ?? $related->title }}" width="400" height="300">
                                                 <div class="magazine-card-content">
                                                     <p class="magazine-category">{{ $related->category?->name ?? 'Blog' }}</p>
                                                     <h4>{{ $related->title }}</h4>
