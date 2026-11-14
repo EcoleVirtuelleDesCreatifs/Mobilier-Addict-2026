@@ -192,6 +192,18 @@
             </div>
           </div>
         </div>
+        <style>
+          /* Barre de menu : plus de hauteur et d'air autour des textes */
+          .header-menubar .main-menu .nav-link{
+            padding:22px 20px;
+            font-size:13px;
+            letter-spacing:1px;
+            line-height:1.4;
+          }
+          .header-menubar .main-menu .nav-link .nav-icon{margin-right:9px;vertical-align:-1px;}
+          .header-menubar .main-menu .nav-link::after{bottom:14px;}
+          .header-menubar .header-ma-cta{padding-top:12px;padding-bottom:12px;}
+        </style>
         <div class="header-menubar d-none d-lg-block">
           <div class="container d-flex align-items-center">
             <nav class="site-navigation" aria-label="Navigation principale">
