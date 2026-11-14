@@ -134,7 +134,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <!-- all css -->
@@ -162,26 +162,26 @@
         --btn-secondary-font-weight: 500;
 
         --heading-color: #000;
-        --heading-font-family: "Poppins", sans-serif;
+        --heading-font-family: "Inter", sans-serif;
         --heading-font-weight: 700;
 
         --title-color: #000;
-        --title-font-family: "Poppins", sans-serif;
+        --title-font-family: "Inter", sans-serif;
         --title-font-weight: 400;
 
         --body-color: #000;
         --body-background-color: #fff;
-        --body-font-family: "Poppins", sans-serif;
+        --body-font-family: "Inter", sans-serif;
         --body-font-size: 14px;
         --body-font-weight: 400;
 
         --section-heading-color: #000;
-        --section-heading-font-family: "Poppins", sans-serif;
+        --section-heading-font-family: "Inter", sans-serif;
         --section-heading-font-size: 48px;
         --section-heading-font-weight: 600;
 
         --section-subheading-color: #000;
-        --section-subheading-font-family: "Poppins", sans-serif;
+        --section-subheading-font-family: "Inter", sans-serif;
         --section-subheading-font-size: 16px;
         --section-subheading-font-weight: 400;
       }

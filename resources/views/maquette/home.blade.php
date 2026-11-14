@@ -39,6 +39,30 @@
   /* Lisibilité du texte du slider (audit UX) : carte presque opaque */
   .slide-content-1{background:rgba(255,255,255,.93);box-shadow:0 10px 34px rgba(0,35,77,.18);}
   .slide-content-1 .slide-subheading{color:#3d4a63;}
+
+  /* Slide promo Black Friday */
+  .slide-promo{background:radial-gradient(900px 420px at 85% 115%,rgba(255,45,120,.28),transparent 60%),radial-gradient(700px 380px at -5% -20%,rgba(255,45,120,.22),transparent 55%),linear-gradient(135deg,#0a0c2e 0%,#121040 55%,#0b0d30 100%);min-height:480px;display:flex !important;align-items:center;}
+  .slide-promo-inner{display:flex;align-items:center;justify-content:space-between;gap:32px;width:100%;max-width:1200px;margin:0 auto;padding:48px 24px;}
+  .slide-promo-copy{max-width:520px;color:#fff;}
+  .slide-promo-title{font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.02;letter-spacing:-.02em;color:#fff;margin:0 0 18px;text-transform:uppercase;}
+  .slide-promo-title .dot{color:#ff2d78;}
+  .slide-promo-offer{font-size:clamp(20px,2.6vw,30px);font-weight:800;line-height:1.3;margin:0 0 10px;}
+  .slide-promo-offer .accent{color:#ff3d8b;}
+  .slide-promo-offer .pill{display:inline-block;background:#ff2d78;color:#fff;border-radius:8px;padding:0 10px;transform:rotate(-1.5deg);}
+  .slide-promo-sub{font-size:clamp(13px,1.4vw,16px);color:#c9cdea;margin:0 0 26px;}
+  .slide-promo-cta{display:inline-flex;align-items:center;gap:10px;background:#ff2d78;color:#fff !important;font-weight:800;font-size:15px;letter-spacing:.04em;padding:14px 26px;border-radius:10px;text-decoration:none;transition:background .25s ease,transform .25s ease;}
+  .slide-promo-cta:hover{background:#ff4a90;transform:translateY(-2px);}
+  .slide-promo-cta svg{width:19px;height:19px;flex:none;}
+  .slide-promo-deadline{margin:22px 0 0;font-size:12px;font-weight:600;letter-spacing:.12em;color:#8f93b8;text-transform:uppercase;}
+  .slide-promo-deadline strong{color:#ff3d8b;font-weight:800;}
+  .slide-promo-visual{flex:0 1 560px;min-width:0;}
+  .slide-promo-visual img{width:100%;height:auto;display:block;border-radius:14px;}
+  @media(max-width:991.98px){
+    .slide-promo{min-height:0;}
+    .slide-promo-inner{flex-direction:column;text-align:center;padding:40px 20px 34px;gap:26px;}
+    .slide-promo-copy{max-width:640px;}
+    .slide-promo-visual{flex:none;width:100%;max-width:480px;}
+  }
 </style>
 @endpush
 
@@ -75,13 +99,14 @@
           >
             @php
                 $defaultSlides = collect([
-                    ['img' => asset('assets/slider/slide-1.jpg'), 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'Voir les matelas', 'url' => route('category.show', 'matelas')],
-                    ['img' => asset('assets/slider/slide-2.jpg'), 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'Voir la literie', 'url' => route('category.show', 'oreillers-et-taies')],
-                    ['img' => asset('assets/slider/slide-3.jpg'), 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'Voir le mobilier', 'url' => route('category.show', 'mobilier-accessoire')],
+                    ['layout' => 'classic', 'img' => asset('assets/slider/slide-1.jpg'), 'alt' => 'Matelas Mobilier Addict - sommeil parfait', 'badge' => null, 'title' => 'Des matelas pour un sommeil parfait', 'highlight' => null, 'desc' => 'Confort et soutien optimal', 'btn' => 'Voir les matelas', 'url' => route('category.show', 'matelas')],
+                    ['layout' => 'classic', 'img' => asset('assets/slider/slide-2.jpg'), 'alt' => 'Literie Mobilier Addict - oreillers, draps et couettes', 'badge' => null, 'title' => 'Oreillers, draps et couettes', 'highlight' => null, 'desc' => 'Tout pour votre literie', 'btn' => 'Voir la literie', 'url' => route('category.show', 'oreillers-et-taies')],
+                    ['layout' => 'classic', 'img' => asset('assets/slider/slide-3.jpg'), 'alt' => 'Mobilier Mobilier Addict - aménagement intérieur', 'badge' => null, 'title' => 'Mobiliers et accessoires', 'highlight' => null, 'desc' => 'Aménagez votre intérieur', 'btn' => 'Voir le mobilier', 'url' => route('category.show', 'mobilier-accessoire')],
                 ]);
 
                 $slides = ($heroSlides ?? collect())->isNotEmpty()
                     ? $heroSlides->map(fn ($s) => [
+                        'layout' => $s->layout ?? 'classic',
                         'img' => $s->image,
                         'alt' => $s->image_alt ?: ($s->title ?? 'Mobilier Addict'),
                         'badge' => $s->badge,
@@ -90,10 +115,39 @@
                         'desc' => $s->description,
                         'btn' => $s->btn_primary_text ?: 'ACHETER',
                         'url' => $s->btn_primary_url ?: route('collection.index'),
+                        'pill' => $s->discount_text,
+                        'offer_end' => $s->discount_label,
+                        'deadline_label' => $s->stat1_label,
+                        'deadline_value' => $s->stat1_value,
                     ])->values()
                     : $defaultSlides;
             @endphp
             @foreach($slides as $i => $s)
+            @if(($s['layout'] ?? 'classic') === 'promo')
+            <div class="slide-item slide-promo">
+              <div class="slide-promo-inner">
+                <div class="slide-promo-copy animate__animated animate__fadeInUp">
+                  <p class="slide-promo-title">{{ $s['title'] }}@if($s['highlight'])<span class="dot">{{ $s['highlight'] }}</span>@endif</p>
+                  @if($s['badge'] || $s['pill'] || $s['offer_end'])
+                  <p class="slide-promo-offer">@if($s['badge'])<span class="accent">{{ $s['badge'] }}</span><br>@endif @if($s['pill'])<span class="pill">{{ $s['pill'] }}</span>@endif @if($s['offer_end'])<span class="accent">{{ $s['offer_end'] }}</span>@endif</p>
+                  @endif
+                  @if($s['desc'])
+                  <p class="slide-promo-sub">{{ $s['desc'] }}</p>
+                  @endif
+                  <a class="slide-promo-cta" href="{{ $s['url'] }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    {{ $s['btn'] }}
+                  </a>
+                  @if($s['deadline_label'] || $s['deadline_value'])
+                  <p class="slide-promo-deadline">{{ $s['deadline_label'] }} <strong>{{ $s['deadline_value'] }}</strong></p>
+                  @endif
+                </div>
+                <div class="slide-promo-visual">
+                  <img src="@image_url($s['img'])" alt="{{ $s['alt'] }}" loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" />
+                </div>
+              </div>
+            </div>
+            @else
             <div class="slide-item slide-item-bag position-relative">
               <img loading="{{ $i === 0 ? 'eager' : 'lazy' }}" {{ $i === 0 ? 'fetchpriority="high"' : '' }} decoding="async" class="slide-img"
                 src="@image_url($s['img'])"
@@ -131,6 +185,7 @@
                 </div>
               </div>
             </div>
+            @endif
             @endforeach
           </div>
           <div class="activate-arrows"></div>

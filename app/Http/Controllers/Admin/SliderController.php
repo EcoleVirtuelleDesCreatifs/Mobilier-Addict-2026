@@ -75,6 +75,7 @@ class SliderController extends Controller
             'description' => ['nullable', 'string'],
             'image' => [$isUpdate ? 'nullable' : 'required', 'image', 'max:4096'],
             'image_alt' => ['nullable', 'string', 'max:255'],
+            'layout' => ['nullable', 'string', 'in:classic,promo'],
             'btn_primary_text' => ['nullable', 'string', 'max:255'],
             'btn_primary_url' => ['nullable', 'string', 'max:255'],
             'btn_secondary_text' => ['nullable', 'string', 'max:255'],
@@ -100,6 +101,7 @@ class SliderController extends Controller
         $data['title_highlight'] = $data['title_highlight'] ?? null;
         $data['description'] = $data['description'] ?? null;
         $data['image_alt'] = $data['image_alt'] ?? null;
+        $data['layout'] = $data['layout'] ?? 'classic';
 
         $data['btn_primary_text'] = $data['btn_primary_text'] ?? null;
         $data['btn_primary_url'] = $data['btn_primary_url'] ?? null;

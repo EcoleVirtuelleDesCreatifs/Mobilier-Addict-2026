@@ -16,6 +16,7 @@ class Slide extends Model
         'description',
         'image',
         'image_alt',
+        'layout',
         'btn_primary_text',
         'btn_primary_url',
         'btn_secondary_text',

@@ -1491,14 +1491,14 @@ button,
   --secondary-color: #d8327f;
   --body-background-color: #fff;
   --body-color: #263749;
-  --body-font-family: 'Poppins', Arial, sans-serif;
+  --body-font-family: 'Inter', Arial, sans-serif;
   --body-font-size: 14px;
   --body-font-weight: 400;
   --heading-color: #00234d;
-  --heading-font-family: 'Poppins', Arial, sans-serif;
+  --heading-font-family: 'Inter', Arial, sans-serif;
   --heading-font-weight: 600;
   --title-color: #00234d;
-  --title-font-family: 'Poppins', Arial, sans-serif;
+  --title-font-family: 'Inter', Arial, sans-serif;
   --title-font-weight: 500;
 }
 .editorial-skip { position: absolute; left: 16px; top: -100px; z-index: 1100; padding: 12px 20px; background: #fff; color: #00234d; }
@@ -8977,7 +8977,7 @@ blockquote {
 
 /* Mobilier Addict: text logo */
 .logo-text {
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 22px;
   letter-spacing: -0.6px;
@@ -9493,7 +9493,7 @@ blockquote {
   .header-menubar .site-navigation{overflow:visible}
   .header-menubar .main-menu{width:100%;justify-content:space-between}
   .header-menubar .main-menu > .menu-list-item{flex:0 1 auto}
-  .header-menubar .main-menu .nav-link{padding:16px 12px;font-size:12px;letter-spacing:.5px}
+  .header-menubar .main-menu .nav-link{padding:16px 12px;font-size:12px;letter-spacing:0}
   .header-menubar .main-menu .nav-link::after{left:12px;right:12px}
   .header-ma-cta{padding:9px 16px;margin-left:14px;font-size:11.5px}
 }

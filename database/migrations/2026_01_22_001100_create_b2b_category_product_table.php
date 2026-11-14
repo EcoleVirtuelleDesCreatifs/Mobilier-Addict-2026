@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
+        if (Schema::hasTable('b2b_category_product')) {
+            return;
+        }
+
         Schema::create('b2b_category_product', function (Blueprint $table) {
             $table->id();
             $table->foreignId('b2b_category_id')->constrained('b2b_categories')->onDelete('cascade');

@@ -18,8 +18,8 @@ $escape = static function ($value) { return htmlspecialchars($value, ENT_QUOTES,
     <link rel="stylesheet" href="assets/css/vendor.css">
     <link rel="stylesheet" href="assets/css/style.min.css">
     <style>
-        .smp-site { --smp-navy: #00234d; --smp-pink: #d8327f; --smp-pale: #fdf2f8; font-family: 'Poppins', Arial, sans-serif; }
-        .smp-site h1, .smp-site h2, .smp-site h3, .smp-site p, .smp-site a, .smp-site span, .smp-site li, .smp-site em, .smp-site strong { font-family: 'Poppins', Arial, sans-serif; }
+        .smp-site { --smp-navy: #00234d; --smp-pink: #d8327f; --smp-pale: #fdf2f8; font-family: 'Inter', Arial, sans-serif; }
+        .smp-site h1, .smp-site h2, .smp-site h3, .smp-site p, .smp-site a, .smp-site span, .smp-site li, .smp-site em, .smp-site strong { font-family: 'Inter', Arial, sans-serif; }
         .smp-site a:focus-visible, .smp-site button:focus-visible { outline: 3px solid var(--smp-pink); outline-offset: 4px; border-radius: 4px; }
         .smp-hero { background: radial-gradient(circle at 85% 8%, rgba(216,50,127,.35), rgba(216,50,127,0) 48%), linear-gradient(120deg, #00234d 0%, #0b3059 60%, #123e6d 100%); color: #fff; padding: 72px 0 80px; }
         .smp-hero-grid { display: grid; grid-template-columns: minmax(0,1.08fr) minmax(0,.92fr); gap: 56px; align-items: center; }
