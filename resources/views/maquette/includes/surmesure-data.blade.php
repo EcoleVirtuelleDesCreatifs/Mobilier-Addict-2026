@@ -76,9 +76,9 @@ return [
         'story_title' => "Des nuits tranquilles pour toute la maison",
         'story' => "Chaque membre de la famille dort différemment : soutien ferme pour les parents, confort douillet pour les enfants, literie pratique pour la chambre d'amis. Plutôt qu'un achat au coup par coup, nous composons un équipement harmonieux qui dure des années — et qui rend chaque chambre accueillante.",
         'modeles' => [
-            ['name' => 'Chambre Parentale', 'desc' => "Le confort des grandes nuits : grand matelas, oreillers extra confort, parures élégantes.", 'img' => 'assets/img/slideshow/f3.jpg'],
-            ['name' => 'Chambre Enfants', 'desc' => "Des matelas adaptés et du linge résistant, pensé pour les lessives fréquentes.", 'img' => 'assets/img/blog/furniture-1.jpg'],
-            ['name' => 'Chambre d’amis', 'desc' => "Accueillir sans se ruiner : literie confortable, polyvalente et facile à entretenir.", 'img' => 'assets/img/blog/furniture-4.jpg'],
+            ['name' => 'Chambre Parentale', 'desc' => "Le confort des grandes nuits : grand matelas, oreillers extra confort, parures élégantes.", 'img' => 'assets/maquette/img/blog/famille-parentale.webp'],
+            ['name' => 'Chambre Enfants', 'desc' => "Des matelas adaptés et du linge résistant, pensé pour les lessives fréquentes.", 'img' => 'assets/maquette/img/blog/famille-enfants.webp'],
+            ['name' => 'Chambre d’amis', 'desc' => "Accueillir sans se ruiner : literie confortable, polyvalente et facile à entretenir.", 'img' => 'assets/maquette/img/blog/famille-amis.webp'],
         ],
         'equipement' => [
             ['Matelas par âge', 'matelas.php', 'Ferme, équilibré ou moelleux selon chacun.'],
