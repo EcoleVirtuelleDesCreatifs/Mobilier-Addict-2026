@@ -50,7 +50,10 @@
   .slide-content-1 .slide-subheading{color:#3d4a63;}
 
   /* Slide promo Black Friday */
-  .slide-promo{background:radial-gradient(900px 420px at 85% 115%,rgba(255,45,120,.28),transparent 60%),radial-gradient(700px 380px at -5% -20%,rgba(255,45,120,.22),transparent 55%),linear-gradient(135deg,#0a0c2e 0%,#121040 55%,#0b0d30 100%);min-height:480px;display:flex !important;align-items:center;}
+  .slide-item{position:relative;overflow:hidden;}
+  .slideshow-section .slide-img{height:clamp(460px,50vw,600px);}
+
+  .slide-promo{background:radial-gradient(900px 420px at 85% 115%,rgba(255,45,120,.28),transparent 60%),radial-gradient(700px 380px at -5% -20%,rgba(255,45,120,.22),transparent 55%),linear-gradient(135deg,#0a0c2e 0%,#121040 55%,#0b0d30 100%);min-height:clamp(460px,50vw,600px);display:flex !important;align-items:center;}
   .slide-promo-inner{display:flex;align-items:center;justify-content:space-between;gap:32px;width:100%;max-width:1200px;margin:0 auto;padding:48px 24px;}
   .slide-promo-copy{max-width:520px;color:#fff;}
   .slide-promo-title{font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.02;letter-spacing:-.02em;color:#fff;margin:0 0 18px;text-transform:uppercase;}
@@ -74,7 +77,7 @@
   }
 
   /* Slide bannière plein écran (texte sur zone sombre de l'image) */
-  .slide-banner{position:relative;overflow:hidden;aspect-ratio:3/1;max-height:560px;min-height:340px;}
+  .slide-banner{position:relative;overflow:hidden;height:clamp(460px,50vw,600px);}
   .slide-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;animation:slide-banner-zoom 14s ease-in-out infinite alternate;}
   @keyframes slide-banner-zoom{from{transform:scale(1)}to{transform:scale(1.07)}}
   .slide-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,22,.88) 0%,rgba(4,6,22,.62) 38%,rgba(4,6,22,.18) 62%,transparent 78%);}
@@ -97,7 +100,8 @@
   .slide-banner-deadline svg{width:15px;height:15px;color:#ff3d8b;flex:none;}
   .slide-banner-deadline strong{color:#ff3d8b;font-weight:800;margin-left:2px;}
   @media(max-width:991.98px){
-    .slide-banner{aspect-ratio:auto;min-height:460px;}
+    .slideshow-section .slide-img,.slide-banner{height:460px;}
+    .slide-banner{min-height:460px;}
     .slide-banner-img{animation:none;}
     .slide-banner::before{background:linear-gradient(180deg,rgba(4,6,22,.4) 0%,rgba(4,6,22,.9) 100%);}
     .slide-banner-inner{align-items:flex-end;padding:0 20px 34px;}
