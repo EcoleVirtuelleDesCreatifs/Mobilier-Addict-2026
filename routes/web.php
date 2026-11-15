@@ -176,14 +176,7 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/search/suggest', [SearchController::class, 'suggest'])->name('search.suggest');
 
-Route::get('/collection', function () {
-    $products = Product::query()
-        ->active()
-        ->ordered()
-        ->get();
-
-    return view('collection', compact('products'));
-})->name('collection.index');
+Route::get('/collection', [\App\Http\Controllers\CatalogueController::class, 'index'])->name('collection.index');
 
 Route::get('/categories/{slug}', function ($slug) {
     // If the slug matches an active menu, redirect to the menu page
@@ -334,30 +327,7 @@ Route::get('/categories/{slug}', function ($slug) {
     return view('category', compact('category'));
 })->name('category.show');
 
-Route::get('/nouveautes', function () {
-    $products = Product::query()
-        ->active()
-        ->where('price', '>', 0)
-        ->orderByDesc('created_at')
-        ->take(48)
-        ->get();
-
-    if ($products->isEmpty()) {
-        $products = Product::query()
-            ->where('price', '>', 0)
-            ->orderByDesc('created_at')
-            ->take(48)
-            ->get();
-    }
-
-    $pageTitle = 'Nouveautés';
-    $pageMetaDescription = 'Découvrez les derniers produits ajoutés à notre catalogue.';
-    $pageBadge = '✨ Nouveautés';
-    $pageHeading = 'Nouveautés';
-    $pageSubtitle = 'Découvrez les dernières nouveautés ajoutées à notre catalogue.';
-
-    return view('collection', compact('products', 'pageTitle', 'pageMetaDescription', 'pageBadge', 'pageHeading', 'pageSubtitle'));
-})->name('nouveautes.index');
+Route::get('/nouveautes', [\App\Http\Controllers\CatalogueController::class, 'index'])->name('nouveautes.index');
 
 // Cart routes
 Route::get('/panier', [CartController::class, 'index'])->name('cart.index');
@@ -374,6 +344,19 @@ Route::get('/menu', fn () => redirect()->route('home'));
 Route::get('/menu/{slug}', [FrontMenuController::class, 'show'])->name('menu.show');
 Route::get('/univers/{slug}', [UniversController::class, 'show'])->name('univers.show');
 Route::get('/produit/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/favoris', function () {
+    $products = Product::query()->active()->with(['variants', 'category'])
+        ->whereIn('id', session('favorites', []))->get();
+    return view('products.favorites', compact('products'));
+})->name('favorites.index');
+Route::post('/favoris/{product}', function (\App\Models\Product $product) {
+    abort_unless($product->is_active, 404);
+    $favorites = collect(session('favorites', []))->map(fn ($id) => (int) $id);
+    $exists = $favorites->contains($product->id);
+    $favorites = $exists ? $favorites->reject(fn ($id) => $id === $product->id) : $favorites->push($product->id);
+    session(['favorites' => $favorites->unique()->take(100)->values()->all()]);
+    return back()->with('success', $exists ? 'Produit retiré des favoris.' : 'Produit ajouté aux favoris.');
+})->name('favorites.toggle');
 
 // Demo product page (hardcoded)
 Route::get('/demo/produit', function () {

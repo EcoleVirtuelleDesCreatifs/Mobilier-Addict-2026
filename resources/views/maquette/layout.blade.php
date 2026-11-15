@@ -189,7 +189,9 @@
 
     <link rel="stylesheet" href="{{ asset('assets/maquette/') }}/css/vendor.css" />
     <link rel="stylesheet" href="{{ asset('assets/maquette/') }}/css/style.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/maquette/css/ma27.css') }}?v={{ filemtime(public_path('assets/maquette/css/ma27.css')) }}">
     @stack('styles')
+    <link rel="stylesheet" href="{{ asset('assets/maquette/css/ma27-pages.css') }}?v={{ filemtime(public_path('assets/maquette/css/ma27-pages.css')) }}">
 
     @if($gtmId)
     <!-- Google Tag Manager -->
@@ -223,14 +225,14 @@
     @endif
   </head>
 
-  <body>
+  <body class="ma27-site">
     @if($gtmId)
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @endif
     <a class="editorial-skip" href="#MainContent">Aller au contenu</a>
     <div class="body-wrapper">@include('maquette.includes.announcement')
-@include('maquette.includes.header')
+@include('maquette.includes.header-2027')
       <main id="MainContent" class="content-for-layout">
 @yield('content')
       </main>
@@ -326,16 +328,7 @@
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-12 footer-widget">
                   <div class="footer-widget-inner">
-                    <h4 class="footer-logo">
-                      <a href="{{ route('home') }}"
-                        ><img
-                          src="{{ asset('assets/logo/mobile/logo-360.webp') }}"
-                          alt="Mobilier Addict"
-                          class="footer-logo-img"
-                          width="360"
-                          height="139"
-                        /></a>
-                    </h4>
+                    <h4 class="footer-logo"><a href="tel:+{{ whatsapp_number() }}">{{ config('maquette.site_phone') ?: '+225 07 99 14 03 56' }}</a></h4>
                     <div class="footer-newsletter">
                       <p class="footer-text mb-3">
                         Restez informé de toutes les nouveautés.
@@ -821,7 +814,7 @@
               var checkout = document.getElementById('camCheckout');
               if (checkout && d.checkout_url) checkout.href = d.checkout_url;
 
-              document.querySelectorAll('.header-cart-count').forEach(function (el) { el.textContent = d.cart_count; });
+              document.querySelectorAll('.header-cart-count').forEach(function (el) { el.textContent = d.cart_count || ''; el.dataset.empty = d.cart_count ? 'false' : 'true'; });
 
               if (window.bootstrap && bootstrap.Modal) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('cartAddedModal')).show();

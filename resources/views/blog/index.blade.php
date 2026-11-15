@@ -53,28 +53,10 @@
 
 @section('content')
     <!-- breadcrumb start -->
-    <div class="breadcrumb">
-        <div class="container">
-            <ul class="list-unstyled d-flex align-items-center m-0">
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li>
-                    <svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.4"><path d="M25.9375 8.5625L23.0625 11.4375L43.625 32L23.0625 52.5625L25.9375 55.4375L47.9375 33.4375L49.3125 32L47.9375 30.5625L25.9375 8.5625Z" fill="#000"/></g></svg>
-                </li>
-                <li>Magazine</li>
-            </ul>
-        </div>
-    </div>
+    <div class="ma27"><section class="page-head"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>Le journal</span></nav><h1>Mieux choisir, <em>mieux dormir.</em></h1></div></section></div>
     <!-- breadcrumb end -->
 
     <div class="container">
-        <header class="magazine-intro">
-            <div>
-                <p class="magazine-kicker">Le journal de la maison · Mobilier Addict</p>
-                <h1>Des idées pour<br><span>mieux vivre chez vous.</span></h1>
-            </div>
-            <p>Un salon où l'on aime recevoir, une chambre propice au repos, des meubles dont on prend soin : retrouvez nos conseils pour un intérieur agréable à vivre, à Abidjan comme ailleurs en Côte d'Ivoire.</p>
-        </header>
-
         <nav class="magazine-topics" aria-label="Filtrer les articles par thème">
             <span>Thèmes</span>
             <a href="{{ route('blog.index') }}" class="{{ !$activeCategory ? 'is-active' : '' }}">Tous</a>

@@ -9,7 +9,7 @@ class ImageUrl
     public static function url(?string $path): string
     {
         if (!$path) {
-            return asset('assets/logo/favicon.png');
+            return asset('assets/maquette/img/product-placeholder.svg');
         }
 
         $path = str_replace('\\', '/', (string) $path);
@@ -24,6 +24,10 @@ class ImageUrl
         }
 
         $path = ltrim($path, '/');
+
+        if (Str::startsWith($path, 'assets/') && is_file(public_path($path))) {
+            return asset($path);
+        }
 
         if (Str::startsWith($path, 'uploads/')) {
             if (preg_match('/\.(jpe?g|png)$/i', $path)) {
@@ -71,7 +75,7 @@ class ImageUrl
         // Le fichier est absent du stockage local (ex : import d'une base de
         // production sans les uploads) : on sert le placeholder plutôt qu'une
         // URL cassée.
-        return asset('assets/maquette/img/product.jpg');
+        return asset('assets/maquette/img/product-placeholder.svg');
     }
 
     /**

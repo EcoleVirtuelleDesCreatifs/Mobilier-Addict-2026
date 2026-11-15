@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('partials.header', $headerMenusComposer);
         View::composer('maquette.includes.header', $headerMenusComposer);
+        View::composer('menus.show-2027', $headerMenusComposer);
         // Le menu mobile est inclus directement dans le layout.
         View::composer('maquette.layout', $headerMenusComposer);
     }

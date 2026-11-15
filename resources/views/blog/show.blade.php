@@ -56,9 +56,6 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-12">
                     <div class="article-rte">
-                        <div class="article-img">
-                            <img loading="eager" fetchpriority="high" decoding="async" src="{{ $post->image_url ?? asset('assets/maquette/img/blog/furniture-9.jpg') }}" alt="{{ $post->image_alt ?? $post->title }}" width="1200" height="675">
-                        </div>
                         <div class="article-meta">
                             <p class="article-ma-kicker">{{ $post->category?->name ?? 'Blog' }} · Le magazine Mobilier Addict</p>
                             <h1 class="article-title">{{ $post->title }}</h1>
@@ -85,6 +82,9 @@
                             </div>
                         </div>
 
+                        <div class="article-img">
+                            <img loading="eager" fetchpriority="high" decoding="async" src="{{ $post->image_url ?? asset('assets/maquette/img/blog/furniture-9.jpg') }}" alt="{{ $post->image_alt ?? $post->title }}" width="1200" height="675">
+                        </div>
                         <div class="article-content">
                             {!! $post->content !!}
                         </div>

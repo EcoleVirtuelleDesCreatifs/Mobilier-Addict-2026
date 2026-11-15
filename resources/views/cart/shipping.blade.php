@@ -4,13 +4,9 @@
 @section('robots', 'noindex, nofollow')
 @section('meta_description', 'Renseignez vos informations de livraison : Abidjan sous 48h, intérieur de la Côte d\'Ivoire par transporteur. Paiement à la réception.')
 @section('content')
+    <div class="ma27"><section class="page-head mb-0"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('cart.index') }}">Panier</a><span>/</span><span>Commande</span></nav><h1>Finaliser <em>la commande</em></h1></div></section></div>
     <div class="checkout-page mt-100 mp-checkout">
         <div class="container">
-
-            <div class="mp-checkout-head" data-aos="fade-up" data-aos-duration="600">
-                <p class="featured-kicker">Commande</p>
-                <h1 class="section-heading">Vos informations de <span class="featured-title-accent">livraison</span></h1>
-            </div>
 
             <div class="mp-steps" data-aos="fade-up" data-aos-duration="600">
                 <a class="mp-step is-done" href="{{ route('cart.index') }}">
@@ -46,38 +42,38 @@
                             @csrf
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="mp-label">Prénom(s) <em>*</em></label>
-                                    <input type="text" name="firstnames" class="mp-input @error('firstnames') is-invalid @enderror" value="{{ old('firstnames') }}" placeholder="Ex. Awa" required />
+                                    <label class="mp-label" for="shipping-firstnames">Prénom(s) <em>*</em></label>
+                                    <input id="shipping-firstnames" autocomplete="given-name" type="text" name="firstnames" class="mp-input @error('firstnames') is-invalid @enderror" value="{{ old('firstnames') }}" placeholder="Ex. Awa" required />
                                     @error('firstnames')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="mp-label">Nom <em>*</em></label>
-                                    <input type="text" name="lastname" class="mp-input @error('lastname') is-invalid @enderror" value="{{ old('lastname') }}" placeholder="Ex. Ndiaye" required />
+                                    <label class="mp-label" for="shipping-lastname">Nom <em>*</em></label>
+                                    <input id="shipping-lastname" autocomplete="family-name" type="text" name="lastname" class="mp-input @error('lastname') is-invalid @enderror" value="{{ old('lastname') }}" placeholder="Ex. Ndiaye" required />
                                     @error('lastname')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="mp-label">Numéro WhatsApp <em>*</em></label>
-                                    <input type="tel" name="whatsapp" class="mp-input @error('whatsapp') is-invalid @enderror" value="{{ old('whatsapp') }}" placeholder="+225 07 00 00 00 00" required />
+                                    <label class="mp-label" for="shipping-whatsapp">Numéro WhatsApp <em>*</em></label>
+                                    <input id="shipping-whatsapp" autocomplete="tel" type="tel" name="whatsapp" class="mp-input @error('whatsapp') is-invalid @enderror" value="{{ old('whatsapp') }}" placeholder="+225 07 00 00 00 00" required />
                                     @error('whatsapp')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="mp-label">Téléphone <small>(optionnel)</small></label>
-                                    <input type="tel" name="phone" class="mp-input @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="Second numéro" />
+                                    <label class="mp-label" for="shipping-phone">Téléphone <small>(optionnel)</small></label>
+                                    <input id="shipping-phone" type="tel" name="phone" class="mp-input @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="Second numéro" />
                                     @error('phone')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="mp-label">Lieu de livraison <em>*</em></label>
-                                    <input type="text" name="delivery_place" class="mp-input @error('delivery_place') is-invalid @enderror" value="{{ old('delivery_place') }}" placeholder="Ville, commune, quartier" required />
+                                    <label class="mp-label" for="shipping-place">Lieu de livraison <em>*</em></label>
+                                    <input id="shipping-place" type="text" name="delivery_place" class="mp-input @error('delivery_place') is-invalid @enderror" value="{{ old('delivery_place') }}" placeholder="Ville, commune, quartier" required />
                                     @error('delivery_place')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="mp-label">Jour de livraison souhaité</label>
-                                    <input type="date" name="delivery_day" class="mp-input @error('delivery_day') is-invalid @enderror" value="{{ old('delivery_day') }}" />
+                                    <label class="mp-label" for="shipping-day">Jour de livraison souhaité</label>
+                                    <input id="shipping-day" type="date" name="delivery_day" class="mp-input @error('delivery_day') is-invalid @enderror" value="{{ old('delivery_day') }}" />
                                     @error('delivery_day')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-12">
-                                    <label class="mp-label">Détails complémentaires</label>
-                                    <textarea name="details" rows="3" class="mp-input" placeholder="Point de repère, étage, instructions…">{{ old('details') }}</textarea>
+                                    <label class="mp-label" for="shipping-details">Détails complémentaires</label>
+                                    <textarea id="shipping-details" name="details" rows="3" class="mp-input" placeholder="Point de repère, étage, instructions…">{{ old('details') }}</textarea>
                                     @error('details')<p class="mp-field-error">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="col-12">

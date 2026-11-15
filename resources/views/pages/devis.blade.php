@@ -4,20 +4,9 @@
 @section('meta_description', 'Demandez un devis sur-mesure pour votre entreprise, hôtel, institution ou projet d’aménagement en Côte d’Ivoire.')
 
 @section('content')
+    <div class="ma27"><section class="page-head"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>Sur-mesure</span></nav><h1>Votre projet <em>sur-mesure.</em></h1><p class="lead">Décrivez votre besoin, nous préparons une proposition chiffrée adaptée à votre structure.</p></div></section></div>
     <div class="devis-page mp-checkout">
         <div class="container">
-
-            <div class="mp-cat-hero" data-aos="fade-up" data-aos-duration="700">
-                <div class="mp-cat-hero-content">
-                    <p class="mp-cat-hero-kicker">
-                        <a href="{{ route('home') }}">Accueil</a>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                        <span>Entreprises · Institutions · Hôtellerie</span>
-                    </p>
-                    <h1 class="mp-cat-hero-title">Devis sur-mesure</h1>
-                    <p class="mp-cat-hero-sub">Un projet d'aménagement, un équipement en quantité ou du mobilier aux dimensions spécifiques&nbsp;? Décrivez votre besoin, notre équipe prépare une proposition chiffrée adaptée à votre structure.</p>
-                </div>
-            </div>
 
             <div class="row mp-checkout-grid mb-100">
                 <div class="col-lg-8 col-12">
@@ -121,6 +110,12 @@
 
                 <div class="col-lg-4 col-12">
                     <aside class="devis-aside" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
+                        <nav class="devis-projects" aria-label="Découvrir nos offres sur-mesure">
+                            <a href="{{ route('pages.hotellerie') }}"><strong>Hôtellerie</strong><span>Hôtels et résidences</span></a>
+                            <a href="{{ route('pages.appartement-meuble') }}"><strong>Appartements meublés</strong><span>Locations, lot par lot</span></a>
+                            <a href="{{ route('pages.studio') }}"><strong>Studio</strong><span>Petits espaces</span></a>
+                            <a href="{{ route('pages.famille') }}"><strong>Famille</strong><span>Toute la maison</span></a>
+                        </nav>
                         <h2>Comment ça marche&nbsp;?</h2>
                         <div class="devis-step">
                             <span class="devis-step-num">1</span>

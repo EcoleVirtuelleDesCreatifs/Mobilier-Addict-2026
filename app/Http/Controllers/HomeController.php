@@ -170,7 +170,8 @@ class HomeController extends Controller
 
         $matelasProducts = Product::query()
             ->active()
-            ->with(['variants' => fn($q) => $q->active()->orderBy('thickness_cm')->orderBy('places')])
+            ->where('price', '>', 0)
+            ->with(['category', 'variants' => fn($q) => $q->active()->orderBy('thickness_cm')->orderBy('places')])
             ->where(function ($q) {
                 $q->whereHas('categories', fn($qq) => $qq->where('slug', 'like', '%matelas%'))
                     ->orWhereHas('category', fn($qq) => $qq->where('slug', 'like', '%matelas%'))
@@ -178,17 +179,17 @@ class HomeController extends Controller
             })
             ->orderByRaw('(stock > 0) DESC')
             ->ordered()
-            ->get()
-            ->unique(fn($p) => preg_replace('/\s*[-–]\s*\d+\s*(cm)?\s*[x×]\s*\d+\s*cm.*$/i', '', (string) $p->name))
-            ->take(9)
-            ->values();
+            ->take(12)
+            ->get();
 
         if ($matelasProducts->isEmpty()) {
             $matelasProducts = Product::query()
                 ->active()
+                ->where('price', '>', 0)
                 ->featured()
+                ->with(['category', 'variants' => fn($q) => $q->active()->orderBy('thickness_cm')->orderBy('places')])
                 ->ordered()
-                ->take(9)
+                ->take(12)
                 ->get();
         }
 
@@ -237,7 +238,7 @@ class HomeController extends Controller
 
         $catalogueCards = $this->catalogueCards();
 
-        return view('maquette.home', compact(
+        return view('maquette.home-2027', compact(
             'catalogueCards',
             'heroSlides',
             'spaceSection',

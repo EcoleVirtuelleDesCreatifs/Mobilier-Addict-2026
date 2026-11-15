@@ -185,6 +185,19 @@ class MenuController extends Controller
             });
         }
 
+        $search = mb_substr(trim((string) request()->query('q', '')), 0, 100);
+        if ($search !== '') {
+            $productsQuery->where('products.name', 'like', '%' . $search . '%');
+        }
+        $size = (string) request()->query('size', '');
+        if (in_array($size, ['90', '120', '140', '160', '180'], true)) {
+            $productsQuery->where(function ($q) use ($size) {
+                $q->where('products.size', 'like', $size . '%')
+                    ->orWhere('products.dimensions', 'like', $size . '%')
+                    ->orWhere('products.name', 'like', '%' . $size . '%');
+            });
+        }
+
         $minPrice = request()->query('price_min');
         $maxPrice = request()->query('price_max');
         if (is_numeric($minPrice)) {
@@ -240,11 +253,7 @@ class MenuController extends Controller
         $menuSkin = $this->universSkin(strtolower(trim((string) $menu->slug)));
 
         $menuSlugKey = strtolower(trim((string) $menu->slug));
-        $viewName = match (true) {
-            $menuSlugKey === 'matelas' => 'menus.show-matelas',
-            $menuSkin !== null => 'menus.show-univers',
-            default => 'menus.show',
-        };
+        $viewName = 'menus.show-2027';
 
         return view($viewName, compact('menu', 'products', 'pageTitle', 'matelasModels', 'matelasCategories', 'matelasCategoryGroups', 'isProtegeMatelas', 'menuCategories', 'menuSkin', 'activeSortLabel', 'stockCounts', 'priceMin', 'priceMax'));
     }

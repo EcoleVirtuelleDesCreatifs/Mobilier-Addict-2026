@@ -37,9 +37,11 @@
             'Taille' => $product->size,
             'Référence' => $product->sku,
         ])->filter();
+        $defaultVariant = $product->variants->sortBy('price')->first();
+        $displayPrice = (float) ($defaultVariant?->price ?? $product->price);
         $inStock = (int) $product->stock > 0;
-        $discount = ($product->old_price && $product->old_price > $product->price)
-            ? round((($product->old_price - $product->price) / $product->old_price) * 100) : null;
+        $discount = ($product->old_price && $product->old_price > $displayPrice)
+            ? round((($product->old_price - $displayPrice) / $product->old_price) * 100) : null;
         $colors = collect($product->available_colors)->filter()->values();
         if ($colors->isEmpty() && $product->color) $colors = collect([$product->color]);
         $colorHex = function ($name) {
@@ -77,7 +79,7 @@
         </div>
     </div>
 
-    <main id="MainContent" class="content-for-layout">
+    <div class="product-content">
         <div class="pdp mt-60">
             <div class="container">
                 <div class="row">
@@ -90,9 +92,7 @@
                                 @elseif($product->badge)
                                     <span class="mp-badge">{{ $product->badge }}</span>
                                 @endif
-                                <button type="button" class="mp-wish" aria-label="Ajouter aux favoris">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                </button>
+                                @include('maquette.includes.favorite-button')
                                 <img id="pdpMainImg" src="@image_url($gallery->first())" alt="{{ $product->name }}">
                                 @if($gallery->count() > 1)
                                     <button type="button" class="pdp-arrow pdp-prev" aria-label="Image précédente">
@@ -129,15 +129,15 @@
                                 {{-- Étoiles masquées : aucun avis client lisible pour l'instant. --}}
                             @endif
                             <div class="pdp-price-row">
-                                @if((float) $product->price > 0)
-                                    <span class="pdp-price" id="pdpPrice">{{ number_format((float) $product->price, 0, ',', ' ') }} FCFA</span>
+                                @if((float) $displayPrice > 0)
+                                    <span class="pdp-price" id="pdpPrice">{{ number_format((float) $displayPrice, 0, ',', ' ') }} FCFA</span>
                                 @else
                                     <span class="pdp-price" id="pdpPrice">Prix sur demande</span>
                                 @endif
-                                @if($product->old_price && $product->old_price > $product->price)
+                                @if($product->old_price && $product->old_price > $displayPrice)
                                     <del class="pdp-price-old">{{ number_format((float) $product->old_price, 0, ',', ' ') }} FCFA</del>
                                 @endif
-                                @if((float) $product->price > 0)
+                                @if((float) $displayPrice > 0)
                                     <span class="pdp-stock {{ $inStock ? 'is-in' : 'is-out' }}">{{ $inStock ? 'En stock' : 'Rupture' }}</span>
                                 @else
                                     <span class="pdp-stock is-out">Sur commande</span>
@@ -164,10 +164,10 @@
                                                         $variant->thickness_cm ? $variant->thickness_cm.' cm' : null,
                                                         $variant->variant_type,
                                                     ])->filter()->join(' · ') ?: 'Option '.$loop->iteration;
-                                                    $vPrice = (float) ($variant->price ?: $product->price);
+                                                    $vPrice = (float) ($variant->price ?: $displayPrice);
                                                 @endphp
                                                 <label class="pdp-pill">
-                                                    <input type="radio" name="product_variant_id" value="{{ $variant->id }}" data-price="{{ $vPrice }}" {{ $loop->first ? 'checked' : '' }}>
+                                                    <input type="radio" name="product_variant_id" value="{{ $variant->id }}" data-price="{{ $vPrice }}" {{ $variant->id === $defaultVariant?->id ? 'checked' : '' }}>
                                                     <span>{{ $vLabel }}</span>
                                                 </label>
                                             @endforeach
@@ -189,6 +189,7 @@
                                     </div>
                                 @endif
 
+                                <div class="pdp-purchase">
                                 <div class="pdp-field">
                                     <span class="pdp-label">Quantité</span>
                                     <div class="mp-qty pdp-qty">
@@ -198,26 +199,26 @@
                                     </div>
                                 </div>
 
-                                <div class="pdp-ctas">
-                                    @if((float) $product->price > 0)
-                                    <button type="submit" class="pdp-buy" data-redirect="shipping" {{ !$inStock ? 'disabled' : '' }}>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-                                        Commander
-                                    </button>
+                                    @if((float) $displayPrice > 0)
                                     <button type="submit" class="pdp-atc" {{ !$inStock ? 'disabled' : '' }}>
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H6"/></svg>
                                         Ajouter au panier
                                     </button>
                                     @endif
+                                </div>
+                                <div class="pdp-ctas">
                                     @php
                                         $waNumber = preg_replace('/\D+/', '', (string) config('services.whatsapp_number'));
-                                        $waText = 'Bonjour Mobilier Addict, je suis intéressé(e) par « ' . $product->name . ' »' . ((float) $product->price > 0 ? ' (' . number_format((float) $product->price, 0, ',', ' ') . ' FCFA)' : '') . ' : ' . route('product.show', $product->slug);
+                                        $waText = 'Bonjour Mobilier Addict, je suis intéressé(e) par « ' . $product->name . ' »' . ((float) $displayPrice > 0 ? ' (' . number_format((float) $displayPrice, 0, ',', ' ') . ' FCFA)' : '') . ' : ' . route('product.show', $product->slug);
                                     @endphp
                                     @if($waNumber)
                                         <a class="pdp-wa-link" href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode($waText) }}" target="_blank" rel="noopener">
                                             <svg viewBox="0 0 32 32" fill="currentColor" stroke="none" width="18" height="18" aria-hidden="true"><path d="M16 .8C7.6.8.8 7.6.8 16c0 2.7.7 5.3 2 7.6L.8 31.2l7.8-2c2.2 1.2 4.7 1.9 7.4 1.9 8.4 0 15.2-6.8 15.2-15.2S24.4.8 16 .8zm0 27.7c-2.3 0-4.6-.6-6.5-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5C4 20.5 3.3 18.3 3.3 16 3.3 9 9 3.3 16 3.3S28.7 9 28.7 16 23 28.5 16 28.5zm7-9.5c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7-.1-.2-.8-2-1.1-2.8-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.9c.2.3 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z"/></svg>
-                                            Ou commander sur WhatsApp
+                                            Commander sur WhatsApp
                                         </a>
+                                    @endif
+                                    @if($displayPrice > 0)
+                                        <button type="submit" class="pdp-buy" data-redirect="shipping" {{ !$inStock ? 'disabled' : '' }}>Commander directement →</button>
                                     @endif
                                 </div>
                                 <style>
@@ -226,7 +227,7 @@
                                     .pdp-info-strip{margin-top:18px;padding:14px 16px;border:1px solid #e6eaf0;border-radius:12px;background:#f8fafc;font-size:13.5px;color:#4b5563;line-height:1.6}
                                     .pdp-info-strip strong{color:#0f2c59}
                                 </style>
-                                @if((float) $product->price > 0)
+                                @if((float) $displayPrice > 0)
                                     <div class="pdp-info-strip">
                                         <strong>Livraison</strong> : Abidjan sous 48&nbsp;h (gratuite dès 50&nbsp;000&nbsp;F
                                         d'achat, sinon 2&nbsp;000–5&nbsp;000&nbsp;F selon la commune) ; intérieur du pays
@@ -256,42 +257,12 @@
 
                 <!-- tabs -->
                 <div class="pdp-tabs" data-aos="fade-up" data-aos-duration="700">
-                    <nav class="pdp-tab-nav" id="pdpTabs">
-                        <a class="pdp-tab-link active" href="#pdp-desc" data-bs-toggle="tab">Description</a>
+                    <div class="pdp-accordion">
+                        <details id="pdp-desc" open><summary>Description</summary>
+                            <div class="pdp-desc-text">{{ strip_tags($product->description ?: $product->short_description) ?: 'Contactez notre équipe pour les informations détaillées de ce modèle.' }}</div>
+                        </details>
                         @if($features->isNotEmpty())
-                            <a class="pdp-tab-link" href="#pdp-specs" data-bs-toggle="tab">Caractéristiques</a>
-                        @endif
-                        <a class="pdp-tab-link" href="#pdp-ship" data-bs-toggle="tab">Livraison &amp; retour</a>
-                        <a class="pdp-tab-link" href="#pdp-reviews" data-bs-toggle="tab">Avis clients</a>
-                    </nav>
-                    <div class="tab-content pdp-tab-content">
-                        <div id="pdp-desc" class="tab-pane fade show active">
-                            <div class="row align-items-center g-5">
-                                <div class="col-lg-6">
-                                    <img class="pdp-desc-img" loading="lazy" decoding="async" src="@image_url($editorialImage)" alt="{{ $product->name }}">
-                                </div>
-                                <div class="col-lg-6">
-                                    <h2 class="pdp-desc-title">Pensé pour vos <span class="mp-title-accent">nuits.</span></h2>
-                                    <p class="pdp-desc-text">{{ Str::limit(strip_tags($product->description ?: $product->short_description), 260) ?: 'Un produit sélectionné avec soin pour transformer votre quotidien en toute simplicité.' }}</p>
-                                    <ul class="pdp-benefits list-unstyled m-0">
-                                        <li>
-                                            <span class="pdp-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>
-                                            <span><strong>Doux et confortable</strong><small>Une sensation agréable au quotidien</small></span>
-                                        </li>
-                                        <li>
-                                            <span class="pdp-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="m16 6-4 4-4-4"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M4 20h16"/></svg></span>
-                                            <span><strong>Respirant</strong><small>Idéal pour un sommeil paisible</small></span>
-                                        </li>
-                                        <li>
-                                            <span class="pdp-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9h16"/><path d="M9 4v16"/></svg></span>
-                                            <span><strong>Facile d'entretien</strong><small>Résistant aux lavages fréquents</small></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        @if($features->isNotEmpty())
-                            <div id="pdp-specs" class="tab-pane fade">
+                            <details id="pdp-specs"><summary>Caractéristiques</summary>
                                 <div class="pdp-specs-card">
                                     <ul class="pdp-specs-list list-unstyled m-0">
                                         @foreach($features as $label => $value)
@@ -299,9 +270,9 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                            </div>
+                            </details>
                         @endif
-                        <div id="pdp-ship" class="tab-pane fade">
+                        <details id="pdp-ship"><summary>Livraison &amp; paiement</summary>
                             <div class="pdp-specs-card">
                                 <ul class="pdp-specs-list list-unstyled m-0">
                                     <li><strong>Livraison Abidjan</strong><span>Sous 48h — gratuite dès 50 000 F d'achat, sinon 2 000–5 000 F selon la commune</span></li>
@@ -312,13 +283,13 @@
                                     <li><strong>Contact</strong><span><a href="{{ route('pages.contact') }}">Notre service client</a></span></li>
                                 </ul>
                             </div>
-                        </div>
-                        <div id="pdp-reviews" class="tab-pane fade">
+                        </details>
+                        <details id="pdp-reviews"><summary>Avis clients</summary>
                             <div class="pdp-specs-card">
                                 <p class="m-0">Aucun avis pour le moment. Vous avez acheté ce produit ?
                                     <a href="{{ route('pages.contact') }}">Partagez votre expérience</a> — votre retour aide les autres clients.</p>
                             </div>
-                        </div>
+                        </details>
                     </div>
                 </div>
 
@@ -360,7 +331,7 @@
                 @endif
             </div>
         </div>
-    </main>
+    </div>
 
     @push('meta')
     <script type="application/ld+json">
@@ -379,7 +350,7 @@
             '@type' => 'Offer',
             'url' => route('product.show', $product->slug),
             'priceCurrency' => 'XOF',
-            'price' => number_format((float) $product->price, 0, '', ''),
+            'price' => number_format((float) $displayPrice, 0, '', ''),
             'priceValidUntil' => optional($product->updated_at ?? now())->addYear()->toDateString(),
             'availability' => $inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
             'itemCondition' => 'https://schema.org/NewCondition',
@@ -432,9 +403,9 @@
                 });
             });
 
-            var buyBtn = document.querySelector('.pdp-buy[data-redirect]');
-            if (buyBtn) buyBtn.addEventListener('click', function () {
-                buyBtn.form.querySelector('[name="redirect_to"]').value = buyBtn.dataset.redirect;
+            var purchaseForm = document.querySelector('.pdp-form');
+            if (purchaseForm) purchaseForm.addEventListener('submit', function (event) {
+                purchaseForm.querySelector('[name="redirect_to"]').value = event.submitter?.dataset.redirect || '';
             });
 
             document.querySelectorAll('.pdp-pill input[data-price]').forEach(function (r) {

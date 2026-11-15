@@ -4,29 +4,10 @@
 @section('robots', 'noindex, nofollow')
 @section('meta_description', 'Consultez votre panier Mobilier Addict et passez commande : livraison sous 48h à Abidjan et partout en Côte d\'Ivoire.')
 @section('content')
-    <div class="breadcrumb">
-        <div class="container">
-            <ul class="list-unstyled d-flex align-items-center m-0">
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li>
-                    <svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g opacity="0.4">
-                            <path d="M25.9375 8.5625L23.0625 11.4375L43.625 32L23.0625 52.5625L25.9375 55.4375L47.9375 33.4375L49.3125 32L47.9375 30.5625L25.9375 8.5625Z" fill="#000" />
-                        </g>
-                    </svg>
-                </li>
-                <li>Panier</li>
-            </ul>
-        </div>
-    </div>
+    <div class="ma27"><section class="page-head mb-0"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>Panier</span></nav><h1>Votre panier</h1></div></section></div>
 
     <div class="cart-page mt-100 mp-checkout">
         <div class="container">
-
-            <div class="mp-checkout-head" data-aos="fade-up" data-aos-duration="600">
-                <p class="featured-kicker">Votre sélection</p>
-                <h1 class="section-heading">Votre <span class="featured-title-accent">panier</span></h1>
-            </div>
 
             <div class="mp-steps" data-aos="fade-up" data-aos-duration="600">
                 <span class="mp-step is-active">
