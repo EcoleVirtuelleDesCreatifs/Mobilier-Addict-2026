@@ -11,7 +11,7 @@
     <section class="hero"><div class="wrap">
         <div>
             <div class="kicker">Literie · Abidjan</div>
-            <h1>Le matelas que <em class="rot"><span class="on">votre dos</span><span aria-hidden="true">votre budget</span><span aria-hidden="true">votre sommeil</span></em> attendait.</h1>
+            <h1 class="hero-title"><span class="hero-title-line">Le matelas que</span> <em class="rot"><span class="on">votre dos</span><span aria-hidden="true">votre budget</span><span aria-hidden="true">votre sommeil</span></em> <span class="hero-title-line">attendait.</span></h1>
             <p class="lead">Choisissez en trente secondes. Livraison à Abidjan, paiement à la livraison.</p>
             <form class="finder" action="{{ route('menu.show', 'matelas') }}" method="GET">
                 <div class="frow"><span class="lab">Taille</span><div class="chips">

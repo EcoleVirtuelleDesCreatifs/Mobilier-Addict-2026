@@ -147,10 +147,9 @@
                                 <p class="pdp-desc">{{ Str::limit(strip_tags($product->short_description), 140) }}</p>
                             @endif
 
-                            <form class="pdp-form" action="{{ route('cart.add') }}" method="POST">
+                            <form id="product-options" class="pdp-form" action="{{ route('cart.add') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="redirect_to" value="">
 
                                 @if($product->variants->isNotEmpty())
                                     <div class="pdp-field">
@@ -218,7 +217,7 @@
                                         </a>
                                     @endif
                                     @if($displayPrice > 0)
-                                        <button type="submit" class="pdp-buy" data-redirect="shipping" {{ !$inStock ? 'disabled' : '' }}>Commander directement →</button>
+                                        <button type="submit" class="pdp-buy" name="redirect_to" value="shipping" {{ !$inStock ? 'disabled' : '' }}>Commander directement →</button>
                                     @endif
                                 </div>
                                 <style>
@@ -401,11 +400,6 @@
                     var input = b.closest('.mp-qty').querySelector('.mp-qty-input');
                     input.value = Math.min(10, Math.max(1, (parseInt(input.value, 10) || 1) + parseInt(b.dataset.qtyStep, 10)));
                 });
-            });
-
-            var purchaseForm = document.querySelector('.pdp-form');
-            if (purchaseForm) purchaseForm.addEventListener('submit', function (event) {
-                purchaseForm.querySelector('[name="redirect_to"]').value = event.submitter?.dataset.redirect || '';
             });
 
             document.querySelectorAll('.pdp-pill input[data-price]').forEach(function (r) {

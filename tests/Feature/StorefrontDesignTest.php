@@ -34,6 +34,9 @@ class StorefrontDesignTest extends TestCase
         $this->assertStringContainsString('85 000', $html);
         $this->assertStringContainsString('name="product_variant_id" value="17"', $html);
         $this->assertStringContainsString('name="quantity" value="1"', $html);
+        $this->assertStringContainsString('Commander directement</button>', $html);
+        $this->assertStringContainsString('Ajouter au panier</button>', $html);
+        $this->assertStringContainsString('name="redirect_to" value="shipping"', $html);
     }
 
     public function test_color_products_link_to_their_options_instead_of_quick_add(): void
@@ -43,8 +46,22 @@ class StorefrontDesignTest extends TestCase
 
         $html = view('maquette.includes.card-2027', compact('product'))->render();
 
-        $this->assertStringNotContainsString('class="ma27-quick-add"', $html);
+        $this->assertStringNotContainsString('ma27-quick-add', $html);
         $this->assertStringContainsString('Voir les options de Matelas test', $html);
+    }
+
+    public function test_multiple_variants_require_options_before_either_card_action(): void
+    {
+        $product = $this->product();
+        $product->setRelation('variants', collect([
+            new ProductVariant(['price' => 70000, 'is_active' => true]),
+            new ProductVariant(['price' => 85000, 'is_active' => true]),
+        ]));
+        $html = view('maquette.includes.card-2027', compact('product'))->render();
+        $this->assertStringNotContainsString('ma27-quick-add', $html);
+        $this->assertSame(2, substr_count($html, '#product-options'));
+        $this->assertStringContainsString('Commander directement</a>', $html);
+        $this->assertStringContainsString('Ajouter au panier</a>', $html);
     }
 
     public function test_unavailable_products_do_not_have_a_quick_add_form(): void
@@ -53,14 +70,27 @@ class StorefrontDesignTest extends TestCase
 
         $html = view('maquette.includes.card-2027', compact('product'))->render();
 
-        $this->assertStringNotContainsString('class="ma27-quick-add"', $html);
+        $this->assertStringNotContainsString('ma27-quick-add', $html);
         $this->assertStringContainsString('Sur commande', $html);
+        $this->assertSame(2, substr_count($html, ' disabled'));
     }
 
     public function test_missing_images_use_a_neutral_placeholder(): void
     {
         $this->assertSame(asset('assets/maquette/img/product-placeholder.svg'), image_url('products/nonexistent-product-image.webp'));
         $this->assertSame(asset('assets/maquette/img/product-placeholder.svg'), image_url(null));
+    }
+
+    public function test_storefront_uses_helvetica_without_loading_external_text_fonts(): void
+    {
+        foreach (['ma27.css', 'ma27-pages.css'] as $file) {
+            $css = file_get_contents(public_path('assets/maquette/css/' . $file));
+            $this->assertStringContainsString('--serif:Helvetica,Arial,sans-serif', $css);
+            $this->assertStringNotContainsString('Instrument Serif', $css);
+            $this->assertStringNotContainsString('Inter', $css);
+            $this->assertStringNotContainsString('fonts.googleapis.com', $css);
+        }
+        $this->assertStringNotContainsString('fonts.googleapis.com', file_get_contents(resource_path('views/maquette/layout.blade.php')));
     }
 
     public function test_existing_public_assets_are_not_replaced_by_the_placeholder(): void

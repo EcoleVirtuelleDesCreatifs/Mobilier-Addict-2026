@@ -5,7 +5,7 @@
     <title>Facture {{ $invoice->number }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 12px;
             line-height: 1.6;
             color: #00234D;

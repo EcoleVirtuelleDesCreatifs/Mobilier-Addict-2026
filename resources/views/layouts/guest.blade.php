@@ -8,8 +8,7 @@
         <title>@hasSection('title')@yield('title') | Mobilier Addict@else {{ config('app.name', 'Mobilier Addict') }} @endif</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <style>body.font-sans { font-family: Helvetica, Arial, sans-serif; }</style>
 
         <!-- Scripts -->
         @php($viteManifest = public_path('build/manifest.json'))

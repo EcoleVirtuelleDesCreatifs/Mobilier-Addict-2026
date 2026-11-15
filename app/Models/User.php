@@ -61,6 +61,10 @@ class User extends Authenticatable implements CanResetPasswordContract
 
     public function hasPermission(string $permission): bool
     {
+        if (!$this->is_active) {
+            return false;
+        }
+
         if (($this->is_admin ?? false) && in_array($this->role, ['super_admin', 'admin'], true)) {
             return true;
         }

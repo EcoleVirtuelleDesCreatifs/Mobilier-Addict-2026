@@ -20,6 +20,7 @@
     <title>{!! $esc($seoTitle) !!}</title>
     <!-- meta tags -->
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="{!! $esc($seoDesc) !!}" />
@@ -131,12 +132,6 @@
       <meta name="apple-mobile-web-app-title" content="Mobilier Addict" />
       <link rel="apple-touch-icon" href="{{ asset('assets/logo/icon-192.png') }}" />
     <!-- fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
     <!-- all css -->
     <style>
       :root {
@@ -162,26 +157,26 @@
         --btn-secondary-font-weight: 500;
 
         --heading-color: #000;
-        --heading-font-family: "Inter", sans-serif;
+        --heading-font-family: Helvetica, Arial, sans-serif;
         --heading-font-weight: 700;
 
         --title-color: #000;
-        --title-font-family: "Inter", sans-serif;
+        --title-font-family: Helvetica, Arial, sans-serif;
         --title-font-weight: 400;
 
         --body-color: #000;
         --body-background-color: #fff;
-        --body-font-family: "Inter", sans-serif;
+        --body-font-family: Helvetica, Arial, sans-serif;
         --body-font-size: 14px;
         --body-font-weight: 400;
 
         --section-heading-color: #000;
-        --section-heading-font-family: "Inter", sans-serif;
+        --section-heading-font-family: Helvetica, Arial, sans-serif;
         --section-heading-font-size: 48px;
         --section-heading-font-weight: 600;
 
         --section-subheading-color: #000;
-        --section-subheading-font-family: "Inter", sans-serif;
+        --section-subheading-font-family: Helvetica, Arial, sans-serif;
         --section-subheading-font-size: 16px;
         --section-subheading-font-weight: 400;
       }
@@ -350,7 +345,10 @@
                           class="footer-newsletter-form d-flex align-items-center"
                         >
                           @csrf
+                          <label for="footer-newsletter-email" class="visually-hidden">Votre adresse e-mail pour la newsletter</label>
                           <input
+                            id="footer-newsletter-email"
+                            autocomplete="email"
                             class="footer-newsletter-input bg-transparent"
                             type="email"
                             name="email"
@@ -774,12 +772,24 @@
         document.addEventListener('submit', function (e) {
           var form = e.target;
           if (!(form instanceof HTMLFormElement) || !/panier\/ajouter/.test(form.action)) return;
-          var redirectField = form.querySelector('[name="redirect_to"]');
-          if (redirectField && redirectField.value === 'shipping') return; // "Commander directement" garde le flux normal
+          var redirectField = form.querySelector('input[name="redirect_to"]');
+          var submitter = e.submitter;
+          var redirectTo = submitter && submitter.name === 'redirect_to' ? submitter.value : redirectField && redirectField.value;
+          if (redirectTo === 'shipping') return; // "Commander directement" garde le flux normal
 
           e.preventDefault();
-          var btn = form.querySelector('.mp-add, [type="submit"]');
+          var btn = submitter || form.querySelector('.mp-add, [type="submit"]');
           if (btn) btn.disabled = true;
+          var feedback = form.querySelector('[data-cart-feedback]');
+          if (feedback) feedback.remove();
+          function showError(message) {
+            var error = document.createElement('p');
+            error.dataset.cartFeedback = '';
+            error.className = 'ma27-cart-feedback';
+            error.setAttribute('role', 'alert');
+            error.textContent = message;
+            form.appendChild(error);
+          }
 
           fetch(form.action, {
             method: 'POST',
@@ -790,7 +800,7 @@
             .then(function (res) {
               if (btn) btn.disabled = false;
               if (!res.data || !res.data.ok) {
-                window.location.href = form.action.replace('/ajouter', '');
+                showError(res.data && res.data.message || 'Impossible d’ajouter cet article. Vérifiez les options choisies.');
                 return;
               }
               var d = res.data, i = d.item || {};
@@ -814,7 +824,39 @@
               var checkout = document.getElementById('camCheckout');
               if (checkout && d.checkout_url) checkout.href = d.checkout_url;
 
-              document.querySelectorAll('.header-cart-count').forEach(function (el) { el.textContent = d.cart_count || ''; el.dataset.empty = d.cart_count ? 'false' : 'true'; });
+              document.querySelectorAll('.header-cart-count').forEach(function (el) {
+                el.textContent = d.cart_count || '';
+                el.dataset.empty = d.cart_count ? 'false' : 'true';
+                var trigger = el.closest('[href="#drawer-cart"]');
+                if (trigger) trigger.setAttribute('aria-label', 'Votre panier, ' + d.cart_count + ' article' + (d.cart_count === 1 ? '' : 's'));
+              });
+              var drawer = document.getElementById('drawer-cart');
+              if (drawer && Array.isArray(d.cart_items)) {
+                var list = drawer.querySelector('.minicart-loop');
+                list.replaceChildren();
+                d.cart_items.forEach(function (item) {
+                  var row = document.createElement('div');
+                  row.className = 'minicart-item d-flex';
+                  row.innerHTML = '<div class="mini-img-wrapper"><img class="mini-img" loading="lazy" decoding="async"></div><div class="product-info"><h2 class="product-title"><a></a></h2><p class="product-vendor"></p><div class="misc d-flex align-items-end justify-content-between"><span class="text_14"></span><div class="product-remove-area d-flex flex-column align-items-end"><div class="product-price"></div><form method="POST" class="d-inline"><input type="hidden" name="_token"><input type="hidden" name="cart_key"><button type="submit" class="product-remove border-0 bg-transparent p-0">Supprimer</button></form></div></div></div>';
+                  row.querySelector('img').src = item.image;
+                  row.querySelector('img').alt = item.name;
+                  row.querySelector('a').href = item.url;
+                  row.querySelector('a').textContent = item.name;
+                  row.querySelector('.product-vendor').textContent = item.options || '';
+                  row.querySelector('.product-vendor').hidden = !item.options;
+                  row.querySelector('.text_14').textContent = 'Qté : ' + item.quantity;
+                  row.querySelector('.product-price').textContent = fmt(item.line_total);
+                  row.querySelector('form').action = d.cart_remove_url;
+                  row.querySelector('[name="_token"]').value = document.querySelector('meta[name="csrf-token"]').content;
+                  row.querySelector('[name="cart_key"]').value = item.cart_key;
+                  list.appendChild(row);
+                });
+                drawer.querySelector('.cart-drawer-heading').textContent = 'Votre panier (' + String(d.cart_count).padStart(2, '0') + ')';
+                drawer.querySelector('.cart-subprice').textContent = fmt(d.cart_subtotal);
+                drawer.querySelector('.cart-content-area').classList.toggle('d-none', !d.cart_items.length);
+                drawer.querySelector('.cart-empty-area').classList.toggle('d-none', !!d.cart_items.length);
+                drawer.querySelector('.minicart-footer').classList.toggle('d-none', !d.cart_items.length);
+              }
 
               if (window.bootstrap && bootstrap.Modal) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('cartAddedModal')).show();
@@ -824,7 +866,7 @@
             })
             .catch(function () {
               if (btn) btn.disabled = false;
-              form.submit();
+              showError('L’ajout n’a pas pu être confirmé. Consultez votre panier avant de réessayer.');
             });
         });
       </script>

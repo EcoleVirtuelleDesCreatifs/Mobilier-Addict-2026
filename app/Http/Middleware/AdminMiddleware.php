@@ -12,7 +12,7 @@ class AdminMiddleware
     {
         $user = $request->user();
 
-        if (!$user || !$user->is_admin) {
+        if (!$user || !$user->is_admin || !$user->is_active) {
             abort(403);
         }
 

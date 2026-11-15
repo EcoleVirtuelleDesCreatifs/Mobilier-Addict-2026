@@ -17,7 +17,7 @@ $buttonColor = ($level ?? 'primary') === 'error' ? '#dc2626' : $pink;
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{{ $brandName }}</title>
 </head>
-<body style="margin:0;padding:0;background:{{ $bg }};font-family:Arial,Helvetica,sans-serif;color:{{ $text }};-webkit-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background:{{ $bg }};font-family:Helvetica,Arial,sans-serif;color:{{ $text }};-webkit-text-size-adjust:100%;">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Une nouvelle information vous attend de la part de {{ $brandName }}.</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background:{{ $bg }};">
     <tr>

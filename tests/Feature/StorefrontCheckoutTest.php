@@ -52,6 +52,42 @@ class StorefrontCheckoutTest extends TestCase
         ]);
     }
 
+    public function test_inactive_admin_cannot_log_in(): void
+    {
+        \App\Models\User::create([
+            'name' => 'Admin test', 'email' => 'inactive@example.test', 'password' => 'test-password',
+            'is_admin' => true, 'is_active' => false, 'role' => 'admin',
+        ]);
+        $this->post(route('login.submit'), ['email' => 'inactive@example.test', 'password' => 'test-password'])
+            ->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
+    public function test_inactive_admin_session_and_permissions_are_blocked(): void
+    {
+        \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'admin'])->get('/_test/admin-only', fn () => 'ok');
+        $user = \App\Models\User::create([
+            'name' => 'Admin test', 'email' => 'inactive@example.test', 'password' => 'test-password',
+            'is_admin' => true, 'is_active' => false, 'role' => 'admin',
+        ]);
+        $this->actingAs($user)->get('/_test/admin-only')->assertForbidden();
+        $this->assertFalse($user->hasPermission('products.view'));
+    }
+
+    public function test_active_admin_can_log_in_and_access_admin_routes(): void
+    {
+        \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'admin'])->get('/_test/admin-only', fn () => 'ok');
+        $user = \App\Models\User::create([
+            'name' => 'Admin test', 'email' => 'active@example.test', 'password' => 'test-password',
+            'is_admin' => true, 'is_active' => true, 'role' => 'admin',
+        ]);
+        $this->post(route('login.submit'), ['email' => 'active@example.test', 'password' => 'test-password'])
+            ->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($user);
+        $this->get('/_test/admin-only')->assertOk();
+        $this->assertTrue($user->hasPermission('products.view'));
+    }
+
     public function test_home_selection_displays_twelve_active_priced_products(): void
     {
         $products = collect(range(1, 13))->map(fn ($i) => Product::create([
@@ -97,6 +133,8 @@ class StorefrontCheckoutTest extends TestCase
         $product->setRelation('categories', collect());
         $html = view('products.show', ['product' => $product, 'relatedProducts' => collect()])->render();
         $this->assertMatchesRegularExpression('/id="pdpPrice">85 000 FCFA/', $html);
+        $this->assertStringContainsString('id="product-options"', $html);
+        $this->assertStringContainsString('class="pdp-buy" name="redirect_to" value="shipping"', $html);
     }
 
     public function test_catalogue_tabs_keep_active_menus_without_products(): void
@@ -120,6 +158,47 @@ class StorefrontCheckoutTest extends TestCase
             ->assertOk()
             ->assertViewHas('products', fn ($products) => $products->pluck('name')->all() === ['Canapé Beta', 'Canapé Alpha']);
         $this->get('/nouveautes')->assertOk()->assertDontSee('Canapé Caché');
+    }
+
+    public function test_direct_purchase_adds_the_chosen_variant_and_opens_delivery_without_ordering(): void
+    {
+        $product = $this->product();
+        $variant = ProductVariant::create([
+            'product_id' => $product->id, 'thickness_cm' => 20, 'places' => 2,
+            'price' => 85000, 'stock' => 5, 'is_active' => true,
+        ]);
+        $key = $product->id . ':' . $variant->id . ':';
+        $this->post(route('cart.add'), [
+            'product_id' => $product->id, 'product_variant_id' => $variant->id,
+            'quantity' => 2, 'redirect_to' => 'shipping', 'price' => 1,
+        ])->assertRedirect(route('cart.shipping'))
+            ->assertSessionHas('cart.' . $key, fn ($row) => $row['quantity'] === 2 && $row['product_variant_id'] === $variant->id);
+        $this->get(route('cart.shipping'))->assertOk()->assertSee('170 000');
+        $this->assertDatabaseCount('orders', 0);
+    }
+
+    public function test_ajax_add_to_cart_returns_server_totals_without_ordering(): void
+    {
+        $product = $this->product();
+        $this->postJson(route('cart.add'), ['product_id' => $product->id, 'quantity' => 1, 'price' => 1])
+            ->assertOk()->assertJsonPath('ok', true)->assertJsonPath('cart_count', 1)
+            ->assertJsonPath('cart_subtotal', 70000)->assertJsonPath('checkout_url', route('cart.shipping'))
+            ->assertJsonPath('cart_items.0.name', $product->name)
+            ->assertJsonPath('cart_items.0.cart_key', $product->id . ':0:')
+            ->assertJsonPath('cart_items.0.quantity', 1)
+            ->assertJsonPath('cart_items.0.line_total', 70000)
+            ->assertJsonPath('cart_remove_url', route('cart.remove'));
+        $this->assertDatabaseCount('orders', 0);
+    }
+
+    public function test_pagination_canonical_and_newsletter_label(): void
+    {
+        $this->get('/collection?page=2')->assertOk()
+            ->assertSee('rel="canonical" href="http://localhost/collection?page=2"', false)
+            ->assertSee('for="footer-newsletter-email"', false)
+            ->assertSee('id="footer-newsletter-email"', false);
+        $this->get('/collection')->assertOk()
+            ->assertSee('rel="canonical" href="http://localhost/collection"', false);
     }
 
     public function test_empty_cart_cannot_enter_checkout(): void

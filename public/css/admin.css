@@ -1,6 +1,7 @@
 :root{--admin-bg-0:#050814;--admin-bg-1:#070b16;--admin-panel:#0b1226;--admin-border:rgba(255,255,255,.08);--admin-text:#e6eaf2;--admin-muted:rgba(230,234,242,.72);--admin-blue:#3b82f6;--admin-cyan:#06b6d4;--admin-indigo:#6366f1;--admin-pink:#ec4899}
 
 body.admin-body{
+  font-family:Helvetica,Arial,sans-serif;
   background:radial-gradient(900px 520px at 18% 0%,rgba(59,130,246,.22) 0%,transparent 55%),radial-gradient(900px 520px at 85% 32%,rgba(6,182,212,.16) 0%,transparent 60%),linear-gradient(180deg,var(--admin-bg-0) 0%,var(--admin-bg-1) 55%,var(--admin-bg-0) 100%);
   color:var(--admin-text);
 }

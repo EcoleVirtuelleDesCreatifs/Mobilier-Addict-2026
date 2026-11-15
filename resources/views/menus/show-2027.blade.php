@@ -2,6 +2,9 @@
 @php
     $pageTitle = $pageTitle ?? 'Tous les produits';
     $catalogueUrl = isset($menu) ? route('menu.show', $menu->slug) : url()->current();
+    if (isset($products) && $products instanceof \Illuminate\Contracts\Pagination\Paginator && $products->currentPage() > 1) {
+        $catalogueUrl .= '?page=' . $products->currentPage();
+    }
     $menuCategories = $menuCategories ?? collect();
 @endphp
 @section('title', $pageTitle . ' à Abidjan — Mobilier Addict')

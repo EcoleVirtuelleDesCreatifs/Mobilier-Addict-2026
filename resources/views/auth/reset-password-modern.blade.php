@@ -9,9 +9,6 @@
 
     <title>Créer mon mot de passe - Mobilier Addict</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/imgs/logo-2.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -30,7 +27,7 @@
         html, body { height: 100%; }
         body {
             margin: 0;
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             background: radial-gradient(1200px 600px at 18% 18%, rgba(124, 58, 237, .35), transparent 55%),
                         radial-gradient(900px 500px at 80% 70%, rgba(34, 197, 94, .22), transparent 50%),
                         linear-gradient(180deg, #070a12 0%, var(--bg) 100%);
