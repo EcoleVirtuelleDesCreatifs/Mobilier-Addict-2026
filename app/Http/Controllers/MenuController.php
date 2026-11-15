@@ -169,8 +169,8 @@ class MenuController extends Controller
             ->where('products.is_active', true);
 
         match (request()->query('availability')) {
-            'in' => $productsQuery->where('products.stock', '>', 0),
-            'out' => $productsQuery->where('products.stock', '<=', 0),
+            'in' => $productsQuery->inStock(),
+            'out' => $productsQuery->outOfStock(),
             default => null,
         };
 
@@ -223,8 +223,8 @@ class MenuController extends Controller
         };
 
         $stockCounts = [
-            'in' => (clone $productsQuery)->where('products.stock', '>', 0)->count(),
-            'out' => (clone $productsQuery)->where('products.stock', '<=', 0)->count(),
+            'in' => (clone $productsQuery)->inStock()->count(),
+            'out' => (clone $productsQuery)->outOfStock()->count(),
         ];
 
         $products = $productsQuery->paginate(12)->withQueryString();

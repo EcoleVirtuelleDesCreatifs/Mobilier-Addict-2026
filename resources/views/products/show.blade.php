@@ -37,9 +37,10 @@
             'Taille' => $product->size,
             'Référence' => $product->sku,
         ])->filter();
-        $defaultVariant = $product->variants->sortBy('price')->first();
+        $activeVariants = $product->variants->where('is_active', true);
+        $defaultVariant = $product->preferredVariant();
         $displayPrice = (float) ($defaultVariant?->price ?? $product->price);
-        $inStock = (int) $product->stock > 0;
+        $inStock = $product->isInStock($defaultVariant);
         $discount = ($product->old_price && $product->old_price > $displayPrice)
             ? round((($product->old_price - $displayPrice) / $product->old_price) * 100) : null;
         $colors = collect($product->available_colors)->filter()->values();
@@ -151,11 +152,11 @@
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                                @if($product->variants->isNotEmpty())
+                                @if($activeVariants->isNotEmpty())
                                     <div class="pdp-field">
                                         <span class="pdp-label">Taille</span>
                                         <div class="pdp-pills">
-                                            @foreach($product->variants as $variant)
+                                            @foreach($activeVariants as $variant)
                                                 @php
                                                     $vLabel = collect([
                                                         $variant->dimensions,
@@ -163,11 +164,12 @@
                                                         $variant->thickness_cm ? $variant->thickness_cm.' cm' : null,
                                                         $variant->variant_type,
                                                     ])->filter()->join(' · ') ?: 'Option '.$loop->iteration;
-                                                    $vPrice = (float) ($variant->price ?: $displayPrice);
+                                                    $vPrice = (float) $variant->price;
+                                                    $vAvailable = $product->isInStock($variant) && $vPrice > 0;
                                                 @endphp
                                                 <label class="pdp-pill">
-                                                    <input type="radio" name="product_variant_id" value="{{ $variant->id }}" data-price="{{ $vPrice }}" {{ $variant->id === $defaultVariant?->id ? 'checked' : '' }}>
-                                                    <span>{{ $vLabel }}</span>
+                                                    <input type="radio" name="product_variant_id" value="{{ $variant->id }}" data-price="{{ $vPrice }}" data-available="{{ $vAvailable ? '1' : '0' }}" {{ $variant->id === $defaultVariant?->id ? 'checked' : '' }} {{ !$vAvailable ? 'disabled' : '' }}>
+                                                    <span>{{ $vLabel }}{{ !$vAvailable ? ' — Indisponible' : '' }}</span>
                                                 </label>
                                             @endforeach
                                         </div>
@@ -405,8 +407,20 @@
             document.querySelectorAll('.pdp-pill input[data-price]').forEach(function (r) {
                 r.addEventListener('change', function () {
                     var el = document.getElementById('pdpPrice');
-                    if (el && r.dataset.price) {
-                        el.textContent = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(r.dataset.price) + ' FCFA';
+                    var available = r.dataset.available === '1' && Number(r.dataset.price) > 0;
+                    if (el) {
+                        el.textContent = Number(r.dataset.price) > 0
+                            ? new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(r.dataset.price) + ' FCFA'
+                            : 'Prix sur demande';
+                    }
+                    document.querySelectorAll('#product-options .pdp-atc, #product-options .pdp-buy').forEach(function (button) {
+                        button.disabled = !available;
+                    });
+                    var stock = document.querySelector('.pdp-stock');
+                    if (stock) {
+                        stock.textContent = available ? 'En stock' : 'Indisponible';
+                        stock.classList.toggle('is-in', available);
+                        stock.classList.toggle('is-out', !available);
                     }
                 });
             });

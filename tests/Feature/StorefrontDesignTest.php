@@ -24,7 +24,7 @@ class StorefrontDesignTest extends TestCase
     public function test_product_card_uses_the_active_variant_price_and_id(): void
     {
         $product = $this->product();
-        $variant = new ProductVariant(['price' => 85000, 'is_active' => true]);
+        $variant = new ProductVariant(['price' => 85000, 'stock' => 0, 'is_active' => true]);
         $variant->id = 17;
         $inactive = new ProductVariant(['price' => 1000, 'is_active' => false]);
         $product->setRelation('variants', collect([$inactive, $variant]));
@@ -37,6 +37,41 @@ class StorefrontDesignTest extends TestCase
         $this->assertStringContainsString('Commander directement</button>', $html);
         $this->assertStringContainsString('Ajouter au panier</button>', $html);
         $this->assertStringContainsString('name="redirect_to" value="shipping"', $html);
+    }
+
+    public function test_card_can_order_a_stocked_variant_when_parent_stock_is_zero(): void
+    {
+        $product = $this->product(['stock' => 0]);
+        $variant = new ProductVariant(['price' => 85000, 'stock' => 3, 'is_active' => true]);
+        $variant->id = 17;
+        $product->setRelation('variants', collect([$variant]));
+        $html = view('maquette.includes.card-2027', compact('product'))->render();
+        $this->assertStringContainsString('name="product_variant_id" value="17"', $html);
+        $this->assertStringNotContainsString(' disabled', $html);
+        $this->assertStringNotContainsString('Sur commande', $html);
+    }
+
+    public function test_card_prefers_a_priced_stocked_variant_over_a_zero_price_option(): void
+    {
+        $product = $this->product(['stock' => 0]);
+        $product->setRelation('variants', collect([
+            new ProductVariant(['price' => 0, 'stock' => 3, 'is_active' => true]),
+            new ProductVariant(['price' => 85000, 'stock' => 2, 'is_active' => true]),
+        ]));
+        $html = view('maquette.includes.card-2027', compact('product'))->render();
+        $this->assertStringContainsString('85 000', $html);
+        $this->assertSame(2, substr_count($html, '#product-options'));
+        $this->assertStringNotContainsString(' disabled', $html);
+    }
+
+    public function test_inactive_variant_does_not_unlock_an_out_of_stock_product(): void
+    {
+        $product = $this->product(['stock' => 0]);
+        $product->setRelation('variants', collect([
+            new ProductVariant(['price' => 85000, 'stock' => 3, 'is_active' => false]),
+        ]));
+        $html = view('maquette.includes.card-2027', compact('product'))->render();
+        $this->assertSame(2, substr_count($html, ' disabled'));
     }
 
     public function test_color_products_link_to_their_options_instead_of_quick_add(): void

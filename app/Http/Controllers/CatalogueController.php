@@ -25,8 +25,8 @@ class CatalogueController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
         match ($filters['availability'] ?? '') {
-            'in' => $query->where('stock', '>', 0),
-            'out' => $query->where('stock', '<=', 0),
+            'in' => $query->inStock(),
+            'out' => $query->outOfStock(),
             default => null,
         };
         match ($filters['sort'] ?? ($isNew ? 'newest' : 'featured')) {

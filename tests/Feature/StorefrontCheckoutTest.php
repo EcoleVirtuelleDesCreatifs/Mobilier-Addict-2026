@@ -137,6 +137,44 @@ class StorefrontCheckoutTest extends TestCase
         $this->assertStringContainsString('class="pdp-buy" name="redirect_to" value="shipping"', $html);
     }
 
+    public function test_stocked_variant_unlocks_the_product_page_and_direct_purchase(): void
+    {
+        $product = $this->product();
+        $product->update(['stock' => 0]);
+        $empty = ProductVariant::create([
+            'product_id' => $product->id, 'thickness_cm' => 15, 'places' => 2,
+            'price' => 70000, 'stock' => 0, 'is_active' => true,
+        ]);
+        $available = ProductVariant::create([
+            'product_id' => $product->id, 'thickness_cm' => 20, 'places' => 2,
+            'price' => 85000, 'stock' => 3, 'is_active' => true,
+        ]);
+        $product->setRelation('variants', collect([$empty, $available]));
+        $product->setRelation('category', null);
+        $product->setRelation('categories', collect());
+        $html = view('products.show', ['product' => $product, 'relatedProducts' => collect()])->render();
+        $this->assertMatchesRegularExpression('/id="pdpPrice">85 000 FCFA/', $html);
+        $this->assertMatchesRegularExpression('/value="' . $available->id . '"[^>]* checked/', $html);
+        $this->assertDoesNotMatchRegularExpression('/class="pdp-(?:atc|buy)"[^>]*disabled/', $html);
+        $this->post(route('cart.add'), [
+            'product_id' => $product->id, 'product_variant_id' => $available->id,
+            'quantity' => 1, 'redirect_to' => 'shipping',
+        ])->assertRedirect(route('cart.shipping'));
+        $this->assertDatabaseCount('orders', 0);
+    }
+
+    public function test_availability_filters_include_stocked_active_variants(): void
+    {
+        $product = $this->product();
+        $product->update(['stock' => 0]);
+        ProductVariant::create([
+            'product_id' => $product->id, 'thickness_cm' => 20, 'places' => 2,
+            'price' => 85000, 'stock' => 3, 'is_active' => true,
+        ]);
+        $this->get('/collection?availability=in')->assertOk()->assertViewHas('products', fn ($rows) => $rows->contains('id', $product->id));
+        $this->get('/collection?availability=out')->assertOk()->assertViewHas('products', fn ($rows) => !$rows->contains('id', $product->id));
+    }
+
     public function test_catalogue_tabs_keep_active_menus_without_products(): void
     {
         $menu = \App\Models\Menu::create(['name' => 'Matelas', 'slug' => 'matelas', 'position' => 'header', 'is_active' => true]);

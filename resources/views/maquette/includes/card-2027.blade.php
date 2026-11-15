@@ -1,10 +1,10 @@
 @php
     $activeVariants = $product->variants->where('is_active', true)->sortBy('price');
-    $variant = $activeVariants->first();
+    $variant = $product->preferredVariant();
     $price = (float) ($variant?->price ?? $product->price);
     $places = $variant?->places ? rtrim(rtrim(number_format((float) $variant->places, 1, '.', ''), '0'), '.') . ((float) $variant->places === 1.0 ? ' place' : ' places') : null;
     $label = collect($variant ? [$places, $variant->thickness_cm ? 'Ép. ' . $variant->thickness_cm . ' cm' : null, $product->firmness] : [$product->size, $product->dimensions, $product->firmness])->filter()->unique()->join(' · ');
-    $available = $product->is_active && (int) $product->stock > 0;
+    $available = $product->isInStock($variant);
     $categoryLabel = mb_strtolower(($product->category?->slug ?? '') . ' ' . ($product->category?->name ?? ''));
     $needsOptions = $activeVariants->count() > 1 || count((array) $product->available_colors) > 1 || str_contains($categoryLabel, 'drap') || str_contains($categoryLabel, 'taie');
     $optionsUrl = route('product.show', $product->slug) . '#product-options';

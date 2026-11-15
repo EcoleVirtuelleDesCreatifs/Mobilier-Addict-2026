@@ -79,6 +79,30 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
+    public function isInStock(?ProductVariant $variant = null): bool
+    {
+        if (!$this->is_active || ($variant && !$variant->is_active)) {
+            return false;
+        }
+
+        if ((int) $this->stock > 0) {
+            return true;
+        }
+
+        return $variant
+            ? (int) $variant->stock > 0
+            : $this->variants->contains(fn ($row) => $row->is_active && (int) $row->stock > 0);
+    }
+
+    public function preferredVariant(): ?ProductVariant
+    {
+        $variants = $this->variants->where('is_active', true)->sortBy('price');
+
+        return $variants->first(fn ($variant) => (float) $variant->price > 0 && $this->isInStock($variant))
+            ?? $variants->first(fn ($variant) => (float) $variant->price > 0)
+            ?? $variants->first();
+    }
+
     public function getFormattedPriceAttribute()
     {
         return number_format($this->price, 0, ',', '.') . 'F';
@@ -111,7 +135,16 @@ class Product extends Model
 
     public function scopeInStock($query)
     {
-        return $query->where('stock', '>', 0);
+        return $query->where(function ($q) {
+            $q->where($this->qualifyColumn('stock'), '>', 0)
+                ->orWhereHas('variants', fn ($variants) => $variants->active()->where('stock', '>', 0));
+        });
+    }
+
+    public function scopeOutOfStock($query)
+    {
+        return $query->where($this->qualifyColumn('stock'), '<=', 0)
+            ->whereDoesntHave('variants', fn ($variants) => $variants->active()->where('stock', '>', 0));
     }
 
     public function scopeCollection($query)
