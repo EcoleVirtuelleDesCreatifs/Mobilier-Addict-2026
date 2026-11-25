@@ -13,19 +13,6 @@
             <div class="kicker">Literie · Abidjan</div>
             <h1 class="hero-title"><span class="hero-title-line">Le matelas que</span> <em class="rot"><span class="on">votre dos</span><span aria-hidden="true">votre budget</span><span aria-hidden="true">votre sommeil</span></em> <span class="hero-title-line">attendait.</span></h1>
             <p class="lead">Choisissez en trente secondes. Livraison à Abidjan, paiement à la livraison.</p>
-            <form class="finder" action="{{ route('menu.show', 'matelas') }}" method="GET">
-                <div class="frow"><span class="lab">Taille</span><div class="chips">
-                    @foreach(['' => 'Toutes', '140' => '140 × 190', '160' => '160 × 190', '180' => '180 × 190'] as $value => $label)
-                    <label class="chip"><input type="radio" name="size" value="{{ $value }}" @checked($loop->first)>{{ $label }}</label>
-                    @endforeach
-                </div></div>
-                <div class="frow"><span class="lab">Confort</span><div class="chips">
-                    @foreach(['' => 'Tous', 'soft' => 'Souple', 'equilibre' => 'Équilibré', 'ferme' => 'Ferme'] as $value => $label)
-                    <label class="chip"><input type="radio" name="comfort[]" value="{{ $value }}" @checked($loop->first)>{{ $label }}</label>
-                    @endforeach
-                </div></div>
-                <div class="go-row"><button class="btn pink" type="submit">Voir les matelas →</button><span class="alt">Un doute ? <a href="{{ $wa }}" target="_blank" rel="noopener">Demandez conseil</a></span></div>
-            </form>
         </div>
         <div class="shot" data-hero-slider role="region" aria-roledescription="carrousel" aria-label="Notre sélection literie">
             @forelse($slides as $slide)
