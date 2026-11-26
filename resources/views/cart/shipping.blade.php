@@ -189,6 +189,10 @@
     </div>
 @endsection
 
+@push('pixel')
+<script>fbq('track', 'InitiateCheckout', { currency: 'XOF' });</script>
+@endpush
+
 @push('styles')
 <style>
 .mp-summary-pro{padding:0!important;overflow:hidden;border:1px solid rgba(0,35,77,.1);box-shadow:0 20px 50px rgba(0,35,77,.1)}

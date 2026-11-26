@@ -27,9 +27,10 @@
 
                 @include('admin.products._form', ['homeSectionCategories' => $homeSectionCategories, 'menus' => $menus])
 
-                <div class="d-flex justify-content-end gap-2 mt-3">
+                <div class="pf-actions">
+                    <span class="pf-dirty">Champs marqués * obligatoires</span>
                     <a href="{{ route('admin.products.index') }}" class="btn btn-admin-ghost">Annuler</a>
-                    <button type="submit" class="btn btn-admin-primary">Créer</button>
+                    <button type="submit" class="btn btn-admin-primary">Créer le produit</button>
                 </div>
             </form>
         </div>

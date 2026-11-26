@@ -16,14 +16,29 @@ class ArticleController extends Controller
 {
     public function index(Request $request)
     {
+        $search = trim((string) $request->query('q', ''));
+        $status = (string) $request->query('status', '');
+
         $articles = BlogPost::query()
             ->with(['category', 'user'])
+            ->when($search !== '', fn ($q) => $q->where('title', 'like', '%' . $search . '%'))
+            ->when($status === 'published', fn ($q) => $q->whereNotNull('published_at')->where('is_active', true))
+            ->when($status === 'draft', fn ($q) => $q->where(fn ($qq) => $qq->whereNull('published_at')->orWhere('is_active', false)))
             ->orderByDesc('created_at')
             ->paginate(15)
             ->withQueryString();
 
+        $all = BlogPost::query()->get(['id', 'image', 'published_at', 'is_active']);
+        $counts = [
+            'all' => $all->count(),
+            'published' => $all->filter(fn ($p) => $p->published_at && $p->is_active)->count(),
+            'draft' => $all->reject(fn ($p) => $p->published_at && $p->is_active)->count(),
+            'no_image' => $all->filter(fn ($p) => ! $p->image || str_contains(image_url($p->image), 'product-placeholder'))->count(),
+        ];
+
         return view('admin.articles.index', [
             'articles' => $articles,
+            'counts' => $counts,
         ]);
     }
 
@@ -51,7 +66,7 @@ class ArticleController extends Controller
 
         $article = new BlogPost();
         $article->title = $data['title'];
-        $article->slug = Str::slug($data['title']);
+        $article->slug = $this->uniqueSlug($data['title']);
         $article->excerpt = $data['excerpt'] ?? null;
         $article->content = $data['content'] ?? null;
         $article->blog_category_id = $data['category_id'] ?? null;
@@ -79,9 +94,10 @@ class ArticleController extends Controller
             $article->is_slider = (bool) ($data['is_slider'] ?? false);
         }
 
+        $article->reading_time = $this->readingTime($article->content);
         $article->save();
 
-        return redirect()->route('admin.articles.index')->with('success', 'Article créé avec succès.');
+        return redirect()->route('admin.articles.edit', $article)->with('success', 'Article créé avec succès.');
     }
 
     public function edit(BlogPost $article)
@@ -108,7 +124,8 @@ class ArticleController extends Controller
         ]);
 
         $article->title = $data['title'];
-        $article->slug = Str::slug($data['title']);
+        // L'adresse d'un article existant ne change pas quand on retouche son titre (liens et SEO conservés).
+        $article->slug = $article->slug ?: $this->uniqueSlug($data['title'], $article->id);
         $article->excerpt = $data['excerpt'] ?? null;
         $article->content = $data['content'] ?? null;
         $article->blog_category_id = $data['category_id'] ?? null;
@@ -131,9 +148,10 @@ class ArticleController extends Controller
             $article->is_slider = (bool) ($data['is_slider'] ?? false);
         }
 
+        $article->reading_time = $this->readingTime($article->content);
         $article->save();
 
-        return redirect()->route('admin.articles.index')->with('success', 'Article mis à jour avec succès.');
+        return redirect()->route('admin.articles.edit', $article)->with('success', 'Article mis à jour avec succès.');
     }
 
     public function destroy(BlogPost $article)
@@ -154,5 +172,22 @@ class ArticleController extends Controller
         return response()->json([
             'url' => image_url($path),
         ]);
+    }
+
+    private function uniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title) ?: 'article';
+        $slug = $base;
+        $i = 2;
+        while (BlogPost::query()->where('slug', $slug)->when($ignoreId, fn ($q) => $q->whereKeyNot($ignoreId))->exists()) {
+            $slug = $base . '-' . $i++;
+        }
+
+        return $slug;
+    }
+
+    private function readingTime(?string $content): int
+    {
+        return max(1, (int) ceil(str_word_count(strip_tags((string) $content)) / 200));
     }
 }

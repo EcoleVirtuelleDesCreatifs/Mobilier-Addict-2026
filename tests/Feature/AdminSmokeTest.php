@@ -79,8 +79,47 @@ class AdminSmokeTest extends TestCase
 
         $this->actingAs($admin)->get(route('admin.stats.index'))->assertOk()
             ->assertSee('Abidjan')->assertSee('Bouaké')->assertDontSee('Ashburn')->assertDontSee('Paris')
-            ->assertViewHas('visitorsMonth', 2);
+            ->assertViewHas('current', fn ($c) => $c['visitors'] === 2);
 
         $this->actingAs($admin)->get(route('admin.stats.index', ['month' => 'nimportequoi']))->assertOk();
+    }
+
+    public function test_admin_article_create_keeps_unique_slug_and_stable_url(): void
+    {
+        Storage::fake('public');
+        $admin = $this->admin();
+
+        foreach ([1, 2] as $n) {
+            $this->actingAs($admin)->post(route('admin.articles.store'), [
+                'title' => 'Bien choisir son matelas', 'content' => '<p>Un contenu de test.</p>', 'status' => 'published',
+                'image' => UploadedFile::fake()->image('a.jpg'),
+            ])->assertSessionHasNoErrors()->assertRedirect();
+        }
+        $this->assertSame(['bien-choisir-son-matelas', 'bien-choisir-son-matelas-2'], \App\Models\BlogPost::orderBy('id')->pluck('slug')->all());
+
+        $post = \App\Models\BlogPost::first();
+        $this->actingAs($admin)->put(route('admin.articles.update', $post), ['title' => 'Nouveau titre', 'status' => 'published'])->assertSessionHasNoErrors();
+        $this->assertSame('bien-choisir-son-matelas', $post->fresh()->slug);
+
+        $this->actingAs($admin)->get(route('admin.articles.index'))->assertOk()->assertSee('Nouveau titre');
+        $this->actingAs($admin)->get(route('admin.articles.edit', $post))->assertOk()->assertSee('ckeditor', false);
+    }
+
+    public function test_facebook_pixel_setting_is_loaded_on_the_site(): void
+    {
+        $admin = $this->admin();
+        $this->get('/')->assertDontSee("fbq('init'", false);
+
+        $this->actingAs($admin)->post(route('admin.settings.facebook-pixel.update'), ['pixel_id' => 'abc', 'enabled' => 1])
+            ->assertSessionHasErrors('pixel_id');
+
+        $this->actingAs($admin)->post(route('admin.settings.facebook-pixel.update'), ['pixel_id' => ' 123456789012345 ', 'enabled' => 1])
+            ->assertSessionHasNoErrors();
+        $this->get('/')->assertSee("fbq('init', '123456789012345')", false);
+        $this->actingAs($admin)->get(route('admin.settings.facebook-pixel.edit'))->assertOk()->assertSee('Pixel actif');
+
+        $this->actingAs($admin)->post(route('admin.settings.facebook-pixel.update'), ['pixel_id' => '123456789012345']);
+        auth()->logout();
+        $this->get('/')->assertDontSee("fbq('init'", false);
     }
 }

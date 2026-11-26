@@ -123,9 +123,9 @@
         @stack('styles')
 
         @php
-            $fbPixelId = \App\Models\SiteSetting::getValue('facebook_pixel_id');
+            $fbPixelId = \App\Support\MetaPixel::id();
             $fbPixelEnabled = \App\Models\SiteSetting::getValue('facebook_pixel_enabled', '0');
-            $fbPixelActive = in_array((string) $fbPixelEnabled, ['1', 'true', 'on', 'yes'], true) && !empty($fbPixelId);
+            $fbPixelActive = !empty($fbPixelId);
         @endphp
         @if($fbPixelActive)
             <script>

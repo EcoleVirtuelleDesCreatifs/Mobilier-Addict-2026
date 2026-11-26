@@ -27,7 +27,20 @@
                 </form>
             </div>
 
-            @foreach($menus as $menu)
+            @php
+                // Les menus sans catégorie ne prennent plus toute une carte vide.
+                $emptyMenus = $menus->filter(fn ($m) => ($categoriesByMenu[$m->id] ?? collect())->isEmpty());
+                $filledMenus = $menus->reject(fn ($m) => ($categoriesByMenu[$m->id] ?? collect())->isEmpty());
+            @endphp
+
+            @if($filledMenus->isEmpty() && $unassignedCategories->isEmpty())
+                <div class="admin-card p-4 text-center mb-4" style="color: var(--admin-muted);">
+                    {{ $search ? 'Aucune catégorie ne correspond à « ' . $search . ' ».' : 'Aucune catégorie pour le moment.' }}
+                    <a href="{{ route('admin.categories.create') }}" class="text-primary">Ajouter une catégorie</a>
+                </div>
+            @endif
+
+            @foreach($filledMenus as $menu)
                 <div class="admin-card p-0 overflow-hidden mb-4">
                     <div class="p-4" style="background: var(--admin-bg-subtle); border-bottom: 1px solid var(--admin-border);">
                         <div class="d-flex align-items-center justify-content-between">
@@ -40,20 +53,24 @@
                                 </h4>
                                 <div class="small" style="color: var(--admin-muted);">{{ $menu->slug }}</div>
                             </div>
-                            <div class="badge bg-primary">{{ $categoriesByMenu[$menu->id]?->count() ?? 0 }} catégories</div>
+                            @php($nb = ($categoriesByMenu[$menu->id] ?? collect())->count())
+                            <div class="badge bg-primary">{{ $nb }} catégorie{{ $nb > 1 ? 's' : '' }}</div>
                         </div>
                     </div>
                     <div class="p-4">
-                        @forelse($categoriesByMenu[$menu->id] ?? collect() as $category)
+                        @foreach($categoriesByMenu[$menu->id] as $category)
                             @include('admin.categories.partials.category-card')
-                        @empty
-                            <div class="text-center py-4" style="color: var(--admin-muted);">
-                                Aucune catégorie pour ce menu. <a href="{{ route('admin.categories.create') }}" class="text-primary">Ajouter une catégorie</a>
-                            </div>
-                        @endforelse
+                        @endforeach
                     </div>
                 </div>
             @endforeach
+
+            @if($emptyMenus->isNotEmpty() && ! $search)
+                <div class="small mb-4" style="color: var(--admin-muted);">
+                    Menus sans catégorie : {{ $emptyMenus->pluck('name')->join(', ', ' et ') }} —
+                    <a href="{{ route('admin.categories.create') }}" class="text-primary">ajouter une catégorie</a>
+                </div>
+            @endif
 
             @if($unassignedCategories->isNotEmpty())
                 <div class="admin-card p-0 overflow-hidden mb-4">

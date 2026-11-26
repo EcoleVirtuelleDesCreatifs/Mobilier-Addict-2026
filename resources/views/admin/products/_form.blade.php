@@ -47,21 +47,60 @@
     $selectedCategoryIds = is_array($selectedCategoryIds) ? $selectedCategoryIds : [];
 @endphp
 
+@push('styles')
+<style>
+    .pf-req{color:#e11d48;margin-left:2px}
+    .pf-hint{font-size:12px;color:var(--admin-muted);margin-top:4px}
+    .pf-count{font-size:12px;font-weight:400;color:var(--admin-muted);margin-left:auto}
+    label:has(>.pf-count){display:flex;align-items:baseline;gap:2px;width:100%}
+    .pf-count.is-warn{color:#d97706}.pf-count.is-bad{color:#e11d48}
+    .pf-title{display:flex;align-items:center;gap:10px;font-weight:600;margin-bottom:12px}
+    .pf-title span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(240,40,110,.12);color:#F0286E;font-size:12px;font-weight:700}
+    .pf-nav{position:sticky;top:64px;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:8px;margin:-4px 0 4px;border-radius:12px;background:var(--admin-card-bg,#fff);border:1px solid var(--admin-border);box-shadow:0 6px 18px -12px rgba(0,0,0,.25)}
+    .pf-nav a{padding:6px 12px;border-radius:999px;font-size:13px;color:inherit;text-decoration:none}
+    .pf-nav a:hover{background:rgba(240,40,110,.1);color:#F0286E}
+    .pf-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .pf-chip{position:relative;margin:0}
+    .pf-chip input{position:absolute;opacity:0;pointer-events:none}
+    .pf-chip span{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;border:1px solid var(--admin-border);font-size:13px;cursor:pointer;user-select:none;transition:.15s}
+    .pf-chip input:checked+span{background:#0B1A3F;border-color:#0B1A3F;color:#fff}
+    .pf-chip input:checked+span::before{content:'✓'}
+    .pf-chip input:focus-visible+span{outline:2px solid #F0286E;outline-offset:2px}
+    .pf-money{position:relative}
+    .pf-money .form-control{padding-right:64px}
+    .pf-money::after{content:'FCFA';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--admin-muted);pointer-events:none}
+    .pf-serp{border:1px solid var(--admin-border);border-radius:12px;padding:14px 16px;background:#fff;font-family:Arial,sans-serif}
+    .pf-serp-url{font-size:12px;color:#4d5156}
+    .pf-serp-title{font-size:18px;line-height:1.3;color:#1a0dab;margin:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pf-serp-desc{font-size:13px;line-height:1.5;color:#4d5156}
+    .pf-actions{position:sticky;bottom:0;z-index:5;display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:12px 16px;margin:16px -24px -24px;border-top:1px solid var(--admin-border);background:var(--admin-card-bg,#fff);border-radius:0 0 16px 16px}
+    .pf-actions .pf-dirty{margin-right:auto;font-size:13px;color:var(--admin-muted)}
+</style>
+@endpush
+
+<nav class="pf-nav" aria-label="Sections du formulaire">
+    <a href="#pf-description">Description</a><a href="#pf-prix">Prix &amp; images</a><a href="#pf-caracteristiques">Caractéristiques</a><a href="#pf-variantes">Variantes</a><a href="#pf-emplacement">Emplacement</a><a href="#pf-visibilite">Visibilité</a><a href="#pf-seo">SEO</a>
+</nav>
+
 <input type="hidden" name="slug" value="{{ old('slug', $isEdit ? $product->slug : null) }}">
 <input type="hidden" name="variants_enabled" value="1">
 
 <div class="d-grid gap-3">
-    <div class="admin-card p-3">
-        <div class="fw-semibold mb-2">Description du produit</div>
+    <div class="admin-card p-3" id="pf-description">
+        <div class="pf-title"><span>1</span>Description du produit</div>
         <div class="row g-3">
             <div class="col-12 col-lg-6">
-                <label class="form-label">Titre</label>
-                <input type="text" name="name" value="{{ old('name', $isEdit ? $product->name : null) }}" class="form-control" required>
+                <label class="form-label" for="pf-name">Nom du produit<span class="pf-req">*</span> <span class="pf-count" data-count-for="pf-name" data-max="80"></span></label>
+                <input type="text" id="pf-name" name="name" value="{{ old('name', $isEdit ? $product->name : null) }}" class="form-control @error('name') is-invalid @enderror" required maxlength="255" placeholder="Ex : Matelas Addict PH10 ferme 140×190 cm — 2 places" autocomplete="off">
+                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <div class="pf-hint">Type · gamme · fermeté · dimensions — places. Évitez les MAJUSCULES et les tirets.</div>
             </div>
 
             <div class="col-12 col-lg-6">
-                <label class="form-label">Image{{ $isEdit ? ' (laisser vide pour conserver)' : '' }}</label>
-                <input type="file" name="image" class="form-control" accept="image/*" {{ $isEdit ? '' : 'required' }} data-role="image-input" data-preview="mainImagePreview">
+                <label class="form-label">Image principale{!! $isEdit ? ' <small class="text-muted">(laisser vide pour conserver)</small>' : '<span class="pf-req">*</span>' !!}</label>
+                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/jpeg,image/png,image/webp" {{ $isEdit ? '' : 'required' }} data-role="image-input" data-preview="mainImagePreview">
+                @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <div class="pf-hint">Carrée, 1200 × 1200 px conseillé · JPG, PNG ou WebP · 4 Mo max. Convertie en WebP automatiquement.</div>
                 <div class="mt-2 rounded-3 overflow-hidden d-none" style="width:120px;height:120px;border:1px solid var(--admin-border);" id="mainImagePreview">
                     <img src="" alt="" style="width:100%;height:100%;object-fit:cover;">
                 </div>
@@ -86,8 +125,8 @@
             </div>
 
             <div class="col-12">
-                <label class="form-label">Résumé</label>
-                <textarea name="short_description" class="form-control" rows="2">{{ old('short_description', $isEdit ? $product->short_description : null) }}</textarea>
+                <label class="form-label" for="pf-short">Résumé <span class="pf-count" data-count-for="pf-short" data-max="160"></span></label>
+                <textarea id="pf-short" name="short_description" class="form-control" rows="2" placeholder="Une phrase qui donne envie : bénéfice principal, fermeté, garantie…">{{ old('short_description', $isEdit ? $product->short_description : null) }}</textarea>
             </div>
 
             <div class="col-12">
@@ -95,22 +134,35 @@
                 <textarea id="product_description" name="description" class="form-control" rows="8">{{ old('description', $isEdit ? $product->description : null) }}</textarea>
             </div>
 
-            <div class="col-12 col-lg-3">
-                <label class="form-label">{{ $isEdit ? 'Prix actuelle' : 'Prix' }}</label>
-                <input type="number" step="0.01" name="price" value="{{ $isEdit ? $displayPrice : old('price') }}" class="form-control" required>
-            </div>
-            <div class="col-12 col-lg-3">
-                <label class="form-label">Prix promo</label>
-                <input type="number" step="0.01" name="promo_price" value="{{ $isEdit ? $displayPromoPrice : old('promo_price') }}" class="form-control">
-            </div>
+        </div>
+    </div>
 
+    <div class="admin-card p-3" id="pf-prix">
+        <div class="pf-title"><span>2</span>Prix &amp; images</div>
+        <div class="row g-3">
             <div class="col-12 col-lg-3">
-                <label class="form-label">Prix de livraison</label>
-                <input type="number" step="0.01" name="shipping_price" value="{{ old('shipping_price', $isEdit ? ($product->shipping_price ?? 0) : 0) }}" class="form-control">
+                <label class="form-label" for="pf-price">{{ $isEdit ? 'Prix actuel' : 'Prix' }}<span class="pf-req">*</span></label>
+                <div class="pf-money"><input type="number" id="pf-price" step="1" min="0" inputmode="numeric" name="price" value="{{ $isEdit ? $displayPrice : old('price') }}" class="form-control @error('price') is-invalid @enderror" required placeholder="Ex : 150000"></div>
+                @error('price')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label" for="pf-promo">Prix promo</label>
+                <div class="pf-money"><input type="number" id="pf-promo" step="1" min="0" inputmode="numeric" name="promo_price" value="{{ $isEdit ? $displayPromoPrice : old('promo_price') }}" class="form-control @error('promo_price') is-invalid @enderror" placeholder="Optionnel"></div>
+                <div class="pf-hint" id="pf-promo-info">Doit être inférieur au prix.</div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label" for="pf-shipping">Prix de livraison</label>
+                <div class="pf-money"><input type="number" id="pf-shipping" step="1" min="0" inputmode="numeric" name="shipping_price" value="{{ old('shipping_price', $isEdit ? ($product->shipping_price ?? 0) : 0) }}" class="form-control"></div>
+                <div class="pf-hint">0 = livraison gratuite.</div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <label class="form-label" for="pf-stock">Stock (sans variante)</label>
+                <input type="number" id="pf-stock" name="stock" min="0" step="1" value="{{ old('stock', $isEdit ? $product->stock : 0) }}" class="form-control">
+                <div class="pf-hint">Avec des variantes, c'est leur stock qui compte.</div>
             </div>
 
             <div class="col-12 col-lg-6">
-                <label class="form-label">Couleurs disponibles (Drap &amp; Taie)</label>
+                <label class="form-label">Couleurs disponibles <small class="text-muted">(draps, taies…)</small></label>
                 @php
                     $colorsValue = old('available_colors', $isEdit ? ($product->available_colors ?? []) : []);
                     $colorsValue = is_array($colorsValue) ? $colorsValue : [];
@@ -243,8 +295,8 @@
             </div>
 
             <div class="col-12 col-lg-6">
-                <label class="form-label">Images (plusieurs)</label>
-                <input type="file" name="gallery[]" class="form-control" accept="image/*" multiple data-role="gallery-input">
+                <label class="form-label">Galerie <small class="text-muted">(plusieurs images, vues détail, mise en situation)</small></label>
+                <input type="file" name="gallery[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple data-role="gallery-input">
                 <div class="d-flex flex-wrap gap-2 mt-2" data-role="gallery-preview"></div>
                 @if($isEdit && !empty($product->gallery))
                     <div class="d-flex flex-wrap gap-2 mt-2">
@@ -270,8 +322,8 @@
         </div>
     </div>
 
-    <div class="admin-card p-3">
-        <div class="fw-semibold mb-2">Caractéristiques</div>
+    <div class="admin-card p-3" id="pf-caracteristiques">
+        <div class="pf-title"><span>3</span>Caractéristiques</div>
         <div class="row g-3">
             <div class="col-12 col-lg-3">
                 <label class="form-label">SKU (référence)</label>
@@ -279,7 +331,7 @@
             </div>
             <div class="col-12 col-lg-3">
                 <label class="form-label">Dimensions</label>
-                <input type="text" name="dimensions" value="{{ old('dimensions', $isEdit ? $product->dimensions : null) }}" class="form-control" placeholder="Ex: 190 x 140 cm">
+                <input type="text" name="dimensions" value="{{ old('dimensions', $isEdit ? $product->dimensions : null) }}" class="form-control" placeholder="Ex : 140 × 190 cm">
             </div>
             <div class="col-12 col-lg-3">
                 <label class="form-label">Matière</label>
@@ -375,9 +427,9 @@
         });
     </script>
 
-    <div class="admin-card p-3">
+    <div class="admin-card p-3" id="pf-variantes">
         <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
-            <div class="fw-semibold">Variantes</div>
+            <div class="pf-title mb-0"><span>4</span>Variantes <small class="text-muted fw-normal">(tailles, épaisseurs, nombre de chaises…)</small></div>
             <div class="d-flex align-items-center gap-2">
                 <select class="form-select form-select-sm" name="variant_mode" id="variantModeSelect" style="width: 210px;">
                     <option value="standard" @selected($variantMode === 'standard')>Standard</option>
@@ -644,61 +696,57 @@
         </script>
     </div>
 
-    <div class="admin-card p-3">
-        <div class="fw-semibold mb-2">Emplacement du produit</div>
-        <div class="row g-3">
-            <div class="col-12 col-lg-6">
-                <label class="form-label">Catégories Section Home (plusieurs)</label>
-                <select name="category_ids[]" class="form-select" multiple size="8">
-                    @foreach(($homeSectionCategories ?? collect()) as $category)
-                        <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategoryIds))>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <div class="small mt-1" style="color: var(--admin-muted);">Ctrl/Cmd + clic pour sélection multiple.</div>
+    <div class="admin-card p-3" id="pf-emplacement">
+        <div class="pf-title"><span>5</span>Emplacement dans la boutique</div>
+        @php
+            $defaultSelected = $selectedMenuIds ?? ($isEdit ? $product->menus->pluck('id')->all() : []);
+            $selected = old('menu_ids', $defaultSelected);
+            $selected = array_map('intval', is_array($selected) ? $selected : []);
+            $selectedCats = array_map('intval', $selectedCategoryIds);
+        @endphp
+        <div class="row g-4">
+            <div class="col-12">
+                <label class="form-label d-block">Rayons (menus)<span class="pf-req">*</span> <small class="text-muted">— où le produit apparaît dans la boutique</small></label>
+                <div class="pf-chips">
+                    @forelse(($menus ?? collect()) as $menu)
+                        <label class="pf-chip"><input type="checkbox" name="menu_ids[]" value="{{ $menu->id }}" @checked(in_array((int) $menu->id, $selected, true))><span>{{ $menu->name }}</span></label>
+                    @empty
+                        <span class="pf-hint">Aucun menu. Créez d'abord un menu.</span>
+                    @endforelse
+                </div>
+                <div class="pf-hint" id="pf-menu-warn" hidden>Sans rayon, le produit n'apparaîtra dans aucune liste de la boutique.</div>
             </div>
 
-            <div class="col-12 col-lg-6">
-                <label class="form-label">Menus rattachés</label>
-                @php
-                    $defaultSelected = $selectedMenuIds ?? ($isEdit ? $product->menus->pluck('id')->all() : []);
-                    $selected = old('menu_ids', $defaultSelected);
-                    $selected = is_array($selected) ? $selected : [];
-                @endphp
-                <select name="menu_ids[]" class="form-select" multiple size="8">
-                    @foreach(($menus ?? collect()) as $menu)
-                        <option value="{{ $menu->id }}" @selected(in_array($menu->id, $selected))>
-                            {{ $menu->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <div class="small mt-1" style="color: var(--admin-muted);">Ctrl/Cmd + clic pour sélection multiple.</div>
+            <div class="col-12">
+                <label class="form-label d-block">Catégories de la page d'accueil</label>
+                <div class="pf-chips">
+                    @forelse(($homeSectionCategories ?? collect()) as $category)
+                        <label class="pf-chip"><input type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(in_array((int) $category->id, $selectedCats, true))><span>{{ $category->name }}</span></label>
+                    @empty
+                        <span class="pf-hint">Aucune catégorie de page d'accueil.</span>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-8">
+                <label class="form-label d-block">Sections mises en avant</label>
+                <div class="pf-chips">
+                    <label class="pf-chip"><input type="checkbox" name="sections[]" value="collection" @checked(in_array('collection', $selectedSections, true))><span>Nos Matelas d'Exception</span></label>
+                    <label class="pf-chip"><input type="checkbox" name="sections[]" value="featured" @checked(in_array('featured', $selectedSections, true))><span>Les Essentiels</span></label>
+                    <label class="pf-chip"><input type="checkbox" name="sections[]" value="bestseller" @checked(in_array('bestseller', $selectedSections, true))><span>Best sellers</span></label>
+                </div>
             </div>
 
             <div class="col-12 col-lg-4">
-                <label class="form-label">Section</label>
-                <select name="sections[]" class="form-select" multiple>
-                    <option value="collection" @selected(in_array('collection', $selectedSections, true))>Nos Matelas d'Exception (Collection)</option>
-                    <option value="featured" @selected(in_array('featured', $selectedSections, true))>Les Essentiels (Mise en avant)</option>
-                    <option value="bestseller" @selected(in_array('bestseller', $selectedSections, true))>Best sellers</option>
-                </select>
-            </div>
-
-            <div class="col-12 col-lg-4">
-                <label class="form-label">Stock</label>
-                <input type="number" name="stock" value="{{ old('stock', $isEdit ? $product->stock : 0) }}" class="form-control">
-            </div>
-
-            <div class="col-12 col-lg-3">
-                <label class="form-label">Ordre</label>
-                <input type="number" name="order" value="{{ old('order', $isEdit ? $product->order : 0) }}" class="form-control">
+                <label class="form-label" for="pf-order">Ordre d'affichage</label>
+                <input type="number" id="pf-order" name="order" value="{{ old('order', $isEdit ? $product->order : 0) }}" class="form-control">
+                <div class="pf-hint">Plus petit = affiché en premier.</div>
             </div>
         </div>
     </div>
 
-    <div class="admin-card p-3">
-        <div class="fw-semibold mb-2">Mise à la UNE</div>
+    <div class="admin-card p-3" id="pf-visibilite">
+        <div class="pf-title"><span>6</span>Visibilité &amp; badge</div>
         <div class="row g-3">
             <div class="col-12 col-lg-3">
                 <label class="form-label">En ligne</label>
@@ -725,38 +773,99 @@
                 </select>
             </div>
 
-            <div class="col-12">
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="is_featured" @checked(old('is_featured', $isEdit ? $product->is_featured : false))>
-                        <label class="form-check-label" for="is_featured">Mis en avant</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="is_bestseller" value="1" id="is_bestseller" @checked(old('is_bestseller', $isEdit ? $product->is_bestseller : false))>
-                        <label class="form-check-label" for="is_bestseller">Best seller</label>
-                    </div>
+        </div>
+    </div>
+
+    <div class="admin-card p-3" id="pf-seo">
+        <div class="pf-title"><span>7</span>Référencement Google (SEO)</div>
+        <div class="row g-3">
+            <div class="col-12 col-xl-7">
+                <label class="form-label" for="pf-seo-title">Titre Google <span class="pf-count" data-count-for="pf-seo-title" data-max="60"></span></label>
+                <input type="text" id="pf-seo-title" name="seo_title" value="{{ old('seo_title', $isEdit ? ($product->seo_title ?? null) : null) }}" class="form-control" maxlength="255" placeholder="Laisser vide : généré à partir du nom">
+                <div class="pf-hint">60 caractères max. Vide = « Nom Dimensions | Mobilier Addict ».</div>
+
+                <label class="form-label mt-3" for="pf-seo-desc">Description Google <span class="pf-count" data-count-for="pf-seo-desc" data-max="155"></span></label>
+                <textarea id="pf-seo-desc" name="seo_description" class="form-control" rows="3" placeholder="Laisser vide : le résumé est utilisé">{{ old('seo_description', $isEdit ? ($product->seo_description ?? null) : null) }}</textarea>
+                <div class="pf-hint">120 à 155 caractères : bénéfice, prix ou livraison à Abidjan, appel à l'action.</div>
+
+                <label class="form-label mt-3" for="pf-seo-kw">Mots-clés <small class="text-muted">(usage interne)</small></label>
+                <input type="text" id="pf-seo-kw" name="seo_keywords" value="{{ old('seo_keywords', $isEdit ? ($product->seo_keywords ?? null) : null) }}" class="form-control" placeholder="Ex : matelas ferme Abidjan, matelas 140x190">
+            </div>
+            <div class="col-12 col-xl-5">
+                <label class="form-label">Aperçu dans Google</label>
+                <div class="pf-serp" aria-live="polite">
+                    <div class="pf-serp-url">mobilier-addict.com › produit</div>
+                    <div class="pf-serp-title" id="pf-serp-title">Nom du produit | Mobilier Addict</div>
+                    <div class="pf-serp-desc" id="pf-serp-desc">La description apparaîtra ici.</div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="admin-card p-3">
-        <div class="fw-semibold mb-2">AMÉLIORER LE SEO</div>
-        <div class="row g-3">
-            <div class="col-12">
-                <label class="form-label">Meta Title</label>
-                <input type="text" name="seo_title" value="{{ old('seo_title', $isEdit ? ($product->seo_title ?? null) : null) }}" class="form-control">
-            </div>
-
-            <div class="col-12">
-                <label class="form-label">Meta Description</label>
-                <textarea name="seo_description" class="form-control" rows="3">{{ old('seo_description', $isEdit ? ($product->seo_description ?? null) : null) }}</textarea>
-            </div>
-
-            <div class="col-12">
-                <label class="form-label">Mot clé</label>
-                <input type="text" name="seo_keywords" value="{{ old('seo_keywords', $isEdit ? ($product->seo_keywords ?? null) : null) }}" class="form-control">
-            </div>
-        </div>
-    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const $ = (id) => document.getElementById(id);
+    const form = document.querySelector('[data-product-form]') || ($('pf-name') && $('pf-name').form);
+    if (!form) return;
+
+    // Compteurs de caractères
+    document.querySelectorAll('[data-count-for]').forEach(function (counter) {
+        const field = $(counter.dataset.countFor);
+        const max = parseInt(counter.dataset.max, 10);
+        if (!field) return;
+        const update = function () {
+            const n = field.value.trim().length;
+            counter.textContent = n + ' / ' + max;
+            counter.classList.toggle('is-warn', n > max * 0.9 && n <= max);
+            counter.classList.toggle('is-bad', n > max);
+        };
+        field.addEventListener('input', update);
+        update();
+    });
+
+    // Promo : remise calculée et contrôle promo < prix
+    const price = $('pf-price'), promo = $('pf-promo'), info = $('pf-promo-info');
+    const checkPromo = function () {
+        if (!price || !promo || !info) return;
+        const p = parseFloat(price.value), q = parseFloat(promo.value);
+        promo.setCustomValidity('');
+        if (!q) { info.textContent = 'Doit être inférieur au prix.'; info.style.color = ''; return; }
+        if (p && q >= p) { promo.setCustomValidity('Le prix promo doit être inférieur au prix.'); info.textContent = 'Le prix promo doit être inférieur au prix.'; info.style.color = '#e11d48'; return; }
+        if (p) { info.textContent = 'Remise affichée : -' + Math.round((p - q) / p * 100) + ' %'; info.style.color = '#16a34a'; }
+    };
+    [price, promo].forEach(el => el && el.addEventListener('input', checkPromo));
+    checkPromo();
+
+    // Aperçu Google
+    const name = $('pf-name'), seoTitle = $('pf-seo-title'), seoDesc = $('pf-seo-desc'), shortDesc = $('pf-short');
+    const cut = (t, n) => t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t;
+    const serp = function () {
+        const base = (name && name.value.trim()) || 'Nom du produit';
+        const title = (seoTitle && seoTitle.value.trim()) || cut(base.replace(/\s*cm\s*—.*$/, '').replace(/\s+—.*$/, ''), 42) + ' | Mobilier Addict';
+        const desc = (seoDesc && seoDesc.value.trim()) || (shortDesc && shortDesc.value.trim()) || 'Achetez ' + base + ' à Abidjan chez Mobilier Addict.';
+        $('pf-serp-title').textContent = cut(title, 62);
+        $('pf-serp-desc').textContent = cut(desc, 158);
+    };
+    [name, seoTitle, seoDesc, shortDesc].forEach(el => el && el.addEventListener('input', serp));
+    serp();
+
+    // Avertissement : aucun rayon coché
+    const menuWarn = $('pf-menu-warn');
+    const menuBoxes = form.querySelectorAll('input[name="menu_ids[]"]');
+    const checkMenus = function () { if (menuWarn) menuWarn.hidden = Array.from(menuBoxes).some(b => b.checked) || !menuBoxes.length; };
+    menuBoxes.forEach(b => b.addEventListener('change', checkMenus));
+    checkMenus();
+
+    // Modifications non enregistrées + double clic sur « Enregistrer »
+    let dirty = false;
+    const dirtyLabel = form.querySelector('.pf-dirty');
+    form.addEventListener('input', function () { dirty = true; if (dirtyLabel) dirtyLabel.textContent = 'Modifications non enregistrées'; });
+    form.addEventListener('change', function () { dirty = true; if (dirtyLabel) dirtyLabel.textContent = 'Modifications non enregistrées'; });
+    window.addEventListener('beforeunload', function (e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    form.addEventListener('submit', function () {
+        dirty = false;
+        form.querySelectorAll('button[type="submit"]').forEach(function (b) { b.disabled = true; b.dataset.label = b.textContent; b.textContent = 'Enregistrement…'; });
+    });
+});
+</script>

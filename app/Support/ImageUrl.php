@@ -37,6 +37,11 @@ class ImageUrl
                 }
             }
 
+            // Fichier absent du serveur : placeholder plutôt qu'une image cassée.
+            if (! is_file(public_path($path))) {
+                return asset('assets/maquette/img/product-placeholder.svg');
+            }
+
             return asset($path);
         }
 

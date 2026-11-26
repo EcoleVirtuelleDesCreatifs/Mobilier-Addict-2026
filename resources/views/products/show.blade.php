@@ -1,7 +1,7 @@
 @extends('maquette.layout')
 
 @section('title', \App\Support\ProductName::seoTitle($product))
-@section('meta_description', Str::limit(strip_tags($product->short_description ?: $product->description ?: 'Achetez ' . $product->name . ' à Abidjan chez Mobilier Addict.'), 155))
+@section('meta_description', Str::limit(strip_tags($product->seo_description ?: $product->short_description ?: $product->description ?: 'Achetez ' . $product->name . ' à Abidjan chez Mobilier Addict.'), 155))
 @php
     // Canonical : les fiches déclinées par taille (90, 120, 140, 160, 180…)
     // pointent vers la première fiche du même modèle pour éviter le contenu dupliqué.
@@ -352,6 +352,10 @@
             </div>
         </div>
     </div>
+
+    @push('pixel')
+    <script>fbq('track', 'ViewContent', {!! json_encode(['content_ids' => [(string) $product->id], 'content_name' => $product->name, 'content_type' => 'product', 'value' => (float) $displayPrice, 'currency' => 'XOF'], JSON_UNESCAPED_UNICODE) !!});</script>
+    @endpush
 
     @push('meta')
     <script type="application/ld+json">

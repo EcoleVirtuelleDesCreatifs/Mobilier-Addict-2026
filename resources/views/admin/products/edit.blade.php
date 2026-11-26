@@ -28,7 +28,9 @@
 
                 @include('admin.products._form', ['product' => $product, 'homeSectionCategories' => $homeSectionCategories, 'menus' => $menus, 'selectedMenuIds' => $selectedMenuIds])
 
-                <div class="d-flex justify-content-end gap-2 mt-3">
+                <div class="pf-actions">
+                    <span class="pf-dirty">Aucune modification</span>
+                    <a href="{{ route('product.show', $product->slug) }}" class="btn btn-admin-ghost" target="_blank" rel="noopener">Voir sur le site ↗</a>
                     <a href="{{ route('admin.products.index') }}" class="btn btn-admin-ghost">Annuler</a>
                     <button type="submit" class="btn btn-admin-primary">Enregistrer</button>
                 </div>

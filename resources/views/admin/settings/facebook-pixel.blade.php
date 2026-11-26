@@ -12,6 +12,17 @@
             </div>
         </div>
 
+        @if($activeId)
+            <div class="alert alert-success d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div><span class="fw-semibold">● Pixel actif sur le site</span> — ID <code>{{ $activeId }}</code>{{ ! $enabled && $envId ? ' (défini dans le fichier .env du serveur)' : '' }}.
+                    <div class="small">Événements envoyés : PageView (toutes les pages), ViewContent (fiche produit), AddToCart (ajout au panier), InitiateCheckout (livraison), Purchase (commande confirmée, en FCFA).</div>
+                </div>
+                <a class="btn btn-sm btn-admin-ghost" href="{{ route('home') }}" target="_blank" rel="noopener">Ouvrir le site pour tester ↗</a>
+            </div>
+        @else
+            <div class="alert alert-warning"><span class="fw-semibold">Pixel inactif.</span> Saisissez l’identifiant et cochez « Activer » : aucun événement n’est envoyé à Meta pour l’instant.</div>
+        @endif
+
         <div class="alert alert-info">
             <div class="fw-semibold mb-2">Étapes de configuration (Meta Business Manager)</div>
             <div class="mb-2">1) Récupérer le Pixel ID</div>
@@ -53,7 +64,10 @@
                                 value="{{ old('pixel_id', $pixelId) }}"
                                 class="form-control"
                                 placeholder="Ex: 123456789012345"
+                                inputmode="numeric"
+                                autocomplete="off"
                             >
+                            <div class="small mt-1" style="color: var(--admin-muted);">Uniquement des chiffres. Le code complet du pixel n’est pas nécessaire.</div>
                         </div>
 
                         <div class="col-12 col-lg-6">

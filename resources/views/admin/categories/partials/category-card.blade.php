@@ -2,7 +2,12 @@
     <div class="row align-items-center">
         <div class="col-12 col-md-2">
             <div class="rounded-3 overflow-hidden" style="width:80px;height:80px;border:1px solid var(--admin-border);">
-                <img src="{{ image_thumb($category->image, 240) }}" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
+                @php($thumb = image_thumb($category->image, 240))
+                @if(str_contains($thumb, 'product-placeholder'))
+                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center small" style="background: var(--admin-bg-subtle); color: var(--admin-muted); line-height:1.2;" title="Image absente du serveur : à renvoyer depuis « Modifier »"><i class="fa-regular fa-image mb-1"></i>Image<br>manquante</div>
+                @else
+                    <img src="{{ $thumb }}" alt="{{ $category->name }}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
+                @endif
             </div>
         </div>
         <div class="col-12 col-md-3">
@@ -13,15 +18,18 @@
             @endif
         </div>
         <div class="col-12 col-md-2">
-            <div class="small" style="color: var(--admin-muted);">Couleur</div>
-            <div class="d-flex align-items-center gap-2">
-                <div style="width:24px;height:24px;border-radius:50%;background:{{ $category->color ?? '#64748b' }};"></div>
-                <span class="small">{{ $category->color ?? '#64748b' }}</span>
-            </div>
+            @if($category->color)
+                <div class="small" style="color: var(--admin-muted);">Couleur</div>
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width:24px;height:24px;border-radius:50%;background:{{ $category->color }};"></div>
+                    <span class="small">{{ $category->color }}</span>
+                </div>
+            @endif
         </div>
         <div class="col-12 col-md-2">
             <div class="small" style="color: var(--admin-muted);">Produits</div>
-            <div class="fw-semibold">{{ $category->products_many_count }}</div>
+            <div class="fw-semibold {{ $category->products_many_count ? '' : 'text-warning' }}">{{ $category->products_many_count }}</div>
+            @unless($category->products_many_count)<div class="small text-warning">Masquée de Google (vide)</div>@endunless
         </div>
         <div class="col-12 col-md-1">
             <span class="badge {{ $category->is_active ? 'text-bg-success' : 'text-bg-secondary' }}">

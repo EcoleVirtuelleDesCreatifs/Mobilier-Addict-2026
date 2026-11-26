@@ -14,7 +14,7 @@
     $seoType = trim($__env->yieldContent('og_type')) !== '' ? trim($__env->yieldContent('og_type')) : 'website';
     $gtmId = config('services.gtm_id');
     $ga4Id = config('services.ga4_id');
-    $metaPixelId = config('services.meta_pixel_id');
+    $metaPixelId = \App\Support\MetaPixel::id();
 @endphp
 
     <title>{!! $esc($seoTitle) !!}</title>
@@ -218,6 +218,7 @@
       fbq('init', '{{ $metaPixelId }}');
       fbq('track', 'PageView');
     </script>
+    @stack('pixel')
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={{ $metaPixelId }}&ev=PageView&noscript=1" alt="" /></noscript>
     @endif
   </head>
@@ -806,6 +807,7 @@
                 return;
               }
               var d = res.data, i = d.item || {};
+              if (window.fbq) fbq('track', 'AddToCart', { content_ids: [String(i.product_id || i.id || '')], content_name: i.name || '', content_type: 'product', value: Number(i.price || 0) * Number(i.quantity || 1), currency: 'XOF' });
               var fmt = function (n) { return new Intl.NumberFormat('fr-FR').format(n) + ' FCFA'; };
 
               var img = document.getElementById('camImage');

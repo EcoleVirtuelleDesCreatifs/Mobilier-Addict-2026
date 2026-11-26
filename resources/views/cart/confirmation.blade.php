@@ -182,6 +182,16 @@
 </div>
 @endsection
 
+@push('pixel')
+<script>
+  (function () {
+    var key = 'fb_purchase_{{ $order->id }}';
+    try { if (localStorage.getItem(key)) return; localStorage.setItem(key, '1'); } catch (e) {}
+    fbq('track', 'Purchase', { value: {{ (float) $order->total }}, currency: 'XOF', content_type: 'product', num_items: {{ (int) $order->items()->sum('quantity') }} }, { eventID: 'order-{{ $order->id }}' });
+  })();
+</script>
+@endpush
+
 @push('styles')
 <style>
 /* Confirmation Success */
