@@ -108,7 +108,9 @@
                     'latitude' => '5.3599517',
                     'longitude' => '-4.0082561',
                 ],
-                'openingHours' => config('maquette.contact.hours'),
+                'openingHours' => config('maquette.contact.hours_schema'),
+                'hasMap' => config('maquette.contact.maps_url'),
+                'sameAs' => array_values(array_filter([config('maquette.contact.maps_url')])) ?: null,
                 'address' => array_filter([
                     '@type' => 'PostalAddress',
                     'streetAddress' => config('maquette.contact.address'),
@@ -837,7 +839,7 @@
                 d.cart_items.forEach(function (item) {
                   var row = document.createElement('div');
                   row.className = 'minicart-item d-flex';
-                  row.innerHTML = '<div class="mini-img-wrapper"><img class="mini-img" loading="lazy" decoding="async"></div><div class="product-info"><h2 class="product-title"><a></a></h2><p class="product-vendor"></p><div class="misc d-flex align-items-end justify-content-between"><span class="text_14"></span><div class="product-remove-area d-flex flex-column align-items-end"><div class="product-price"></div><form method="POST" class="d-inline"><input type="hidden" name="_token"><input type="hidden" name="cart_key"><button type="submit" class="product-remove border-0 bg-transparent p-0">Supprimer</button></form></div></div></div>';
+                  row.innerHTML = '<div class="mini-img-wrapper"><img class="mini-img" loading="lazy" decoding="async" alt=""></div><div class="product-info"><h2 class="product-title"><a></a></h2><p class="product-vendor"></p><div class="misc d-flex align-items-end justify-content-between"><span class="text_14"></span><div class="product-remove-area d-flex flex-column align-items-end"><div class="product-price"></div><form method="POST" class="d-inline"><input type="hidden" name="_token"><input type="hidden" name="cart_key"><button type="submit" class="product-remove border-0 bg-transparent p-0">Supprimer</button></form></div></div></div>';
                   row.querySelector('img').src = item.image;
                   row.querySelector('img').alt = item.name;
                   row.querySelector('a').href = item.url;

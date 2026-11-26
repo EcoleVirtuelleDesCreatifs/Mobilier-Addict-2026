@@ -10,9 +10,8 @@
 <div class="ma27">
     <section class="hero"><div class="wrap">
         <div>
-            <div class="kicker">Literie · Abidjan</div>
-            <h1 class="hero-title"><span class="hero-title-line">Le matelas que</span> <em class="rot"><span class="on">votre dos</span><span aria-hidden="true">votre budget</span><span aria-hidden="true">votre sommeil</span></em> <span class="hero-title-line">attendait.</span></h1>
-            <p class="lead">Choisissez en trente secondes. Livraison à Abidjan, paiement à la livraison.</p>
+            <h1 class="hero-title has-kicker"><span class="kicker hero-kicker">Matelas et literie à Abidjan</span> <span class="hero-title-line">Le matelas que</span> <em class="rot"><span class="on">votre dos</span><span aria-hidden="true">votre budget</span><span aria-hidden="true">votre sommeil</span></em> <span class="hero-title-line">attendait.</span></h1>
+            <p class="lead">Matelas, oreillers et linge de lit livrés partout à Abidjan. Paiement à la livraison.</p>
         </div>
         <div class="shot" data-hero-slider role="region" aria-roledescription="carrousel" aria-label="Notre sélection literie">
             @forelse($slides as $slide)

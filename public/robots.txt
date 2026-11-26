@@ -1,47 +1,35 @@
+# Mobilier Addict — un seul groupe de règles pour tous les robots.
+# (Un groupe dédié « Googlebot » remplaçait entièrement celui-ci pour Google.)
+
 User-agent: *
-Allow: /
-Disallow: /admin
+# Administration et comptes
 Disallow: /ma/admin
+Disallow: /admin
 Disallow: /login
 Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /confirm-password
+Disallow: /verify-email
+Disallow: /profile
+Disallow: /dashboard
+
+# Parcours d'achat et pages personnelles
 Disallow: /panier
-Disallow: /cart
+Disallow: /favoris
+
+# Recherche interne et filtres / tris (contenu dupliqué).
+# La pagination (?page=2) reste explorable.
 Disallow: /search
-Disallow: /*?*
-Disallow: /storage/
-Disallow: /assets/admin/
+Disallow: /*?*sort=
+Disallow: /*?*size=
+Disallow: /*?*comfort
+Disallow: /*?*price_min=
+Disallow: /*?*price_max=
+Disallow: /*?*availability=
+Disallow: /*?*q=
 
-# Crawlers d'IA et moteurs de recherche : autoriser l'indexation du contenu public
-User-agent: GPTBot
-Allow: /
-Disallow: /admin
-Disallow: /ma/admin
-Disallow: /login
-Disallow: /panier
-Disallow: /cart
-
-User-agent: ChatGPT-User
-Allow: /
-Disallow: /admin
-Disallow: /ma/admin
-Disallow: /login
-Disallow: /panier
-Disallow: /cart
-
-User-agent: Googlebot
-Allow: /
-Disallow: /admin
-Disallow: /ma/admin
-Disallow: /login
-Disallow: /panier
-Disallow: /cart
-
-User-agent: Bingbot
-Allow: /
-Disallow: /admin
-Disallow: /ma/admin
-Disallow: /login
-Disallow: /panier
-Disallow: /cart
+# Page de démonstration
+Disallow: /demo/
 
 Sitemap: https://mobilier-addict.com/sitemap.xml

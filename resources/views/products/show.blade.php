@@ -1,6 +1,6 @@
 @extends('maquette.layout')
 
-@section('title', $product->name . ' à Abidjan — Mobilier Addict Côte d\'Ivoire')
+@section('title', \App\Support\ProductName::seoTitle($product))
 @section('meta_description', Str::limit(strip_tags($product->short_description ?: $product->description ?: 'Achetez ' . $product->name . ' à Abidjan chez Mobilier Addict.'), 155))
 @php
     // Canonical : les fiches déclinées par taille (90, 120, 140, 160, 180…)
@@ -62,20 +62,39 @@
         };
         $rating = (float) ($product->rating ?? 0);
         $reviews = (int) ($product->reviews_count ?? 0);
+
+        // Fil d'Ariane : Accueil > Rayon (menu) > N places > Produit
+        $nameParts = \App\Support\ProductName::parse((string) $product->name);
+        $productMenus = $product->relationLoaded('menus') ? $product->menus : collect();
+        $crumbMenu = $productMenus->firstWhere('slug', 'matelas') ?: $productMenus->where('is_active', true)->first();
+        $crumbs = [['label' => 'Accueil', 'url' => route('home')]];
+        if ($crumbMenu) {
+            $crumbs[] = ['label' => $crumbMenu->name, 'url' => route('menu.show', $crumbMenu->slug)];
+            $places = \App\Support\ProductName::places($product);
+            if ($places) {
+                $width = $nameParts['dims'] ? strtok($nameParts['dims'], '×') : null;
+                $crumbs[] = [
+                    'label' => \App\Support\ProductName::placesLabel($places),
+                    'url' => route('menu.show', array_filter(['slug' => $crumbMenu->slug, 'size' => in_array($width, ['90', '120', '140', '160', '180'], true) ? $width : null])),
+                ];
+            }
+        } elseif ($primaryCategory) {
+            $crumbs[] = ['label' => $primaryCategory->name, 'url' => route('category.show', $primaryCategory->slug)];
+        }
+        $crumbs[] = ['label' => $nameParts['base'] ?: $product->name, 'url' => null];
         $editorialImage = $gallery->get(1) ?? $gallery->first();
     @endphp
 
     <!-- breadcrumb -->
     <div class="breadcrumb">
         <div class="container">
-            <ul class="list-unstyled d-flex align-items-center m-0">
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                @if($primaryCategory)
+            <ul class="list-unstyled d-flex align-items-center m-0" aria-label="Fil d'Ariane">
+                @foreach($crumbs as $crumb)
+                    @unless($loop->first)
                     <li><svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none"><g opacity="0.4"><path d="M25.9375 8.5625L23.0625 11.4375L43.625 32L23.0625 52.5625L25.9375 55.4375L47.9375 33.4375L49.3125 32L47.9375 30.5625L25.9375 8.5625Z" fill="#000"/></g></svg></li>
-                    <li><a href="{{ route('category.show', $primaryCategory->slug) }}">{{ $primaryCategory->name }}</a></li>
-                @endif
-                <li><svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none"><g opacity="0.4"><path d="M25.9375 8.5625L23.0625 11.4375L43.625 32L23.0625 52.5625L25.9375 55.4375L47.9375 33.4375L49.3125 32L47.9375 30.5625L25.9375 8.5625Z" fill="#000"/></g></svg></li>
-                <li>{{ $product->name }}</li>
+                    @endunless
+                    <li>@if($crumb['url'])<a href="{{ $crumb['url'] }}">{{ $crumb['label'] }}</a>@else<span aria-current="page">{{ $crumb['label'] }}</span>@endif</li>
+                @endforeach
             </ul>
         </div>
     </div>
@@ -376,8 +395,27 @@
                 'returnFees' => 'https://schema.org/FreeReturn',
             ],
         ],
-        'aggregateRating' => null,
+        // Étoiles Google : uniquement avec de vrais avis clients (note et nombre d'avis renseignés).
+        'aggregateRating' => ($rating > 0 && $reviews > 0) ? [
+            '@type' => 'AggregateRating',
+            'ratingValue' => number_format($rating, 1, '.', ''),
+            'reviewCount' => $reviews,
+            'bestRating' => '5',
+            'worstRating' => '1',
+        ] : null,
     ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => collect($crumbs)->values()->map(fn ($c, $i) => array_filter([
+            '@type' => 'ListItem',
+            'position' => $i + 1,
+            'name' => $c['label'],
+            'item' => $c['url'] ?? route('product.show', $product->slug),
+        ]))->all(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
     @endpush
 

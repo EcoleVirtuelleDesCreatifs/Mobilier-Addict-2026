@@ -9,7 +9,8 @@
 @endphp
 @section('title', $pageTitle . ' à Abidjan — Mobilier Addict')
 @section('canonical', $catalogueUrl)
-@if(request()->hasAny(['q', 'size', 'comfort', 'availability', 'price_min', 'price_max', 'sort']))
+{{-- Filtres et rayons vides : pas d'indexation (contenu pauvre / dupliqué). --}}
+@if(request()->hasAny(['q', 'size', 'comfort', 'availability', 'price_min', 'price_max', 'sort']) || (isset($products) && count($products) === 0))
 @section('robots', 'noindex, follow')
 @endif
 @section('meta_description', 'Découvrez nos ' . mb_strtolower($pageTitle) . ' à Abidjan : modèles, dimensions et prix réels. Conseil personnalisé et paiement à la livraison avec Mobilier Addict.')

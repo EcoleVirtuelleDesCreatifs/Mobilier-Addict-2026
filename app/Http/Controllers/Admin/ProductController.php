@@ -551,7 +551,7 @@ class ProductController extends Controller
         // Slug vide : généré depuis le nom, rendu unique pour éviter une erreur SQL
         // quand deux produits portent le même nom.
         if (empty($data['slug'])) {
-            $base = Str::slug($data['name']) ?: 'produit';
+            $base = \App\Support\ProductName::slug($data['name']);
             $slug = $base;
             $i = 2;
             while (Product::query()->where('slug', $slug)->when($product, fn ($q) => $q->whereKeyNot($product->id))->exists()) {

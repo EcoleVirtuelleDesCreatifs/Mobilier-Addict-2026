@@ -3,6 +3,11 @@
 @section('title', $category->name . ' à Abidjan | Mobilier Addict Côte d\'Ivoire')
 @section('meta_description', ($category->description ? strip_tags($category->description) . ' ' : 'Découvrez notre sélection de ' . $category->name . ' ') . 'chez Mobilier Addict à Abidjan. Livraison en Côte d\'Ivoire, devis personnalisé et accompagnement dédié.')
 
+{{-- Catégorie sans produit : pas d'indexation tant qu'elle est vide. --}}
+@if(collect($category->productsMany ?? [])->isEmpty() && collect($category->products ?? [])->isEmpty())
+@section('robots', 'noindex, follow')
+@endif
+
 @section('content')
     @php
         $isModel = $category instanceof \App\Models\Category;

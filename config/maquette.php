@@ -23,9 +23,11 @@ return [
 
     // Page contact — à compléter par la direction (audit confiance).
     'contact' => [
-        'address' => null,      // ex : « Angré, Cocody — près de la station X, Abidjan »
-        'hours' => null,        // ex : « Lun–Sam : 9h–18h »
-        'maps_url' => null,     // lien Google Maps / fiche Google Business Profile
+        // Renseigner dans .env (SEO local : affiché sur le site + données structurées).
+        'address' => env('CONTACT_ADDRESS'),            // ex : « Angré 8e tranche, Cocody, Abidjan »
+        'hours' => env('CONTACT_HOURS'),                // ex : « Lun–Sam : 9h–18h »
+        'hours_schema' => env('CONTACT_HOURS_SCHEMA'),  // même horaire au format Google : « Mo-Sa 09:00-18:00 »
+        'maps_url' => env('GOOGLE_BUSINESS_URL'),       // lien de la fiche Google Business Profile
     ],
 
     'menu_items' => [

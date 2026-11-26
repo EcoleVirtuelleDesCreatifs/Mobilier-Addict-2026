@@ -14,8 +14,22 @@ class ProductController extends Controller
                 'categories',
                 'variants' => fn ($q) => $q->active()->orderBy('thickness_cm')->orderBy('places'),
             ])
+            ->when(\Illuminate\Support\Facades\Schema::hasTable('menu_product'), fn ($q) => $q->with('menus'))
             ->where('slug', $slug)
-            ->firstOrFail();
+            ->first();
+
+        if (! $product) {
+            // Ancienne adresse d'un produit renommé : redirection permanente.
+            $target = \Illuminate\Support\Facades\Schema::hasTable('product_slug_redirects')
+                ? Product::query()->whereKey(
+                    \Illuminate\Support\Facades\DB::table('product_slug_redirects')->where('old_slug', $slug)->value('product_id')
+                )->value('slug')
+                : null;
+
+            abort_unless($target, 404);
+
+            return redirect()->route('product.show', $target, 301);
+        }
 
         $primaryCategory = $product->categories->first() ?: $product->category;
 

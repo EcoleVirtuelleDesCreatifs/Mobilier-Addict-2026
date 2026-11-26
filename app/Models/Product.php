@@ -11,6 +11,26 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        // Changement d'adresse : l'ancien slug est conservé pour une redirection 301.
+        static::updated(function (Product $product) {
+            if (! $product->wasChanged('slug') || ! \Illuminate\Support\Facades\Schema::hasTable('product_slug_redirects')) {
+                return;
+            }
+
+            $old = (string) $product->getOriginal('slug');
+            if ($old !== '' && $old !== $product->slug) {
+                \Illuminate\Support\Facades\DB::table('product_slug_redirects')->updateOrInsert(
+                    ['old_slug' => $old],
+                    ['product_id' => $product->id, 'updated_at' => now(), 'created_at' => now()]
+                );
+            }
+            // Le nouveau slug ne doit plus être une redirection.
+            \Illuminate\Support\Facades\DB::table('product_slug_redirects')->where('old_slug', $product->slug)->delete();
+        });
+    }
+
     protected $fillable = [
         'name',
         'slug',
