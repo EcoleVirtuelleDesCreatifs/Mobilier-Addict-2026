@@ -22,12 +22,17 @@
                 $zones = [
                     [
                         'title' => 'Audience',
-                        'subtitle' => "En attendant un tracking visiteurs, on affiche les vues d'articles si disponibles.",
+                        'subtitle' => $countryName ? "Visiteurs uniques connectés depuis la {$countryName}." : 'Visiteurs uniques, tous pays confondus.',
                         'cards' => [
                             [
                                 'label' => 'Visiteurs (mois)',
                                 'value' => number_format($visitorsMonth),
                                 'meta' => 'Total: ' . number_format($visitorsTotal),
+                            ],
+                            [
+                                'label' => 'Pages vues (mois)',
+                                'value' => number_format($pageViewsMonth),
+                                'meta' => null,
                             ],
                             [
                                 'label' => "Vues d'articles (mois)",
@@ -105,6 +110,31 @@
                                     </div>
                                 @endforeach
                             </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="row g-3 mt-1">
+                @foreach([['title' => $countryName ? "Villes de {$countryName}" : 'Villes', 'rows' => $cities], ['title' => 'Régions / districts', 'rows' => $regions]] as $geo)
+                    <div class="col-12 col-xl-6">
+                        <div class="admin-card p-3 p-md-4 h-100">
+                            <div class="h5 mb-1">{{ $geo['title'] }}</div>
+                            <div class="small mb-3" style="color: var(--admin-muted);">Visiteurs uniques sur {{ $currentMonth }}.</div>
+                            @php($geoMax = max(1, (int) $geo['rows']->max('visitors')))
+                            @forelse($geo['rows'] as $row)
+                                <div class="py-2" style="border-top: 1px solid var(--admin-border);">
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <span class="fw-semibold text-truncate">{{ $row['label'] }}</span>
+                                        <span class="small text-nowrap" style="color: var(--admin-muted);">{{ number_format($row['visitors']) }} visiteurs · {{ number_format($row['views']) }} pages</span>
+                                    </div>
+                                    <div class="mt-1 rounded-pill" style="height: 4px; background: var(--admin-border);">
+                                        <div class="rounded-pill" style="height: 4px; width: {{ round($row['visitors'] / $geoMax * 100) }}%; background: #F0286E;"></div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="small py-3" style="color: var(--admin-muted);">Aucune visite localisée sur cette période.</div>
+                            @endforelse
                         </div>
                     </div>
                 @endforeach

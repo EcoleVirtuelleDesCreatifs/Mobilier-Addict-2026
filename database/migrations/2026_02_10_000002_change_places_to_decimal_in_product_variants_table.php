@@ -13,8 +13,8 @@ return new class extends Migration
             return;
         }
 
-        $indexes = collect(DB::select('SHOW INDEX FROM `product_variants`'))
-            ->pluck('Key_name')
+        $indexes = collect(Schema::getIndexes('product_variants'))
+            ->pluck('name')
             ->unique()
             ->values();
 
@@ -30,7 +30,9 @@ return new class extends Migration
             });
         }
 
-        DB::statement('ALTER TABLE `product_variants` MODIFY `places` DECIMAL(3,1) NOT NULL');
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->decimal('places', 3, 1)->change();
+        });
 
         $hasVariantTypeColumn = Schema::hasColumn('product_variants', 'variant_type');
 
@@ -51,8 +53,8 @@ return new class extends Migration
             return;
         }
 
-        $indexes = collect(DB::select('SHOW INDEX FROM `product_variants`'))
-            ->pluck('Key_name')
+        $indexes = collect(Schema::getIndexes('product_variants'))
+            ->pluck('name')
             ->unique()
             ->values();
 
@@ -68,7 +70,9 @@ return new class extends Migration
             });
         }
 
-        DB::statement('ALTER TABLE `product_variants` MODIFY `places` INT UNSIGNED NOT NULL');
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->unsignedInteger('places')->change();
+        });
 
         $hasVariantTypeColumn = Schema::hasColumn('product_variants', 'variant_type');
 

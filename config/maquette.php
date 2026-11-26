@@ -16,6 +16,11 @@ return [
         'host' => null,         // nom + coordonnées de l'hébergeur
     ],
 
+    // Statistiques visiteurs de l'admin : seules les visites de ce pays sont comptées
+    // (code ISO à 2 lettres). Mettre une valeur vide pour compter tous les pays.
+    'analytics_country' => env('ANALYTICS_COUNTRY', 'CI'),
+    'analytics_country_name' => env('ANALYTICS_COUNTRY_NAME', "Côte d'Ivoire"),
+
     // Page contact — à compléter par la direction (audit confiance).
     'contact' => [
         'address' => null,      // ex : « Angré, Cocody — près de la station X, Abidjan »

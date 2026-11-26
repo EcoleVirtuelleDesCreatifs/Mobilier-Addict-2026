@@ -9,8 +9,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $indexes = collect(DB::select('SHOW INDEX FROM `product_variants`'))
-            ->pluck('Key_name')
+        $indexes = collect(Schema::getIndexes('product_variants'))
+            ->pluck('name')
             ->unique()
             ->values();
 
@@ -42,8 +42,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        $indexes = collect(DB::select('SHOW INDEX FROM `product_variants`'))
-            ->pluck('Key_name')
+        $indexes = collect(Schema::getIndexes('product_variants'))
+            ->pluck('name')
             ->unique()
             ->values();
 

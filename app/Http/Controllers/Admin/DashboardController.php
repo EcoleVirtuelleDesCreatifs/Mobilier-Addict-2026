@@ -22,7 +22,7 @@ class DashboardController extends Controller
     public function index()
     {
         try {
-            $dashboard = Cache::remember('admin.dashboard.payload', now()->addSeconds(60), fn () => $this->buildDashboard());
+            $dashboard = Cache::remember('admin.dashboard.payload.ci', now()->addSeconds(60), fn () => $this->buildDashboard());
         } catch (\Throwable $e) {
             $dashboard = $this->buildDashboard();
         }
@@ -120,6 +120,7 @@ class DashboardController extends Controller
                 ['label' => 'Stock faible', 'value' => Product::where('stock', '<=', 5)->count(), 'hint' => '≤ 5 unités', 'icon' => 'fa-solid fa-triangle-exclamation', 'tone' => 'red', 'url' => route('admin.products.index', ['status' => 'low_stock'])],
             ],
             'traffic' => $hasPageViews ? $visitors : null,
+            'trafficScope' => PageView::targetCountry() ? config('maquette.analytics_country_name') : null,
             'origins' => $this->origins($now, $hasOrders),
             'abandonedCarts' => $abandonedCarts,
             'topProducts' => $top,
@@ -156,7 +157,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        [$visitors, $abandonedCarts] = Cache::remember('admin.dashboard.realtime', now()->addSeconds(10), fn () => $this->trafficStats(now()));
+        [$visitors, $abandonedCarts] = Cache::remember('admin.dashboard.realtime.ci', now()->addSeconds(10), fn () => $this->trafficStats(now()));
 
         return response()->json([
             'visitors' => $visitors,
@@ -173,13 +174,13 @@ class DashboardController extends Controller
             'month' => $this->distinctVisitors($now->copy()->startOfMonth()),
         ];
 
-        $checkoutVisitors = PageView::query()
+        $checkoutVisitors = PageView::query()->targetCountry()
             ->whereIn('route_name', ['cart.shipping', 'cart.payment'])
             ->where('created_at', '>=', $now->copy()->subDays(30))
             ->distinct()
             ->pluck('visitor_id');
 
-        $confirmedVisitors = PageView::query()
+        $confirmedVisitors = PageView::query()->targetCountry()
             ->where('route_name', 'cart.confirmation')
             ->where('created_at', '>=', $now->copy()->subDays(30))
             ->distinct()
@@ -190,7 +191,7 @@ class DashboardController extends Controller
 
     private function distinctVisitors($since): int
     {
-        return PageView::query()
+        return PageView::query()->targetCountry()
             ->where('created_at', '>=', $since)
             ->distinct()
             ->count('visitor_id');
@@ -211,11 +212,11 @@ class DashboardController extends Controller
             'month' => $now->copy()->startOfMonth(),
         ];
 
-        $result = ['enabled' => $hasOrigin, 'sources' => [], 'cities' => [], 'communes' => []];
+        $result = ['enabled' => $hasOrigin, 'country' => PageView::targetCountry() ? config('maquette.analytics_country_name') : null, 'sources' => [], 'cities' => [], 'communes' => []];
 
         foreach ($periods as $period => $since) {
             $result['sources'][$period] = $hasOrigin
-                ? PageView::query()
+                ? PageView::query()->targetCountry()
                     ->select('source', 'medium', DB::raw('COUNT(DISTINCT visitor_id) as visitors'))
                     ->where('created_at', '>=', $since)
                     ->whereNotNull('source')
@@ -233,17 +234,17 @@ class DashboardController extends Controller
                 : [];
 
             $result['cities'][$period] = $hasOrigin
-                ? PageView::query()
-                    ->select('city', 'region', 'country', 'country_code', DB::raw('COUNT(DISTINCT visitor_id) as visitors'))
+                ? PageView::query()->targetCountry()
+                    ->select('city', 'region', 'country_code', DB::raw('COUNT(DISTINCT visitor_id) as visitors'))
                     ->where('created_at', '>=', $since)
-                    ->whereNotNull('country')
-                    ->groupBy('city', 'region', 'country', 'country_code')
+                    ->whereNotNull('country_code')
+                    ->groupBy('city', 'region', 'country_code')
                     ->orderByDesc('visitors')
-                    ->limit(8)
+                    ->limit(10)
                     ->get()
                     ->map(fn ($r) => [
-                        'label' => $r->city ?: ($r->region ?: $r->country),
-                        'detail' => collect([$r->city ? $r->region : null, $r->country])->filter()->unique()->implode(', '),
+                        'label' => $r->city ?: ($r->region ?: 'Ville non précisée'),
+                        'detail' => ($r->city && $r->region && $r->region !== $r->city) ? $r->region : '',
                         'flag' => $r->country_code ? Str::lower($r->country_code) : null,
                         'visitors' => (int) $r->visitors,
                     ])->values()
@@ -272,7 +273,7 @@ class DashboardController extends Controller
 
     private function topViewedPaths($since, int $limit = 5)
     {
-        return PageView::query()
+        return PageView::query()->targetCountry()
             ->select('path', DB::raw('COUNT(*) as views'))
             ->where('route_name', 'product.show')
             ->where('created_at', '>=', $since)

@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Créer mon mot de passe - Mobilier Addict</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/imgs/logo-2.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/logo/desktop/logo-2.png') }}">
 
     <style>
         :root {
@@ -202,7 +202,7 @@
             <div class="hero">
                 <div class="brand">
                     <div class="logo">
-                        <img src="{{ asset('assets/imgs/logo-2.png') }}" alt="Mobilier Addict">
+                        <img src="{{ asset('assets/logo/desktop/logo-2.png') }}" alt="Mobilier Addict">
                     </div>
                     <div>
                         <h1>Mobilier Addict</h1>

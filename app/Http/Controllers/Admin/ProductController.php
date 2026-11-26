@@ -176,7 +176,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $this->validateProduct($request, $product);
-        $data = $this->normalizeProductData($data);
+        $data = $this->normalizeProductData($data, $product);
 
         $categoryIds = $this->sectionCategoryIds($request);
         $menuIds = $this->menuIds($request);
@@ -514,7 +514,7 @@ class ProductController extends Controller
         }
     }
 
-    private function normalizeProductData(array $data): array
+    private function normalizeProductData(array $data, ?Product $product = null): array
     {
         if (!Schema::hasColumn('products', 'seo_title')) {
             unset($data['seo_title']);
@@ -548,7 +548,17 @@ class ProductController extends Controller
         }
         unset($data['promo_price']);
 
-        $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
+        // Slug vide : généré depuis le nom, rendu unique pour éviter une erreur SQL
+        // quand deux produits portent le même nom.
+        if (empty($data['slug'])) {
+            $base = Str::slug($data['name']) ?: 'produit';
+            $slug = $base;
+            $i = 2;
+            while (Product::query()->where('slug', $slug)->when($product, fn ($q) => $q->whereKeyNot($product->id))->exists()) {
+                $slug = $base . '-' . $i++;
+            }
+            $data['slug'] = $slug;
+        }
         $data['stock'] = $data['stock'] ?? 0;
         $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
         $data['is_bestseller'] = (bool) ($data['is_bestseller'] ?? false);

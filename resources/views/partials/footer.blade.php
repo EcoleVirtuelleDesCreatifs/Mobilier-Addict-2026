@@ -448,7 +448,7 @@
                 <!-- Brand Section -->
                 <div>
                     <a href="{{ url('/') }}" class="footer-optimized__brand-logo">
-                        <img src="{{ asset('logo/mobile/logo.png') }}" alt="Mobilier Addict" />
+                        <img src="{{ asset('assets/logo/mobile/logo.png') }}" alt="Mobilier Addict" />
                     </a>
                     <p class="footer-optimized__brand-desc">Votre partenaire sommeil depuis 2015. Nous sélectionnons les meilleurs produits pour transformer vos nuits en moments de pur confort.</p>
                     <div class="footer-optimized__social">

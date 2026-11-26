@@ -455,7 +455,7 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('permission:articles.manage')->name('admin.articles.destroy');
     Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage'])->middleware('permission:articles.manage')->name('admin.articles.upload-image');
 
-    Route::resource('menus', MenuController::class)->middleware('permission:menus.manage')->names('admin.menus');
+    Route::resource('menus', MenuController::class)->except('show')->middleware('permission:menus.manage')->names('admin.menus');
 
     Route::get('/users/stats', [AdminUserController::class, 'stats'])->middleware('permission:users.manage')->name('admin.users.stats');
     Route::resource('users', AdminUserController::class)->middleware('permission:users.manage')->names('admin.users');
@@ -472,13 +472,13 @@ Route::prefix('ma/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/slider/{slider}', [SliderController::class, 'update'])->middleware('permission:homepage.manage')->name('admin.slider.update');
     Route::delete('/slider/{slider}', [SliderController::class, 'destroy'])->middleware('permission:homepage.manage')->name('admin.slider.destroy');
 
-    Route::resource('b2b', B2BCategoryController::class)->middleware('permission:homepage.manage')->names('admin.b2b');
+    Route::resource('b2b', B2BCategoryController::class)->except('show')->parameters(['b2b' => 'b2bCategory'])->middleware('permission:homepage.manage')->names('admin.b2b');
 
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->middleware('permission:products.manage')->name('admin.products.toggle-active');
     Route::delete('/products/{product}/image', [AdminProductController::class, 'destroyImage'])->middleware('permission:products.manage')->name('admin.products.image.destroy');
     Route::delete('/products/{product}/gallery/{index}', [AdminProductController::class, 'destroyGalleryImage'])->middleware('permission:products.manage')->name('admin.products.gallery.destroy');
-    Route::resource('products', AdminProductController::class)->middleware('permission:products.manage')->names('admin.products');
-    Route::resource('categories', CategoryController::class)->middleware('permission:categories.manage')->names('admin.categories');
+    Route::resource('products', AdminProductController::class)->except('show')->middleware('permission:products.manage')->names('admin.products');
+    Route::resource('categories', CategoryController::class)->except('show')->middleware('permission:categories.manage')->names('admin.categories');
     Route::get('/orders', [OrderController::class, 'index'])->middleware('permission:orders.view')->name('admin.orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view')->name('admin.orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.update_status')->name('admin.orders.status');

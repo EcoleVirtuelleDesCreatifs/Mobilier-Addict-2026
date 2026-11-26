@@ -32,6 +32,7 @@
                 today: d.today || '',
                 kpis: d.kpis || [],
                 traffic: d.traffic || null,
+                trafficScope: d.trafficScope || null,
                 abandonedCarts: d.abandonedCarts || 0,
                 topProducts: d.topProducts || { day: [], week: [], month: [] },
                 latestOrders: d.latestOrders || [],
@@ -151,7 +152,7 @@
 
 <div v-if="traffic" class="ad-live mb-3">
     <div class="ad-live-head">
-        <span><span class="ad-pulse" :style="live ? '' : 'background:#f59e0b;animation:none'"></span>Trafic en direct</span>
+        <span><span class="ad-pulse" :style="live ? '' : 'background:#f59e0b;animation:none'"></span>Trafic en direct<template v-if="trafficScope"> · {{ trafficScope }}</template></span>
         <span>Mis à jour {{ updatedLabel }}</span>
     </div>
     <div class="ad-live-grid">
@@ -164,7 +165,7 @@
 
 <div v-if="origins" class="ad-card mb-3">
     <div class="ad-card-head">
-        <h2 class="ad-card-title"><i class="fa-solid fa-earth-africa me-1" style="color:var(--ad-pink)"></i> Origine des visiteurs</h2>
+        <h2 class="ad-card-title"><i class="fa-solid fa-earth-africa me-1" style="color:var(--ad-pink)"></i> Origine des visiteurs<template v-if="origins.country"> · {{ origins.country }}</template></h2>
         <div class="ad-tabs">
             <button v-for="p in periods" :key="p.key" type="button" :class="{ 'is-active': originPeriod === p.key }" @click="originPeriod = p.key">{{ p.label }}</button>
         </div>
@@ -185,7 +186,7 @@
             <div v-if="!originSources.length" class="ad-empty py-4"><i class="fa-solid fa-route"></i>{{ origins.enabled ? 'Aucune visite sur cette période' : 'Suivi des sources non activé' }}</div>
         </div>
         <div class="col-12 col-lg-4 ad-origin-col">
-            <div class="ad-origin-title">Villes de connexion</div>
+            <div class="ad-origin-title">{{ origins.country ? 'Villes de ' + origins.country : 'Villes de connexion' }}</div>
             <div v-for="c in originCities" :key="c.label + c.detail" class="ad-origin-row">
                 <span class="ad-origin-icon ad-origin-flag">{{ flag(c.flag) }}</span>
                 <span class="flex-grow-1" style="min-width:0">
