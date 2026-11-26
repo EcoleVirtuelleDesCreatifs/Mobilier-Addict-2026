@@ -160,7 +160,7 @@
 
                     @if(method_exists($products, 'links'))
                         <div class="mt-5 mb-4">
-                            {{ $products->links('pagination::bootstrap-5') }}
+                            {{ $products->onEachSide(1)->links('pagination::ma27') }}
                         </div>
                     @endif
                 </div>

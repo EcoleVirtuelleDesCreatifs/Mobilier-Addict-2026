@@ -42,7 +42,7 @@
         </script>
         <p class="result"><b>{{ $products->total() }}</b> produit{{ $products->total() > 1 ? 's' : '' }}</p>
         <div class="grid">@forelse($products as $product)@include('maquette.includes.card-2027')@empty<div class="empty"><p>Aucun produit ne correspond.</p><span>Essayez un autre filtre ou demandez conseil.</span><a class="btn pink" href="{{ route('pages.contact') }}">Demander conseil</a></div>@endforelse</div>
-        <div class="center">{{ $products->links() }}</div>
+        <div class="center">{{ $products->onEachSide(1)->links('pagination::ma27') }}</div>
         @if($menuCategories->isNotEmpty())<nav class="catalogue-subcategories" aria-label="Catégories de {{ $pageTitle }}">@foreach($menuCategories as $category)<a class="chip" href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a>@endforeach</nav>@endif
     </div></section>
 </div>

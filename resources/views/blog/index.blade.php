@@ -142,7 +142,7 @@
             </div>
             @if($blogPosts->hasPages())
                 <div class="pagination-wrapper mt-4">
-                    {{ $blogPosts->links('pagination::bootstrap-5') }}
+                    {{ $blogPosts->onEachSide(1)->links('pagination::ma27', ['label' => 'article']) }}
                 </div>
             @endif
         </section>

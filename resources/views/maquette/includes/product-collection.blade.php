@@ -107,7 +107,7 @@
 
                 @if(method_exists($collectionProducts, 'links'))
                     <div class="pagination justify-content-center mt-100">
-                        {{ $collectionProducts->links('pagination::bootstrap-5') }}
+                        {{ $collectionProducts->onEachSide(1)->links('pagination::ma27') }}
                     </div>
                 @endif
             </div>
