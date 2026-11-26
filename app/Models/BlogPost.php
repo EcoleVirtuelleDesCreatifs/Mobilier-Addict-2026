@@ -42,9 +42,37 @@ class BlogPost extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
-        return $this->image ? image_url($this->image) : null;
+        $url = $this->image ? image_url($this->image) : null;
+
+        // Image absente (fichier non envoyé sur le serveur, article sans visuel) :
+        // visuel de la bibliothèque du site, choisi selon le sujet de l'article.
+        if (! $url || str_contains($url, 'product-placeholder')) {
+            return asset($this->fallbackImage());
+        }
+
+        return $url;
+    }
+
+    /** Visuel de remplacement cohérent avec le thème de l'article (stable pour un même article). */
+    public function fallbackImage(): string
+    {
+        $text = mb_strtolower($this->title . ' ' . $this->slug);
+        $pools = [
+            'appart|meubl|salon|canap|studio|location' => ['appart-essentiel', 'appart-residence', 'appart-standing', 'appartement-cover', 'studio-cover'],
+            'hôtel|hotel|résidence|residence' => ['hotellerie-cover', 'hotellerie-essentielle', 'hotellerie-premium'],
+            'enfant|bébé|bebe|ado' => ['famille-enfants'],
+        ];
+        $pool = ['famille-parentale', 'famille-amis', 'famille-cover', 'hotellerie-cover', 'hotellerie-essentielle', 'studio-actif'];
+        foreach ($pools as $pattern => $images) {
+            if (preg_match('/' . $pattern . '/u', $text)) {
+                $pool = $images;
+                break;
+            }
+        }
+
+        return 'assets/maquette/img/blog/' . $pool[abs(crc32((string) ($this->slug ?: $this->id))) % count($pool)] . '.webp';
     }
 
     public function getCategoryIdAttribute()

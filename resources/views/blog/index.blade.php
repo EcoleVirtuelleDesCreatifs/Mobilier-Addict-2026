@@ -1,7 +1,10 @@
 @extends('maquette.layout')
 
-@section('title', 'Le Magazine — articles literie, mobilier & maison | Mobilier Addict')
-@section('meta_description', 'Articles et conseils du magazine Mobilier Addict : bien choisir son matelas, sa literie et son mobilier à Abidjan et en Côte d\'Ivoire.')
+@section('title', 'Conseils literie et maison à Abidjan | Mobilier Addict')
+@section('meta_description', 'Le journal Mobilier Addict : nos conseils pour bien choisir son matelas, son oreiller, sa literie et son mobilier à Abidjan et en Côte d\'Ivoire.')
+@if(request()->filled('category') || request()->query('page', 1) > 1)
+@section('robots', 'noindex, follow')
+@endif
 
 @push('meta')
     <meta property="og:image" content="{{ $blogFeaturedPost?->image_url ?? asset('assets/maquette/img/blog/furniture-2.jpg') }}" />
@@ -12,12 +15,14 @@
             'name' => 'Le magazine Mobilier Addict',
             'url' => route('blog.index'),
             'inLanguage' => 'fr-CI',
-            'blogPost' => $blogPosts->map(fn ($p) => [
+            'blogPost' => collect([$blogFeaturedPost])->filter()->merge($blogPosts->items())->map(fn ($p) => [
                 '@type' => 'BlogPosting',
                 'headline' => $p->title,
                 'url' => route('blog.show', $p->slug),
-                'image' => $p->image_url ?? null,
+                'image' => $p->image_url,
                 'datePublished' => optional($p->published_at)->toISOString(),
+                'description' => Str::limit(strip_tags((string) ($p->excerpt ?: $p->content)), 160),
+                'author' => ['@type' => 'Organization', 'name' => 'Mobilier Addict'],
             ])->filter()->values()->all(),
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
@@ -28,7 +33,8 @@
         .blog-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #7a8794; margin-bottom: 8px; }
         .blog-meta .sep { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
         .magazine-card-img-link { display: block; overflow: hidden; }
-        .magazine-card-img-link img { transition: transform .5s ease; display: block; width: 100%; }
+        .magazine-card-img-link img { transition: transform .5s ease; display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+        .magazine-feature-image img { aspect-ratio: 4 / 3; object-fit: cover; height: auto; }
         .magazine-card:hover .magazine-card-img-link img { transform: scale(1.05); }
         .magazine-topics a { transition: background .2s, color .2s; }
         .magazine-topics a.is-active { background: #00234d; color: #fff; }
@@ -53,7 +59,7 @@
 
 @section('content')
     <!-- breadcrumb start -->
-    <div class="ma27"><section class="page-head"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>Le journal</span></nav><h1>Mieux choisir, <em>mieux dormir.</em></h1></div></section></div>
+    <div class="ma27"><section class="page-head"><div class="wrap"><nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>Le journal</span></nav><h1><span class="kicker" style="display:block;margin-bottom:14px;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.4;color:#FFB8CF">Conseils literie et maison à Abidjan</span>Mieux choisir, <em>mieux dormir.</em></h1></div></section></div>
     <!-- breadcrumb end -->
 
     <div class="container">
@@ -80,7 +86,7 @@
             <section aria-label="Article à la une">
             <article class="magazine-feature" aria-labelledby="featured-title">
                 <a class="magazine-feature-image magazine-card-img-link" href="{{ route('blog.show', $blogFeaturedPost->slug) }}">
-                    <img loading="eager" fetchpriority="high" decoding="async" src="{{ $blogFeaturedPost->image_url ?? asset('assets/maquette/img/blog/furniture-2.jpg') }}" alt="{{ $blogFeaturedPost->title }}" width="1400" height="1169">
+                    <img loading="eager" fetchpriority="high" decoding="async" src="{{ $blogFeaturedPost->image_url }}" alt="{{ $blogFeaturedPost->image_alt ?: $blogFeaturedPost->title }}" width="1200" height="900">
                     <span>À la une · {{ $blogFeaturedPost->category?->name ?? 'Blog' }}</span>
                 </a>
                 <div class="magazine-feature-content">
@@ -111,7 +117,7 @@
                 @forelse($blogPosts as $post)
                     <article class="magazine-card" aria-labelledby="post-{{ $post->id }}-title">
                         <a class="magazine-card-img-link" href="{{ route('blog.show', $post->slug) }}" tabindex="-1" aria-hidden="true">
-                            <img loading="lazy" decoding="async" src="{{ $post->image_url ?? asset('assets/maquette/img/blog/furniture-1.jpg') }}" alt="{{ $post->title }}" width="1400" height="1169">
+                            <img loading="lazy" decoding="async" src="{{ $post->image_url }}" alt="{{ $post->image_alt ?: $post->title }}" width="1200" height="900">
                         </a>
                         <div class="magazine-card-content">
                             <div class="blog-meta">
@@ -129,7 +135,9 @@
                         </div>
                     </article>
                 @empty
+                    @unless($blogFeaturedPost)
                     <p>Aucun article dans ce thème pour le moment. <a href="{{ route('blog.index') }}">Voir tous les articles</a></p>
+                    @endunless
                 @endforelse
             </div>
             @if($blogPosts->hasPages())

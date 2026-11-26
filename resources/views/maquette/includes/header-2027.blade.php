@@ -6,7 +6,7 @@
     <div class="wrap ma27-head-row">
         <a class="ma27-logo" href="{{ route('home') }}" aria-label="Mobilier Addict, accueil"><img src="{{ asset('assets/logo/desktop/logo-480.webp') }}" alt="Mobilier Addict" width="155" height="60"></a>
         <nav class="ma27-links" aria-label="Navigation principale">@include('maquette.includes.menu', ['headerMenus' => ($headerMenus ?? collect())->reject(fn ($entry) => in_array($entry->slug, ['accueil', 'home', '/']))])</nav>
-        <a class="ma27-surmesure-link" href="{{ route('devis.create') }}">Sur-mesure</a>
+        <a class="ma27-surmesure-link" href="{{ route('devis.create') }}" aria-label="Demander un devis sur-mesure">Sur-mesure</a>
         <div class="ma27-acts">
             <a href="{{ route('search.index') }}" aria-label="Rechercher"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
             <a href="{{ route('favorites.index') }}" aria-label="Mes favoris"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S3.5 15.6 3.5 9.4A4.4 4.4 0 0 1 12 7.6a4.4 4.4 0 0 1 8.5 1.8c0 6.2-8.5 11.1-8.5 11.1z"/></svg></a>

@@ -30,6 +30,17 @@ class BlogController extends Controller
             ->when($activeCategory, fn ($q) => $q->where('blog_category_id', $activeCategory->id))
             ->first();
 
+        // Aucun article « à la une » : le plus récent prend la place (page 1 uniquement).
+        if (! $blogFeaturedPost && (int) request()->query('page', 1) <= 1) {
+            $blogFeaturedPost = BlogPost::query()
+                ->active()
+                ->with(['category'])
+                ->when($activeCategory, fn ($q) => $q->where('blog_category_id', $activeCategory->id))
+                ->orderByDesc('published_at')
+                ->orderByDesc('id')
+                ->first();
+        }
+
         $blogPosts = BlogPost::query()
             ->active()
             ->when($blogFeaturedPost, fn ($q) => $q->where('id', '!=', $blogFeaturedPost->id))

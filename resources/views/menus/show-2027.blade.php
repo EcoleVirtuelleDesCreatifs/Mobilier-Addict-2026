@@ -31,6 +31,15 @@
             <label class="catalogue-field">Trier<select class="sel" name="sort">@foreach(['featured' => 'Recommandés', 'price-asc' => 'Prix croissant', 'price-desc' => 'Prix décroissant', 'newest' => 'Nouveautés'] as $value => $label)<option value="{{ $value }}" @selected(request('sort', request()->routeIs('nouveautes.index') ? 'newest' : 'featured') === $value)>{{ $label }}</option>@endforeach</select></label>
             <button class="btn pink sm" type="submit">Filtrer</button><a class="tlink" href="{{ $catalogueUrl }}">Réinitialiser</a>
         </form>
+        <script>
+            // Les puces Taille / Confort appliquent le filtre dès le clic.
+            document.querySelectorAll('form.toolbar .catalogue-choices input[type=radio]').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    var form = input.form;
+                    if (form.requestSubmit) { form.requestSubmit(); } else { form.submit(); }
+                });
+            });
+        </script>
         <p class="result"><b>{{ $products->total() }}</b> produit{{ $products->total() > 1 ? 's' : '' }}</p>
         <div class="grid">@forelse($products as $product)@include('maquette.includes.card-2027')@empty<div class="empty"><p>Aucun produit ne correspond.</p><span>Essayez un autre filtre ou demandez conseil.</span><a class="btn pink" href="{{ route('pages.contact') }}">Demander conseil</a></div>@endforelse</div>
         <div class="center">{{ $products->links() }}</div>

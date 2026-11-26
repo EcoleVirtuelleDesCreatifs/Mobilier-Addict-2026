@@ -191,10 +191,19 @@ class MenuController extends Controller
         }
         $size = (string) request()->query('size', '');
         if (in_array($size, ['90', '120', '140', '160', '180'], true)) {
+            // « 90 » ne doit pas correspondre à « 190 » : on cherche la largeur suivie de « x » / « × ».
             $productsQuery->where(function ($q) use ($size) {
                 $q->where('products.size', 'like', $size . '%')
-                    ->orWhere('products.dimensions', 'like', $size . '%')
-                    ->orWhere('products.name', 'like', '%' . $size . '%');
+                    ->orWhere('products.dimensions', 'like', $size . '%');
+                foreach (['x', '×', ' x', ' ×', 'cm x', 'cm×', ' cm x', ' cm ×', 'X'] as $sep) {
+                    $q->orWhere('products.name', 'like', '% ' . $size . $sep . '%')
+                        ->orWhere('products.name', 'like', $size . $sep . '%')
+                        ->orWhere('products.name', 'like', '%-' . $size . $sep . '%');
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('product_variants', 'variant_type')) {
+                    $q->orWhereHas('variants', fn ($v) => $v->where('is_active', true)
+                        ->where(fn ($vv) => $vv->where('variant_type', 'like', $size . 'x%')->orWhere('variant_type', 'like', $size . '×%')->orWhere('variant_type', 'like', $size . ' %')));
+                }
             });
         }
 

@@ -1,6 +1,6 @@
 @extends('maquette.layout')
 
-@section('title', 'FAQ — Mobilier Addict Abidjan | Livraison en Côte d\'Ivoire')
+@section('title', 'FAQ : commande, livraison, paiement | Mobilier Addict')
 @section('meta_description', 'Questions fréquentes sur les commandes, paiements, livraisons à Abidjan et en Côte d\'Ivoire, et le service après-vente Mobilier Addict.')
 
 @php
@@ -49,31 +49,16 @@
         .faq-topic.is-hidden { display: none; }
         .faq-question[hidden], .faq-group[hidden] { display: none; }
 
-        /* Hero */
-        .faq-hero{background:#00234D;padding:70px 0;color:#fff;position:relative;overflow:hidden;}
-        .faq-hero::before,.faq-hero::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(236,72,153,.35);pointer-events:none;}
-        .faq-hero::before{width:420px;height:420px;top:-160px;right:-120px;}
-        .faq-hero::after{width:260px;height:260px;bottom:-140px;left:-80px;border-color:rgba(255,255,255,.08);}
-        .faq-hero-layout{display:grid;grid-template-columns:1.4fr .9fr;gap:44px;align-items:center;position:relative;z-index:1;}
-        .faq-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ec4899;margin-bottom:14px;}
-        .faq-hero h1{font-size:clamp(30px,4vw,46px);font-weight:800;line-height:1.15;margin-bottom:16px;}
-        .faq-hero h1 span{color:#ec4899;}
-        .faq-intro{color:rgba(255,255,255,.75);font-size:15.5px;line-height:1.7;max-width:520px;margin-bottom:28px;}
-        .faq-search label{display:block;font-weight:700;font-size:14px;margin-bottom:10px;color:#fff;}
+        /* Recherche (dans l'en-tête de page) */
+        .faq-search{max-width:560px;margin-top:28px}
+        .faq-search label{display:block;font-weight:600;font-size:14px;margin-bottom:10px;color:#fff;}
         .faq-search-field{display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:6px 8px 6px 20px;color:#00234D;}
         .faq-search-field input{flex:1;border:none;outline:none;font-size:15px;padding:10px 0;background:transparent;color:#00234D;min-width:0;}
-        .faq-search-status{font-size:12.5px;color:rgba(255,255,255,.6);margin:10px 4px 0;}
-
-        .faq-contact-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:32px;backdrop-filter:blur(6px);}
-        .faq-card-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ec4899;display:block;margin-bottom:12px;}
-        .faq-contact-card h2{font-size:24px;font-weight:800;margin-bottom:12px;color:#fff;}
-        .faq-contact-card p{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.65;margin-bottom:20px;}
-        .faq-call{display:inline-flex;align-items:center;gap:8px;background:#ec4899;color:#fff;font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px;text-decoration:none;transition:.15s;}
-        .faq-call:hover{background:#d1357f;color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(236,72,153,.4);}
-        .faq-contact-note{display:block;font-size:12px;color:rgba(255,255,255,.55);margin-top:14px;}
+        .faq-search-status{font-size:12.5px;color:rgba(255,255,255,.7);margin:10px 4px 0;}
+        .faq-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ec4899;margin-bottom:14px;}
 
         /* Rubriques */
-        .faq-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:44px 0;}
+        .faq-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:0 0 44px;}
         .faq-topic{background:#fff;border:1px solid #f0e8ee;border-radius:18px;padding:20px;text-decoration:none;transition:.15s;display:block;}
         .faq-topic:hover{border-color:#ec4899;transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,35,77,.08);}
         .faq-topic-number{display:block;font-size:12px;font-weight:800;color:#ec4899;letter-spacing:.1em;margin-bottom:8px;}
@@ -123,7 +108,6 @@
         .faq-bottom .faq-action:last-child:hover{border-color:#ec4899;background:rgba(236,72,153,.15);}
 
         @media (max-width:991.98px){
-            .faq-hero-layout{grid-template-columns:1fr;}
             .faq-content-layout{grid-template-columns:1fr;}
             .faq-guide{position:static;}
         }
@@ -131,54 +115,29 @@
 @endpush
 
 @section('content')
-    <!-- breadcrumb start -->
-    <div class="breadcrumb">
-        <div class="container">
-            <ul class="list-unstyled d-flex align-items-center m-0">
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li>
-                    <svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.4"><path d="M25.9375 8.5625L23.0625 11.4375L43.625 32L23.0625 52.5625L25.9375 55.4375L47.9375 33.4375L49.3125 32L47.9375 30.5625L25.9375 8.5625Z" fill="#000"/></g></svg>
-                </li>
-                <li>FAQ</li>
-            </ul>
+<div class="ma27">
+    <section class="page-head"><div class="wrap">
+        <nav class="crumbs" aria-label="Fil d’Ariane"><a href="{{ route('home') }}">Accueil</a><span>/</span><span>FAQ</span></nav>
+        <h1 id="faq-title">Questions fréquentes, <em>réponses claires.</em></h1>
+        <p class="lead">Commande, paiement, livraison à Abidjan et service après-vente : {{ $faqCount }} réponses pour acheter sereinement.</p>
+        <div class="faq-search" id="faq-search-box">
+            <label for="faq-search-input">Quelle est votre question ?</label>
+            <div class="faq-search-field">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+                <input id="faq-search-input" type="search" placeholder="Ex. : livraison, paiement, matelas…" aria-controls="faq-answers" autocomplete="off">
+            </div>
+            <p id="faq-search-status" class="faq-search-status" role="status" aria-live="polite" aria-atomic="true">{{ $faqCount }} réponses pour vous guider.</p>
         </div>
-    </div>
-    <!-- breadcrumb end -->
-
-            <section class="faq-hero" aria-labelledby="faq-title">
-                <div class="container">
-                    <div class="faq-hero-layout">
-                        <div>
-                            <p class="faq-eyebrow">Mobilier Addict · Côte d’Ivoire</p>
-                            <h1 id="faq-title">Bien choisir, <br><span>acheter sereinement.</span></h1>
-                            <p class="faq-intro">Du choix de votre matelas à la réception de vos meubles, retrouvez les réponses utiles pour aménager votre chez-vous.</p>
-                            <div class="faq-search" id="faq-search-box">
-                                <label for="faq-search-input">Quelle est votre question ?</label>
-                                <div class="faq-search-field">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
-                                    <input id="faq-search-input" type="search" placeholder="Ex. : livraison, paiement, matelas…" aria-controls="faq-answers" autocomplete="off">
-                                </div>
-                                <p id="faq-search-status" role="status" aria-live="polite" aria-atomic="true">{{ $faqCount }} réponses pour vous guider.</p>
-                            </div>
-                        </div>
-                        <aside class="faq-contact-card" aria-labelledby="faq-contact-title">
-                            <span class="faq-card-label">Parlons de votre projet</span>
-                            <h2 id="faq-contact-title">Un doute avant<br>de commander ?</h2>
-                            <p>Une référence, une dimension, une adresse de livraison : préparez vos informations et échangez directement avec la boutique.</p>
-                            <a class="faq-call" href="tel:+2250799140356">+225 07 99 14 03 56 <span aria-hidden="true">↗</span></a>
-                            <span class="faq-contact-note">Pour confirmer votre commande et ses modalités.</span>
-                        </aside>
-                    </div>
-                </div>
-            </section>
+    </div></section>
+</div>
 
             <div class="container">
                 <nav class="faq-topics" aria-label="Rubriques de la FAQ">
                     @foreach($faqGroups as $index => $group)
                         <a class="faq-topic" href="#{{ $group['id'] }}">
                             <span class="faq-topic-number" aria-hidden="true">0{{ $index + 1 }}</span>
-                            <strong>{{ htmlspecialchars($group['title'], ENT_QUOTES, 'UTF-8') }}</strong>
-                            <span>{{ htmlspecialchars($group['description'], ENT_QUOTES, 'UTF-8') }}</span>
+                            <strong>{{ $group['title'] }}</strong>
+                            <span>{{ $group['description'] }}</span>
                         </a>
                     @endforeach
                 </nav>
@@ -202,12 +161,12 @@
                             <section class="faq-group" id="{{ $group['id'] }}" aria-labelledby="{{ $group['id'] }}-title">
                                 <div class="faq-group-heading">
                                     <span aria-hidden="true">0{{ $index + 1 }}</span>
-                                    <h2 id="{{ $group['id'] }}-title">{{ htmlspecialchars($group['title'], ENT_QUOTES, 'UTF-8') }}</h2>
+                                    <h2 id="{{ $group['id'] }}-title">{{ $group['title'] }}</h2>
                                 </div>
                                 @foreach($group['items'] as $item)
                                     <details class="faq-question">
-                                        <summary>{{ htmlspecialchars($item[0], ENT_QUOTES, 'UTF-8') }}<span class="faq-toggle" aria-hidden="true"></span></summary>
-                                        <div class="faq-answer"><p>{{ htmlspecialchars($item[1], ENT_QUOTES, 'UTF-8') }}</p></div>
+                                        <summary>{{ $item[0] }}<span class="faq-toggle" aria-hidden="true"></span></summary>
+                                        <div class="faq-answer"><p>{{ $item[1] }}</p></div>
                                     </details>
                                 @endforeach
                             </section>

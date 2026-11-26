@@ -17,3 +17,19 @@
 @keyframes ma27-slide-zoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.ma27 *{animation:none!important;transition:none!important}.ma27 .shot[data-hero-slider] img{transform:none!important}}
 .ma27 .hero h1.hero-title.has-kicker{margin-top:0}.ma27 .hero h1 .hero-kicker{display:block;margin-bottom:18px;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.4;letter-spacing:.16em;white-space:normal}
+/* Boutons des cartes produit : l'ancien style « + » rond de .ma27-quick-add (ma27-pages.css) les sortait de la carte. */
+.ma27-site form.ma27-quick-add.ma27-card-actions,.ma27 form.ma27-quick-add.ma27-card-actions{position:static;right:auto;bottom:auto;display:grid;gap:8px;margin:auto 0 0;padding-top:18px}
+.ma27-site .ma27-card-actions button.ma27-card-buy,.ma27-site .ma27-card-actions button.ma27-card-add,.ma27 .ma27-card-actions button.ma27-card-buy,.ma27 .ma27-card-actions button.ma27-card-add{display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-height:46px;padding:12px 16px;border:1px solid var(--ink)!important;border-radius:999px;font:600 14px/1.3 Helvetica,Arial,sans-serif;transform:none}
+.ma27-site .ma27-card-actions button.ma27-card-buy,.ma27 .ma27-card-actions button.ma27-card-buy{background:var(--pink);border-color:var(--pink)!important;color:#fff}
+.ma27-site .ma27-card-actions button.ma27-card-add,.ma27 .ma27-card-actions button.ma27-card-add{background:transparent;color:var(--ink)}
+.ma27-site .ma27-card-actions button.ma27-card-buy:hover:not(:disabled),.ma27 .ma27-card-actions button.ma27-card-buy:hover:not(:disabled){background:var(--pink-dark);border-color:var(--pink-dark)!important}
+.ma27-site .ma27-card-actions button.ma27-card-add:hover:not(:disabled),.ma27 .ma27-card-actions button.ma27-card-add:hover:not(:disabled){background:var(--ink);color:#fff}
+.ma27-site .ma27 .ma27-card-actions button:hover,.ma27-site .ma27-card-actions button.ma27-card-add:hover,.ma27-site .ma27-card-actions button.ma27-card-buy:hover{transform:none}
+/* Lien « Sur-mesure » de l'en-tête : bouton d'appel à l'action. */
+@media(min-width:601px){
+.ma27-site .ma27-header .ma27-surmesure-link{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;background:linear-gradient(120deg,var(--pink-dark,#C4124F),var(--pink,#F0286E));color:#fff;font:600 14px/1 Helvetica,Arial,sans-serif;text-decoration:none;box-shadow:0 10px 22px -10px rgba(240,40,110,.75);transition:transform .2s,box-shadow .2s}
+.ma27-site .ma27-header .ma27-surmesure-link::after{content:'→';transition:transform .2s}
+.ma27-site .ma27-header .ma27-surmesure-link:hover,.ma27-site .ma27-header .ma27-surmesure-link:focus-visible{color:#fff;transform:translateY(-1px);box-shadow:0 14px 26px -10px rgba(240,40,110,.9)}
+.ma27-site .ma27-header .ma27-surmesure-link:hover::after{transform:translateX(3px)}
+.ma27-site .ma27-header .ma27-surmesure-link:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+}
